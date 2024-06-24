@@ -36,7 +36,7 @@ return [
     | site wherever the name needs to be displayed.
     |
     */
-    'site_name' => 'Lorekeeper',
+    'site_name' => 'Kukuri ARPG',
 
     /*
     |--------------------------------------------------------------------------
@@ -48,7 +48,7 @@ return [
     | It is not, however, displayed on the site itself. This should be kept short and snappy!
     |
     */
-    'site_desc' => 'A Lorekeeper ARPG',
+    'site_desc' => 'Spread Kindness',
 
     /*
     |--------------------------------------------------------------------------
@@ -107,7 +107,7 @@ return [
     |
     */
     'character_codes' => '{category}-{number}',
-    'character_number_digits' => 3,
+    'character_number_digits' => 5,
     'character_pull_number' => 'all',
 
     'reset_character_status_on_transfer' => 0,
