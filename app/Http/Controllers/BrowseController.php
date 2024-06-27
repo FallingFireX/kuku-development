@@ -84,7 +84,7 @@ class BrowseController extends Controller
     {
         $staffRanks = RankPower::distinct()->get(['rank_id']);
         $staffRanks->push(User::where("id",Settings::get('admin_user'))->first()->rank_id);
-        $staff = User::whereIn('rank_id', $staffRanks)->get()->groupBy('rank_id');
+        $staff = User::join('ranks','users.rank_id',"=",'ranks.id')->select('users.*')->whereIn('rank_id', $staffRanks)->orderBy('sort', 'DESC')->get()->groupBy('rank_id');
         $ranks = Rank::orderBy('id')->get()->keyBy('id');
         return view('browse.team_index', [
             'staff' => $staff,
