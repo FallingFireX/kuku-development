@@ -261,7 +261,7 @@ class CharacterManager extends Service
             }
             $imageData = Arr::only($data, [
                 'species_id', 'subtype_id', 'rarity_id', 'use_cropper',
-                'x0', 'x1', 'y0', 'y1', 'transformation_id','transformation_info','transformation_description'
+                'x0', 'x1', 'y0', 'y1', 'transformation_id','transformation_info','transformation_description', 'genotype'
             ]);
             $imageData['use_cropper'] = isset($data['use_cropper']) ;
             $imageData['description'] = isset($data['image_description']) ? $data['image_description'] : null;
@@ -863,6 +863,7 @@ class CharacterManager extends Service
             $new['transformation'] = $image->transformation_id ? $image->transformation->displayName : null;
             $new['transformation_info'] = $image->transformation_info ? $image->transformation_info : null;
             $new['transformation_description'] = $image->transformation_description ? $image->transformation_description : null;
+            $new['genotype'] = $image->genotype ? $image->genotype : null;
 
             // Character also keeps track of these features
             $image->character->rarity_id = $image->rarity_id;
