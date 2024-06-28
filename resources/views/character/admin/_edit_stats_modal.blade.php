@@ -50,7 +50,7 @@
             {!! Form::text('sale_value', $character->sale_value, ['class' => 'form-control']) !!}
         </div>
     </div>
-    <div class="card mb-3" id="resellOptions">
+    <div class="card mb-3" id="genotype">
         <div class="card-body">
             {!! Form::label('genotype') !!} {!! add_help('This value is publicly displayed on the character\'s page.') !!}
             {!! Form::text('genotype', $character->genotype, ['class' => 'form-control']) !!}
