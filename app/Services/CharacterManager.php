@@ -264,6 +264,7 @@ class CharacterManager extends Service
             $imageData['is_visible'] = isset($data['is_visible']);
             $imageData['extension'] = (Config::get('lorekeeper.settings.masterlist_image_format') ? Config::get('lorekeeper.settings.masterlist_image_format') : (isset($data['extension']) ? $data['extension'] : $data['image']->getClientOriginalExtension()));
             $imageData['character_id'] = $character->id;
+            $imageData['genotype'] = isset($data['genotype']);
 
             $image = CharacterImage::create($imageData);
 
