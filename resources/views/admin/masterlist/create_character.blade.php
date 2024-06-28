@@ -211,12 +211,14 @@
                 {!! Form::label('Image Notes (Optional)') !!} {!! add_help('This section is for making additional notes about the image.') !!}
                 {!! Form::textarea('image_description', old('image_description'), ['class' => 'form-control wysiwyg']) !!}
             </div>
-        @endif
 
-        <div class="form-group">
+            <div class="form-group">
             {!! Form::label('genotype') !!}
             {!! Form::text('genotype', old('genotype'), ['class' => 'form-control']) !!}
         </div>
+        @endif
+
+        
 
         <h3>Traits</h3>
 
