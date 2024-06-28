@@ -238,6 +238,13 @@
             {!! Form::select('rarity_id', $rarities, old('rarity_id'), ['class' => 'form-control']) !!}
         </div>
 
+        <div class="form-group">
+            {!! Form::label('Genotype: ') !!} @if ($isMyo)
+                {!! add_help('This will lock the slot into a particular rarity. Leave it blank if you would like to give the user more choices.') !!}
+            @endif
+            {!! Form::text('genotype', $character, old('genotype'), ['class' => 'form-control']) !!}
+        </div>
+
         <hr>
         <h5>{{ ucfirst(__('transformations.transformations')) }}</h5>
         <div class="form-group" id="transformations">
