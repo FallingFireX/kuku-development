@@ -195,6 +195,7 @@ class CharacterManager extends Service
                 $data['genotype'] = isset($data['genotype']) ? $data['genotype'] : null;
                 $data['phenotype'] = isset($data['phenotype']) ? $data['phenotype'] : null;
                 $data['gender'] = isset($data['gender']) ? $data['gender'] : null;
+                $data['eyecolor'] = isset($data['eyecolor']) ? $data['eyecolor'] : null;
 
             }
 
@@ -251,6 +252,7 @@ class CharacterManager extends Service
                 $data['genotype'] = isset($data['genotype']) ? $data['genotype'] : null;
                 $data['phenotype'] = isset($data['phenotype']) ? $data['phenotype'] : null;
                 $data['gender'] = isset($data['gender']) ? $data['gender'] : null;
+                $data['eyecolor'] = isset($data['eyecolor']) ? $data['eyecolor'] : null;
 
 
                 // Use default images for MYO slots without an image provided
@@ -265,7 +267,7 @@ class CharacterManager extends Service
             }
             $imageData = Arr::only($data, [
                 'species_id', 'subtype_id', 'rarity_id', 'use_cropper',
-                'x0', 'x1', 'y0', 'y1', 'transformation_id','transformation_info','transformation_description', 'genotype', 'phenotype', 'gender',
+                'x0', 'x1', 'y0', 'y1', 'transformation_id','transformation_info','transformation_description', 'genotype', 'phenotype', 'gender', 'eyecolor',
             ]);
             $imageData['use_cropper'] = isset($data['use_cropper']) ;
             $imageData['description'] = isset($data['image_description']) ? $data['image_description'] : null;
@@ -860,6 +862,7 @@ class CharacterManager extends Service
             $image->genotype = $data['genotype'];
             $image->phenotype = $data['phenotype'];
             $image->gender = $data['gender'];
+            $image->eyecolor = $data['eyecolor'];
             $image->save();
 
             $new = [];
@@ -873,6 +876,7 @@ class CharacterManager extends Service
             $new['genotype'] = $image->genotype ? $image->genotype : null;
             $new['phenotype'] = $image->phenotype ? $image->phenotype : null;
             $new['gender'] = $image->gender ? $image->gender : null;
+            $new['eyecolor'] = $image->eyecolor ? $image->eyecolor : null;
 
             // Character also keeps track of these features
             $image->character->rarity_id = $image->rarity_id;
