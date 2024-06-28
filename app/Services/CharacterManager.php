@@ -207,6 +207,7 @@ class CharacterManager extends Service
             $characterData['is_gift_writing_allowed'] = 0;
             $characterData['is_trading'] = 0;
             $characterData['parsed_description'] = parse($data['description']);
+            $characterData['genotype'] = isset($data['genotype']);
             if($isMyo) $characterData['is_myo_slot'] = 1;
 
             $character = Character::create($characterData);
