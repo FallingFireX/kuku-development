@@ -859,7 +859,7 @@ class CharacterManager extends Service
             $image->transformation_id = $data['transformation_id'] ?: null;
             $image->transformation_info = $data['transformation_info'] ?: null;
             $image->transformation_description = $data['transformation_description'] ?: null;
-            $image->genotype = $data['genotype'];
+            //$image->genotype = $data['genotype'];
             $image->phenotype = $data['phenotype'];
             $image->gender = $data['gender'];
             $image->eyecolor = $data['eyecolor'];
@@ -873,7 +873,7 @@ class CharacterManager extends Service
             $new['transformation'] = $image->transformation_id ? $image->transformation->displayName : null;
             $new['transformation_info'] = $image->transformation_info ? $image->transformation_info : null;
             $new['transformation_description'] = $image->transformation_description ? $image->transformation_description : null;
-            $new['genotype'] = $image->genotype ? $image->genotype : null;
+            //$new['genotype'] = $image->genotype ? $image->genotype : null;
             $new['phenotype'] = $image->phenotype ? $image->phenotype : null;
             $new['gender'] = $image->gender ? $image->gender : null;
             $new['eyecolor'] = $image->eyecolor ? $image->eyecolor : null;
