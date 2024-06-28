@@ -20,5 +20,13 @@ return [
             'AnimatedCritter' => 'https://github.com/animatedcritter/',
         ]),
         'version' => '1.0.0',
+    ]
+    'character_profile_custom_values' => [
+        'key' => 'character_profile_custom_values',
+        'wiki_key' => 'Character_Profile_Custom_Values',
+        'creators' => json_encode([
+            'Pure09' => 'https://github.com/deep-ci/',
+        ]),
+        'version' => '1.0.0',
     ],
 ];
