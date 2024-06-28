@@ -67,6 +67,7 @@ class CharacterController extends Controller
             'subtypes' => ['0' => 'Pick a Species First'],
             'features' => Feature::orderBy('name')->pluck('name', 'id')->toArray(),
             'transformations' => ['0' => 'Pick a Species First'],
+            'genotype' => ['0' => 'Enter a value'],
             'isMyo' => false
         ]);
     }
@@ -86,6 +87,7 @@ class CharacterController extends Controller
             'subtypes' => ['0' => 'Pick a Species First'],
             'features' => Feature::orderBy('name')->pluck('name', 'id')->toArray(),
             'transformations' => ['0' => 'Pick a Species First'],
+            'genotype' => ['0' => 'Enter a value'],
             'isMyo' => true
         ]);
     }
