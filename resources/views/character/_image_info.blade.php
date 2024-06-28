@@ -45,9 +45,9 @@
                     <div class="col-lg-4 col-md-6 col-4"><h5> </h5></div>
                     <div class="col-lg-8 col-md-6 col-8">{!! $image->rarity_id ? $image->rarity->displayName : 'None' !!}</div>
                 </div>
-
+                <hr>
                 <div class="row">
-                    <div class="col-lg-4 col-md-6 col-4"><h5>Genotype</h5></div>
+                    <div class="col-lg-4 col-md-6 col-4"><strong>Genotype</strong></div>
                     <div class="col-lg-8 col-md-6 col-8">{!! $image->genotype ? $image->genotype : 'None' !!}</div>
                 </div>
 
