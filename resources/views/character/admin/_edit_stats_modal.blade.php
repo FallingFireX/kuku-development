@@ -25,6 +25,11 @@
         </div>
     @endif
 
+    <div class="form-group">
+    {!! Form::label('Genotype') !!}
+    {!! Form::text('genotype', $character->genotype, ['class' => 'form-control mr-2', 'placeholder' => 'Origin Info (Optional)']) !!}
+</div>
+
     <div class="alert alert-info">
         These are displayed on the character's profile, but don't have any effect on site functionality except for the following: 
         <ul>
