@@ -213,6 +213,11 @@
             </div>
         @endif
 
+        <div class="form-group">
+            {!! Form::label('genotype') !!}
+            {!! Form::text('genotype', old('genotype'), ['class' => 'form-control']) !!}
+        </div>
+
         <h3>Traits</h3>
 
         <div class="form-group">
