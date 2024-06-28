@@ -394,6 +394,7 @@
         {!! Form::submit('Create Character', ['class' => 'btn btn-primary']) !!}
     </div>
     {!! Form::close() !!}
+@endif
 
 @endsection
 

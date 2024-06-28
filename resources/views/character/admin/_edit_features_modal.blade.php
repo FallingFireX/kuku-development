@@ -30,11 +30,6 @@
     {!! Form::select('rarity_id', $rarities, $image->rarity_id, ['class' => 'form-control']) !!}
 </div>
 
-<div class="form-group" id="genotype">
-    {!! Form::label('genotype') !!}
-    {!! Form::test('genotype', $character->genotype, ['class' => 'form-control']) !!}
-</div>
-
 <div class="form-group">
     {!! Form::label('Traits') !!}
     <div id="featureList">

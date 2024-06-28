@@ -45,7 +45,7 @@ class Character extends Model
         'is_sellable', 'is_tradeable', 'is_giftable',
         'sale_value', 'transferrable_at', 'is_visible',
         'is_gift_art_allowed', 'is_gift_writing_allowed', 'is_trading', 'sort',
-        'is_myo_slot', 'name', 'trade_id', 'owner_url', 'genotype'
+        'is_myo_slot', 'name', 'trade_id', 'owner_url', 
     ];
 
     /**
@@ -324,16 +324,6 @@ class Character extends Model
     public function getDisplayNameAttribute()
     {
         return '<a href="'.$this->url.'" class="display-character">'.$this->fullName.'</a>';
-    }
-
-    /**
-     * Displays the character's name, linked to their character page.
-     *
-     * @return string
-     */
-    public function getDisplayGenoAttribute()
-    {
-        return 'Genotype: '.$this->genotype;
     }
 
     /**
