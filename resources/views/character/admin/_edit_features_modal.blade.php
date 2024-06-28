@@ -49,10 +49,10 @@
     </div>
 </div>
 
-<div class="form-group">
-    {!! Form::label('Genotype') !!}
-    {!! Form::text('genotype', $image->genotype, ['class' => 'form-control']) !!}
-</div>
+<div class="form-group" id='genotype'>
+            {!! Form::label('genotype') !!}{!! add_help('This is text that will show alongside the ' . __('transformations.transformation') . ' name on the image info area. Explains why the character takes this form, how, etc. Should be pretty short.') !!}
+            {!! Form::text('genotype', old('genotype'), ['class' => 'form-control', 'genotype']) !!}
+        </div>
 
 <div class="text-right">
     {!! Form::submit('Edit', ['class' => 'btn btn-primary']) !!}
