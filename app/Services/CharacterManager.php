@@ -859,6 +859,7 @@ class CharacterManager extends Service
             $image->transformation_description = $data['transformation_description'] ?: null;
             $image->genotype = $data['genotype'];
             $image->phenotype = $data['phenotype'];
+            $image->gender = $data['gender'];
             $image->save();
 
             $new = [];
@@ -871,6 +872,7 @@ class CharacterManager extends Service
             $new['transformation_description'] = $image->transformation_description ? $image->transformation_description : null;
             $new['genotype'] = $image->genotype ? $image->genotype : null;
             $new['phenotype'] = $image->phenotype ? $image->phenotype : null;
+            $new['gender'] = $image->gender ? $image->gender : null;
 
             // Character also keeps track of these features
             $image->character->rarity_id = $image->rarity_id;

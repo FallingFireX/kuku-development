@@ -347,6 +347,16 @@ class Character extends Model
     }
 
     /**
+     * Displays the character's name, linked to their character page.
+     *
+     * @return string
+     */
+    public function getGenderAttribute()
+    {
+        return $this->gender;
+    }
+
+    /**
      * Gets the character's name, including their code and user-assigned name.
      * If this is a MYO slot, simply returns the slot's name.
      *
