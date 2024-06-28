@@ -31,11 +31,6 @@
 </div>
 
 <div class="form-group">
-    {!! Form::label('genotype') !!}
-    {!! Form::text('genotype', $characters->genotype, ['class' => 'form-control']) !!}
-</div>
-
-<div class="form-group">
     {!! Form::label('Traits') !!}
     <div id="featureList">
         @foreach ($image->features as $feature)
@@ -52,6 +47,11 @@
         {!! Form::text('feature_data[]', null, ['class' => 'form-control mr-2', 'placeholder' => 'Extra Info (Optional)']) !!}
         <a href="#" class="remove-feature btn btn-danger mb-2">×</a>
     </div>
+</div>
+
+<div class="form-group">
+    {!! Form::label('Genotype') !!}
+    {!! Form::text('transformation_description', $image->transformation_description, ['class' => 'form-control mr-2', 'placeholder' => 'Origin Info (Optional)']) !!}
 </div>
 
 <div class="text-right">
