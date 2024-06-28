@@ -60,7 +60,7 @@
                                         <strong>Basic Info:</strong>
                                     @endif
                                     @foreach($group as $feature)
-                                        <div class="ml-md-2">{!! $feature->feature->displayName !!} @if($feature->data) ({{ $feature->data }}) @endif</div>
+                                        <div class="ml-md-2">{!! $feature->feature->displayName !!} @endif</div>
                                     @endforeach
                                 </div>
                                 @endforeach
