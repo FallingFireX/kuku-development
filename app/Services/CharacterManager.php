@@ -193,6 +193,7 @@ class CharacterManager extends Service
                 $data['transformation_info'] = isset($data['transformation_info']) && $data['transformation_info'] ? $data['transformation_info'] : null;
                 $data['transformation_description'] = isset($data['transformation_description']) && $data['transformation_description'] ? $data['transformation_description'] : null;
                 $data['genotype'] = isset($data['genotype']) ? $data['genotype'] : null;
+                $data['phenotype'] = isset($data['phenotype']) ? $data['phenotype'] : null;
 
             }
 
@@ -247,6 +248,7 @@ class CharacterManager extends Service
                 $data['transformation_info'] = isset($data['transformation_info']) && $data['transformation_info'] ? $data['transformation_info'] : null;
                 $data['transformation_description'] = isset($data['transformation_description']) && $data['transformation_description'] ? $data['transformation_description'] : null;
                 $data['genotype'] = isset($data['genotype']) ? $data['genotype'] : null;
+                $data['phenotype'] = isset($data['phenotype']) ? $data['phenotype'] : null;
 
 
                 // Use default images for MYO slots without an image provided
@@ -261,7 +263,7 @@ class CharacterManager extends Service
             }
             $imageData = Arr::only($data, [
                 'species_id', 'subtype_id', 'rarity_id', 'use_cropper',
-                'x0', 'x1', 'y0', 'y1', 'transformation_id','transformation_info','transformation_description', 'genotype'
+                'x0', 'x1', 'y0', 'y1', 'transformation_id','transformation_info','transformation_description', 'genotype', 'phenotype'
             ]);
             $imageData['use_cropper'] = isset($data['use_cropper']) ;
             $imageData['description'] = isset($data['image_description']) ? $data['image_description'] : null;
