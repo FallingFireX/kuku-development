@@ -41,6 +41,19 @@
                         <div class="col-lg-8 col-md-6 col-8">{!! $image->subtype_id ? $image->subtype->displayName : 'None' !!}</div>
                     </div>
                 @endif
+                @if ($image->transformation_id)
+                    <div class="row">
+                        <div class="col-lg-4 col-md-6 col-4">
+                            <h5>{{ ucfirst(__('transformations.form')) }} {!! add_help('The main image is always the active image') !!}</h5>
+                        </div>
+                        <div class="col-lg-8 col-md-6 col-8">
+                            <a href="{{ $image->transformation->url }}">
+                                {!! $image->transformation->displayName !!}
+                            </a>
+                            @if($image->transformation_description) ({{ $image->transformation_description }}) @endif
+                        </div>
+                    </div>
+                @endif
                 <div class="row">
                     <div class="col-lg-4 col-md-6 col-4"><h5> </h5></div>
                     <div class="col-lg-8 col-md-6 col-8">{!! $image->rarity_id ? $image->rarity->displayName : 'None' !!}</div>
@@ -161,3 +174,4 @@
     </div>
 
 </div>
+
