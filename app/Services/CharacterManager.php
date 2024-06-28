@@ -207,7 +207,7 @@ class CharacterManager extends Service
             $characterData['is_gift_writing_allowed'] = 0;
             $characterData['is_trading'] = 0;
             $characterData['parsed_description'] = parse($data['description']);
-            $characterData['genotype'] = isset($data['genotype']);
+            $characterData['genotype'] = isset($data['genotype']) ? $data['genotype'] : null;
             if($isMyo) $characterData['is_myo_slot'] = 1;
 
             $character = Character::create($characterData);
@@ -264,7 +264,7 @@ class CharacterManager extends Service
             $imageData['is_visible'] = isset($data['is_visible']);
             $imageData['extension'] = (Config::get('lorekeeper.settings.masterlist_image_format') ? Config::get('lorekeeper.settings.masterlist_image_format') : (isset($data['extension']) ? $data['extension'] : $data['image']->getClientOriginalExtension()));
             $imageData['character_id'] = $character->id;
-            $imageData['genotype'] = isset($data['genotype']);
+            $imageData['genotype'] = isset($data['genotype']) ? $data['genotype'] : null;
 
             $image = CharacterImage::create($imageData);
 
