@@ -61,7 +61,7 @@
 
                 <div class="row">
                     <div class="col-lg-4 col-md-6 col-4"><h5>genotype</h5></div>
-                    <div class="col-lg-8 col-md-6 col-8">{!! $character->genotype ? $character->genotype->displayName : 'None' !!}</div>
+                    <div class="col-lg-8 col-md-6 col-8">{!! $character->genotype ? $character->genotype->displayGeno : 'None' !!}</div>
                 </div>
 
                 <div class="mb-3">
