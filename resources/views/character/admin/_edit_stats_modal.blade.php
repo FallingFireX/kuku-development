@@ -50,6 +50,12 @@
             {!! Form::text('sale_value', $character->sale_value, ['class' => 'form-control']) !!}
         </div>
     </div>
+    <div class="card mb-3" id="resellOptions">
+        <div class="card-body">
+            {!! Form::label('genotype') !!} {!! add_help('This value is publicly displayed on the character\'s page.') !!}
+            {!! Form::text('genotype', $character->genotype, ['class' => 'form-control']) !!}
+        </div>
+    </div>
     <div class="form-group">
         {!! Form::label('On Transfer Cooldown Until (Optional)') !!} 
         {!! Form::text('transferrable_at', $character->transferrable_at, ['class' => 'form-control', 'id' => 'datepicker']) !!}
