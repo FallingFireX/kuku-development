@@ -32,7 +32,7 @@
 
 <div class="form-group">
     {!! Form::label('genotype') !!}
-    {!! Form::text('genotype', $character->genotype, ['class' => 'form-control']) !!}
+    {!! Form::text('genotype', $characters->genotype, ['class' => 'form-control']) !!}
 </div>
 
 <div class="form-group">
