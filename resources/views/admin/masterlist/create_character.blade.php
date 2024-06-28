@@ -254,6 +254,11 @@
         </div>
         <hr>
 
+        <div class="form-group" id='genotype'>
+            {!! Form::label('genotype') !!}{!! add_help('This is text that will show alongside the ' . __('transformations.transformation') . ' name on the image info area. Explains why the character takes this form, how, etc. Should be pretty short.') !!}
+            {!! Form::text('genotype', old('genotype'), ['class' => 'form-control', 'genotype']) !!}
+        </div>
+
         <div class="form-group">
             {!! Form::label('Traits') !!} @if ($isMyo)
                 {!! add_help(
