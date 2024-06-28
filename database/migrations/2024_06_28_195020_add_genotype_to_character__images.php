@@ -13,7 +13,7 @@ class AddGenotypeToCharacterImages extends Migration
      */
     public function up()
     {
-        Schema::table('character__images', function (Blueprint $table) {
+        Schema::table('character_images', function (Blueprint $table) {
             $table->string('genotype', 191)->nullable()->after('sort');
         });
     }
@@ -25,7 +25,7 @@ class AddGenotypeToCharacterImages extends Migration
      */
     public function down()
     {
-        Schema::table('character__images', function (Blueprint $table) {
+        Schema::table('character_images', function (Blueprint $table) {
             $table->dropColumn('genotype');
         });
     }
