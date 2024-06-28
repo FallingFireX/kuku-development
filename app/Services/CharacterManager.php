@@ -192,6 +192,8 @@ class CharacterManager extends Service
                 $data['transformation_id'] = isset($data['transformation_id']) && $data['transformation_id'] ? $data['transformation_id'] : null;
                 $data['transformation_info'] = isset($data['transformation_info']) && $data['transformation_info'] ? $data['transformation_info'] : null;
                 $data['transformation_description'] = isset($data['transformation_description']) && $data['transformation_description'] ? $data['transformation_description'] : null;
+                $data['genotype'] = isset($data['genotype']) && $data['genotype'] ? $data['genotype'] : null;
+
             }
 
             $characterData = Arr::only($data, [
@@ -244,6 +246,7 @@ class CharacterManager extends Service
                 $data['transformation_id'] = isset($data['transformation_id']) && $data['transformation_id'] ? $data['transformation_id'] : null;
                 $data['transformation_info'] = isset($data['transformation_info']) && $data['transformation_info'] ? $data['transformation_info'] : null;
                 $data['transformation_description'] = isset($data['transformation_description']) && $data['transformation_description'] ? $data['transformation_description'] : null;
+                $data['genotype'] = isset($data['genotype']) && $data['genotype'] ? $data['genotype'] : null;
 
 
                 // Use default images for MYO slots without an image provided

@@ -48,7 +48,12 @@
         <a href="#" class="remove-feature btn btn-danger mb-2">×</a>
     </div>
 </div>
-
+<div class="card mb-3" id="genotype">
+        <div class="card-body">
+            {!! Form::label('Genotype') !!} {!! add_help('This value is publicly displayed on the character\'s page.') !!}
+            {!! Form::text('genotype', $character->genotype, ['class' => 'form-control']) !!}
+        </div>
+    </div>
 <div class="text-right">
     {!! Form::submit('Edit', ['class' => 'btn btn-primary']) !!}
 </div>
