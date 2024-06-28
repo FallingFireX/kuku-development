@@ -42,12 +42,12 @@
                     </div>
                 @endif
                 <div class="row">
-                    <div class="col-lg-4 col-md-6 col-4"><h5>Rarity</h5></div>
+                    <div class="col-lg-4 col-md-6 col-4"><h5> </h5></div>
                     <div class="col-lg-8 col-md-6 col-8">{!! $image->rarity_id ? $image->rarity->displayName : 'None' !!}</div>
                 </div>
 
                 <div class="mb-3">
-                    <div><h5>Traits</h5></div>
+                    <div><h5>Overview</h5></div>
                     @if(Config::get('lorekeeper.extensions.traits_by_category'))
                         <div>
                             @php $traitgroup = $image->features()->get()->groupBy('feature_category_id') @endphp
@@ -57,7 +57,7 @@
                                     @if($key)
                                         <strong>{!! $group->first()->feature->category->displayName !!}:</strong>
                                     @else
-                                        <strong>Miscellaneous:</strong>
+                                        <strong>Basic Info:</strong>
                                     @endif
                                     @foreach($group as $feature)
                                         <div class="ml-md-2">{!! $feature->feature->displayName !!} @if($feature->data) ({{ $feature->data }}) @endif</div>
