@@ -62,7 +62,7 @@
                     <div class="col-lg-4 col-md-6 col-4"><strong>Phenotype</strong></div>
                     <div class="col-lg-8 col-md-6 col-8">{!! $image->phenotype ? $image->phenotype : 'None' !!}</div>
                 </div>
-
+                <hr>
                 <div class="mb-3">
                     <div><h5>Overview</h5></div>
                     @if(Config::get('lorekeeper.extensions.traits_by_category'))
@@ -74,7 +74,7 @@
                                     @if($key)
                                         <strong>{!! $group->first()->feature->category->displayName !!}:</strong>
                                     @else
-                                        <strong>Basic Info:</strong>
+                                        <strong>Rank:</strong>
                                     @endif
                                     @foreach($group as $feature)
                                         <div class="ml-md-2">{!! $feature->feature->displayName !!} @if($feature->data) ({{ $feature->data }}) @endif</div>
