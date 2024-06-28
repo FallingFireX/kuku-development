@@ -51,7 +51,7 @@
 
 <div class="form-group">
     {!! Form::label('Genotype') !!}
-    {!! Form::text('genotype', $image->genotype, ['class' => 'form-control mr-2', 'placeholder' => 'Origin Info (Optional)']) !!}
+    {!! Form::text('genotype', $image->genotype, ['class' => 'form-control']) !!}
 </div>
 
 <div class="text-right">

@@ -853,6 +853,7 @@ class CharacterManager extends Service
             $image->transformation_id = $data['transformation_id'] ?: null;
             $image->transformation_info = $data['transformation_info'] ?: null;
             $image->transformation_description = $data['transformation_description'] ?: null;
+            $image->genotype = $data['genotype'] ?: null;
             $image->save();
 
             $new = [];
