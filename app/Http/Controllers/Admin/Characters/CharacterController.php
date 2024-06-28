@@ -67,7 +67,6 @@ class CharacterController extends Controller
             'subtypes' => ['0' => 'Pick a Species First'],
             'features' => Feature::orderBy('name')->pluck('name', 'id')->toArray(),
             'transformations' => ['0' => 'Pick a Species First'],
-            'genotype' => ['0' => 'Enter a value'],
             'isMyo' => false
         ]);
     }
@@ -87,7 +86,6 @@ class CharacterController extends Controller
             'subtypes' => ['0' => 'Pick a Species First'],
             'features' => Feature::orderBy('name')->pluck('name', 'id')->toArray(),
             'transformations' => ['0' => 'Pick a Species First'],
-            'genotype' => ['0' => 'Enter a value'],
             'isMyo' => true
         ]);
     }
@@ -155,7 +153,7 @@ class CharacterController extends Controller
             'generate_ancestors',
 
             'species_id', 'subtype_id', 'rarity_id', 'feature_id', 'feature_data',
-            'image', 'thumbnail', 'image_description', 'transformation_id','transformation_info','transformation_description', 'genotype'
+            'image', 'thumbnail', 'image_description', 'transformation_id','transformation_info','transformation_description'
         ]);
         if ($character = $service->createCharacter($data, Auth::user())) {
             flash('Character created successfully.')->success();
@@ -203,7 +201,7 @@ class CharacterController extends Controller
             'generate_ancestors',
 
             'species_id', 'subtype_id', 'rarity_id', 'feature_id', 'feature_data',
-            'image', 'thumbnail', 'transformation_id','transformation_info','transformation_description', 'genotype'
+            'image', 'thumbnail', 'transformation_id','transformation_info','transformation_description'
         ]);
         if ($character = $service->createCharacter($data, Auth::user(), true)) {
             flash('MYO slot created successfully.')->success();

@@ -254,10 +254,6 @@
         </div>
         <hr>
 
-        <div class="form-group">
-            {!! Form::label(' Origin/Lore (Optional)') !!}{!! add_help('This is text that will show alongside the ame on the image info area. Explains why the character takes this form, how, etc. Should be pretty short.') !!}
-            {!! Form::text('genotype', old('genotype'), ['class' => 'form-control mr-2', 'placeholder' => 'Origin Info (Optional)']) !!}
-        </div>
 
         <div class="form-group">
             {!! Form::label('Traits') !!} @if ($isMyo)
@@ -398,7 +394,7 @@
         {!! Form::submit('Create Character', ['class' => 'btn btn-primary']) !!}
     </div>
     {!! Form::close() !!}
-
+@endif
 
 @endsection
 
