@@ -351,14 +351,14 @@ return [
     345 => [
         'name' => 'Character Award Grant',
         'message' => '{character_name} has received a staff grant of {award_name} (×{award_quantity}) from <a href="{sender_url}">{sender_name}</a>. (<a href="{url}">View Awards</a>)',
-        'url' => 'character/{character_slug}/awards'
+        'url' => 'character/{character_slug}/awardcase'
     ],
 
     // CHARACTER_AWARD_REMOVAL
     346 => [
         'name' => 'Character Award Removal',
         'message' => '{award_name} (×{award_quantity}) was removed from {character_name} by <a href="{sender_url}">{sender_name}</a>. (<a href="{url}">View Awards</a>)',
-        'url' => 'character/{character_slug}/awards'
+        'url' => 'character/{character_slug}/awardcase'
     ],
 
     // CHARACTER_ITEM_GRANT
