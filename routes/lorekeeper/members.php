@@ -25,9 +25,11 @@ Route::group(['prefix' => 'account', 'namespace' => 'Users'], function() {
     Route::post('profile', 'AccountController@postProfile');
     Route::post('staff-profile', 'AccountController@postStaffProfile');
     Route::post('staff-links', 'AccountController@postStaffLinks');
+    Route::post('theme', 'AccountController@postTheme');
     Route::post('password', 'AccountController@postPassword');
     Route::post('email', 'AccountController@postEmail');
     Route::post('avatar', 'AccountController@postAvatar');
+    Route::post('theme', 'AccountController@postTheme');
     Route::get('aliases', 'AccountController@getAliases');
     Route::get('make-primary/{id}', 'AccountController@getMakePrimary');
     Route::post('make-primary/{id}', 'AccountController@postMakePrimary');
