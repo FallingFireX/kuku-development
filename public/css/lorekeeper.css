@@ -222,7 +222,8 @@ main > .row {
         position: absolute;
         padding-left: 0px;
         text-align: left;
-        background-color: #ddd;
+        background-color: #A3D4BE;
+        ;
         z-index: 3;
         right: 0px;
         bottom: 0px;
