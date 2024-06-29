@@ -22,6 +22,15 @@ return [
         'version' => '1.0.0',
     ],
 
+    'user_pronouns' => [
+        'key' => 'user_pronouns',
+        'wiki_key' => 'User_Pronouns',
+        'creators' => json_encode([
+            'AnimatedCritter' => 'https://github.com/animatedcritter/',
+        ]),
+        'version' => '1.0.0',
+    ],
+
     'character_profile_custom_values' => [
         'key' => 'character_profile_custom_values',
         'wiki_key' => 'Character_Profile_Custom_Values',
