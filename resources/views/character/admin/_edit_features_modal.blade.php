@@ -59,14 +59,14 @@
         </div> -->
 
 <div class="form-group" id='genotype'>
-            {!! Form::label('genotype') !!}{!! add_help('This will edit the Character's Genotype. Only do this if there was a mistake spotted!') !!}
+            {!! Form::label('genotype') !!}
             {!! Form::text('genotype', $image->genotype, ['class' => 'form-control mr-2']) !!}
         </div>
 
-<div class="form-group" id='phenotype'>
-            {!! Form::label('phenotype') !!}{!! add_help('This will edit the Character's Phenotype. Only do this if there was a mistake spotted!') !!}
+<!-- <div class="form-group" id='phenotype'>
+            {!! Form::label('phenotype') !!}
             {!! Form::text('phenotype', $image->phenotype, ['class' => 'form-control mr-2']) !!}
-        </div>
+        </div> -->
 
 <div class="text-right">
     {!! Form::submit('Edit', ['class' => 'btn btn-primary']) !!}
