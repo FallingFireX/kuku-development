@@ -49,14 +49,14 @@
     </div>
 </div>
 
-<div class="form-group" id='gender'>
+<!-- <div class="form-group" id='gender'>
             {!! Form::label('gender') !!}{!! add_help('This is text that will show alongside the ' . __('transformations.transformation') . ' name on the image info area. Explains why the character takes this form, how, etc. Should be pretty short.') !!}
             {!! Form::select('gender', ['Rook' => 'Rook', 'Dove' => 'Dove'], null, ['class' => 'form-control']) !!}
         </div>
 <div class="form-group" id='eyecolor'>
             {!! Form::label('eyecolor') !!}{!! add_help('If a kukuri is given a rebirth or otherwise has their eye color modified, please change this to read accordingly') !!}
             {!! Form::text('eyecolor', $image->eyecolor, ['class' => 'form-control mr-2']) !!}
-        </div>
+        </div> -->
 
 <div class="form-group" id='genotype'>
             {!! Form::label('genotype') !!}{!! add_help('This will edit the Character's Genotype. Only do this if there was a mistake spotted!') !!}
