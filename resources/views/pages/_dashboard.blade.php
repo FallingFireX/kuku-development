@@ -6,11 +6,29 @@
 </div>
 
 <div class="row justify-content-center">
-    <div class="col-md-2">
+    <div class="col-md-5">
         <div class="card mb-4">
             <div class="card-body text-center">
                 <h5>Game Activities</h5>
                 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-5">
+        <div class="card mb-4">
+            <div class="card-body text-center">
+                <h5>Resources</h5>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-5">
+        <div class="card mb-4">
+            <div class="card-body text-center">
+                <h5>Image test?</h5>
+                <img src="{{ asset('images/frontpagedoll.png') }}" alt="Characters" class="card-img" />
             </div>
         </div>
     </div>
