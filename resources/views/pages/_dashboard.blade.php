@@ -6,7 +6,7 @@
 </div>
 
 <div class="row justify-content-center">
-    <div class="col-md-6">
+    <div class="col-md-2">
         <div class="card mb-4">
             <div class="card-body text-center">
                 <img src="{{ asset('images/account.png') }}" alt="Account" />
@@ -19,7 +19,7 @@
             </ul>
         </div>
     </div>
-    <div class="col-md-6">
+    <div class="col-md-2">
         <div class="card mb-4">
             <div class="card-body text-center">
                 <img src="{{ asset('images/characters.png') }}" alt="Characters" />
@@ -32,7 +32,7 @@
             </ul>
         </div>
     </div>
-    <div class="col-md-6">
+    <div class="col-md-2">
         <div class="card mb-4">
             <div class="card-body text-center">
                 <img src="{{ asset('images/inventory.png') }}" alt="Inventory" />
@@ -44,7 +44,7 @@
             </ul>
         </div>
     </div>
-    <div class="col-md-6">
+    <div class="col-md-2">
         <div class="card">
             <div class="card-body text-center">
                 <img src="{{ asset('images/currency.png') }}" alt="Bank" />
@@ -56,7 +56,7 @@
             </ul>
         </div>
     </div>
-    <div class="col-md-6">
+    <div class="col-md-2">
         <div class="card mb-12">
             <div class="card-body text-center">
                 <img src="{{ asset('images/awards.png') }}" />
