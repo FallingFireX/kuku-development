@@ -62,11 +62,10 @@
             {!! Form::label('genotype') !!}
             {!! Form::text('genotype', $image->genotype, ['class' => 'form-control mr-2']) !!}
         </div>
-
-<!-- <div class="form-group" id='phenotype'>
+ <div class="form-group" id='phenotype'>
             {!! Form::label('phenotype') !!}
             {!! Form::text('phenotype', $image->phenotype, ['class' => 'form-control mr-2']) !!}
-        </div> -->
+        </div>
 
 <div class="text-right">
     {!! Form::submit('Edit', ['class' => 'btn btn-primary']) !!}
