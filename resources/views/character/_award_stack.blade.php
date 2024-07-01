@@ -9,7 +9,7 @@
     </div>
 
     @if($award->is_featured)
-        <div class="alert mt-2">
+        <div class="alert alert-success mt-2" background-color=transparent;>
             This {{ __('awards.award') }} is featured!
         </div>
     @endif
