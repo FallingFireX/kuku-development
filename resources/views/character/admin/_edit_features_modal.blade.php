@@ -64,7 +64,7 @@
         </div>
 
 <div class="form-group" id='phenotype'>
-            {!! Form::label('genotype') !!}{!! add_help('This will edit the Character's Phenotype. Only do this if there was a mistake spotted!') !!}
+            {!! Form::label('phenotype') !!}{!! add_help('This will edit the Character's Phenotype. Only do this if there was a mistake spotted!') !!}
             {!! Form::text('phenotype', $image->phenotype, ['class' => 'form-control mr-2']) !!}
         </div>
 
