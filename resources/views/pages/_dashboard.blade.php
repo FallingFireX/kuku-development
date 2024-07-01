@@ -28,7 +28,7 @@
         <div class="card mb-4">
             <div class="card-body text-center">
                 <h5>Image test?</h5>
-                <img src="{{ asset('images/frontpagedoll.png') }}" alt="Characters" class="card-img" />
+                <img src="{{ asset('images\frontpagedoll.png') }}" alt="Characters" class="card-img" />
             </div>
         </div>
     </div>
