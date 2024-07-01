@@ -6,7 +6,7 @@
 </div>
 
 <div class="row justify-content-center">
-    <div class="col-md-5">
+    <div class="col-md-4">
         <div class="card mb-4">
             <div class="card-body text-center">
                 <h5>Game Activities</h5>
@@ -15,7 +15,7 @@
         </div>
     </div>
 
-    <div class="col-md-5">
+    <div class="col-md-4">
         <div class="card mb-4">
             <div class="card-body text-center">
                 <h5>Resources</h5>
@@ -24,7 +24,7 @@
         </div>
     </div>
 
-    <div class="col-md-5">
+    <div class="col-md-4">
         <div class="card mb-4">
             <div class="card-body text-center">
                 <h5>Image test?</h5>
