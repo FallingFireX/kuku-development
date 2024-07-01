@@ -10,28 +10,26 @@
         <div class="card mb-4">
             <div class="card-body text-center">
                 <h5>Game Activities</h5>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam</p>
+                <p>Quest<br>Coliseum<br>Activity Letters<br><br>Hunting<br>Gathering<br>Excavating<br>Traveling<br><br>Breeding<br>Training</p>
             </div>
         </div>
     </div>
-
     <div class="col-md-4">
         <div class="card mb-4">
             <div class="card-body text-center">
-                <h5>Resources</h5>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam</p>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-md-4">
-        <div class="card mb-4">
-            <div class="card-body text-center">
-                <h5>Image test?</h5>
                 <img src="https://kukuri-arpg.w3spaces.com/Graphics/Frontpagedoll.png" alt="Characters" class="card-img" />
             </div>
         </div>
     </div>
+    <div class="col-md-4">
+        <div class="card mb-4">
+            <div class="card-body text-center">
+                <h5>Resources</h5>
+                <p>Bank<br>Design Approvals<br>Import Updates<br><br>Genetics and Mutations<br>Adoption Center<br>Status Updates<br></p>
+            </div>
+        </div>
+    </div>
+
 </div>
 
 <div class="row justify-content-center">
