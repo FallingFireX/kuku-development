@@ -49,9 +49,23 @@
     </div>
 </div>
 
+<div class="form-group" id='gender'>
+            {!! Form::label('gender') !!}{!! add_help('You should NEVER need to edit this; this option is here just in case') !!}
+            {!! Form::text('gender', $image->gender, ['class' => 'form-control mr-2']) !!}
+        </div>
+<div class="form-group" id='eyecolor'>
+            {!! Form::label('eyecolor') !!}{!! add_help('If a kukuri is given a rebirth or otherwise has their eye color modified, please change this to read accordingly') !!}
+            {!! Form::text('eyecolor', $image->eyecolor, ['class' => 'form-control mr-2']) !!}
+        </div>
+
 <div class="form-group" id='genotype'>
-            {!! Form::label('genotype') !!}
+            {!! Form::label('genotype') !!}{!! add_help('This will edit the Character's Genotype. Only do this if there was a mistake spotted!') !!}
             {!! Form::text('genotype', $image->genotype, ['class' => 'form-control mr-2']) !!}
+        </div>
+
+<div class="form-group" id='phenotype'>
+            {!! Form::label('genotype') !!}{!! add_help('This will edit the Character's Phenotype. Only do this if there was a mistake spotted!') !!}
+            {!! Form::text('phenotype', $image->phenotype, ['class' => 'form-control mr-2']) !!}
         </div>
 
 <div class="text-right">
