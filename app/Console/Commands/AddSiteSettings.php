@@ -104,6 +104,8 @@ class AddSiteSettings extends Command
         $this->addSiteSetting('group_currency', 1, 'ID of the group currency to award from gallery submissions (if enabled).');
 
         $this->addSiteSetting('default_theme', 0, 'ID of the default theme users should see. 0: Disabled, shows default lorekeeper. This setting is overwritten by the users theme setting.');
+        
+        $this->addSiteSetting('featured_character', 1, 'ID of the currently featured character.');
 
         $this->line("\nSite settings up to date!");
 
