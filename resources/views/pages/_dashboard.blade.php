@@ -9,7 +9,7 @@
     <div class="col-md-2">
         <div class="card mb-4">
             <div class="card-body text-center">
-                <img src="{{ asset('images/account.png') }}" alt="Account" />
+                <img src="{{ asset('images/account.png') }}" alt="Account" class="card-img" />
                 <h5 class="card-title">Account</h5>
             </div>
             <ul class="list-group list-group-flush">
@@ -22,7 +22,7 @@
     <div class="col-md-2">
         <div class="card mb-4">
             <div class="card-body text-center">
-                <img src="{{ asset('images/characters.png') }}" alt="Characters" />
+                <img src="{{ asset('images/characters.png') }}" alt="Characters" class="card-img" />
                 <h5 class="card-title">Characters</h5>
             </div>
             <ul class="list-group list-group-flush">
@@ -35,7 +35,7 @@
     <div class="col-md-2">
         <div class="card mb-4">
             <div class="card-body text-center">
-                <img src="{{ asset('images/inventory.png') }}" alt="Inventory" />
+                <img src="{{ asset('images/inventory.png') }}" alt="Inventory" class="card-img" />
                 <h5 class="card-title">Inventory</h5>
             </div>
             <ul class="list-group list-group-flush">
@@ -47,7 +47,7 @@
     <div class="col-md-2">
         <div class="card">
             <div class="card-body text-center">
-                <img src="{{ asset('images/currency.png') }}" alt="Bank" />
+                <img src="{{ asset('images/currency.png') }}" alt="Bank" class="card-img" />
                 <h5 class="card-title">Bank</h5>
             </div>
             <ul class="list-group list-group-flush">
@@ -59,7 +59,7 @@
     <div class="col-md-2">
         <div class="card mb-12">
             <div class="card-body text-center">
-                <img src="{{ asset('images/awards.png') }}" />
+                <img src="{{ asset('images/awards.png') }}" class="card-img" />
                 <h5 class="card-title">{{ ucfirst(__('awards.awards')) }}</h5>
             </div>
             <ul class="list-group list-group-flush">
