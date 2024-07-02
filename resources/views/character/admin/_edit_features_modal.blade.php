@@ -69,9 +69,7 @@
 
 <div class="form-group" id='stats' style='display:inline; width:29%;'>
             {!! Form::label('phenotype') !!}
-            {!! Form::text('phenotype', $image->phenotype, ['class' => 'form-control mr-2']) !!}
-            {!! Form::text('phenotype', $image->phenotype, ['class' => 'form-control mr-2']) !!}
-            {!! Form::text('phenotype', $image->phenotype, ['class' => 'form-control mr-2']) !!}
+            {!! Form::text('phenotype', $image->phenotype, ['class' => 'form-control mr-2']) !!}{!! Form::text('phenotype', $image->phenotype, ['class' => 'form-control mr-2']) !!}{!! Form::text('phenotype', $image->phenotype, ['class' => 'form-control mr-2']) !!}
         </div>
 
 <div class="text-right">
