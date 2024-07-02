@@ -65,9 +65,9 @@
                 <br>
                 <div class="row">
                     <div class="col-lg-4 col-md-6 col-4"><strong>Stats</strong></div>
-                    <div class="col-lg-2 col-md-6 col-8">{!! '<strong>ATK</strong> ', $image->gender ? $image->gender : 'None' !!}</div>
-                    <div class="col-lg-2 col-md-6 col-8">{!! '<strong>SPD</strong> ', $image->gender ? $image->gender : 'None' !!}</div>
-                    <div class="col-lg-2 col-md-6 col-8">{!! '<strong>DEF</strong> ', $image->gender ? $image->gender : 'None' !!}</div>
+                    <div class="col-lg-2 col-md-6 col-8">{!! '<strong>ATK</strong> ', $image->atk ? $image->atk : 'None' !!}</div>
+                    <div class="col-lg-2 col-md-6 col-8">{!! '<strong>SPD</strong> ', $image->spd ? $image->spd : 'None' !!}</div>
+                    <div class="col-lg-2 col-md-6 col-8">{!! '<strong>DEF</strong> ', $image->def ? $image->def : 'None' !!}</div>
                 </div>
                 <br>
                 <div class="mb-3">
