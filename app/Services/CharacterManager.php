@@ -862,7 +862,7 @@ class CharacterManager extends Service
             $image->genotype = $data['genotype'] ?: null;
             $image->phenotype = $data['phenotype'] ?: null;
             $image->gender = $data['gender'] ?: null;
-            //$image->eyecolor = $data['eyecolor'] ?: null;
+            $image->eyecolor = $data['eyecolor'] ?: null;
             $image->save();
 
             $new = [];

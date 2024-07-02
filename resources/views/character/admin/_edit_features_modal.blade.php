@@ -53,10 +53,10 @@
             {!! Form::label('gender') !!}
             {!! Form::select('gender', ['Rook' => 'Rook', 'Dove' => 'Dove'], null, ['class' => 'form-control']) !!}
         </div>
-<!--<div class="form-group" id='eyecolor'>
-            {!! Form::label('eyecolor') !!}{!! add_help('If a kukuri is given a rebirth or otherwise has their eye color modified, please change this to read accordingly') !!}
+<div class="form-group" id='eyecolor'>
+            {!! Form::label('eyecolor') !!}
             {!! Form::text('eyecolor', $image->eyecolor, ['class' => 'form-control mr-2']) !!}
-        </div> -->
+        </div>
 
 <div class="form-group" id='genotype'>
             {!! Form::label('genotype') !!}
@@ -64,6 +64,13 @@
         </div>
  <div class="form-group" id='phenotype'>
             {!! Form::label('phenotype') !!}
+            {!! Form::text('phenotype', $image->phenotype, ['class' => 'form-control mr-2']) !!}
+        </div>
+
+<div class="form-group" id='stats' style='display:inline; width:29%;'>
+            {!! Form::label('phenotype') !!}
+            {!! Form::text('phenotype', $image->phenotype, ['class' => 'form-control mr-2']) !!}
+            {!! Form::text('phenotype', $image->phenotype, ['class' => 'form-control mr-2']) !!}
             {!! Form::text('phenotype', $image->phenotype, ['class' => 'form-control mr-2']) !!}
         </div>
 
