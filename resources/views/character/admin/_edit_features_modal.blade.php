@@ -68,10 +68,10 @@
         </div>
 
 <div class="form-group" id='stats'>
-            {!! Form::label('Stats (atk/spd/def)') !!}
+            {!! Form::label('Stats (atk/def/spd)') !!}
             {!! Form::text('atk', $image->atk, ['class' => 'form-control mr-2']) !!}
-            {!! Form::text('spd', $image->spd, ['class' => 'form-control mr-2']) !!}
             {!! Form::text('def', $image->def, ['class' => 'form-control mr-2']) !!}
+            {!! Form::text('spd', $image->spd, ['class' => 'form-control mr-2']) !!}
         </div>
 
 <div class="text-right">

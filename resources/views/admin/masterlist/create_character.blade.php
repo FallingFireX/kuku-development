@@ -270,10 +270,10 @@
         </div>
 
         <div class="form-group" id='stats'>
-            {!! Form::label('Stats (atk/spd/def)') !!}
-            {!! Form::text('atk', $image->atk, ['class' => 'form-control']) !!}
-            {!! Form::text('spd', $image->spd, ['class' => 'form-control']) !!}
-            {!! Form::text('def', $image->def, ['class' => 'form-control']) !!}
+            {!! Form::label('Stats (atk/def/spd)') !!}
+            {!! Form::text('atk', old('atk'), ['class' => 'form-control', 'atk']) !!}
+            {!! Form::text('def', old('def'), ['class' => 'form-control', 'def']) !!}
+            {!! Form::text('spd', old('spd'), ['class' => 'form-control', 'spd']) !!}
         </div>
         
 
