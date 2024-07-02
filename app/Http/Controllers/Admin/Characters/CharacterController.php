@@ -154,7 +154,7 @@ class CharacterController extends Controller
             'generate_ancestors',
 
             'species_id', 'subtype_id', 'rarity_id', 'feature_id', 'feature_data',
-            'image', 'thumbnail', 'image_description', 'transformation_id','transformation_info','transformation_description', 'genotype', 'phenotype', 'gender', 'eyecolor',
+            'image', 'thumbnail', 'image_description', 'transformation_id','transformation_info','transformation_description', 'genotype', 'phenotype', 'gender', 'eyecolor', 'spd', 'def', 'atk'
         ]);
         if ($character = $service->createCharacter($data, Auth::user())) {
             flash(ucfirst(__('lorekeeper.character')).' created successfully.')->success();
@@ -202,7 +202,7 @@ class CharacterController extends Controller
             'generate_ancestors',
 
             'species_id', 'subtype_id', 'rarity_id', 'feature_id', 'feature_data',
-            'image', 'thumbnail', 'transformation_id','transformation_info','transformation_description', 'genotype', 'phenotype', 'gender', 'eyecolor',
+            'image', 'thumbnail', 'transformation_id','transformation_info','transformation_description', 'genotype', 'phenotype', 'gender', 'eyecolor', 'spd', 'def', 'atk'
         ]);
         if ($character = $service->createCharacter($data, Auth::user(), true)) {
             flash('MYO slot created successfully.')->success();

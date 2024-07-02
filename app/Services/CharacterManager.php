@@ -196,6 +196,9 @@ class CharacterManager extends Service
                 $data['phenotype'] = isset($data['phenotype']) ? $data['phenotype'] : null;
                 $data['gender'] = isset($data['gender']) ? $data['gender'] : null;
                 $data['eyecolor'] = isset($data['eyecolor']) ? $data['eyecolor'] : null;
+                $data['def'] = isset($data['def']) ? $data['def'] : null;
+                $data['spd'] = isset($data['spd']) ? $data['spd'] : null;
+                $data['atk'] = isset($data['atk']) ? $data['atk'] : null;
 
             }
 
@@ -253,6 +256,9 @@ class CharacterManager extends Service
                 $data['phenotype'] = isset($data['phenotype']) ? $data['phenotype'] : null;
                 $data['gender'] = isset($data['gender']) ? $data['gender'] : null;
                 $data['eyecolor'] = isset($data['eyecolor']) ? $data['eyecolor'] : null;
+                $data['def'] = isset($data['def']) ? $data['def'] : null;
+                $data['spd'] = isset($data['spd']) ? $data['spd'] : null;
+                $data['atk'] = isset($data['atk']) ? $data['atk'] : null;
 
 
                 // Use default images for MYO slots without an image provided
@@ -863,6 +869,9 @@ class CharacterManager extends Service
             $image->phenotype = $data['phenotype'] ?: null;
             $image->gender = $data['gender'] ?: null;
             $image->eyecolor = $data['eyecolor'] ?: null;
+            $image->atk = $data['atk'] ?: null;
+            $image->def = $data['def'] ?: null;
+            $image->spd = $data['spd'] ?: null;
             $image->save();
 
             $new = [];

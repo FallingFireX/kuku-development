@@ -269,6 +269,12 @@
             {!! Form::text('phenotype', old('phenotype'), ['class' => 'form-control', 'phenotype']) !!}
         </div>
 
+        <div class="form-group" id='stats'>
+            {!! Form::label('Stats (atk/spd/def)') !!}
+            {!! Form::text('atk', $image->atk, ['class' => 'form-control']) !!}
+            {!! Form::text('spd', $image->spd, ['class' => 'form-control']) !!}
+            {!! Form::text('def', $image->def, ['class' => 'form-control']) !!}
+        </div>
         
 
         <div class="form-group" id='eyecolor'>
