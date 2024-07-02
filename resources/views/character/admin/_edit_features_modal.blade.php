@@ -68,8 +68,8 @@
         </div>
 
 <div class="form-group" id='stats'>
-            {!! Form::label('phenotype') !!}
-            {!! Form::text('phenotype', $image->phenotype, ['class' => 'form-control mr-2']) !!}
+            {!! Form::label('Stats') !!}
+            'ATK: '{!! Form::text('phenotype', $image->phenotype, ['class' => 'form-control mr-2']) !!}
             {!! Form::text('phenotype', $image->phenotype, ['class' => 'form-control mr-2']) !!}
             {!! Form::text('phenotype', $image->phenotype, ['class' => 'form-control mr-2']) !!}
         </div>
