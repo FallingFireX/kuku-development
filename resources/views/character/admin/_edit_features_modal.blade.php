@@ -67,11 +67,19 @@
             {!! Form::text('phenotype', $image->phenotype, ['class' => 'form-control mr-2']) !!}
         </div>
 
-<div class="form-group" id='stats'>
-            {!! Form::label('Stats (atk/spd/def)') !!}
+<div class="form-group" id='atk'>
+            {!! Form::label('atk') !!}
             {!! Form::text('atk', $image->atk, ['class' => 'form-control mr-2']) !!}
-            {!! Form::text('spd', $image->spd, ['class' => 'form-control mr-2']) !!}
+        </div>
+
+<div class="form-group" id='def'>
+            {!! Form::label('def') !!}
             {!! Form::text('def', $image->def, ['class' => 'form-control mr-2']) !!}
+        </div>
+
+<div class="form-group" id='spd'>
+            {!! Form::label('spd') !!}
+            {!! Form::text('spd', $image->spd, ['class' => 'form-control mr-2']) !!}
         </div>
 
 <div class="text-right">
