@@ -860,8 +860,8 @@ class CharacterManager extends Service
             $image->transformation_info = $data['transformation_info'] ?: null;
             $image->transformation_description = $data['transformation_description'] ?: null;
             $image->genotype = $data['genotype'] ?: null;
-            //$image->phenotype = $data['phenotype'] ?: null;
-            //$image->gender = $data['gender'] ?: null;
+            $image->phenotype = $data['phenotype'] ?: null;
+            $image->gender = $data['gender'] ?: null;
             //$image->eyecolor = $data['eyecolor'] ?: null;
             $image->save();
 
