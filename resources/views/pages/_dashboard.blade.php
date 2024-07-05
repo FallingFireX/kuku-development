@@ -1,6 +1,3 @@
-@include('widgets._online_count')
-
-
 <h1>Welcome, {!! Auth::user()->displayName !!}!</h1>
 <div class="card mb-4 timestamp">
     <div class="card-body">
@@ -99,3 +96,5 @@
         </div>
     </div>
 </div>
+
+<a href="{{ url('users') }}">@include('widgets._online_count')</a>
