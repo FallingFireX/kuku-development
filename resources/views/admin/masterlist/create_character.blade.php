@@ -256,7 +256,7 @@
 
         <div class="form-group" id='gender'>
             {!! Form::label('gender') !!}{!! add_help('This is text that will show alongside the ' . __('transformations.transformation') . ' name on the image info area. Explains why the character takes this form, how, etc. Should be pretty short.') !!}
-            {!! Form::select('gender', ['Rook' => 'Rook', 'Dove' => 'Dove'], ['class' => 'form-control']) !!}
+            {!! Form::select('gender', ['Rook' => 'Rook', 'Dove' => 'Dove'], null, ['class' => 'form-control']) !!}
         </div>
 
         <div class="form-group" id='genotype'>
