@@ -269,7 +269,7 @@
             {!! Form::text('phenotype', old('phenotype'), ['class' => 'form-control', 'phenotype']) !!}
         </div>
 
-        <div class="form-group" id='atk'>
+        <!-- <div class="form-group" id='atk'>
             {!! Form::label('atk') !!}
             {!! Form::text('atk', old('atk'), ['class' => 'form-control', 'atk']) !!}
         </div>
@@ -280,7 +280,7 @@
         <div class="form-group" id='spd'>
             {!! Form::label('spd') !!}
             {!! Form::text('spd', old('spd'), ['class' => 'form-control', 'spd']) !!}
-        </div>
+        </div> -->
 <!-- 
         <div class="form-group" id='stats'>
             {!! Form::label('Stats (atk/def/spd)') !!}
