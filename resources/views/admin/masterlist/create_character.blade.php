@@ -269,13 +269,26 @@
             {!! Form::text('phenotype', old('phenotype'), ['class' => 'form-control', 'phenotype']) !!}
         </div>
 
+        <div class="form-group" id='atk'>
+            {!! Form::label('atk') !!}
+            {!! Form::text('atk', old('atk'), ['class' => 'form-control', 'atk']) !!}
+        </div>
+        <div class="form-group" id='def'>
+            {!! Form::label('def') !!}
+            {!! Form::text('def', old('def'), ['class' => 'form-control', 'def']) !!}
+        </div>
+        <div class="form-group" id='spd'>
+            {!! Form::label('spd') !!}
+            {!! Form::text('spd', old('spd'), ['class' => 'form-control', 'spd']) !!}
+        </div>
+<!-- 
         <div class="form-group" id='stats'>
             {!! Form::label('Stats (atk/def/spd)') !!}
             {!! Form::text('atk', old('atk'), ['class' => 'form-control', 'atk']) !!}
             {!! Form::text('def', old('def'), ['class' => 'form-control', 'def']) !!}
             {!! Form::text('spd', old('spd'), ['class' => 'form-control', 'spd']) !!}
         </div>
-        
+         -->
 
         <div class="form-group" id='eyecolor'>
             {!! Form::label('eyecolor') !!}{!! add_help('This is text that will show alongside the ' . __('transformations.transformation') . ' name on the image info area. Explains why the character takes this form, how, etc. Should be pretty short.') !!}
