@@ -11,6 +11,15 @@ return [
     //     ]),
     //     'version' => '1.0.0',
     // ],
+    
+    'Books' => [
+        'key' => 'Books',
+            'wiki_key' => 'Books',
+            'creators' => json_encode([
+                'CH3RVB' => 'https://github.com/CH3RVB/',
+            ]),
+            'version' => '2.0.0',
+        ],
 
     'staff-team-page' => [
         'key' => 'staff_team_page',
