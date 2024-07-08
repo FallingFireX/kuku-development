@@ -32,7 +32,7 @@
 
                         <div class="dropdown-menu" aria-labelledby="inventoryDropdown">
                             <a class="dropdown-item" href="{{ url('characters') }}">
-                                My Characters
+                                My Kukuri
                             </a>
                             <a class="dropdown-item" href="{{ url('characters/myos') }}">
                                 My MYO Slots
@@ -53,11 +53,21 @@
                             Activity
                         </a>
                         <div class="dropdown-menu" aria-labelledby="queueDropdown">
+                            <a class="dropdown-item" href="{{ url('prompts/prompts') }}">
+                                Activities
+                            </a>
+                            <a class="dropdown-item" href="{{ url('https://kukuri-arpg.w3spaces.com/activities/quests.html') }}">
+                                Current Quest
+                            </a>
+                            <a class="dropdown-item" href="{{ url('https://kukuri-arpg.w3spaces.com/activities/breeding.html') }}">
+                                Breeding
+                            </a>
+                            <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="{{ url('submissions') }}">
-                                Prompt Submissions
+                                My Submissions
                             </a>
                             <a class="dropdown-item" href="{{ url('claims') }}">
-                                Claims
+                                My Claims
                             </a>
                             <a class="dropdown-item" href="{{ url('reports') }}">
                                 My Reports
