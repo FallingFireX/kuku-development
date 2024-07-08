@@ -29,7 +29,7 @@ return [
         'name' => 'Theme',
         'text_color' => "#ffffff",
         'background_color' => '#573f7e'
-    ]
+    ],
     'volume' => [
         'name' => 'Volume',
         'text_color' => '#ffffff',
