@@ -1,19 +1,21 @@
-<div class="container text-center">
----------------------------------------- SSS: Unknown
-<br>------------------- SS: Unknown
-<br>---------------------------------------- SSD: Unknown
-<br><span class="font-weight-bold">Sire</span>: Wraith 15000
-<br>---------------------------------------- SDS: Unknown
-<br>------------------- SD: Unknown
-<br>---------------------------------------- SDD: Unknown
-<br>---------------------------------------- DSS: Unknown
-<br>------------------- DS: Ouroboros 15006
-<br>---------------------------------------- DSD: Unknown
-<br><span class="font-weight-bold">Dam</span>: Unknown
-<br>---------------------------------------- DDS: Unknown
-<br>------------------- DD: Unknown
-<br>---------------------------------------- DDD: Unknown
+<div class="container text-left">
+---------------------------------------- SSS: {!! $line['sire_sire_sire'] !!}
+<br>------------------- SS: {!! $line['sire_sire'] !!}
+<br>---------------------------------------- SSD: {!! $line['sire_sire_dam'] !!}
+<br><span class="font-weight-bold">Sire</span>: {!! $line['sire'] !!}
+<br>---------------------------------------- SDS: {!! $line['sire_dam_sire'] !!}
+<br>------------------- SD: {!! $line['sire_dam'] !!}
+<br>---------------------------------------- SDD: {!! $line['sire_dam_dam'] !!}
+<br>---------------------------------------- DSS: {!! $line['dam_sire_sire'] !!}
+<br>------------------- DS: {!! $line['dam_sire'] !!}
+<br>---------------------------------------- DSD: {!! $line['dam_sire_dam'] !!}
+<br><span class="font-weight-bold">Dam</span>: {!! $line['dam'] !!}
+<br>---------------------------------------- DDS: {!! $line['dam_dam_sire'] !!}
+<br>------------------- DD: {!! $line['dam_dam'] !!}
+<br>---------------------------------------- DDD: {!! $line['dam_dam_dam'] !!}
 <br><br>
+</div>
+<div class="container text-center">
     <div class="row">
         <div class="col">
             <div class="border-bottom mb-1">
