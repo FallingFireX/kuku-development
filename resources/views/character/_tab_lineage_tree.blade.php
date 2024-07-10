@@ -15,7 +15,7 @@
 <br>---------------------------------------- DDD: {!! $line['dam_dam_dam'] !!}
 <br><br>
 </div>
-<div class="container text-center">
+<!-- <div class="container text-center">
     <div class="row">
         <div class="col">
             <div class="border-bottom mb-1">
@@ -100,4 +100,4 @@
             </div>
         </div>
     </div>
-</div>
+</div> -->
