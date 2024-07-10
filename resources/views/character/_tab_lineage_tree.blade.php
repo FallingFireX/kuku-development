@@ -1,4 +1,19 @@
 <div class="container text-center">
+---------------------------------------- SSS: Unknown
+<br>------------------- SS: Unknown
+<br>---------------------------------------- SSD: Unknown
+<br><span class="font-weight-bold">Sire</span>: Wraith 15000
+<br>---------------------------------------- SDS: Unknown
+<br>------------------- SD: Unknown
+<br>---------------------------------------- SDD: Unknown
+<br>---------------------------------------- DSS: Unknown
+<br>------------------- DS: Ouroboros 15006
+<br>---------------------------------------- DSD: Unknown
+<br><span class="font-weight-bold">Dam</span>: Unknown
+<br>---------------------------------------- DDS: Unknown
+<br>------------------- DD: Unknown
+<br>---------------------------------------- DDD: Unknown
+<br><br>
     <div class="row">
         <div class="col">
             <div class="border-bottom mb-1">
