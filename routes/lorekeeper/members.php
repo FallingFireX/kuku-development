@@ -105,6 +105,11 @@ Route::group(['prefix' => 'character', 'namespace' => 'Characters'], function() 
     Route::post('{slug}/'.__('awards.awardcase').'/edit', 'CharacterController@postAwardEdit');
     Route::post('{slug}/inventory/edit', 'CharacterController@postInventoryEdit');
 
+    Route::get('{slug}/breeding-permissions/new', 'CharacterController@getNewBreedingPermission');
+    Route::post('{slug}/breeding-permissions/new', 'CharacterController@postNewBreedingPermission');
+    Route::get('{slug}/breeding-permissions/{id}/transfer', 'CharacterController@getTransferBreedingPermission');
+    Route::post('{slug}/breeding-permissions/{id}/transfer', 'CharacterController@postTransferBreedingPermission');
+
     Route::post('{slug}/bank/transfer', 'CharacterController@postCurrencyTransfer');
     Route::get('{slug}/transfer', 'CharacterController@getTransfer');
     Route::post('{slug}/transfer', 'CharacterController@postTransfer');
@@ -126,6 +131,9 @@ Route::group(['prefix' => 'myo', 'namespace' => 'Characters'], function() {
     Route::get('{id}/approval', 'MyoController@getCharacterApproval');
     //this is useless but im not sure if we dont include it things will get weird or not
     Route::post('{slug}/approval/{id}', 'CharacterController@postCharacterApprovalSpecificImage');
+});
+Route::group(['prefix' => 'breeding-permissions', 'namespace' => 'Users'], function() {
+    Route::get('/', 'AccountController@getBreedingPermissions');
 });
 
 /**************************************************************************************************

@@ -32,6 +32,7 @@ use App\Models\Character\CharacterCategory;
 use App\Models\Character\CharacterImage;
 use App\Models\Character\Character;
 use App\Models\Character\Sublist;
+use App\Models\Character\BreedingPermission;
 
 use App\Http\Controllers\Controller;
 
@@ -178,6 +179,28 @@ class UserController extends Controller
         return view('user.myo_slots', [
             'user' => $this->user,
             'myos' => $myo->get(),
+            'sublists' => Sublist::orderBy('sort', 'DESC')->get()
+        ]);
+    }
+
+    /**
+     * Shows the user's breeding permissions.
+     *
+     * @param  \Illuminate\Http\Request       $request
+     * @param  string                         $name
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function getUserBreedingPermissions(Request $request)
+    {
+        $permissions = BreedingPermission::where('recipient_id', $this->user->id);
+        $used = $request->get('used');
+        if(!$used) $used = 0;
+
+        $permissions = $permissions->where('is_used', $used);
+
+        return view('user.breeding_permissions', [
+            'user' => $this->user,
+            'permissions' => $permissions->orderBy('id', 'DESC')->paginate(20)->appends($request->query()),
             'sublists' => Sublist::orderBy('sort', 'DESC')->get()
         ]);
     }

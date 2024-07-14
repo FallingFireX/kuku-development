@@ -11,6 +11,7 @@
             <div class="sidebar-item"><a href="{{ $character->url . '/lineage' }}" class="{{ set_active('character/'.$character->slug.'/lineage') }}">Decendents</a></div>
         @endif
         <div class="sidebar-item"><a href="{{ $character->url . '/'.__('awards.awardcase') }}" class="{{ set_active('character/'.$character->slug.'/'.__('awards.awardcase')) }}">{{ucfirst(__('awards.awards'))}}</a></div>
+        <div class="sidebar-item"><a href="{{ $character->url . '/breeding-permissions' }}" class="{{ set_active('character/'.$character->slug.'/breeding-permissions') }}">Breeding Permissions</a></div>
     </li>
     <li class="sidebar-section">
         <div class="sidebar-section-header">History</div>

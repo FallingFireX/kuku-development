@@ -7,6 +7,7 @@ use DB;
 use Carbon\Carbon;
 use Notifications;
 use App\Models\Model;
+use Settings;
 
 use App\Models\User\User;
 use App\Models\User\UserCharacterLog;
@@ -227,6 +228,14 @@ class Character extends Model
         return $this->hasOne('App\Models\Character\CharacterLineage', 'character_id');
     }
 
+    /**
+     * Get the character's associated breeding permissions.
+     */
+    public function breedingPermissions()
+    {
+        return $this->hasMany('App\Models\Character\BreedingPermission', 'character_id');
+    }
+
     /**********************************************************************************************
 
         SCOPES
@@ -408,6 +417,28 @@ class Character extends Model
         return 'Character';
     }
 
+    /**
+     * Gets the character's maximum number of breeding permissions.
+     *
+     * @return int
+     */
+    public function getMaxBreedingPermissionsAttribute()
+    {
+        $currencies = $this->getCurrencies(true)->where('id', Settings::get('breeding_permission_currency'))->first();
+        if(!$currencies) return 0;
+        return $currencies->quantity;
+    }
+
+    /**
+     * Gets the character's number of available breeding permissions.
+     *
+     * @return int
+     */
+    public function getAvailableBreedingPermissionsAttribute()
+    {
+        return $this->maxBreedingPermissions - $this->breedingPermissions->count();
+    }
+
     /**********************************************************************************************
 
         OTHER FUNCTIONS
@@ -437,10 +468,10 @@ class Character extends Model
     /**
      * Get the character's held currencies.
      *
-     * @param  bool  $displayedOnly
+     * @param  bool  $showAll
      * @return \Illuminate\Support\Collection
      */
-    public function getCurrencies($displayedOnly = false)
+    public function getCurrencies($showAll = false)
     {
         // Get a list of currencies that need to be displayed
         // On profile: only ones marked is_displayed
@@ -449,7 +480,7 @@ class Character extends Model
         $owned = CharacterCurrency::where('character_id', $this->id)->pluck('quantity', 'currency_id')->toArray();
 
         $currencies = Currency::where('is_character_owned', 1);
-        if($displayedOnly) $currencies->where(function($query) use($owned) {
+        if($showAll) $currencies->where(function($query) use($owned) {
             $query->where('is_displayed', 1)->orWhereIn('id', array_keys($owned));
         });
         else $currencies = $currencies->where('is_displayed', 1);

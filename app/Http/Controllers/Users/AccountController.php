@@ -10,6 +10,7 @@ use App\Models\Theme;
 use App\Models\User\User;
 use App\Models\User\UserAlias;
 use App\Models\User\StaffProfile;
+use App\Models\Character\BreedingPermission;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -322,5 +323,24 @@ class AccountController extends Controller {
             foreach ($service->errors()->getMessages()['error'] as $error) flash($error)->error();
         }
         return redirect()->back();
+    }
+
+    /**
+     * Shows the user's owned breeding permissions.
+     *
+     * @param  \Illuminate\Http\Request       $request
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function getBreedingPermissions(Request $request)
+    {
+        $permissions = BreedingPermission::where('recipient_id', Auth::user()->id);
+        $used = $request->get('used');
+        if(!$used) $used = 0;
+
+        $permissions = $permissions->where('is_used', $used);
+
+        return view('home.breeding_permissions', [
+            'permissions' => $permissions->orderBy('id', 'DESC')->paginate(20)->appends($request->query()),
+        ]);
     }
 }
