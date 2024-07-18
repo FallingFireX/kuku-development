@@ -39,6 +39,7 @@ class HomeController extends Controller
         return view('welcome', [
             'about' => SitePage::where('key', 'about')->first(),
             'featured' => $character,
+            'gallerySubmissions'  => $gallerySubmissions,
         ]);
     
    
@@ -48,11 +49,6 @@ class HomeController extends Controller
         } else {
             $gallerySubmissions = [];
         }
-
-        return view('welcome', [
-            'about'               => SitePage::where('key', 'about')->first(),
-            'gallerySubmissions'  => $gallerySubmissions,
-        ]);
     }
 
     /**
