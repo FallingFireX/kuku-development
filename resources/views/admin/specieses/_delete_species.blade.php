@@ -1,5 +1,5 @@
-@if($species)
-    {!! Form::open(['url' => 'admin/data/species/delete/'.$species->id]) !!}
+@if ($species)
+    {!! Form::open(['url' => 'admin/data/species/delete/' . $species->id]) !!}
 
     <p>You are about to delete the {{ __('lorekeeper.species') }} <strong>{{ $species->name }}</strong>. This is not reversible. If traits and/or characters that have this {{ __('lorekeeper.species') }} exist, you will not be able to delete this {{ __('lorekeeper.species') }}.</p>
     <p>Are you sure you want to delete <strong>{{ $species->name }}</strong>?</p>
@@ -10,5 +10,5 @@
 
     {!! Form::close() !!}
 @else
-    Invalid {{ __('lorekeeper.species') }} selected.
+    Invalid species selected.
 @endif

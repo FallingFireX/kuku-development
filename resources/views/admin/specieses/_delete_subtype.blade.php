@@ -1,5 +1,5 @@
-@if($subtype)
-    {!! Form::open(['url' => 'admin/data/subtypes/delete/'.$subtype->id]) !!}
+@if ($subtype)
+    {!! Form::open(['url' => 'admin/data/subtypes/delete/' . $subtype->id]) !!}
 
     <p>You are about to delete the {{ __('lorekeeper.subtype') }} <strong>{{ $subtype->name }}</strong>. This is not reversible. If traits and/or characters that have this {{ __('lorekeeper.subtype') }} exist, you will not be able to delete this {{ __('lorekeeper.subtype') }}.</p>
     <p>Are you sure you want to delete <strong>{{ $subtype->name }}</strong>?</p>
@@ -10,5 +10,5 @@
 
     {!! Form::close() !!}
 @else
-    Invalid {{ __('lorekeeper.subtype') }} selected.
+    Invalid subtype selected.
 @endif

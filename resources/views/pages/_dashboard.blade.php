@@ -98,3 +98,4 @@
 </div>
 
 <a href="{{ url('users') }}">@include('widgets._online_count')</a>
+@include('widgets._recent_gallery_submissions', ['gallerySubmissions' => $gallerySubmissions])

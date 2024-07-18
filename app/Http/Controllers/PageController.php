@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\SitePage;
+<<<<<<< HEAD
 use App\Models\SiteCreds;
+=======
+>>>>>>> 8da3a234d382e1b78065c30d0737cf9de0d71412
 use Illuminate\Support\Facades\DB;
 
 class PageController extends Controller {
@@ -25,16 +28,12 @@ class PageController extends Controller {
      */
     public function getPage($key) {
         $page = SitePage::where('key', $key)->where('is_visible', 1)->first();
-
-        if(!$page) abort(404);
-
-        if ($page->admin_only && (auth()->user() == null || !auth()->user()->isStaff)) {
-            flash('You do not have the permission to access this page.')->error();
-            return redirect('/');
+        if (!$page) {
+            abort(404);
         }
+
         return view('pages.page', ['page' => $page]);
     }
-
 
     /**
      * Shows the credits page.
