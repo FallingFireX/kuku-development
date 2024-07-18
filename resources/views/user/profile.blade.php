@@ -15,6 +15,8 @@
 @section('profile-content')
     {!! breadcrumbs(['Users' => 'users', $user->name => $user->url]) !!}
     @endsection
+
+    @section('features')
     @include('widgets._awardcase_feature', ['target' => $user, 'count' => Config::get('lorekeeper.extensions.awards.user_featured'), 'float' => false])
     @include('widgets._selected_character', ['character' => $user->settings->selectedCharacter, 'user' => $user, 'fullImage' => false])
 
