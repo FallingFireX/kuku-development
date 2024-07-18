@@ -23,6 +23,7 @@ use App\Models\Gallery\GalleryCollaborator;
 use App\Models\Gallery\GalleryFavorite;
 use App\Models\Theme;
 use App\Models\Item\ItemLog;
+use App\Models\Rank\Rank;
 use App\Models\Rank\RankPower;
 use App\Models\Report\Report;
 use App\Models\Shop\ShopLog;
