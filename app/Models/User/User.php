@@ -17,6 +17,7 @@ use App\Models\Character\CharacterImageCreator;
 use App\Models\Currency\Currency;
 use App\Models\Currency\CurrencyLog;
 use App\Models\Award\AwardLog;
+use App\Models\User\UsernameLog;
 use App\Models\Gallery\GallerySubmission;
 use App\Models\Gallery\GalleryCollaborator;
 use App\Models\Gallery\GalleryFavorite;
@@ -658,6 +659,17 @@ class User extends Authenticatable implements MustVerifyEmail
         })->orWhere(function($query) use ($user) {
             $query->where('recipient_id', $user->id);
         })->orderBy('id', 'DESC');
+        return $query->paginate(30);
+    }
+
+    /**
+     * Get the user's display name logs.
+     *
+     * @return \Illuminate\Pagination\LengthAwarePaginator
+     */
+    public function getUsernameLogs()
+    {
+        $query = UsernameLog::where('user_id', $this->id)->orderBy('updated_at', 'DESC');
         return $query->paginate(30);
     }
 

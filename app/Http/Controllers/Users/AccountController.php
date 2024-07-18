@@ -5,12 +5,15 @@ namespace App\Http\Controllers\Users;
 use Auth;
 use File;
 use Image;
+use Settings;
+use Carbon\Carbon;
 
 use App\Models\Theme;
 use App\Models\User\User;
 use App\Models\User\UserAlias;
 use App\Models\User\StaffProfile;
 use App\Models\Character\BreedingPermission;
+use App\Models\User\UsernameLog;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -62,11 +65,18 @@ class AccountController extends Controller {
 
         $decoratorOptions = ['0' => 'Select Decorator Theme'] + Theme::where('is_active', 1)->where('theme_type', 'decorator')->where('is_user_selectable', 1)->get()->pluck('displayName', 'id')->toArray();
         $links = StaffProfile::where('user_id', Auth::user()->id)->first();
+        $lastUsernameChange = UsernameLog::where('user_id', Auth::user()->id)->where('is_staff_edit', 0)->orderBy('updated_at', 'DESC')->first();
+        $daysSinceNameChange = isset($lastUsernameChange) ? Carbon::now()->diffInDays($lastUsernameChange->updated_at) : Settings::get('username_change_cooldown');
+        $usernameCooldown = Settings::get('username_change_cooldown');
 
         return view('account.settings', [
             'themeOptions' => $themeOptions + Auth::user()->themes()->where('theme_type', 'base')->get()->pluck('displayName', 'id')->toArray(),
             'decoratorThemes' => $decoratorOptions + Auth::user()->themes()->where('theme_type', 'decorator')->get()->pluck('displayName', 'id')->toArray(),
-            'links' => $links ? $links : null
+            'links' => $links ? $links : null,
+            'usernameCooldown' => $usernameCooldown,
+            'canChangeName' => $daysSinceNameChange >= $usernameCooldown,
+            'usernameCountdown' => $usernameCooldown - $daysSinceNameChange
+        
         ]);
     }
 
@@ -153,6 +163,29 @@ class AccountController extends Controller {
     }
 
 
+    /**
+     * Changes the user's display name.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  App\Services\UserService  $service
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function postUsername(Request $request, UserService $service)
+    {
+        if($request['username'] == Auth::user()->name) flash("You are already using this username.");
+        $request->validate( [
+            'username' => 'required|string|min:3|max:255|alpha_dash|unique:users,name'
+        ]);
+
+        if($service->updateUsername($request->only(['username', 'password']), Auth::user())) {
+            flash('Username updated successfully.')->success();
+        }
+        else {
+            foreach($service->errors()->getMessages()['error'] as $error) flash($error)->error();
+        }
+        return redirect()->back();
+    }
+    
     /**
      * Changes the user's password.
      *
