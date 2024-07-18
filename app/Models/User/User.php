@@ -22,6 +22,7 @@ use App\Models\Gallery\GallerySubmission;
 use App\Models\Gallery\GalleryCollaborator;
 use App\Models\Gallery\GalleryFavorite;
 use App\Models\Theme;
+use App\Models\Item\Item;
 use App\Models\Item\ItemLog;
 use App\Models\Rank\Rank;
 use App\Models\Rank\RankPower;
