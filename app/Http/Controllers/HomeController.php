@@ -36,12 +36,6 @@ class HomeController extends Controller
             $character = Character::find(Settings::get('featured_character'));
         }
         else $character = null;
-        return view('welcome', [
-            'about' => SitePage::where('key', 'about')->first(),
-            'featured' => $character,
-            'gallerySubmissions'  => $gallerySubmissions,
-        ]);
-    
    
         if (config('lorekeeper.extensions.show_all_recent_submissions.enable')) {
             $query = GallerySubmission::visible(Auth::check() ? Auth::user() : null)->accepted()->orderBy('created_at', 'DESC');
@@ -49,6 +43,12 @@ class HomeController extends Controller
         } else {
             $gallerySubmissions = [];
         }
+
+        return view('welcome', [
+            'about' => SitePage::where('key', 'about')->first(),
+            'featured' => $character,
+            'gallerySubmissions'  => $gallerySubmissions,
+        ]);
     }
 
     /**
