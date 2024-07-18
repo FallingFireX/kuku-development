@@ -87,12 +87,14 @@ Route::group(['prefix' => 'character', 'namespace' => 'Characters'], function() 
     Route::get('{slug}/profile', 'CharacterController@getCharacterProfile');
     Route::get('{slug}/'.__('awards.awardcase'), 'CharacterController@getCharacterAwards');
     Route::get('{slug}/bank', 'CharacterController@getCharacterBank');
+    Route::get('{slug}/status-effects', 'CharacterController@getCharacterStatusEffects');
     Route::get('{slug}/inventory', 'CharacterController@getCharacterInventory');
     Route::get('{slug}/images', 'CharacterController@getCharacterImages');
 
     Route::get('{slug}/'.__('awards.award').'-logs', 'CharacterController@getCharacterAwardLogs');
     Route::get('{slug}/currency-logs', 'CharacterController@getCharacterCurrencyLogs');
     Route::get('{slug}/item-logs', 'CharacterController@getCharacterItemLogs');
+    Route::get('{slug}/status-effect-logs', 'CharacterController@getCharacterStatusEffectLogs');
     Route::get('{slug}/ownership', 'CharacterController@getCharacterOwnershipLogs');
     Route::get('{slug}/change-log', 'CharacterController@getCharacterLogs');
     Route::get('{slug}/submissions', 'CharacterController@getCharacterSubmissions');
@@ -125,8 +127,9 @@ Route::group(['prefix' => 'world'], function() {
     Route::get('currencies', 'WorldController@getCurrencies');
     Route::get('rarities', 'WorldController@getRarities');
     Route::get('species', 'WorldController@getSpecieses');
-    Route::get(__('lorekeeper.subtypes'), 'WorldController@getSubtypes');
-    Route::get(__('lorekeeper.specieses').'/{id}/traits', 'WorldController@getSpeciesFeatures');
+    Route::get('subtypes', 'WorldController@getSubtypes');
+    Route::get('species/{id}/traits', 'WorldController@getSpeciesFeatures');
+    Route::get('status-effects', 'WorldController@getStatusEffects');
     Route::get('item-categories', 'WorldController@getItemCategories');
     Route::get('items', 'WorldController@getItems');
     Route::get(__('awards.award').'-categories', 'WorldController@getAwardCategories');

@@ -479,6 +479,20 @@ return [
         'message' => '<a href="{sender_url}">{sender_name}</a> has transferred a {type} breeding permission for <a href="character/{character_slug}">{character_name}</a> from you. (<a href="{url}">View Breeding Permissions</a>)',
         'url' => 'breeding-permissions'
     ],
+    // CHARACTER_STATUS_GRANT
+    521 => [
+        'name' => 'Character Status Effect Grant',
+        'message' => '{character_name} has been given the status effect {status_name} (×{status_quantity}) by <a href="{sender_url}">{sender_name}</a>. (<a href="{url}">View Status Effects</a>)',
+        'url' => 'character/{character_slug}/status-effects'
+    ],
+
+    // CHARACTER_STATUS_REMOVAL
+    522 => [
+        'name' => 'Character Status Effect Removal',
+        'message' => '{status_name} (×{status_quantity})  was removed from {character_name} by <a href="{sender_url}">{sender_name}</a>. (<a href="{url}">View Status Effects</a>)',
+        'url' => 'character/{character_slug}/status-effects'
+    ],
+
     // RECIPE_GRANT
     600 => [
         'name' => 'Recipe Grant',

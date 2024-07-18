@@ -12,6 +12,7 @@
         @endif
         <div class="sidebar-item"><a href="{{ $character->url . '/'.__('awards.awardcase') }}" class="{{ set_active('character/'.$character->slug.'/'.__('awards.awardcase')) }}">{{ucfirst(__('awards.awards'))}}</a></div>
         <div class="sidebar-item"><a href="{{ $character->url . '/breeding-permissions' }}" class="{{ set_active('character/'.$character->slug.'/breeding-permissions') }}">Breeding Permissions</a></div>
+        <div class="sidebar-item"><a href="{{ $character->url . '/status-effects' }}" class="{{ set_active('character/'.$character->slug.'/status-effects') }}">Status Effects</a></div>
     </li>
     <li class="sidebar-section">
         <div class="sidebar-section-header">History</div>
@@ -20,6 +21,7 @@
         <div class="sidebar-item"><a href="{{ $character->url . '/ownership' }}" class="{{ set_active('character/'.$character->slug.'/ownership') }}">Ownership History</a></div>
         <div class="sidebar-item"><a href="{{ $character->url . '/item-logs' }}" class="{{ set_active('character/'.$character->slug.'/item-logs') }}">Item Logs</a></div>
         <div class="sidebar-item"><a href="{{ $character->url . '/currency-logs' }}" class="{{ set_active('character/'.$character->slug.'/currency-logs') }}">Currency Logs</a></div>
+        <div class="sidebar-item"><a href="{{ $character->url . '/status-effect-logs' }}" class="{{ set_active('character/'.$character->slug.'/status-effect-logs') }}">Status Effect Logs</a></div>
         <div class="sidebar-item"><a href="{{ $character->url . '/submissions' }}" class="{{ set_active('character/'.$character->slug.'/submissions') }}">Submissions</a></div>
         <div class="sidebar-item"><a href="{{ $character->url . '/'.__('awards.award').'-logs' }}" class="{{ set_active('character/'.$character->slug.'/'.__('awards.award').'-logs') }}">{{ucfirst(__('awards.award'))}} Logs</a></div>
     </li>
