@@ -97,6 +97,15 @@ return [
         'version' => '1.0.1',
     ],
 
+    'selected_character' => [
+        'key' => 'selected_character',
+        'wiki_key' => 'Selected_Character',
+        'creators' => json_encode([
+            'Mercury' => 'https://github.com/itinerare/',
+        ]),
+        'version' => '1.0.1',
+    ],
+
     'donation_shop' => [
         'key' => 'donation_shop',
         'wiki_key' => 'Donation_Shop',
