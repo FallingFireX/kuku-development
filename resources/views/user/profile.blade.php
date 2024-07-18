@@ -12,15 +12,13 @@
 @section('meta-img')
     {{ $user->avatarUrl }}
 @endsection
-<div class="row">
-<div class="col-md-6">
-        @include('widgets._selected_character', ['character' => $user->settings->selectedCharacter, 'user' => $user, 'fullImage' => false])
-    </div>
-</div>
 @section('profile-content')
     {!! breadcrumbs(['Users' => 'users', $user->name => $user->url]) !!}
+    @endsection
+    @include('widgets._awardcase_feature', ['target' => $user, 'count' => Config::get('lorekeeper.extensions.awards.user_featured'), 'float' => false])
+    @include('widgets._selected_character', ['character' => $user->settings->selectedCharacter, 'user' => $user, 'fullImage' => false])
 
-@include('widgets._awardcase_feature', ['target' => $user, 'count' => Config::get('lorekeeper.extensions.awards.user_featured'), 'float' => false])
+
 
 
     <div class="card mb-3">
