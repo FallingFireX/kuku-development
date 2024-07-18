@@ -12,7 +12,7 @@
     {!! breadcrumbs(['Users' => 'users', $user->name => $user->url]) !!}
 
 @include('widgets._awardcase_feature', ['target' => $user, 'count' => Config::get('lorekeeper.extensions.awards.user_featured'), 'float' => false])
-
+<br>
 @if(isset($user->profile->parsed_text))
     <div class="card mb-3" style="clear:both;">
         @if($user->profile->pronouns)
