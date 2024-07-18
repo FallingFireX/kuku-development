@@ -14,7 +14,6 @@
 @endsection
 @section('profile-content')
     {!! breadcrumbs(['Users' => 'users', $user->name => $user->url]) !!}
-    @endsection
 
     
 
