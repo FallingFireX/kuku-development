@@ -2,47 +2,27 @@
 
 @section('profile-title')
     {{ $user->name }}'s Profile
+    @if($user->profile->pronouns)
+            <h5 class="card-header">
+                {{ $user->profile->pronouns }}
+            </h5>
+            @endif
 @endsection
 
 @section('meta-img')
     {{ $user->avatarUrl }}
 @endsection
-
+<div class="row">
+<div class="col-md-6">
+        @include('widgets._selected_character', ['character' => $user->settings->selectedCharacter, 'user' => $user, 'fullImage' => false])
+    </div>
+</div>
 @section('profile-content')
     {!! breadcrumbs(['Users' => 'users', $user->name => $user->url]) !!}
 
 @include('widgets._awardcase_feature', ['target' => $user, 'count' => Config::get('lorekeeper.extensions.awards.user_featured'), 'float' => false])
-<br>
-@if(isset($user->profile->parsed_text))
-    <div class="card mb-3" style="clear:both;">
-        @if($user->profile->pronouns)
-            <h5 class="card-header">
-                {{ $user->profile->pronouns }}
-            </h5>
-        @endif
-        <div class="card-body">
-            {!! $user->profile->parsed_text !!}
-        </div>
-    </div>
-@endif
 
-<div class="row">
-    <div class="col-md-6">
-        @include('widgets._selected_character', ['character' => $user->settings->selectedCharacter, 'user' => $user, 'fullImage' => false])
-    </div>
-    <div class="col-md-6 mb-4 profile-assets" style="clear:both;">
-        <div class="card profile-currencies profile-assets-card mb-4">
-            <div class="card-body text-center">
-                <h5 class="card-title">Bank</h5>
-                <div class="profile-assets-content">
-                    @foreach($user->getCurrencies(false) as $currency)
-                        <div>{!! $currency->display($currency->quantity) !!}</div>
-                    @endforeach
-                </div>
-                <div class="text-right"><a href="{{ $user->url.'/bank' }}">View all...</a></div>
-            </div>
-        </div>
-        
+
     <div class="card mb-3">
         <div class="card-body text-center">
             <h5 class="card-title">{{ ucfirst(__('awards.awards')) }}</h5>
