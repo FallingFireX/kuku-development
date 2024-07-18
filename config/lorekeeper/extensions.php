@@ -49,7 +49,7 @@ return [
     'traits_by_category' => 1,
 
     // Scroll To Top - Uri
-    'scroll_to_top' => 0, // 1 - On, 0 - off
+    'scroll_to_top' => 1, // 1 - On, 0 - off
 
     // Character Reward Expansion - Uri
     'character_reward_expansion'    => [
