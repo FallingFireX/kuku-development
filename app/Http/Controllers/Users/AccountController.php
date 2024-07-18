@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Users;
 use File;
 use Settings;
 use Carbon\Carbon;
-use App\Http\Controllers\Users;
+use App\Http\Controllers\Controller;
 use App\Models\Theme;
 use App\Models\User\StaffProfile;
 use App\Models\Character\BreedingPermission;
