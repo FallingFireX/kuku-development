@@ -66,6 +66,8 @@ Route::group(['prefix' => 'user', 'namespace' => 'Users'], function() {
     Route::get('{name}/'.__('awards.award').'-logs', 'UserController@getUserAwardLogs');
     Route::get('{name}/ownership', 'UserController@getUserOwnershipLogs');
     Route::get('{name}/submissions', 'UserController@getUserSubmissions');
+
+    Route::get('{name}/recipe-logs', 'UserController@getUserRecipeLogs');
 });
 
 # STAFF TEAM
@@ -140,6 +142,8 @@ Route::group(['prefix' => 'world'], function() {
     Route::get(__('volumes.library').'/'.__('volumes.book').'/{id}', 'WorldController@getBook');
     Route::get(__('volumes.library').'/'.__('volumes.volumes'), 'WorldController@getVolumes');
 
+    Route::get('recipes', 'WorldController@getRecipes');
+    Route::get('recipes/{id}', 'WorldController@getRecipe');
 });
 
 Route::group(['prefix' => 'prompts'], function() {
@@ -201,5 +205,3 @@ Route::group(['prefix' => 'gallery'], function() {
 Route::group(['prefix' => 'reports', 'namespace' => 'Users'], function() {
     Route::get('/bug-reports', 'ReportController@getBugIndex');
 });
-
-

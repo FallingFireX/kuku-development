@@ -28,6 +28,8 @@ use Config;
 use Illuminate\Http\Request;
 use Auth;
 
+use App\Models\Recipe\Recipe;
+
 class WorldController extends Controller
 {
     /*
@@ -587,6 +589,38 @@ class WorldController extends Controller
 
         if (isset($data['sort'])) {
             switch ($data['sort']) {
+            case 'alpha':
+                    $query->sortAlphabetical();
+                    break;
+                case 'alpha-reverse':
+                    $query->sortAlphabetical(true);
+                    break;
+                case 'newest':
+                    $query->sortNewest();
+                    break;
+                case 'oldest':
+                    $query->sortOldest();
+                    break;
+                }
+        } else {
+            $query->sortNewest();
+        }
+
+        return view('world.volumes.volumes', [
+            'volumes' => $query->paginate(20)->appends($request->query()),
+            'books' => ['none' => 'Any Book'] + Book::visible(Auth::user() ?? null)->orderBy('name', 'DESC')->pluck('name', 'id')->toArray(),
+        ]);
+    }
+    public function getRecipes(Request $request)
+    {
+        $query = Recipe::query();
+        $data = $request->only(['name', 'sort']);
+        if(isset($data['name']))
+            $query->where('name', 'LIKE', '%'.$data['name'].'%');
+
+        if(isset($data['sort']))
+        {
+            switch($data['sort']) {
                 case 'alpha':
                     $query->sortAlphabetical();
                     break;
@@ -599,14 +633,15 @@ class WorldController extends Controller
                 case 'oldest':
                     $query->sortOldest();
                     break;
+                case 'locked':
+                    $query->sortNeedsUnlocking();
+                    break;
             }
-        } else {
-            $query->sortNewest();
         }
+        else $query->sortNewest();
 
-        return view('world.volumes.volumes', [
-            'volumes' => $query->paginate(20)->appends($request->query()),
-            'books' => ['none' => 'Any Book'] + Book::visible(Auth::user() ?? null)->orderBy('name', 'DESC')->pluck('name', 'id')->toArray(),
+        return view('world.recipes.recipes', [
+            'recipes' => $query->paginate(20)->appends($request->query()),
         ]);
     }
 
@@ -709,4 +744,22 @@ class WorldController extends Controller
         ]);
     }
 
+    /*
+    * Shows an individual recipe;ss page.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function getRecipe($id)
+    {
+        $recipe = Recipe::where('id', $id)->first();
+        if(!$recipe) abort(404);
+
+        return view('world.recipes._recipe_page', [
+            'recipe' => $recipe,
+            'imageUrl' => $recipe->imageUrl,
+            'name' => $recipe->displayName,
+            'description' => $recipe->parsed_description,
+        ]);
+    }
 }

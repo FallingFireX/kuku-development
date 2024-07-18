@@ -37,6 +37,7 @@
                 <li class="list-group-item"><a href="{{ url('world/'.__('awards.awards')) }}">All {{ ucfirst(__('awards.awards')) }}</a></li>
                 <li class="list-group-item"><a href="{{ url('world/currencies') }}">Currencies</a></li>
                 <li class="list-group-item"><a href="{{ url('world/'.__('volumes.library')) }}">{{ ucfirst(__('volumes.library')) }}</a></li>
+                <li class="list-group-item"><a href="{{ url('world/recipes') }}">All Recipes</a></li>
             </ul>
         </div>
     </div>
