@@ -143,6 +143,7 @@ return [
         ]),
         'version' => '1.0.2',
     ],
+    
     'artist_credits_tracker' => [
         'key' => 'artist_credits_tracker',
         'wiki_key' => 'Artist_Credits_Tracker',
