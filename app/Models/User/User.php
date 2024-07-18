@@ -30,6 +30,7 @@ use App\Models\Shop\ShopLog;
 use App\Models\Submission\Submission;
 use App\Models\Submission\SubmissionCharacter;
 use App\Models\User\UserCharacterLog;
+use App\Models\User\Notification;
 
 use App\Traits\Commenter;
 use App\Models\User\UserVolume;
