@@ -51,7 +51,7 @@
                             {!! Form::select('rewardable_id[]', $raffles, $loot->rewardable_id, ['class' => 'form-control raffle-select selectize', 'placeholder' => 'Select Raffle']) !!}
                         @elseif(isset($showThemes) && $showThemes && $loot->rewardable_type == 'Theme')
                             {!! Form::select('rewardable_id[]', $themes, $loot->rewardable_id, ['class' => 'form-control theme-select selectize', 'placeholder' => 'Select Theme']) !!}
-                            @if(isset($showRecipes) && $showRecipes)
+                        @elseif(isset($showRecipes) && $showRecipes)
                             {!! Form::select('rewardable_id[]', $recipes, null, ['class' => 'form-control recipe-select', 'placeholder' => 'Select Recipe']) !!}
                         @endif
                     </td>
