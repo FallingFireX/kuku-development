@@ -148,7 +148,7 @@
     </div>
 </div>
 </div>
-<div class="row">
+
 <h2>
     <a href="{{ $user->url . '/characters' }}">Characters</a>
     @if (isset($sublists) && $sublists->count() > 0)
@@ -159,7 +159,7 @@
 </h2>
 <br>
 @foreach ($characters->take(4)->get()->chunk(4) as $chunk)
-    <div class="row mb-4">
+    <div class="row mb-3">
         @foreach ($chunk as $character)
             <div class="col-md-3 col-6 text-center">
                 <div>
@@ -179,7 +179,6 @@
 <br>
 <div class="text-right"><a href="{{ $user->url . '/characters' }}">View all...</a></div>
 <hr class="mb-5" />
-</div>
 
 </div>
 <div class="col">
