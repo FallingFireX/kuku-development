@@ -2,11 +2,16 @@
 
 namespace App\Models\Item;
 
+use Config;
+use DB;
 use App\Models\Model;
-use App\Models\Prompt\Prompt;
-use App\Models\Shop\Shop;
+use App\Models\Item\ItemCategory;
+
 use App\Models\User\User;
-use App\Services\Config;
+use App\Models\Shop\Shop;
+use App\Models\Prompt\Prompt;
+use App\Models\User\UserItem;
+
 
 class Item extends Model {
     /**
