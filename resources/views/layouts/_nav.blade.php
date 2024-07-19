@@ -33,7 +33,7 @@ $user = Auth::user();
                         </a>
 
                         <div class="dropdown-menu" aria-labelledby="inventoryDropdown">
-                            <a class="dropdown-item" href="{{ $user->url . '/characters' }}">
+                            <a class="dropdown-item" href="{{ Auth::user()->url . '/characters' }}">
                                 My Kukuri
                             </a>
                             <a class="dropdown-item" href="{{ url('characters/myos') }}">
@@ -49,7 +49,7 @@ $user = Auth::user();
                             <a class="dropdown-item" href="{{ url('bank') }}">
                                 Bank
                             </a>
-                            <a class="dropdown-item" href="{{ $user->url . '/awardcase' }}">
+                            <a class="dropdown-item" href="{{ Auth::user()->url . '/awardcase' }}">
                                 {{ ucfirst(__('awards.awards')) }}
                                 </a>
                             <div class="dropdown-divider"></div>

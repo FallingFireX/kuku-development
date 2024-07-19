@@ -53,7 +53,7 @@
                 
             </div>
             <ul class="list-group list-group-flush">
-                <li class="list-group-item"><a href="{{ $user->url . '/characters' }}">My Characters</a></li>
+                <li class="list-group-item"><a href="{{ Auth::user()->url . '/characters' }}">My Characters</a></li>
                 <li class="list-group-item"><a href="{{ url('characters/myos') }}">My MYO Slots</a></li>
                 <li class="list-group-item"><a href="{{ url('characters/transfers/incoming') }}">Character Transfers</a></li>
             </ul>
@@ -90,8 +90,8 @@
                 <!--<h5 class="card-title">{{ ucfirst(__('awards.awards')) }}</h5>-->
             </div>
             <ul class="list-group list-group-flush">
-                <li class="list-group-item"><a href="{{ $user->url . '/awardcase' }}">My {{ ucfirst(__('awards.award')) }}</a></li>
-                <li class="list-group-item"><a href="{{ $user->url . '/award-logs' }}">{{ ucfirst(__('awards.award')) }} Logs</a></li>
+                <li class="list-group-item"><a href="{{ Auth::user()->url . '/awardcase' }}">My {{ ucfirst(__('awards.award')) }}</a></li>
+                <li class="list-group-item"><a href="{{ Auth::user()->url . '/award-logs' }}">{{ ucfirst(__('awards.award')) }} Logs</a></li>
             </ul>
         </div>
     </div>
