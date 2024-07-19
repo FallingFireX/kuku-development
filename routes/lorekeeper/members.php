@@ -79,7 +79,9 @@ Route::group(['prefix' => 'characters', 'namespace' => 'Users'], function () {
     Route::post('transfer/act/{id}', 'CharacterController@postHandleTransfer');
 
     Route::get('myos', 'CharacterController@getMyos');
+});
 
+Route::group(['prefix' => __('awards.awardcase'), 'namespace' => 'Users'], function() {
     Route::get('/', 'AwardCaseController@getIndex');
     Route::post('edit', 'AwardCaseController@postEdit');
     Route::post('claim/{id}', 'AwardCaseController@postClaimAward');
