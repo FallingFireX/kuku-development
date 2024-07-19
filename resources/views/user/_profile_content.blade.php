@@ -182,7 +182,7 @@
 <hr>
 </div>
 <div class="col">
-<div class="row mb-4 no-gutters">
+    <div class="card-deck mb-4 profile-assets">
     <div class="card profile-currencies profile-assets-card">
         <div class="card-body text-center">
             <h5 class="card-title">Pets</h5>
@@ -228,6 +228,7 @@
             <div class="text-right"><a href="{{ $user->url . '/armoury' }}">View all...</a></div>
         </div>
     </div>
+</div>
 </div>
 <div class="row col-12">
     <div class="col-md-8">
