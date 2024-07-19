@@ -3,7 +3,7 @@
 @section('title') Awards @endsection
 
 @section('content')
-{!! breadcrumbs(['World' => 'world', 'Awards' => 'world/awards') !!}
+{!! breadcrumbs(['World' => 'world', 'Awards' => 'world/awards']) !!}
 <h1>Awards</h1>
 
 <div>
