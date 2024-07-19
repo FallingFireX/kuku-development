@@ -80,6 +80,7 @@
                             @endif Detach Pet from Character
                         </a>
                         {!! Form::open(['url' => 'pets/detach/' . $stack->id, 'id' => 'attachForm', 'class' => 'collapse']) !!}
+                        {!! Form::hidden('is_staff', 1) !!}
                         <p>This pet is currently attached to {!! $stack->character->displayName !!}, do you want to detach them?</p>
                         <div class="text-right">
                             {!! Form::submit('Detach', ['class' => 'btn btn-primary']) !!}
@@ -97,6 +98,7 @@
                         <div class="form-group">
                             {!! Form::label('id', 'Slug') !!} {!! add_help('Insert your character\'s slug.') !!}
                             {!! Form::select('id', $chara, null, ['class' => 'form-control']) !!}
+                            {!! Form::hidden('is_staff', 1) !!}
                         </div>
                         <div class="text-right">
                             {!! Form::submit('Attach', ['class' => 'btn btn-primary']) !!}
