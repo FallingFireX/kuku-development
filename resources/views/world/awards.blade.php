@@ -1,10 +1,10 @@
 @extends('world.layout')
 
-@section('title') {{__('awards.awards')}} @endsection
+@section('title') {{__('awards.award')}} @endsection
 
 @section('content')
-{!! breadcrumbs(['World' => 'world', __('awards.awards') => 'world/'.__('awards.awards')]) !!}
-<h1>{{__('awards.awards')}}</h1>
+{!! breadcrumbs(['World' => 'world', __('awards.award') => 'world/'.__('awards.award')]) !!}
+<h1>{{__('awards.award')}}</h1>
 
 <div>
     {!! Form::open(['method' => 'GET', 'class' => '']) !!}
