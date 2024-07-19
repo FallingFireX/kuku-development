@@ -54,18 +54,18 @@ class UpdateExtensionTracker extends Command {
                     'version'  => $data['version'],
                 ]);
                 $this->info('Added:   '.$key.' / Version: '.$data['version']);
-            } elseif ($extension->first()->version != $data['version']) {
-                    DB::table('site_extensions')->where('key', $key)->update([
-                        'key'      => $key,
-                        'wiki_key' => $data['wiki_key'],
-                        'creators' => $data['creators'],
-                        'version'  => $data['version'],
-                    ]);
-                    $this->info('Updated:   '.$key.' / Version: '.$data['version']);
+            // } elseif ($extension->first()->version != $data['version']) {
+            //         DB::table('site_extensions')->where('key', $key)->update([
+            //             'key'      => $key,
+            //             'wiki_key' => $data['wiki_key'],
+            //             'creators' => $data['creators'],
+            //             'version'  => $data['version'],
+            //         ]);
+            //         $this->info('Updated:   '.$key.' / Version: '.$data['version']);
                 
-            } else {
-                $this->line('Skipped: '.$key.' / Version: '.$data['version']);
-            }
+            // } else {
+            //     $this->line('Skipped: '.$key.' / Version: '.$data['version']);
+            // }
         }
 
         if (app()->runningInConsole()) {
@@ -94,4 +94,5 @@ class UpdateExtensionTracker extends Command {
 
         $this->info("\n".'All extensions are in tracker.'."\n");
     }
+}
 }
