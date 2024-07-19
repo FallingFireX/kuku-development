@@ -46,7 +46,7 @@
                     @endif
                 </div>
             </div>
-            <div class="row col-sm-7">
+            <div class="row col-sm-6">
                 <div class="col-md-3 col-4">
                     <h5>Joined</h5>
                 </div>
@@ -147,6 +147,38 @@
         </div>
     </div>
 </div>
+
+
+<h2>
+    <a href="{{ $user->url . '/characters' }}">Characters</a>
+    @if (isset($sublists) && $sublists->count() > 0)
+        @foreach ($sublists as $sublist)
+            / <a href="{{ $user->url . '/sublist/' . $sublist->key }}">{{ $sublist->name }}</a>
+        @endforeach
+    @endif
+</h2>
+<br>
+@foreach ($characters->take(4)->get()->chunk(4) as $chunk)
+    <div class="row mb-4">
+        @foreach ($chunk as $character)
+            <div class="col-md-3 col-6 text-center">
+                <div>
+                    <a href="{{ $character->url }}"><img src="{{ $character->image->thumbnailUrl }}" class="img-thumbnail" alt="{{ $character->fullName }}" /></a>
+                </div>
+                <div class="mt-1">
+                    <a href="{{ $character->url }}" class="h5 mb-0">
+                        @if (!$character->is_visible)
+                            <i class="fas fa-eye-slash"></i>
+                        @endif {{ Illuminate\Support\Str::limit($character->fullName, 20, $end = '...') }}
+                    </a>
+                </div>
+            </div>
+        @endforeach
+    </div>
+@endforeach
+<br>
+<div class="text-right"><a href="{{ $user->url . '/characters' }}">View all...</a></div>
+<hr class="mb-5" />
 <div class="card-deck mb-4 profile-assets">
     <div class="card profile-currencies profile-assets-card">
         <div class="card-body text-center">
@@ -194,38 +226,6 @@
         </div>
     </div>
 </div>
-
-<h2>
-    <a href="{{ $user->url . '/characters' }}">Characters</a>
-    @if (isset($sublists) && $sublists->count() > 0)
-        @foreach ($sublists as $sublist)
-            / <a href="{{ $user->url . '/sublist/' . $sublist->key }}">{{ $sublist->name }}</a>
-        @endforeach
-    @endif
-</h2>
-<br>
-@foreach ($characters->take(4)->get()->chunk(4) as $chunk)
-    <div class="row mb-4">
-        @foreach ($chunk as $character)
-            <div class="col-md-3 col-6 text-center">
-                <div>
-                    <a href="{{ $character->url }}"><img src="{{ $character->image->thumbnailUrl }}" class="img-thumbnail" alt="{{ $character->fullName }}" /></a>
-                </div>
-                <div class="mt-1">
-                    <a href="{{ $character->url }}" class="h5 mb-0">
-                        @if (!$character->is_visible)
-                            <i class="fas fa-eye-slash"></i>
-                        @endif {{ Illuminate\Support\Str::limit($character->fullName, 20, $end = '...') }}
-                    </a>
-                </div>
-            </div>
-        @endforeach
-    </div>
-@endforeach
-<br>
-<div class="text-right"><a href="{{ $user->url . '/characters' }}">View all...</a></div>
-<hr class="mb-5" />
-
 <div class="row col-12">
     <div class="col-md-8">
 
