@@ -1,10 +1,10 @@
 @extends('world.layout')
 
-@section('title') {{__('awards.award')}} @endsection
+@section('title') {{__('awards.awards')}} @endsection
 
 @section('content')
-{!! breadcrumbs(['World' => 'world', __('awards.award') => 'world/'.__('awards.award')]) !!}
-<h1>{{__('awards.award')}}</h1>
+{!! breadcrumbs(['World' => 'world', __('awards.awards') => 'world/'.__('awards.awards')]) !!}
+<h1>{{__('awards.awards')}}</h1>
 
 <div>
     {!! Form::open(['method' => 'GET', 'class' => '']) !!}
@@ -69,6 +69,6 @@
 </div>
 {!! $awards->render() !!}
 
-<div class="text-center mt-4 small text-muted">{{ $awards->total() }} {{ trans_choice('awards.award_',$awards->total())}} found.</div>
+<div class="text-center mt-4 small text-muted">{{ $awards->total() }} {{ trans_choice('awards.awards_',$awards->total())}} found.</div>
 
 @endsection
