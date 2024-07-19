@@ -6,7 +6,7 @@ use App\Models\Model;
 use App\Models\Prompt\Prompt;
 use App\Models\Shop\Shop;
 use App\Models\User\User;
-use config;
+use App\Services\Config;
 
 class Item extends Model {
     /**
