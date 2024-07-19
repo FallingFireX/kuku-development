@@ -18,10 +18,8 @@
             ->orderBy('name')
             ->pluck('name', 'id');
     }
-    if ($showRecipes) {
-        $recipes = \App\Models\Recipe\Recipe::orderBy('name')
-        ->pluck('name', 'id');
-    }
+    $Recipes= \App\Models\Recipe\Recipe::orderBy('name')->pluck('name', 'id');
+    
 @endphp
 
 <div id="lootRowData" class="hide">
