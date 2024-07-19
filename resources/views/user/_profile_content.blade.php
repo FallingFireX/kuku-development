@@ -181,7 +181,8 @@
 <hr class="mb-5" />
 <hr>
 </div>
-<div class="row mb-4">
+<div class="col">
+<div class="row mb-4 no-gutters">
     <div class="card profile-currencies profile-assets-card">
         <div class="card-body text-center">
             <h5 class="card-title">Pets</h5>
