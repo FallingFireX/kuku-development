@@ -117,7 +117,6 @@
             <div class="text-right"><a href="{{ $user->url.'/'.__('awards.awardcase') }}">View all...</a></div>
         </div>
     </div>
-</div>
 <div class="card-deck mb-4 profile-assets" style="clear:both;">
         <div class="card profile-inventory profile-assets-card">
             <div class="card-body text-center">
