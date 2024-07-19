@@ -178,9 +178,9 @@
 @endforeach
 <br>
 <div class="text-right"><a href="{{ $user->url . '/characters' }}">View all...</a></div>
-<hr class="mb-5" />
+<hr class="mb-5" /></hr>
 
-<div class="row mb-4 profile-assets">
+<div class="row mb-4">
     <div class="card profile-currencies profile-assets-card">
         <div class="card-body text-center">
             <h5 class="card-title">Pets</h5>
