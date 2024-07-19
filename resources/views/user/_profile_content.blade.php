@@ -147,7 +147,7 @@
         </div>
     </div>
 </div>
-</div>
+
 
 <h2>
     <a href="{{ $user->url . '/characters' }}">Characters</a>
@@ -179,7 +179,7 @@
 <br>
 <div class="text-right"><a href="{{ $user->url . '/characters' }}">View all...</a></div>
 <hr class="mb-5" />
-<hr>
+
 </div>
 <div class="col">
     <div class="card-deck mb-4 profile-assets">
