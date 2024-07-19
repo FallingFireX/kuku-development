@@ -55,9 +55,6 @@ class UpdateExtensionTracker extends Command {
                 ]);
                 $this->info('Added:   '.$key.' / Version: '.$data['version']);
             } elseif ($extension->first()->version != $data['version']) {
-                $this->info(ucfirst($key).' version mismatch. Old version: '.$extension->first()->version.' / New version: '.$data['version']);
-                $confirm = $this->confirm('Do you want to update the listed version of '.$key.' to '.$data['version'].'? This will not affect any other files.');
-                if ($confirm || !app()->runningInConsole()) {
                     DB::table('site_extensions')->where('key', $key)->update([
                         'key'      => $key,
                         'wiki_key' => $data['wiki_key'],
@@ -65,9 +62,7 @@ class UpdateExtensionTracker extends Command {
                         'version'  => $data['version'],
                     ]);
                     $this->info('Updated:   '.$key.' / Version: '.$data['version']);
-                } else {
-                    $this->line('Skipped: '.$key.' / Version: '.$extension->first()->version);
-                }
+                
             } else {
                 $this->line('Skipped: '.$key.' / Version: '.$data['version']);
             }
