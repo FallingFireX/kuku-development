@@ -118,29 +118,28 @@
     {!! Form::close() !!}
 
     
-@include('widgets._loot_select_row', ['items' => $items, 'currencies' => $currencies, 'tables' => $tables, 'raffles' => $raffles, 'recipes' => $recipes, 'showLootTables' => true, 'showRaffles' => true, 'showRecipes' => true])
+    @include('widgets._loot_select_row', ['showLootTables' => true, 'showRaffles' => true])
 
-
-    @if ($prompt->id)
-        <h3>Preview</h3>
-        <div class="card mb-3">
-            <div class="card-body">
-                @include('prompts._prompt_entry', ['prompt' => $prompt])
-            </div>
+@if ($prompt->id)
+    <h3>Preview</h3>
+    <div class="card mb-3">
+        <div class="card-body">
+            @include('prompts._prompt_entry', ['prompt' => $prompt])
         </div>
-    @endif
+    </div>
+@endif
 @endsection
 
 @section('scripts')
-    @parent
-    @include('js._loot_js', ['showLootTables' => true, 'showRaffles' => true])
-    @include('widgets._datetimepicker_js')
-    <script>
-        $(document).ready(function() {
-            $('.delete-prompt-button').on('click', function(e) {
-                e.preventDefault();
-                loadModal("{{ url('admin/data/prompts/delete') }}/{{ $prompt->id }}", 'Delete Prompt');
-            });
+@parent
+@include('js._loot_js', ['showLootTables' => true, 'showRaffles' => true])
+@include('widgets._datetimepicker_js')
+<script>
+    $(document).ready(function() {
+        $('.delete-prompt-button').on('click', function(e) {
+            e.preventDefault();
+            loadModal("{{ url('admin/data/prompts/delete') }}/{{ $prompt->id }}", 'Delete Prompt');
         });
-    </script>
+    });
+</script>
 @endsection

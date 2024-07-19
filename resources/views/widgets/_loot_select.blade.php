@@ -22,13 +22,13 @@
 @endphp
 
 <div class="text-right mb-3">
-    <a href="#" class="btn btn-outline-info" id="addLoot">Add {{ isset($progression) && $progression ? 'Progression' : 'Reward'  }}</a>
+    <a href="#" class="btn btn-outline-info" id="addLoot">Add Reward</a>
 </div>
 <table class="table table-sm" id="lootTable">
     <thead>
         <tr>
-            <th width="35%">{{ isset($progression) && $progression ? 'Progression' : 'Reward'  }} Type</th>
-            <th width="35%">{{ isset($progression) && $progression ? 'Progression' : 'Reward'  }}</th>
+            <th width="35%">Reward Type</th>
+            <th width="35%">Reward</th>
             <th width="20%">Quantity</th>
             <th width="10%"></th>
         </tr>
