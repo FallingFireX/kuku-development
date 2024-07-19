@@ -2,46 +2,30 @@
 
 @section('profile-title')
     {{ $user->name }}'s Profile
-    @if($user->profile->pronouns)
-            <h5 class="card-header">
-                {{ $user->profile->pronouns }}
-            </h5>
-            @endif
 @endsection
 
 @section('meta-img')
     {{ $user->avatarUrl }}
 @endsection
+
 @section('profile-content')
     {!! breadcrumbs(['Users' => 'users', $user->name => $user->url]) !!}
 
-    
+@include('widgets._awardcase_feature', ['target' => $user, 'count' => Config::get('lorekeeper.extensions.awards.user_featured'), 'float' => false])
 
-
-
-    <div class="card mb-3">
-        <div class="card-body text-center">
-            <h5 class="card-title">{{ ucfirst(__('awards.awards')) }}</h5>
-            <div class="card-body">
-                @if(count($awards))
-                    <div class="row">
-                        @foreach($awards as $award)
-                            <div class="col-md-3 col-6 profile-inventory-item">
-                                @if($award->imageUrl)
-                                    <img src="{{ $award->imageUrl }}" data-toggle="tooltip" title="{{ $award->name }}" />
-                                @else
-                                    <p>{{ $award->name }}</p>
-                                @endif
-                            </div>
-                        @endforeach
-                    </div>
-                @else
-                    <div>No {{ __('awards.awards') }} earned.</div>
-                @endif
-            </div>
-            <div class="text-right"><a href="{{ $user->url.'/'.__('awards.awardcase') }}">View all...</a></div>
+@if(isset($user->profile->parsed_text))
+    <div class="card mb-3" style="clear:both;">
+        @if($user->profile->pronouns)
+            <h5 class="card-header">
+                {{ $user->profile->pronouns }}
+            </h5>
+        @endif
+        <div class="card-body">
+            {!! $user->profile->parsed_text !!}
         </div>
     </div>
+@endif
+
 
 <!-- Uncomment this to restore the original character display.
     <h2>
@@ -95,7 +79,3 @@
     @endif
 
 @endsection
-@section('features')
-    @include('widgets._awardcase_feature', ['target' => $user, 'count' => Config::get('lorekeeper.extensions.awards.user_featured'), 'float' => false])
-    @include('widgets._selected_character', ['character' => $user->settings->selectedCharacter, 'user' => $user, 'fullImage' => false])
-    @endsection
