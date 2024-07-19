@@ -177,6 +177,7 @@
     </div>
 @endforeach
 <br>
+<hr class="mb-5" />
 <div class="text-right"><a href="{{ $user->url . '/characters' }}">View all...</a></div>
 <hr class="mb-5" />
 
