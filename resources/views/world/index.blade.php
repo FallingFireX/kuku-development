@@ -23,6 +23,10 @@
                     <li class="list-group-item"><a href="{{ url('world/traits') }}">All Traits</a></li>
                     <li class="list-group-item"><a href="{{ url('world/character-categories') }}">Character Categories</a></li>
                     <li class="list-group-item"><a href="{{ url('world/'.__('transformations.transformations')) }}">{{ ucfirst(__('transformations.transformations')) }}</a></li>
+                    <li class="list-group-item"><a href="{{ url('world/character-classes') }}">Character Classes</a></li>
+                    <li class="list-group-item"><a href="{{ url('world/levels') }}">Levels</a></li>
+                    <li class="list-group-item"><a href="{{ url('world/stats') }}">Stats</a></li>
+                    <li class="list-group-item"><a href="{{ url('world/elements') }}">All Elements</a></li>
                 </ul>
             </div>
         </div>
@@ -30,16 +34,24 @@
             <div class="card mb-4">
                 <div class="card-body text-center">
                     <img src="{{ asset('images/inventory.png') }}" alt="Items" />
-                    <h5 class="card-title">Items</h5>
+                    <h5 class="card-title">Items & Companions</h5>
                 </div>
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item"><a href="{{ url('world/item-categories') }}">Item Categories</a></li>
                     <li class="list-group-item"><a href="{{ url('world/items') }}">All Items</a></li>
+                    <li class="list-group-item"><a href="{{ url('world/skill-categories') }}">Skill Categories</a></li>
+                    <li class="list-group-item"><a href="{{ url('world/skills') }}">All Skills</a></li>
                     <li class="list-group-item"><a href="{{ url('world/currencies') }}">Currencies</a></li>
                     <li class="list-group-item"><a href="{{ url('world/'.__('awards.award').'-categories') }}">{{ ucfirst(__('awards.award')) }} Categories</a></li>
                     <li class="list-group-item"><a href="{{ url('world/'.__('awards.awards')) }}">All {{ ucfirst(__('awards.award')) }}</a></li>
                     <li class="list-group-item"><a href="{{ url('world/'.__('volumes.library')) }}">{{ ucfirst(__('volumes.library')) }}</a></li>
                     <li class="list-group-item"><a href="{{ url('world/recipes') }}">All Recipes</a></li>
+                    <li class="list-group-item"><a href="{{ url('world/pet-categories') }}">Pet Categories</a></li>
+                    <li class="list-group-item"><a href="{{ url('world/pets') }}">All Pets</a></li>
+                    <li class="list-group-item"><a href="{{ url('world/weapon-categories') }}">Weapon Categories</a></li>
+                    <li class="list-group-item"><a href="{{ url('world/weapons') }}">All Weapons</a></li>
+                    <li class="list-group-item"><a href="{{ url('world/gear-categories') }}">Gear Categories</a></li>
+                    <li class="list-group-item"><a href="{{ url('world/gear') }}">All Gear</a></li>
                 </ul>
             </div>
         </div>

@@ -23,7 +23,7 @@ class RaffleService extends Service {
      *
      * @param array $data
      *
-     * @return \App\Models\Raffle\Raffle
+     * @return Raffle
      */
     public function createRaffle($data) {
         DB::beginTransaction();
@@ -43,10 +43,10 @@ class RaffleService extends Service {
     /**
      * Updates a raffle.
      *
-     * @param array                     $data
-     * @param \App\Models\Raffle\Raffle $raffle
+     * @param array  $data
+     * @param Raffle $raffle
      *
-     * @return \App\Models\Raffle\Raffle
+     * @return Raffle
      */
     public function updateRaffle($data, $raffle) {
         DB::beginTransaction();
@@ -62,7 +62,7 @@ class RaffleService extends Service {
     /**
      * Deletes a raffle.
      *
-     * @param \App\Models\Raffle\Raffle $raffle
+     * @param Raffle $raffle
      *
      * @return bool
      */
@@ -82,7 +82,7 @@ class RaffleService extends Service {
      *
      * @param array $data
      *
-     * @return \App\Models\Raffle\RaffleGroup
+     * @return RaffleGroup
      */
     public function createRaffleGroup($data) {
         DB::beginTransaction();
@@ -101,7 +101,7 @@ class RaffleService extends Service {
      * @param array $data
      * @param mixed $group
      *
-     * @return \App\Models\Raffle\Raffle
+     * @return Raffle
      */
     public function updateRaffleGroup($data, $group) {
         DB::beginTransaction();

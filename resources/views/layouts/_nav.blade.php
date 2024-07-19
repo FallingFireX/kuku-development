@@ -40,6 +40,9 @@
                             </a>
                             <a class="dropdown-item" href="{{ url('breeding-permissions') }}">
                                 Breeding Permissions
+                                </a>
+                            <a class="dropdown-item" href="{{ url('pets') }}">
+                                My Pets
                             </a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="{{ url('inventory') }}">
@@ -51,6 +54,9 @@
                             <a class="dropdown-item" href="{{ Auth::user()->url . '/awardcase' }}">
                                 {{ ucfirst(__('awards.awards')) }}
                                 </a>
+                            <a class="dropdown-item" href="{{ url('stats') }}">
+                                Stat Information
+                            </a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="{{ url('comments/liked') }}">
                                 Liked Comments

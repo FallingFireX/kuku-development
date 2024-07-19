@@ -69,9 +69,9 @@ class FeatureService extends Service {
     /**
      * Update a category.
      *
-     * @param \App\Models\Feature\FeatureCategory $category
-     * @param array                               $data
-     * @param \App\Models\User\User               $user
+     * @param FeatureCategory       $category
+     * @param array                 $data
+     * @param \App\Models\User\User $user
      *
      * @return \App\Models\Feature\FeatureCategory|bool
      */
@@ -119,8 +119,8 @@ class FeatureService extends Service {
     /**
      * Delete a category.
      *
-     * @param \App\Models\Feature\FeatureCategory $category
-     * @param mixed                               $user
+     * @param FeatureCategory $category
+     * @param mixed           $user
      *
      * @return bool
      */
@@ -253,9 +253,9 @@ class FeatureService extends Service {
     /**
      * Updates a feature.
      *
-     * @param \App\Models\Feature\Feature $feature
-     * @param array                       $data
-     * @param \App\Models\User\User       $user
+     * @param Feature               $feature
+     * @param array                 $data
+     * @param \App\Models\User\User $user
      *
      * @return \App\Models\Feature\Feature|bool
      */
@@ -321,40 +321,6 @@ class FeatureService extends Service {
         return $this->rollbackReturn(false);
     }
 
-    // /**
-    //  * Deletes a feature.
-    //  *
-    //  * @param \App\Models\Feature\Feature $feature
-    //  * @param mixed                       $user
-    //  *
-    //  * @return bool
-    //  */
-    // public function deleteFeature($feature, $user) {
-    //     DB::beginTransaction();
-
-    //     try {
-    //         // Check first if the feature is currently in use
-    //         if (DB::table('character_features')->where('feature_id', $feature->id)->exists()) {
-    //             throw new \Exception('A character with this trait exists. Please remove the trait first.');
-    //         }
-
-    //         if (!$this->logAdminAction($user, 'Deleted Feature', 'Deleted '.$feature->name)) {
-    //             throw new \Exception('Failed to log admin action.');
-    //         }
-
-    //         if ($feature->has_image) {
-    //             $this->deleteImage($feature->imagePath, $feature->imageFileName);
-    //         }
-    //         $feature->delete();
-
-    //         return $this->commitReturn(true);
-    //     } catch (\Exception $e) {
-    //         $this->setError('error', $e->getMessage());
-    //     }
-
-    //     return $this->rollbackReturn(false);
-    // }
-
     /**
      * Handle category data.
      *
@@ -386,8 +352,8 @@ class FeatureService extends Service {
     /**
      * Processes user input for creating/updating a feature.
      *
-     * @param array                       $data
-     * @param \App\Models\Feature\Feature $feature
+     * @param array   $data
+     * @param Feature $feature
      *
      * @return array
      */

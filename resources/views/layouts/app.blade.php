@@ -119,6 +119,7 @@
     @endif
     @if(!$decoratorTheme?->prioritize_css) @include('layouts.editable_theme', ['theme' => $decoratorTheme]) @endif
 
+    @stack('styles')
     @include('feed::links')
 </head>
 
