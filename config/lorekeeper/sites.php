@@ -46,9 +46,9 @@ return [
         'regex'         => '/toyhou\.se\/([A-Za-z0-9_-]+)/',
         'link'          => 'toyhou.se',
         'icon'          => 'fas fa-home',
-        'auth'          => 1,
-        'login'         => 1,
-        'primary_alias' => 1,
+        'auth'          => 0,
+        'login'         => 0,
+        'primary_alias' => 0,
     ],
 
     'twitter'    => [
