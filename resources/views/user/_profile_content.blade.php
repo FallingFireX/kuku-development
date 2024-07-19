@@ -143,7 +143,7 @@
     </div>
     </div>
     </div>
-
+    </div>
 <h2>
     <a href="{{ $user->url . '/characters' }}">Characters</a>
     @if (isset($sublists) && $sublists->count() > 0)
