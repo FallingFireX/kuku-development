@@ -142,6 +142,7 @@
         </div>
     </div>
     </div>
+    </div>
 
 <h2>
     <a href="{{ $user->url . '/characters' }}">Characters</a>
