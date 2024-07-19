@@ -122,7 +122,7 @@
             <div class="text-right"><a href="{{ $user->url.'/'.__('awards.awardcase') }}">View all...</a></div>
         </div>
     </div>
-<div class="card-deck mb-4 profile-assets" style="clear:both;">
+    <div class="card-deck mb-4 profile-assets" style="clear:both;">
         <div class="card profile-inventory profile-assets-card">
             <div class="card-body text-center">
                 <h5 class="card-title">Inventory</h5>
@@ -147,7 +147,7 @@
         </div>
     </div>
 </div>
-
+</div>
 
 <h2>
     <a href="{{ $user->url . '/characters' }}">Characters</a>
