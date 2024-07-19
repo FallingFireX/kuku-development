@@ -35,6 +35,8 @@ use App\Models\User\UserCharacterLog;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+use App\Models\Character\CharacterTransformation as Transformation;
+
 class Character extends Model {
     use SoftDeletes;
 
