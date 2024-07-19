@@ -53,7 +53,7 @@
                 
             </div>
             <ul class="list-group list-group-flush">
-                <li class="list-group-item"><a href="{{ Auth::user()->url . '/characters' }}">My Characters</a></li>
+                <li class="list-group-item"><a href="{{ url('characters') }}">My Characters</a></li>
                 <li class="list-group-item"><a href="{{ url('characters/myos') }}">My MYO Slots</a></li>
                 <li class="list-group-item"><a href="{{ url('characters/transfers/incoming') }}">Character Transfers</a></li>
             </ul>
