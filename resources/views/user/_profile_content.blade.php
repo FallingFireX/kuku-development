@@ -152,7 +152,7 @@
         @endforeach
     @endif
 </h2>
-
+<br>
 @foreach ($characters->take(4)->get()->chunk(4) as $chunk)
     <div class="row mb-4">
         @foreach ($chunk as $character)
@@ -171,7 +171,7 @@
         @endforeach
     </div>
 @endforeach
-
+<br>
 <div class="text-right"><a href="{{ $user->url . '/characters' }}">View all...</a></div>
 <hr class="mb-5" />
 
