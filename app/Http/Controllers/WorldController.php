@@ -430,9 +430,38 @@ class WorldController extends Controller {
                 case 'user':
                     $query->where('is_character_owned',0)->where('is_user_owned',1);
                     break;
+                    if(isset($data['sort']))
+                    {
+                        switch($data['sort']) {
+                            case 'alpha':
+                                $query->sortAlphabetical();
+                                break;
+                            case 'alpha-reverse':
+                                $query->sortAlphabetical(true);
+                                break;
+                            case 'category':
+                                $query->sortCategory();
+                                break;
+                            case 'newest':
+                                $query->sortNewest();
+                                break;
+                            case 'oldest':
+                                $query->sortOldest();
+                                break;
+                        }
+                    }
+                    else $query->sortAlphabetical();
+            
+                    if(!Auth::check() || !Auth::user()->isStaff) $query->released();
+            
+                    return view('world.awards', [
+                        'awards' => $query->paginate(20)->appends($request->query()),
+                        'categories' => ['none' => 'Any Category'] + AwardCategory::orderBy('sort', 'DESC')->pluck('name', 'id')->toArray(),
+                        'shops' => Shop::orderBy('sort', 'DESC')->get()
+                    ]);
+                }
             }
         }
-    }
 
     /**
      * Shows an individual award's page.
