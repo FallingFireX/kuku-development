@@ -178,8 +178,8 @@
 @endforeach
 <br>
 <div class="text-right"><a href="{{ $user->url . '/characters' }}">View all...</a></div>
-<hr class="mb-5" /></hr>
-
+<hr class="mb-5" />
+<hr>
 <div class="row mb-4">
     <div class="card profile-currencies profile-assets-card">
         <div class="card-body text-center">
