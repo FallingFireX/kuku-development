@@ -147,8 +147,8 @@
         </div>
     </div>
 </div>
-
-
+</div>
+<div class="row">
 <h2>
     <a href="{{ $user->url . '/characters' }}">Characters</a>
     @if (isset($sublists) && $sublists->count() > 0)
@@ -179,6 +179,7 @@
 <br>
 <div class="text-right"><a href="{{ $user->url . '/characters' }}">View all...</a></div>
 <hr class="mb-5" />
+</div>
 
 </div>
 <div class="col">
