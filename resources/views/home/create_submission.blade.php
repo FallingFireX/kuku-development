@@ -81,8 +81,6 @@
     @else
         @include('widgets._loot_select_row', ['items' => $items, 'currencies' => $currencies, 'showLootTables' => false, 'showRaffles' => false, 'showRecipes' => false]) -->
         {!! breadcrumbs(['Prompt Submissions' => 'submissions', 'New Submission' => 'submissions/new']) !!}
-    @endif
-
     <h1>
         @if ($isClaim)
             New Claim
@@ -201,5 +199,5 @@
                 });
             });
         </script>
-   
+   @endif
 
