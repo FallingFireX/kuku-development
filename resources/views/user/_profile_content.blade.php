@@ -148,6 +148,7 @@
     </div>
 </div>
 </div>
+</div>
 
 <h2>
     <a href="{{ $user->url . '/characters' }}">Characters</a>
@@ -159,7 +160,7 @@
 </h2>
 <hr>
 @foreach ($characters->take(4)->get()->chunk(4) as $chunk)
-    <div class="row mb-3">
+    <div class="row mb-4">
         @foreach ($chunk as $character)
             <div class="col-md-3 col-6 text-center">
                 <div>
