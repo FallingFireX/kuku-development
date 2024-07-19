@@ -32,7 +32,7 @@ use App\Models\Submission\Submission;
 use App\Models\Submission\SubmissionCharacter;
 use App\Models\User\UserCharacterLog;
 use App\Models\Notification;
-use App\Models\User\commentLikes;
+use App\Models\Comment\CommentLike;
 
 use App\Traits\Commenter;
 use App\Models\User\UserVolume;
