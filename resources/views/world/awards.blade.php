@@ -69,6 +69,6 @@
 </div>
 {!! $awards->render() !!}
 
-<div class="text-center mt-4 small text-muted">{{ $awards->total() }} {{ trans_choice('awards.awards_',$awards->total())}} found.</div>
+<div class="text-center mt-4 small text-muted">{{ $awards->total() }} {{ trans_choice('awards.award_',$awards->total())}} found.</div>
 
 @endsection
