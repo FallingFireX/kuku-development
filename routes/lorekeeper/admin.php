@@ -552,6 +552,7 @@ Route::group(['prefix' => 'character', 'namespace' => 'Characters', 'middleware'
     Route::post('{slug}/grant', 'GrantController@postCharacterCurrency');
     Route::post('{slug}/grant-items', 'GrantController@postCharacterItems');
     Route::post('{slug}/grant-status', 'GrantController@postCharacterStatusEffect');
+    Route::post('{slug}/grant-awards', 'GrantController@postCharacterAwards');
 });
 Route::group(['prefix' => 'character', 'namespace' => 'Characters', 'middleware' => 'power:manage_characters'], function () {
     // IMAGES
