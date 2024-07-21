@@ -32,7 +32,7 @@
                         </a>
 
                         <div class="dropdown-menu" aria-labelledby="inventoryDropdown">
-                            <a class="dropdown-item" href="{{ Auth::user()->url . '/characters' }}">
+                            <a class="dropdown-item" href="{{ url('characters') }}">
                                 My Kukuri
                             </a>
                             <a class="dropdown-item" href="{{ url('characters/myos') }}">

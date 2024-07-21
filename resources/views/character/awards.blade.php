@@ -64,11 +64,11 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <span class="modal-title h5 mb-0">[ADMIN] Grant {{ucfirst(__('awards.awards'))}} </span>
+                    <span class="modal-title h5 mb-0">[ADMIN] Grant {{ucfirst(__('awards.award'))}} </span>
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
                 <div class="modal-body">
-                <p>Note that granting {{__('awards.awards')}} does not check against any hold limits for {{__('lorekeeper.characters')}}.</p>
+                <p>Note that granting {{__('awards.award')}} does not check against any hold limits for {{__('lorekeeper.characters')}}.</p>
                 <div class="form-group">
                 {!! Form::open(['url' => 'admin/character/'.$character->slug.'/grant-awards']) !!}
 
