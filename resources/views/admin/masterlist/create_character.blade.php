@@ -470,6 +470,16 @@
                 alert("AJAX call failed: " + textStatus + ", " + errorThrown);
             });
 
+            $.ajax({
+                type: "GET",
+                url: "{{ url('admin/masterlist/check-transformation') }}?species=" + species + "&myo=" + myo,
+                dataType: "text"
+            }).done(function(res) {
+                $("#transformations").html(res);
+            }).fail(function(jqXHR, textStatus, errorThrown) {
+                alert("AJAX call failed: " + textStatus + ", " + errorThrown);
+            });
+
             // Check stats
             $.ajax({
                 type: "GET",
