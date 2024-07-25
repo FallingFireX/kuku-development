@@ -1,10 +1,5 @@
 <?php
 return [
-<<<<<<< HEAD
-
-=======
-    
->>>>>>> 235693a560fc31d8ed7e71dbc06473d44b753b2f
     // FORMAT EXAMPLE.
     //
     // 'extension_tracker' => [
@@ -15,9 +10,6 @@ return [
     //     ]),
     //     'version' => '1.0.0',
     // ],
-<<<<<<< HEAD
-<<<<<<< HEAD
-
     'user_username_changes' => [
         'key' => 'user_username_changes',
         'wiki_key' => 'User_Username_Changes',
@@ -49,18 +41,11 @@ return [
     'Levels_&_Stats' => [
         'key'      => 'Levels_&_Stats',
         'wiki_key' => 'Levels_%26_Stats',
-=======
-    
-    'mini_clock' => [
-        'key' => 'mini_clock',
-        'wiki_key' => 'Mini_Clock',
->>>>>>> f815c8e3231f48b667170bcd678f7fdaebe534f8
         'creators' => json_encode([
             'Newt' => 'https://github.com/ne-wt/',
         ]),
         'version' => '1.0.0',
     ],
-<<<<<<< HEAD
 
     'staff-team-page' => [
         'key' => 'staff_team_page',
@@ -86,19 +71,10 @@ return [
         'wiki_key'     => 'Character_Skills',
         'creators'     => json_encode([
             'Newt' => 'https://github.com/ne-wt/',
-=======
-    
-    'dev_logs' => [
-        'key' => 'dev_logs',
-        'wiki_key' => 'Dev_Logs',
-            'creators' => json_encode([
-            'AnimatedCritter' => 'https://github.com/animatedcritter/',
->>>>>>> 235693a560fc31d8ed7e71dbc06473d44b753b2f
         ]),
         'version' => '1.0.0',
     ],
 
-<<<<<<< HEAD
     'user_pronouns' => [
         'key' => 'user_pronouns',
         'wiki_key' => 'User_Pronouns',
@@ -222,9 +198,4 @@ return [
         'version' => '2.0.0',
     ],
 ];
-=======
-];
->>>>>>> f815c8e3231f48b667170bcd678f7fdaebe534f8
-=======
-];
->>>>>>> 235693a560fc31d8ed7e71dbc06473d44b753b2f
+ 
