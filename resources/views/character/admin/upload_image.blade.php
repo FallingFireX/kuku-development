@@ -367,7 +367,6 @@
             }).fail(function(jqXHR, textStatus, errorThrown) {
                 alert("AJAX call failed: " + textStatus + ", " + errorThrown);
             });
-            
             $.ajax({
                 type: "GET",
                 url: "{{ url('admin/character/image/transformation') }}?species=" + species + "&id=" + id,
@@ -377,6 +376,7 @@
             }).fail(function(jqXHR, textStatus, errorThrown) {
                 alert("AJAX call failed: " + textStatus + ", " + errorThrown);
             });
+
 
         });
     </script>

@@ -167,7 +167,7 @@ class CharacterImageController extends Controller {
         ]);
     }
 
-    /**
+     /**
      * Shows the edit image transformation portion of the modal.
      *
      * @return \Illuminate\Contracts\Support\Renderable

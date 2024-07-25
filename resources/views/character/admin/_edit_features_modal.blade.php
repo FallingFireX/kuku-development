@@ -131,21 +131,6 @@
         refreshSubtype();
     });
 
-    $("#species").change(function() {
-        $.ajax({
-            type: "GET",
-            url: "{{ url('admin/character/image/traits/transformation') }}?species=" + species + "&id=" + id,
-            dataType: "text"
-        }).done(function(res) {
-            $("#transformations").html(res);
-        }).fail(function(jqXHR, textStatus, errorThrown) {
-            alert("AJAX call failed: " + textStatus + ", " + errorThrown);
-        });
-
-    });
-        refreshSubtype();
-    
-
     function refreshSubtype() {
         var species = $('#species').val();
         var id = '<?php echo $image->id; ?>';
@@ -158,6 +143,14 @@
         }).fail(function(jqXHR, textStatus, errorThrown) {
             alert("AJAX call failed: " + textStatus + ", " + errorThrown);
         });
-
+        $.ajax({
+            type: "GET",
+            url: "{{ url('admin/character/image/traits/transformation') }}?species=" + species + "&id=" + id,
+            dataType: "text"
+        }).done(function(res) {
+            $("#transformations").html(res);
+        }).fail(function(jqXHR, textStatus, errorThrown) {
+            alert("AJAX call failed: " + textStatus + ", " + errorThrown);
+        });
     };
 </script>

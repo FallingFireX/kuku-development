@@ -36,7 +36,7 @@
                 </li>
             </ul>
         </div>
-    @endif
+@endif
 
     {{-- Main Image --}}
     <div class="row mb-3">
