@@ -85,12 +85,13 @@
                             {!! Form::submit('Detach', ['class' => 'btn btn-primary']) !!}
                         </div>
                         {!! Form::close() !!}
-                    @if ($user->hasPower('edit_inventories'))
+                    @elseif($stack->character_id == null || $diff < Carbon\Carbon::now())
                         <a class="card-title h5 collapse-title" data-toggle="collapse" href="#attachForm">
                             @if ($stack->user_id != $user->id)
                                 [ADMIN]
                             @endif Attach Pet to Character
                         </a>
+                        @if ($user->hasPower('edit_inventories'))
                         {!! Form::open(['url' => 'pets/attach/' . $stack->id, 'id' => 'attachForm', 'class' => 'collapse']) !!}
                         <p>Attach this pet to a character you own! They'll appear on the character's page and any stat bonuses will automatically be applied.</p>
                         <p>Pets can be detached.</p>
@@ -102,6 +103,7 @@
                             {!! Form::submit('Attach', ['class' => 'btn btn-primary']) !!}
                         </div>
                         {!! Form::close() !!}
+                        @endif
                     @else
                         <a class="card-title h5">You cannot currently attach / detach this pet! It is under cooldown.</a>
                     @endif
