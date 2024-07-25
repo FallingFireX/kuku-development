@@ -75,7 +75,7 @@
                     @endphp
                     @if ($stack->character_id != null && $diff < Carbon\Carbon::now())
                         <a class="card-title h5 collapse-title" data-toggle="collapse" href="#attachForm">
-                            @if ($stack->user_id != $user->id)
+                        @if ($user->hasPower('edit_inventories'))
                                 [ADMIN]
                             @endif Detach Pet from Character
                         </a>
@@ -88,12 +88,11 @@
                         {!! Form::close() !!}
                     @elseif($stack->character_id == null || $diff < Carbon\Carbon::now())
                         <a class="card-title h5 collapse-title" data-toggle="collapse" href="#attachForm">
-                            @if ($stack->user_id != $user->id)
+                        @if ($user->hasPower('edit_inventories'))
                                 [ADMIN]
                             @endif Attach Pet to Character
                         </a>
                         {!! Form::open(['url' => 'pets/attach/' . $stack->id, 'id' => 'attachForm', 'class' => 'collapse']) !!}
-                        {!! Form::hidden('is_staff', 1) !!}
                         <p>Attach this pet to a character you own! They'll appear on the character's page and any stat bonuses will automatically be applied.</p>
                         <p>Pets can be detached.</p>
                         <div class="form-group">
