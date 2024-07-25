@@ -11,6 +11,7 @@ return [
     //     ]),
     //     'version' => '1.0.0',
     // ],
+<<<<<<< HEAD
 
     'user_username_changes' => [
         'key' => 'user_username_changes',
@@ -43,11 +44,18 @@ return [
     'Levels_&_Stats' => [
         'key'      => 'Levels_&_Stats',
         'wiki_key' => 'Levels_%26_Stats',
+=======
+    
+    'mini_clock' => [
+        'key' => 'mini_clock',
+        'wiki_key' => 'Mini_Clock',
+>>>>>>> f815c8e3231f48b667170bcd678f7fdaebe534f8
         'creators' => json_encode([
             'Newt' => 'https://github.com/ne-wt/',
         ]),
         'version' => '1.0.0',
     ],
+<<<<<<< HEAD
 
     'staff-team-page' => [
         'key' => 'staff_team_page',
@@ -200,3 +208,6 @@ return [
         'version' => '2.0.0',
     ],
 ];
+=======
+];
+>>>>>>> f815c8e3231f48b667170bcd678f7fdaebe534f8
