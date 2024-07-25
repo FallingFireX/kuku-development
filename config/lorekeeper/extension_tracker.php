@@ -1,6 +1,10 @@
 <?php
 return [
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> 235693a560fc31d8ed7e71dbc06473d44b753b2f
     // FORMAT EXAMPLE.
     //
     // 'extension_tracker' => [
@@ -11,6 +15,7 @@ return [
     //     ]),
     //     'version' => '1.0.0',
     // ],
+<<<<<<< HEAD
 <<<<<<< HEAD
 
     'user_username_changes' => [
@@ -81,10 +86,19 @@ return [
         'wiki_key'     => 'Character_Skills',
         'creators'     => json_encode([
             'Newt' => 'https://github.com/ne-wt/',
+=======
+    
+    'dev_logs' => [
+        'key' => 'dev_logs',
+        'wiki_key' => 'Dev_Logs',
+            'creators' => json_encode([
+            'AnimatedCritter' => 'https://github.com/animatedcritter/',
+>>>>>>> 235693a560fc31d8ed7e71dbc06473d44b753b2f
         ]),
         'version' => '1.0.0',
     ],
 
+<<<<<<< HEAD
     'user_pronouns' => [
         'key' => 'user_pronouns',
         'wiki_key' => 'User_Pronouns',
@@ -211,3 +225,6 @@ return [
 =======
 ];
 >>>>>>> f815c8e3231f48b667170bcd678f7fdaebe534f8
+=======
+];
+>>>>>>> 235693a560fc31d8ed7e71dbc06473d44b753b2f
