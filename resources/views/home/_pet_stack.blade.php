@@ -93,6 +93,7 @@
                             @endif Attach Pet to Character
                         </a>
                         {!! Form::open(['url' => 'pets/attach/' . $stack->id, 'id' => 'attachForm', 'class' => 'collapse']) !!}
+                        {!! Form::hidden('is_staff', 1) !!}
                         <p>Attach this pet to a character you own! They'll appear on the character's page and any stat bonuses will automatically be applied.</p>
                         <p>Pets can be detached.</p>
                         <div class="form-group">
