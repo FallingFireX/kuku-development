@@ -4,7 +4,7 @@
     <div class="text-center">
         <div class="mb-1">
             <a href="{{ $stack->pet->url }}">
-                <img class="img-fluid" src="{{ $stack->pet->variantImage($stack->id) }}" style="width:50%;" />
+                <img class="img-fluid" src="{{ $stack->pet->variantImage($stack->id) }}" />
             </a>
         </div>
         <div class="mb-1"><a href="{{ $stack->pet->url }}">{{ $stack->pet->name }}</a></div>
@@ -75,20 +75,19 @@
                     @endphp
                     @if ($stack->character_id != null && $diff < Carbon\Carbon::now())
                         <a class="card-title h5 collapse-title" data-toggle="collapse" href="#attachForm">
-                        @if ($user->hasPower('edit_inventories'))
+                            @if ($stack->user_id != $user->id)
                                 [ADMIN]
                             @endif Detach Pet from Character
                         </a>
                         {!! Form::open(['url' => 'pets/detach/' . $stack->id, 'id' => 'attachForm', 'class' => 'collapse']) !!}
-                        {!! Form::hidden('is_staff', 1) !!}
                         <p>This pet is currently attached to {!! $stack->character->displayName !!}, do you want to detach them?</p>
                         <div class="text-right">
                             {!! Form::submit('Detach', ['class' => 'btn btn-primary']) !!}
                         </div>
                         {!! Form::close() !!}
-                    @elseif($stack->character_id == null || $diff < Carbon\Carbon::now())
+                    @if ($user->hasPower('edit_inventories'))
                         <a class="card-title h5 collapse-title" data-toggle="collapse" href="#attachForm">
-                        @if ($user->hasPower('edit_inventories'))
+                            @if ($stack->user_id != $user->id)
                                 [ADMIN]
                             @endif Attach Pet to Character
                         </a>
@@ -98,7 +97,6 @@
                         <div class="form-group">
                             {!! Form::label('id', 'Slug') !!} {!! add_help('Insert your character\'s slug.') !!}
                             {!! Form::select('id', $chara, null, ['class' => 'form-control']) !!}
-                            {!! Form::hidden('is_staff', 1) !!}
                         </div>
                         <div class="text-right">
                             {!! Form::submit('Attach', ['class' => 'btn btn-primary']) !!}
