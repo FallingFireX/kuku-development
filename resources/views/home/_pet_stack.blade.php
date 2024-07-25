@@ -68,6 +68,7 @@
                     </div>
                     {!! Form::close() !!}
                 </li>
+                @if ($user->hasPower('edit_inventories'))
                 <li class="list-group-item">
                     @php
                         $now = Carbon\Carbon::parse($stack->attached_at);
@@ -91,7 +92,7 @@
                                 [ADMIN]
                             @endif Attach Pet to Character
                         </a>
-                        @if ($user->hasPower('edit_inventories'))
+                        
                         {!! Form::open(['url' => 'pets/attach/' . $stack->id, 'id' => 'attachForm', 'class' => 'collapse']) !!}
                         <p>Attach this pet to a character you own! They'll appear on the character's page and any stat bonuses will automatically be applied.</p>
                         <p>Pets can be detached.</p>
@@ -103,11 +104,12 @@
                             {!! Form::submit('Attach', ['class' => 'btn btn-primary']) !!}
                         </div>
                         {!! Form::close() !!}
-                        @endif
+                       
                     @else
                         <a class="card-title h5">You cannot currently attach / detach this pet! It is under cooldown.</a>
                     @endif
                 </li>
+                @endif
                 @if ($user && count($splices) && $user->id == $stack->user_id)
                     <li class="list-group-item">
                         <a class="card-title h5 collapse-title" data-toggle="collapse" href="#userVariantForm">Change Pet Variant</a>
