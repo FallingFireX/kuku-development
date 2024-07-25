@@ -10,9 +10,13 @@ Below is an example of a user being credited for 2 different items.
 <?php
 
 return [
-    'creator' => 'T0rnPages', 
+    'creator' => 'Unikeko', 
     'credits' => json_encode([
-        'Item: Sprout Key' => 'https://www.jellocats.club/world/items/103',
-        'Item: Sandy Bag' => 'https://www.jellocats.club/world/items/102',
+        'Item: All Base Imports' => '#',
+        'Item: Fungal Contamination Import Item' => '#',
+        'Item: Varma Base' => '#',
+        'Item: BG sets' => '#',
+        'Item: Familiars' => '#',
+        'Item: Activity Letters' => '#',
     ]),
 ];
