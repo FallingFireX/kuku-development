@@ -127,7 +127,7 @@
                 @if ($type || (Auth::check() && Auth::user()->hasPower('manage_characters')))
                     <div class="row">
                         <div class="col-lg-4 col-md-6 col-4">
-                            <h5>Typing</h5>
+                            <b>Magic</b>
                         </div>
                         <div class="col-lg-8 col-md-6 col-8 row">
                             <h5>{!! $type?->displayElements !!}</h5>
@@ -157,14 +157,14 @@
                             @endphp
                             @if ($image->features()->count())
                                 @foreach ($traitgroup as $key => $group)
-                                    <div class="mb-2">
+                                    <!-- <div class="mb-2"> -->
                                         @if ($key)
                                             <strong>{!! $group->first()->feature->category->displayName !!}:</strong>
                                         @else
                                             <strong>Miscellaneous:</strong>
                                         @endif
                                         @foreach ($group as $feature)
-                                            <div class="ml-md-2">{!! $feature->feature->displayName !!} @if ($feature->data)
+                                            <!-- <div class="ml-md-2">-->{!! $feature->feature->displayName !!} @if ($feature->data) 
                                                     ({{ $feature->data }})
                                                 @endif
                                             </div>
