@@ -76,18 +76,18 @@ class AwardCaseManager extends Service
 
                 foreach($targets as $target){
                     foreach($awards as $award) {
-                        if($this->creditAward($staff, $target, 'Staff Grant', array_only($data, ['data', 'disallow_transfer', 'notes']), $award, $keyed_quantities[$award->id])) {
+                        if($this->creditAward($staff, $target, 'Staff Grant', array_only($data, ['data', 'disallow_transfer', 'notes']), $award, $keyed_quantities[$awards->id])) {
                             if($type == "User"){
                                 Notifications::create('AWARD_GRANT', $target, [
                                     'award_name' => $award->name,
-                                    'award_quantity' => $keyed_quantities[$award->id],
+                                    'award_quantity' => $keyed_quantities[$awards->id],
                                     'sender_url' => $staff->url,
                                     'sender_name' => $staff->name
                                 ]);
                             } else {
                                 Notifications::create('CHARACTER_AWARD_GRANT', $target->user, [
                                     'award_name' => $award->name,
-                                    'award_quantity' => $keyed_quantities[$award->id],
+                                    'award_quantity' => $keyed_quantities[$awards->id],
                                     'sender_url' => $staff->url,
                                     'sender_name' => $staff->name,
                                     'character_name' => $target->fullName,
@@ -144,11 +144,11 @@ class AwardCaseManager extends Service
             if(!count($awards)) throw new \Exception("No valid ".__('awards.awards')." found.");
 
             foreach($awards as $award) {
-                $this->creditAward($staff, $character, 'Staff Grant', Arr::only($data, ['data', 'disallow_transfer', 'notes']), $award, $keyed_quantities[$award->id]);
+                $this->creditAward($staff, $character, 'Staff Grant', Arr::only($data, ['data', 'disallow_transfer', 'notes']), $award, $keyed_quantities[$awards->id]);
                 if($character->is_visible && $character->user_id) {
                     Notifications::create('CHARACTER_AWARD_GRANT', $character->user, [
                         'award_name' => $award->name,
-                        'award_quantity' => $keyed_quantities[$award->id],
+                        'award_quantity' => $keyed_quantities[$awards->id],
                         'sender_url' => $staff->url,
                         'sender_name' => $staff->name,
                         'character_name' => $character->fullName,
@@ -361,26 +361,26 @@ class AwardCaseManager extends Service
             if($recipient->logType == 'User') {
                 $recipient_stack = UserAward::where([
                     ['user_id', '=', $recipient->id],
-                    ['award_id', '=', $award->id],
+                    ['award_id', '=', $awards->id],
                     ['data', '=', $encoded_data]
                 ])->first();
 
-                if(!$recipient_stack) $recipient_stack = UserAward::create(['user_id' => $recipient->id, 'award_id' => $award->id, 'data' => $encoded_data]);
+                if(!$recipient_stack) $recipient_stack = UserAward::create(['user_id' => $recipient->id, 'award_id' => $awards->id, 'data' => $encoded_data]);
                 $recipient_stack->count += $quantity;
                 $recipient_stack->save();
             }
             else {
                 $recipient_stack = CharacterAward::where([
                     ['character_id', '=', $recipient->id],
-                    ['award_id', '=', $award->id],
+                    ['award_id', '=', $awards->id],
                     ['data', '=', $encoded_data]
                 ])->first();
 
-                if(!$recipient_stack) $recipient_stack = CharacterAward::create(['character_id' => $recipient->id, 'award_id' => $award->id, 'data' => $encoded_data]);
+                if(!$recipient_stack) $recipient_stack = CharacterAward::create(['character_id' => $recipient->id, 'award_id' => $awards->id, 'data' => $encoded_data]);
                 $recipient_stack->count += $quantity;
                 $recipient_stack->save();
             }
-            if($type && !$this->createLog($sender ? $sender->id : null, $sender ? $sender->logType : null, $recipient ? $recipient->id : null, $recipient ? $recipient->logType : null, null, $type, $data['data'], $award->id, $quantity)) throw new \Exception("Failed to create log.");
+            if($type && !$this->createLog($sender ? $sender->id : null, $sender ? $sender->logType : null, $recipient ? $recipient->id : null, $recipient ? $recipient->logType : null, null, $type, $data['data'], $awards->id, $quantity)) throw new \Exception("Failed to create log.");
 
             return $this->commitReturn(true);
         } catch(\Exception $e) {
@@ -513,7 +513,7 @@ class AwardCaseManager extends Service
             }
 
             // credit the award (if the user has the award already, we do not give them another one)
-            if(!$user->awards()->where('award_id', $award->id)->first())
+            if(!$user->awards()->where('award_id', $awards->id)->first())
                 if(!$this->creditAward($user, $user, ucfirst(__('awards.award')).' Claim', ['data' => 'Received '.__('awards.award').' by completing progessions', 'progression_data' => json_encode($progressionData)], $award, 1)) throw new \Exception("Failed to credit ".__('awards.award').".");
 
             // grant the award rewards
