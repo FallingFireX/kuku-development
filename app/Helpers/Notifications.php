@@ -42,7 +42,7 @@ class Notifications {
 
             return true;
         } catch (\Exception $e) {
-            $this->setError('error', $e->getMessage());
+            throw new \Exception($e->getMessage());
         }
         DB::rollback();
 
