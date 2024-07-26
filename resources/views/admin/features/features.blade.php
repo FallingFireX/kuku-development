@@ -95,16 +95,6 @@
                 @endforeach
             </div>
         </div>
-        @foreach($features as $feature)
-        <div class="d-flex row flex-wrap col-12 mt-1 pt-1 px-0 ubt-top">
-          <div class="col-12 col-md-3">{{ $feature->name }}</div>
-          <div class="col-6 col-md-2">{!! $feature->rarity->displayName !!}</div>
-          <div class="col-6 col-md-2">{{ $feature->category ? $feature->category->name : '---' }}</div>
-          <div class="col-6 col-md-2">{{ $feature->species ? $feature->species->name : '---' }}</div>
-          <div class="col-6 col-md-2">{{ $feature->subtype ? $feature->subtype->name : '---' }}</div>
-          <div class="col-12 col-md-1"><a href="{{ url('admin/data/traits/edit/'.($feature->parent_id ? $feature->parent_id : $feature->id)) }}" class="btn btn-primary py-0 px-1 w-100">Edit</a></div>
-        </div>
-        @endforeach
       </div>
     {!! $features->render() !!}
     <div class="text-center mt-4 small text-muted">{{ $features->total() }} result{{ $features->total() == 1 ? '' : 's' }} found.</div>
