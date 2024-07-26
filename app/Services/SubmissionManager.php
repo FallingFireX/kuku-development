@@ -103,7 +103,12 @@ class SubmissionManager extends Service {
             ]);
 
             // Retrieve all reward IDs for characters
-            $currencyIds = []; $itemIds = []; $tableIds = []; $statusIds = [];
+            $currencyIds = []; 
+            $itemIds = []; 
+            $tableIds = [];
+            $awardIds = []; 
+            $statusIds = [];
+            $elementIds = [];
             if(isset($data['character_currency_id'])) {
                 foreach($data['character_currency_id'] as $c)
                 {
