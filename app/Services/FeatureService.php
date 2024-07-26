@@ -296,7 +296,7 @@ class FeatureService extends Service {
      *
      * @return \App\Models\Feature\Feature|bool
      */
-    public function updateFeature($feature, $data, $user) {
+    public function updateFeature($feature, $data, $user, $parent = null) {
         DB::beginTransaction();
 
         try {
