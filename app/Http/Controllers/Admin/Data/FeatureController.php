@@ -212,12 +212,10 @@ class FeatureController extends Controller {
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function getEditFeature($id) {
-        $feature = Feature::find($id);
-        if (!$feature) {
-            abort(404);
-        }
-
+    public function getEditFeature($id)
+    {
+        $feature = Feature::where('id', $id)->whereNull('parent_id')->first();
+        if(!$feature) abort(404);
         return view('admin.features.create_edit_feature', [
             'feature'    => $feature,
             'rarities'   => ['none' => 'Select a Rarity'] + Rarity::orderBy('sort', 'DESC')->pluck('name', 'id')->toArray(),
@@ -238,7 +236,7 @@ class FeatureController extends Controller {
     public function postCreateEditFeature(Request $request, FeatureService $service, $id = null) {
         $id ? $request->validate(Feature::$updateRules) : $request->validate(Feature::$createRules);
         $data = $request->only([
-            'name', 'species_id', 'subtype_id', 'rarity_id', 'feature_category_id', 'description', 'image', 'remove_image', 'is_visible',
+            'name', 'species_id', 'subtype_id', 'rarity_id', 'feature_category_id', 'description', 'image', 'remove_image', 'alt', 'display_mode', 'is_visible',
         ]);
         if ($id && $service->updateFeature(Feature::find($id), $data, Auth::user())) {
             flash('Trait updated successfully.')->success();
