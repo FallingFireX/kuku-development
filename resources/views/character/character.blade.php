@@ -1,8 +1,7 @@
 @extends('character.layout', ['isMyo' => $character->is_myo_slot])
-
-@section('profile-title') {{ $character->fullName }} 
 @include('widgets._awardcase_feature', ['target' => $character, 'count' => Config::get('lorekeeper.extensions.awards.character_featured'), 'float' => true])
-@endsection
+
+@section('profile-title') {{ $character->fullName }} @endsection
 
 @section('meta-img') {{ $character->image->thumbnailUrl }} @endsection
 
