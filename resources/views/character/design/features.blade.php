@@ -101,6 +101,25 @@
                 <a href="#" class="remove-feature btn btn-danger mb-2">×</a>
             </div>
         </div>
+        <h2>Elements</h2>
+        <p>Here you can update the elements of the character.</p>
+        @php
+            $type = \App\Models\Element\Typing::where('typing_model', 'App\Models\Character\CharacterImage')
+                ->where('typing_id', $request->character->image->id)
+                ->first();
+            // make new typing object with attributes set
+            $newType = $type ? clone $type : new \App\Models\Element\Typing();
+            if (!$type) {
+                $newType->typing_model = 'App\Models\Character\CharacterImage';
+                $newType->typing_id = $request->character->image->id;
+                $newType->element_ids = [];
+            }
+            if (isset($request->data['element_ids']) && $request->data['element_ids']) {
+                $newType->element_ids = $request->data['element_ids'];
+            }
+        @endphp
+        <p class="alert alert-info">Current Typing: {!! $type ? $type->elementNames : 'None' !!}</p>
+        @include('widgets._add_typing', ['object' => $request, 'type' => $newType ?? null, 'isStaff' => false])
         <div class="text-right">
             {!! Form::submit('Save', ['class' => 'btn btn-primary']) !!}
         </div>
