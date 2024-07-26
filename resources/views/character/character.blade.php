@@ -1,5 +1,4 @@
 @extends('character.layout', ['isMyo' => $character->is_myo_slot])
-@include('widgets._awardcase_feature', ['target' => $character, 'count' => Config::get('lorekeeper.extensions.awards.character_featured'), 'float' => true])
 
 @section('profile-title') {{ $character->fullName }} @endsection
 
@@ -7,7 +6,7 @@
 
 @section('profile-content')
 
-
+@include('widgets._awardcase_feature', ['target' => $character, 'count' => Config::get('lorekeeper.extensions.awards.character_featured'), 'float' => true])
 
 @if($character->is_myo_slot)
         {!! breadcrumbs(['MYO Slot Masterlist' => 'myos', $character->fullName => $character->url]) !!}
