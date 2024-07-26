@@ -214,7 +214,7 @@ class FeatureService extends Service {
      *
      * @return \App\Models\Feature\Feature|bool
      */
-    public function createFeature($data, $user) {
+    public function createFeature($data, $user, $parent = null) {
         DB::beginTransaction();
 
         try {
