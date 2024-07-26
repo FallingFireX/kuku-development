@@ -15,7 +15,7 @@ class Feature extends Model {
      * @var array
      */
     protected $fillable = [
-        'feature_category_id', 'species_id', 'subtype_id', 'rarity_id', 'name', 'has_image', 'description', 'parsed_description', 'parent_id', 'is_visible', 'hash',
+        'feature_category_id', 'species_id', 'subtype_id', 'rarity_id', 'name', 'has_image', 'description', 'parsed_description', 'parent_id', 'is_visible', 'hash','feature_subcategory_id',
     ];
 
     /**
@@ -37,6 +37,7 @@ class Feature extends Model {
         'name'                => 'required|unique:features|between:3,100',
         'description'         => 'nullable',
         'image'               => 'mimes:png',
+        'feature_subcategory_id' => 'nullable',
     ];
 
     /**
@@ -52,6 +53,7 @@ class Feature extends Model {
         'name'                => 'required|between:3,100',
         'description'         => 'nullable',
         'image'               => 'mimes:png',
+        'feature_subcategory_id' => 'nullable',
     ];
 
     /**********************************************************************************************
@@ -102,6 +104,14 @@ class Feature extends Model {
     public function altTypes()
     {
         return $this->hasMany('App\Models\Feature\Feature', 'parent_id');
+    }
+
+    /**
+     * Get the category the feature belongs to.
+     */
+    public function subcategory()
+    {
+        return $this->belongsTo('App\Models\Feature\FeatureSubcategory', 'feature_subcategory_id');
     }
 
     /**********************************************************************************************
@@ -213,6 +223,18 @@ class Feature extends Model {
         }
 
         return $query->where('is_visible', 1);
+    }
+     /**
+     * Scope a query to sort features in subcategory order.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @param  bool                                   $reverse
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeSortSubcategory($query)
+    {
+        $ids = FeatureSubcategory::orderBy('sort', 'DESC')->pluck('id')->toArray();
+        return count($ids) ? $query->orderByRaw(DB::raw('FIELD(feature_subcategory_id, '.implode(',', $ids).')')) : $query;
     }
 
     /**********************************************************************************************

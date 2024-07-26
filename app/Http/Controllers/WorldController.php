@@ -35,6 +35,7 @@ use App\Models\Volume\Book;
 use App\Models\Volume\Bookshelf;
 use App\Models\Volume\BookTag;
 use App\Models\Volume\Volume;
+use App\Models\Feature\FeatureSubcategory;
 
 use App\Models\Recipe\Recipe;
 use App\Models\Stat\Stat;
@@ -183,6 +184,22 @@ class WorldController extends Controller {
     }
 
     /**
+     * Shows the trait subcategories page.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function getFeatureSubcategories(Request $request)
+    {
+        $query = FeatureSubcategory::query();
+        $name = $request->get('name');
+        if($name) $query->where('name', 'LIKE', '%'.$name.'%');
+        return view('world.feature_subcategories', [
+            'subcategories' => $query->orderBy('sort', 'DESC')->paginate(20)->appends($request->query()),
+        ]);
+    }
+
+    /**
      * Shows the traits page.
      *
      * @return \Illuminate\Contracts\Support\Renderable
@@ -201,6 +218,11 @@ class WorldController extends Controller {
                 $query->where('feature_category_id', $data['feature_category_id']);
             }
         }
+
+        if(isset($data['feature_subcategory_id']) && $data['feature_subcategory_id'] != 'none'){
+            $query->where('feature_subcategory_id', $data['feature_subcategory_id']);
+        }
+            
         if (isset($data['species_id']) && $data['species_id'] != 'none') {
             if ($data['species_id'] == 'withoutOption') {
                 $query->whereNull('species_id');
@@ -259,6 +281,7 @@ class WorldController extends Controller {
             'specieses'  => ['none' => 'Any Species'] + ['withoutOption' => 'Without Species'] + Species::visible(Auth::check() ? Auth::user() : null)->orderBy('sort', 'DESC')->pluck('name', 'id')->toArray(),
             'subtypes'   => ['none' => 'Any Subtype'] + ['withoutOption' => 'Without Subtype'] + Subtype::visible(Auth::check() ? Auth::user() : null)->orderBy('sort', 'DESC')->pluck('name', 'id')->toArray(),
             'categories' => ['none' => 'Any Category'] + ['withoutOption' => 'Without Category'] + FeatureCategory::visible(Auth::check() ? Auth::user() : null)->orderBy('sort', 'DESC')->pluck('name', 'id')->toArray(),
+            'subcategories' => ['none' => 'Any Subcategory'] + FeatureSubcategory::orderBy('sort', 'DESC')->pluck('name', 'id')->toArray(),
         ]);
     }
 
@@ -271,6 +294,7 @@ class WorldController extends Controller {
      */
     public function getSpeciesFeatures($id) {
         $categories = FeatureCategory::orderBy('sort', 'DESC')->get();
+        $subcategories = FeatureSubcategory::orderBy('sort', 'DESC')->get();
         $rarities = Rarity::orderBy('sort', 'ASC')->get();
         $species = Species::visible(Auth::check() ? Auth::user() : null)->where('id', $id)->first();
         if (!$species) {
@@ -314,8 +338,9 @@ class WorldController extends Controller {
         return view('world.species_features', [
             'species'    => $species,
             'categories' => $categories->keyBy('id'),
-            'rarities'   => $rarities->keyBy('id'),
-            'features'   => $features,
+            'subcategories' => $subcategories->keyBy('id'),
+            'rarities' => $rarities->keyBy('id'),
+            'features' => $features,
         ]);
     }
 
