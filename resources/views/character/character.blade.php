@@ -24,7 +24,7 @@
     @if ($character->images()->where('is_valid', 1)->whereNotNull('transformation_id')->exists())
         <div class="card-header mb-2">
             <ul class="nav nav-tabs card-header-tabs">
-                @foreach ($images()->where('is_valid', 1)->get() as $image)
+                @foreach ($image()->where('is_valid', 1)->get() as $image)
                     <li class="nav-item">
                         <a class="nav-link form-data-button {{ $image->id == $image->id ? 'active' : '' }}" data-toggle="tab" role="tab" data-id="{{ $image->character->id }}">
                             {{ $image->transformation_id ? $image->transformation->name : 'Main' }} {{ $image->transformation_info ? ' ('.$image->transformation_info.')' : '' }}
