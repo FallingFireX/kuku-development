@@ -108,9 +108,7 @@
                 <br>
                 
                 <div class="mb-3">
-                    <div>
-                        <h5>Traits</h5>
-                    </div>
+                   
                     @if (config('lorekeeper.extensions.traits_by_category'))
                         <div>
                             @php
@@ -197,7 +195,7 @@
                         </div>
                     </div>
                 @endif
-
+                    <br>
                 <div>
                     <strong>Uploaded:</strong> {!! pretty_date($image->created_at) !!}
                 </div>
