@@ -159,7 +159,7 @@
                                 @foreach ($traitgroup as $key => $group)
                                     <div class="mb-2">
                                         @if ($key)
-                                            <strong>{!! $group->first()->feature->category->displayName !!}:</strong>
+                                            <strong>{!! $group->first()->feature->category->displayName !!}: </strong>
                                         @else
                                             <strong>Miscellaneous:</strong>
                                         @endif
