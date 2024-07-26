@@ -157,7 +157,7 @@
                             @endphp
                             @if ($image->features()->count())
                                 @foreach ($traitgroup as $key => $group)
-                                    <!-- <div class="mb-2"> -->
+                                    <div class="mb-2">
                                         @if ($key)
                                             <strong>{!! $group->first()->feature->category->displayName !!}:</strong>
                                         @else
