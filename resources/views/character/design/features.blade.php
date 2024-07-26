@@ -211,6 +211,43 @@
             @endforeach
         </div>
     @endif
+    @if (isset($request->data['element_ids']) && $request->data['element_ids'])
+            @php
+                $currentType = \App\Models\Element\Typing::where('typing_model', 'App\Models\Character\CharacterImage')
+                    ->where('typing_id', $request->character->image->id)
+                    ->first();
+                // make newtype a clone of current type not a reference
+                $newType = $currentType ? clone $currentType : new \App\Models\Element\Typing();
+                if (!$currentType) {
+                    $newType->typing_model = 'App\Models\Character\CharacterImage';
+                    $newType->typing_id = $request->character->image->id;
+                    $newType->element_ids = [];
+                }
+                if (isset($request->data['element_ids']) && $request->data['element_ids']) {
+                    $newType->element_ids = $request->data['element_ids'];
+                }
+            @endphp
+            <h4 class="mt-3">Elements</h4>
+            <div class="row">
+                <div class="row col-md-6 col-sm-12">
+                    <div class="col-lg-4 col-md-6 col-4">
+                        <h5>Current Typing</h5>
+                    </div>
+                    <div class="col-lg-8 col-md-6 col-8 row">
+                        <h5>{!! $currentType?->displayElements !!}</h5>
+                    </div>
+                </div>
+                <div class="row col-md-6 col-sm-12">
+                    <div class="col-lg-4 col-md-6 col-4">
+                        <h5>New Typing</h5>
+                    </div>
+                    <div class="col-lg-8 col-md-6 col-8 row">
+                        <h5>{!! $newType?->displayElements !!}</h5>
+                    </div>
+                </div>
+            </div>
+        @endif
+    @endif
 
 @endsection
 
