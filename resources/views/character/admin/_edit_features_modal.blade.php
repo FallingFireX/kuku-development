@@ -52,7 +52,12 @@
 
  <div class="form-group" id='gender'>
             {!! Form::label('gender') !!}
-            {!! Form::select('gender', ['Rook' => 'Rook', 'Dove' => 'Dove'], null, ['class' => 'form-control']) !!}
+            <!--{!! Form::select('gender', ['Rook' => 'Rook', 'Dove' => 'Dove'], null, ['class' => 'form-control']) !!}-->
+            <select id="gender" name="gender" placehoder="gender">
+                <option value='' disabled style='display:none;'>Please Choose</option>
+                <option value="Rook"<?php echo $currency == "Rook" ? " selected" : ""; ?>>Rook</option>
+                <option value="Dove"<?php echo $currency == "Dove" ? " selected" : ""; ?>>Dove</option>
+            </select>
         </div>
 <div class="form-group" id='eyecolor'>
             {!! Form::label('eyecolor') !!}
