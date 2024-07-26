@@ -167,7 +167,7 @@
                                             <!-- <div class="ml-md-2">-->{!! $feature->feature->displayName !!} @if ($feature->data) 
                                                     ({{ $feature->data }})
                                                 @endif
-                                            </div>
+                                            <!-- </div> -->
                                         @endforeach
                                     </div>
                                 @endforeach
