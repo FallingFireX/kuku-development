@@ -75,7 +75,7 @@ class GrantController extends Controller {
         }
         return redirect()->back();
     }
-    
+
      /**
      * Grants or removes status effect(s) from a character.
      *
