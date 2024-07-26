@@ -106,7 +106,7 @@
                     <div class="col-lg-2 col-md-6 col-8">{!! '<strong>SPD: </strong> ', $image->spd ? $image->spd : '0' !!}</div>
                 </div>
                 <br>
-                @php
+                <!-- @php
                     // check if there is a type for this object if not passed
                     // for characters first check subtype (since it takes precedence)
                     $type = \App\Models\Element\Typing::where('typing_model', 'App\Models\Character\CharacterImage')
@@ -141,7 +141,7 @@
                             @endif
                         </div>
                     </div>
-                @endif
+                @endif -->
 
                 <div class="mb-3">
                     <div>
