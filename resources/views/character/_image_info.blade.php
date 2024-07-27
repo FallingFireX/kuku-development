@@ -180,10 +180,10 @@
                 @if ($type || (Auth::check() && Auth::user()->hasPower('manage_characters')))
                     <div class="row">
                         <div class="col-lg-4 col-md-6 col-4">
-                            <b>Magic</b>
+                            <b>Magic: {!! $type?->displayElements !!}</b>
                         </div>
                         <div class="col-lg-8 col-md-6 col-8 row">
-                            <h5>{!! $type?->displayElements !!}</h5>
+                            <!-- <b>{!! $type?->displayElements !!}</b> -->
                             @if (Auth::check() && Auth::user()->hasPower('manage_characters'))
                                 {!! add_help('Typing is assigned on an image basis') !!}
                                 <div class="ml-auto">
