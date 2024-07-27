@@ -180,7 +180,7 @@
                 @if ($type || (Auth::check() && Auth::user()->hasPower('manage_characters')))
                     <div class="row">
                         <div class="col-lg-4 col-md-6 col-4">
-                            <b>Magic: {!! $type?->displayElements ? $type?->displayElements : 'None' !!}</b>
+                            <b>Magic:</b>  {!! $type?->displayElements ? $type?->displayElements : 'None' !!}
                         </div>
                         <div class="col-lg-8 col-md-6 col-8 row">
                             <!-- <b>{!! $type?->displayElements !!}</b> -->
