@@ -16,9 +16,9 @@
             $character->fullName => $character->url,
         ]) !!}
     @endif
-
-    @include('character._header', ['character' => $character])
     @include('widgets._awardcase_feature', ['target' => $character, 'count' => Config::get('lorekeeper.extensions.awards.character_featured'), 'float' => true])
+    @include('character._header', ['character' => $character])
+    
 
     @if ($character->images()->where('is_valid', 1)->whereNotNull('transformation_id')->exists())
     <div class="card-header mb-2">
