@@ -75,10 +75,10 @@ class Typing extends Model {
         // get the displayName attribute from each element
         $elements = $this->elements()->map(function ($element) {
             // check if first in loop
-            return '<a href="'.$element->idUrl.'"><span class="badge '. ($element->id == $this->elements()->first()->id ? '' : 'ml-1')
-            .'" style="color: white; background-color: '.$element->colour.';">'.$element->name.'</span></a>';
+            return '<a href="'.$element->idUrl.'"><span class="display-trait '. ($element->id == $this->elements()->first()->id ? '' : 'ml-1');
+            //.'" style="color: white; background-color: '.$element->colour.';">'.$element->name.'</span></a>';
         });
 
-        return implode(' ', $elements->toArray());
+        return implode(' ', $elements->toArray()); 
     }
 }
