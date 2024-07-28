@@ -6,11 +6,11 @@
             {!! $pet->pet->displayName !!}
         </div>
         
-            @if ($pet->pet_name)
+            <!-- @if ($pet->pet_name)
                 <span class="text-light badge badge-dark mb-2 p-2" style="font-size:95%;">
                     {!! $pet->pet_name !!}
                 </span> the
-            @endif
+            @endif -->
             {!! $pet->pet->displayName !!}
             <!-- <div class="progress mb-2">
                 <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"
