@@ -2,6 +2,9 @@
     <div class="card d-flex flex-row align-items-center p-2 px-3">
         <div class="col-md-4">
             <img src="{{ $pet->pet->variantImage($pet->id) }}" class="rounded img-fluid" />
+            <br>
+            <span class="text-light badge badge-dark mb-2 p-2" style="font-size:95%;">
+                    {!! $pet->pet_name !!}
         </div>
         
             @if ($pet->pet_name)
