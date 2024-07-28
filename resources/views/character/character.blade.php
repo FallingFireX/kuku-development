@@ -54,7 +54,8 @@
             <p></p>
         </div>
         @include('character._image_info', ['image' => $character->image])
-        <div class="col-md-7">
+    </div>
+    <div class="col-md-7">
         @if (count($image->character->pets))
                     <div class="row justify-content-center text-center">
                         {{-- get one random pet --}}
@@ -77,7 +78,6 @@
                         </div>
                     </div>
                 @endif
-    </div>
     </div>
         
     {{-- Info --}}
