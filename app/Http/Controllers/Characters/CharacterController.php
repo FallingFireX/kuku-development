@@ -36,6 +36,8 @@ use App\Services\AwardCaseManager;
 
 use App\Models\Character\CharacterImage;
 use App\Models\Status\StatusEffect;
+use App\Models\Pet\Pet;
+use App\Models\Pet\PetCategory;
 
 use App\Services\CharacterManager;
 use App\Services\CurrencyManager;
