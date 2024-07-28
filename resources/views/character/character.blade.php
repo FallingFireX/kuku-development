@@ -115,6 +115,8 @@
             @endif
         </div>
     </div>
+    <br>
+    <p></p>
         @if (count($image->character->pets))
                     <div class="row justify-content-center text-center">
                         {{-- get one random pet --}}
