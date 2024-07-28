@@ -3,7 +3,7 @@
 return [
 
     // number of pets to display on character profile
-    'display_pet_count' => 2,
+    'display_pet_count' => 5,
     
     /*
     |--------------------------------------------------------------------------
@@ -14,6 +14,6 @@ return [
     | pets will require bonding to level up. When disabled, pets will not have levels
     |
     */
-    'pet_bonding_enabled' => true,
+    'pet_bonding_enabled' => false,
     'initial_level_name' => 'Wary',
 ];
