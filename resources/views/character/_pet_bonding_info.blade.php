@@ -5,6 +5,7 @@
             @if ($pet->pet_name)
                 <span class="text-light badge badge-dark mb-2 p-2" style="font-size:95%;">
                     {!! $pet->pet_name !!}
+                    @endif
         </div>
         <!-- <div class="col-md-8">
             @if ($pet->pet_name)
