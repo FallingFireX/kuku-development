@@ -14,9 +14,9 @@
         @if (!isset($categories[$categoryId]) || (Auth::check() && Auth::user()->hasPower('edit_data')) || $categories[$categoryId]->is_visible)
             <div class="card mb-3 inventory-category">
                 <h5 class="card-header inventory-header">
-                    @if (isset($categories[$categoryId]) && !$categories[$categoryId]->is_visible)
+                    <!-- @if (isset($categories[$categoryId]) && !$categories[$categoryId]->is_visible)
                         <i class="fas fa-eye-slash mr-1"></i>
-                    @endif
+                    @endif -->
                     {!! isset($categories[$categoryId]) ? '<a href="' . $categories[$categoryId]->searchUrl . '">' . $categories[$categoryId]->name . '</a>' : 'Miscellaneous' !!}
                 </h5>
                 <div class="card-body inventory-body">
@@ -30,9 +30,9 @@
                                         </a>
                                     @endif
                                     <p>
-                                        @if (!$feature->first()->is_visible)
+                                        <!-- @if (!$feature->first()->is_visible)
                                             <i class="fas fa-eye-slash mr-1"></i>
-                                        @endif
+                                        @endif -->
                                         {!! $feature->first()->displayName !!}
                                         @if ($feature->first()->subtype)
                                             <br />({!! $feature->first()->subtype->displayName !!} Subtype)
