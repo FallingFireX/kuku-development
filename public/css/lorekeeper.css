@@ -145,10 +145,10 @@ main > .row {
 }
 
 .sidebar .sidebar-header {
-    background-color: #343a40;
+    background-color: #A3D4BE;
 }
 .sidebar .sidebar-header a {
-    color: white;
+    color: #527f56;
 }
 .sidebar .sidebar-header a:hover {
     background-color: transparent;
