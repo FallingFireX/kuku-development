@@ -85,15 +85,17 @@
                     
                 </div>
                 <ul class="list-group list-group-flush">
-                    <li class="list-group-item"><a href="{{ url('characters') }}">My Characters</a></li>
-                    <li class="list-group-item"><a href="{{ url('characters/myos') }}">My MYO Slots</a></li>
-                    <li class="list-group-item"><a href="{{ url('characters/transfers/incoming') }}">Character Transfers</a></li>
+                <br><br>
+                    <br><a href="{{ url('characters') }}">My Characters</a></li>
+                    <br><a href="{{ url('characters/myos') }}">My MYO Slots</a></li>
+                    <br><a href="{{ url('characters/transfers/incoming') }}">Character Transfers</a></li>
                 </ul>
             </div>
         </div>
         <div class="col-md-2">
             <div class="card mb-4">
                 <div class="card-body text-center">
+                    <br><br>
                     <img src="{{ asset('images/inventory.png') }}" alt="Inventory" class="card-img" />
                     
                 </div>
