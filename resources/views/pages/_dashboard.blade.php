@@ -71,7 +71,7 @@
                 <div class="card-body text-center">
                 <img src="/images/avatars/{!! Auth::user()->avatar !!}" class="img-fluid rounded-circle" style="max-height: 150px;" alt="Avatar"/>
                     
-                <br><br>
+                <br>
                 <br><a href="{{ Auth::user()->url }}">Profile</a></li>
                 <br><a href="{{ url('account/settings') }}">User Settings</a></li>
                 <br><a href="{{ url('trades/open') }}">Trades</a></li>
@@ -95,23 +95,19 @@
                     
                     <img src="{{ asset('images/inventory.png') }}" alt="Inventory" class="card-img" />
                     
-                </div>
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item"><a href="{{ url('inventory') }}">My Inventory</a></li>
-                    <li class="list-group-item"><a href="{{ Auth::user()->url . '/item-logs' }}">Item Logs</a></li>
-                </ul>
+                    <br><a href="{{ url('inventory') }}">My Inventory</a></li>
+                    <br><a href="{{ Auth::user()->url . '/item-logs' }}">Item Logs</a></li>
+                    </div>
             </div>
         </div>
         <div class="col-md-2">
             <div class="card">
                 <div class="card-body text-center">
                     <img src="{{ asset('images/currency.png') }}" alt="Bank" class="card-img" />
-                    
+          
+                    <br><a href="{{ url('bank') }}">Bank</a></li>
+                    <br><a href="{{ Auth::user()->url . '/currency-logs' }}">Currency Logs</a></li>
                 </div>
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item"><a href="{{ url('bank') }}">Bank</a></li>
-                    <li class="list-group-item"><a href="{{ Auth::user()->url . '/currency-logs' }}">Currency Logs</a></li>
-                </ul>
             </div>
         </div>
         <div class="col-md-2">
