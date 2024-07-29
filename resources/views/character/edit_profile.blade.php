@@ -28,7 +28,7 @@
     @endif
 
     {!! Form::open(['url' => $character->url . '/profile/edit']) !!}
-    @if ($character->user_id != Auth::user()->id)
+    @if (Auth::check() && Auth::user()->hasPower('manage_characters'))
         <div class="form-group">
             {!! Form::label('name', 'Name') !!}
             {!! Form::text('name', $character->name, ['class' => 'form-control']) !!}
