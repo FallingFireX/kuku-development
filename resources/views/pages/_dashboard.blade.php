@@ -83,9 +83,6 @@
                 <div class="card-body text-center">
                     <img src="{{ asset('images/characters.png') }}" alt="Characters" class="card-img" />
                     
-                
-                
-                <br><br>
                     <br><a href="{{ url('characters') }}">My Characters</a></li>
                     <br><a href="{{ url('characters/myos') }}">My MYO Slots</a></li>
                     <br><a href="{{ url('characters/transfers/incoming') }}">Character Transfers</a></li>
