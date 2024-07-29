@@ -93,7 +93,7 @@
             <div class="card mb-4">
                 <div class="card-body text-center" style="margin-bottom: 0.5rem">
                     <img src="{{ asset('images/inventory.png') }}" alt="Inventory" class="card-img" />
-                    <br>
+                    <br><br>
                     <br><a href="{{ url('inventory') }}">My Inventory</a></li>
                     <br><a href="{{ Auth::user()->url . '/item-logs' }}">Item Logs</a></li>
                     </div>
@@ -103,7 +103,6 @@
             <div class="card">
                 <div class="card-body text-center">
                     <img src="{{ asset('images/currency.png') }}" alt="Bank" class="card-img" />
-                    <br>
                     <br><a href="{{ url('bank') }}">Bank</a></li>
                     <br><a href="{{ Auth::user()->url . '/currency-logs' }}">Currency Logs</a></li>
                 </div>
