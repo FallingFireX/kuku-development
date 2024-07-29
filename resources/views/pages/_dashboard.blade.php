@@ -41,7 +41,7 @@
         <div class="card mb-4">
             <div class="card-body text-center">
                 <h5>Resources</h5>
-                    <p>Design Approvals
+                    <p style="margin-bottom: 0.5rem">Design Approvals
                     <br>Import Updates
                     <br>
                     <br>Genetics and Mutations
