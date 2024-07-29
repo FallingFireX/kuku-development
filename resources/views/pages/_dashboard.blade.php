@@ -33,7 +33,7 @@
     <div class="col-md-4">
         <div class="card mb-4">
             <div class="card-body text-center">
-                <img src="https://kukuri-arpg.w3spaces.com/Graphics/Frontpagedoll.png" alt="Characters" class="card-img"/>
+                <img src="https://kukuri-arpg.w3spaces.com/Graphics/Frontpagedoll.png" alt="Characters" class="card-img" style="max-width:100%; height:auto;"/>
             </div>
         </div>
     </div>
