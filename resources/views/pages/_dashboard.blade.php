@@ -21,7 +21,9 @@
                     <br>Traveling
                     <br>
                     <br>Breeding
+                    <br>Breeding Slots (Sheet)
                     <br>Training
+                    <br>Training Completion
                     <br>
                     <br>Illnesses and Injuries
                 </p>
