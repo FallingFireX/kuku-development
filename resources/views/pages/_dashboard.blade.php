@@ -68,11 +68,11 @@
                 <div class="card-body text-center">
                 <img src="/images/avatars/{!! Auth::user()->avatar !!}" class="img-fluid rounded-circle" style="max-height: 125px;" alt="Avatar"/>
                     
-                </div>
+                
                 <br><a href="{{ Auth::user()->url }}">Profile</a></li>
                 <br><a href="{{ url('account/settings') }}">User Settings</a></li>
                 <br><a href="{{ url('trades/open') }}">Trades</a></li>
-                
+                </div>
             </div>
         </div>
         <div class="col-md-2">
