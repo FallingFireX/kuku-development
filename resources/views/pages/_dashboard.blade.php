@@ -93,7 +93,7 @@
             <div class="card mb-4">
                 <div class="card-body text-center" style="margin-bottom: 0.5rem">
                     <img src="{{ asset('images/inventory.png') }}" alt="Inventory" class="card-img" />
-                    
+                    <br>
                     <br><a href="{{ url('inventory') }}">My Inventory</a></li>
                     <br><a href="{{ Auth::user()->url . '/item-logs' }}">Item Logs</a></li>
                     </div>
@@ -113,7 +113,7 @@
                 <div class="card-body text-center">
                     <img src="{{ asset('images/awards.png') }}" class="card-img" />
                     <!--<h5 class="card-title">{{ ucfirst(__('awards.awards')) }}</h5>-->
-                
+                    <br>
                     <br><a href="{{ Auth::user()->url . '/pets' }}">My Familiars</a></li>
                     <br><a href="{{ Auth::user()->url . '/pet-logs' }}">Familiar Logs</a></li>
                     </div>
