@@ -28,7 +28,7 @@
     @endif
 
     {!! Form::open(['url' => $character->url . '/profile/edit']) !!}
-    @if (!$character->is_myo_slot)
+    @if ($character->user_id != Auth::user()->id)
         <div class="form-group">
             {!! Form::label('name', 'Name') !!}
             {!! Form::text('name', $character->name, ['class' => 'form-control']) !!}
