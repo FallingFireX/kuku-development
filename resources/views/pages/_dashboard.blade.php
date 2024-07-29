@@ -66,7 +66,7 @@
         <div class="col-md-2">
             <div class="card mb-4">
                 <div class="card-body text-center">
-                <img src="/images/avatars/{!! Auth::user()->avatar !!}" style="max-height: 125px;" alt="Avatar"/>
+                <img src="/images/avatars/{!! Auth::user()->avatar !!}" class="img-fluid rounded-circle" style="max-height: 125px;" alt="Avatar"/>
                     
                 </div>
                 <br><a href="{{ Auth::user()->url }}">Profile</a></li>
