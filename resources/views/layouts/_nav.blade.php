@@ -115,6 +115,9 @@
                             <a class="dropdown-item" href="{{ url('trades/open') }}">
                                 Trades
                             </a>
+                            <a class="dropdown-item" href="{{ url('shops') }}">
+                            Shops
+                            </a>
                         </div>
                     </li>
                 @endif
@@ -167,14 +170,24 @@
                     </a>
 
                     <div class="dropdown-menu" aria-labelledby="loreDropdown">
-                        <a class="dropdown-item" href="{{ url('world') }}">
+                        <a class="dropdown-item" href="{{ url('masterlist') }}">
+                            All Kukuri
+                        </a>
+                        <a class="dropdown-item" href="{{ url('world/trait-categories') }}">
                             Physical Features
                         </a>
-                        <a class="dropdown-item" href="{{ url('prompts/prompts') }}">
-                            Prompts
+                        <a class="dropdown-item" href="{{ url('https://kukuri-arpg.w3spaces.com/genetics/genes-and-mutations.html') }}">
+                            Genetics
                         </a>
-                        <a class="dropdown-item" href="{{ url('shops') }}">
-                            Shops
+                        <a class="dropdown-item" href="{{ url('https://kukuri-arpg.w3spaces.com/genetics/species-info.html') }}">
+                            Species Information
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="{{ url('world/pets') }}">
+                            Familiars
+                        </a>
+                        <a class="dropdown-item" href="{{ url('world/item-categories') }}">
+                            Items
                         </a>
                     </div>
                 </li>
