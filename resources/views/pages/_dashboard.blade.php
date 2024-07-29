@@ -83,13 +83,13 @@
                 <div class="card-body text-center">
                     <img src="{{ asset('images/characters.png') }}" alt="Characters" class="card-img" />
                     
-                </div>
-                <ul class="list-group list-group-flush">
+                
+                
                 <br><br>
                     <br><a href="{{ url('characters') }}">My Characters</a></li>
                     <br><a href="{{ url('characters/myos') }}">My MYO Slots</a></li>
                     <br><a href="{{ url('characters/transfers/incoming') }}">Character Transfers</a></li>
-                </ul>
+                    </div>
             </div>
         </div>
         <div class="col-md-2">
