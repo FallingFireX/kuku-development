@@ -66,9 +66,9 @@
         <div class="col-md-2">
             <div class="card mb-4">
                 <div class="card-body text-center">
-                <img src="/images/avatars/{!! Auth::user()->avatar !!}" class="img-fluid rounded-circle" style="max-height: 125px;" alt="Avatar"/>
+                <img src="/images/avatars/{!! Auth::user()->avatar !!}" class="img-fluid rounded-circle" style="max-height: 150px;" alt="Avatar"/>
                     
-                
+                <br><br>
                 <br><a href="{{ Auth::user()->url }}">Profile</a></li>
                 <br><a href="{{ url('account/settings') }}">User Settings</a></li>
                 <br><a href="{{ url('trades/open') }}">Trades</a></li>
