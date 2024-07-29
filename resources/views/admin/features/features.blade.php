@@ -73,7 +73,7 @@
                         <div class="row flex-wrap">
                             <div class="col-12 col-md-3">
                                 <div class="logs-table-cell">
-                                    @if (!$feature->is_visible)
+                                    @if ($feature->!is_visible)
                                         <i class="fas fa-eye-slash mr-1"></i>
                                     @endif
                                     {{ $feature->name }}

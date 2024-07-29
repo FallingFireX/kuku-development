@@ -131,6 +131,9 @@
                     @endif
 
                     <div class="dropdown-menu" aria-labelledby="browseDropdown">
+                        <a class="dropdown-item" href="{{ url('https://kukuri-arpg.w3spaces.com/rules-tos.html') }}">
+                            Group Rules
+                        </a>
                         <a class="dropdown-item" href="{{ url('team') }}">
                             Admin Team
                         </a>
@@ -160,12 +163,12 @@
                 </li>
                 <li class="nav-item dropdown">
                     <a id="loreDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                        World
+                        Kukuology
                     </a>
 
                     <div class="dropdown-menu" aria-labelledby="loreDropdown">
                         <a class="dropdown-item" href="{{ url('world') }}">
-                            Encyclopedia
+                            Physical Features
                         </a>
                         <a class="dropdown-item" href="{{ url('prompts/prompts') }}">
                             Prompts
