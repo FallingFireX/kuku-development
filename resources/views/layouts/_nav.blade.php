@@ -27,7 +27,7 @@
                     @if (Auth::check() && Auth::user()->is_sales_unread && config('lorekeeper.extensions.navbar_news_notif'))
                         <a class="nav-link d-flex text-warning" href="{{ url('sales') }}"><strong>Sales</strong><i class="fas fa-bell"></i></a>
                     @else
-                        <a class="nav-link" href="{{ url('sales') }}">Sales</a>
+                        <a class="nav-link" href="{{ url('sales') }}">Divine Shop</a>
                     @endif
                 </li>
                 @if (Auth::check())
@@ -40,28 +40,28 @@
                             <a class="dropdown-item" href="{{ url('characters') }}">
                                 My Kukuri
                             </a>
-                            <a class="dropdown-item" href="{{ url('characters/myos') }}">
+                            <!-- <a class="dropdown-item" href="{{ url('characters/myos') }}">
                                 My MYO Slots
-                            </a>
+                            </a> -->
                             <a class="dropdown-item" href="{{ url('breeding-permissions') }}">
-                                Breeding Permissions
+                                My Breeding Slots
                                 </a>
                             <a class="dropdown-item" href="{{ url('pets') }}">
-                                My Pets
+                                My Familiars
                             </a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="{{ url('inventory') }}">
-                                Inventory
+                                My Bank
                             </a>
                             <a class="dropdown-item" href="{{ url('bank') }}">
-                                Bank
+                                My Wallet
                             </a>
                             <a class="dropdown-item" href="{{ Auth::user()->url . '/awardcase' }}">
                                 {{ ucfirst(__('awards.awards')) }}
                                 </a>
-                            <a class="dropdown-item" href="{{ url('stats') }}">
+                            <!-- <a class="dropdown-item" href="{{ url('stats') }}">
                                 Stat Information
-                            </a>
+                            </a> -->
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="{{ url('comments/liked') }}">
                                 Liked Comments
@@ -73,6 +73,16 @@
                             Activity
                         </a>
                         <div class="dropdown-menu" aria-labelledby="queueDropdown">
+                            <div class="dropdown-divider"></div>
+                            @if (Auth::check() && Auth::user()->is_raffles_unread && config('lorekeeper.extensions.navbar_news_notif'))
+                                <a class="dropdown-item text-warning" href="{{ url('raffles') }}">
+                                    Raffles <i class="fas fa-bell"></i>
+                                </a>
+                            @else
+                                <a class="dropdown-item" href="{{ url('raffles') }}">
+                                    Raffles
+                                </a>
+                            @endif
                             <a class="dropdown-item" href="{{ url('prompts/prompts') }}">
                                 Activities
                             </a>
@@ -92,9 +102,9 @@
                             <a class="dropdown-item" href="{{ url('reports') }}">
                                 Reports
                             </a>
-                            <a class="dropdown-item" href="{{ url('designs') }}">
+                            <!-- <a class="dropdown-item" href="{{ url('designs') }}">
                                 Design Approvals
-                            </a>
+                            </a> -->
                             <a class="dropdown-item" href="{{ url('crafting') }}">
                                 Crafting
                             </a>
@@ -112,34 +122,36 @@
 
                     @if (Auth::check() && Auth::user()->is_raffles_unread && config('lorekeeper.extensions.navbar_news_notif'))
                         <a id="browseDropdown" class="nav-link dropdown-toggle text-warning" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                            <strong>Browse</strong> <i class="fas fa-bell"></i>
+                            <strong>About Us</strong> <i class="fas fa-bell"></i>
                         </a>
                     @else
                     <a id="browseDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                            Browse
+                            About Us
                         </a>
                     @endif
 
                     <div class="dropdown-menu" aria-labelledby="browseDropdown">
-                        <a class="dropdown-item" href="{{ url('users') }}">
-                            Users
+                        <a class="dropdown-item" href="{{ url('team') }}">
+                            Admin Team
                         </a>
-                        <a class="dropdown-item" href="{{ url('masterlist') }}">
+                        <a class="dropdown-item" href="{{ url('users') }}">
+                            Players
+                        </a>
+
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="{{ url('https://kukuri-arpg.w3spaces.com/newbie-guide.html') }}">
+                            Newbie guide
+                        </a>
+                        <a class="dropdown-item" href="{{ url('https://kukuri-arpg.w3spaces.com/newbie-guide.html') }}">
+                            Site Guide
+                        </a>
+                        <!-- <a class="dropdown-item" href="{{ url('masterlist') }}">
                             Character Masterlist
                         </a>
                         <a class="dropdown-item" href="{{ url('myos') }}">
                             MYO Slot Masterlist
-                        </a>
-                        <div class="dropdown-divider"></div>
-                        @if (Auth::check() && Auth::user()->is_raffles_unread && config('lorekeeper.extensions.navbar_news_notif'))
-                            <a class="dropdown-item text-warning" href="{{ url('raffles') }}">
-                                Raffles <i class="fas fa-bell"></i>
-                            </a>
-                        @else
-                            <a class="dropdown-item" href="{{ url('raffles') }}">
-                                Raffles
-                            </a>
-                        @endif
+                        </a> -->
+                        
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="{{ url('reports/bug-reports') }}">
                             Bug Reports
