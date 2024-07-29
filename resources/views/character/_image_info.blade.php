@@ -84,7 +84,10 @@
                 <hr>
                 <div class="row">
                     <div class="col-lg-4 col-md-6 col-4"><strong>Gender</strong></div>
-                    <div class="col-lg-8 col-md-6 col-8">{!! $image->gender ? $image->gender : 'None' !!}</div>
+                    <div class="col-lg-8 col-md-6 col-8">
+                        <span data-toggle="tooltip" title="A Rook is a Male Kukuri, while a Dove is a Female!">
+                        {!! $image->gender ? $image->gender : 'None' !!}
+                    </div>
                 </div>
                 <div class="row">
                     <div class="col-lg-4 col-md-6 col-4"><strong>Eyecolor</strong></div>
