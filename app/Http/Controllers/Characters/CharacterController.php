@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Award\Award;
 use App\Models\Award\AwardCategory;
 use App\Models\Character\BreedingPermission;
+use App\Models\Character\BreedingPermissionLog;
 use App\Models\Character\Character;
 use App\Models\Character\CharacterAward;
 use App\Models\Character\CharacterCurrency;
