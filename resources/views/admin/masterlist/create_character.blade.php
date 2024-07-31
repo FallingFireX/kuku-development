@@ -361,26 +361,26 @@
     ];
     ?>
 <div class="row">
-    <div class="col-lg-6">
-            @for ($i=0; $i < 14; $i++)
-                <?php $em = ($i < 2 || $i == 4 || ($i > 6 && $i < 9) || $i == 11); ?>
-                <div class="form-group text-center {{ $em ? 'pb-1 border-bottom' : '' }}">
-                    {!! Form::label($j[$i], null, ['class' => $em ? 'font-weight-bold' : '']) !!}
-                    <div class="row">
-                        <div class="col-sm-6 pr-sm-1">
-                            {!! Form::select($k[$i].'_id', $characterOptions, !old($k[$i].'_id') ? $lineage[$k[$i].'_id'] : old($k[$i].'_id'), ['class' => 'form-control text-left character-select mb-1', 'placeholder' => 'None']) !!}
-                        </div>
-                        <div class="col-sm-6 pl-sm-1">
-                            {!! Form::text($k[$i].'_name', !old($k[$i].'_name') ? $lineage[$k[$i].'_name'] : old($k[$i].'_name'), ['class' => 'form-control mb-1']) !!}
-                        </div>
+    <div class="col-md-6">
+        @for ($i=0; $i < 14; $i++)
+            <?php $em = ($i < 3 || $i == 5 || $i == 8 || $i == 11); ?>
+            <div class="form-group text-center {{ $em ? 'pb-1 border-bottom' : '' }}">
+                {!! Form::label($j[$i], null, ['class' => $em ? 'font-weight-bold' : '']) !!}
+                <div class="row">
+                    <div class="col-sm-6 pr-sm-1">
+                    {!! Form::select($k[$i].'_id', $characterOptions, !old($k[$i].'_id') ? $lineage[$k[$i].'_id'] : old($k[$i].'_id'), ['class' => 'form-control text-left character-select mb-1', 'placeholder' => 'None']) !!}
+                    </div>
+                    <div class="col-sm-6 pl-sm-1">
+                    {!! Form::text($k[$i].'_name', !old($k[$i].'_name') ? $lineage[$k[$i].'_name'] : old($k[$i].'_name'), ['class' => 'form-control mb-1']) !!}
                     </div>
                 </div>
-                @if ($i == 6)
-                    </div>
-                    <div class="col-lg-6">
-                @endif
-            
-        
+            </div>
+            @if ($i == 0)
+                </div>
+                <div class="col-md-6">
+            @elseif ($i == 1)
+                </div>
+            </div>
             <div class="form-check mb-4">
                 <input class="form-check-input" type="checkbox" value="generate" name="generate_ancestors" id="generate_ancestors" checked>
                 <label class="form-check-label" for="generate_ancestors">
