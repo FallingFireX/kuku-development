@@ -379,7 +379,7 @@
                     </div>
                     <div class="col-lg-6">
                 @endif
-            @endfor
+            
         
             <div class="form-check mb-4">
                 <input class="form-check-input" type="checkbox" value="generate" name="generate_ancestors" id="generate_ancestors" checked>
