@@ -3,10 +3,8 @@
 namespace App\Models\Volume;
 
 use App\Models\Model;
-use App\Models\Volume\Book;
 
 class BookTag extends Model {
-
     /**
      * The attributes that are mass assignable.
      *
@@ -23,7 +21,6 @@ class BookTag extends Model {
      */
     protected $table = 'book_tags';
 
-
     /**********************************************************************************************
 
         RELATIONS
@@ -37,9 +34,9 @@ class BookTag extends Model {
         return $this->belongsTo('App\Models\Volume\Book');
     }
 
-     /**********************************************************************************************
+    /**********************************************************************************************
 
-        ACCESSORS
+       ACCESSORS
 
     **********************************************************************************************/
 
@@ -47,10 +44,7 @@ class BookTag extends Model {
         return '<a href="'.$this->url.'">'.$this->tag.'</a>';
     }
 
-
     public function getUrlAttribute() {
-        return url('world/' . __('volumes.library') . '?tags[]=' . $this->tag);
+        return url('world/'.__('volumes.library').'?tags[]='.$this->tag);
     }
-
-
 }

@@ -74,15 +74,15 @@ class AddSiteSettings extends Command {
         $this->addSiteSetting('group_currency', 1, 'ID of the group currency to award from gallery submissions (if enabled).');
 
         $this->addSiteSetting('default_theme', 0, 'ID of the default theme users should see. 0: Disabled, shows default lorekeeper. This setting is overwritten by the users theme setting.');
-        
+
         $this->addSiteSetting('featured_character', 1, 'ID of the currently featured character.');
-        
+
         $this->addSiteSetting('username_change_cooldown', 30, 'The number of days a user must wait before they can change their username.');
-        
+
         $this->addSiteSetting('birthday_item', 1, 'ID of item to be granted to a user on their birth month. Suggestion is to set this to a box type item.');
 
         $this->line("\nSite settings up to date!");
-        
+
         $this->addSiteSetting('claymore_cooldown', 0, 'Number of days to add to the cooldown timer when a pet/weapon/gear is attached.');
 
         $this->addSiteSetting('stamina_per_object', 15, 'Max stamina per user / character. May take a bit for every user / character to reflect this change.');

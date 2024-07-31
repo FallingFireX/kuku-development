@@ -2,18 +2,12 @@
 
 namespace App\Models\User;
 
-use Auth;
-use Config;
-use Cache;
-use Carbon\Carbon;
-use Laravel\Fortify\TwoFactorAuthenticatable;
-use Illuminate\Notifications\Notifiable;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-
+use App\Models\Award\AwardLog;
 use App\Models\Character\Character;
 use App\Models\Character\CharacterBookmark;
+use App\Models\Character\CharacterDesignUpdate;
 use App\Models\Character\CharacterImageCreator;
+use App\Models\Character\CharacterTransfer;
 use App\Models\Claymore\Gear;
 use App\Models\Claymore\GearLog;
 use App\Models\Claymore\Weapon;
@@ -21,37 +15,34 @@ use App\Models\Claymore\WeaponLog;
 use App\Models\Comment\CommentLike;
 use App\Models\Currency\Currency;
 use App\Models\Currency\CurrencyLog;
-use App\Models\Award\AwardLog;
-use App\Models\User\UsernameLog;
-use App\Models\Gallery\GallerySubmission;
 use App\Models\Gallery\GalleryCollaborator;
 use App\Models\Gallery\GalleryFavorite;
-use App\Models\Theme;
+use App\Models\Gallery\GallerySubmission;
 use App\Models\Item\Item;
 use App\Models\Item\ItemLog;
 use App\Models\Level\LevelLog;
-use App\Models\Pet\PetLog;
 use App\Models\Notification;
+use App\Models\Pet\PetLog;
 use App\Models\Rank\Rank;
 use App\Models\Rank\RankPower;
+use App\Models\Recipe\Recipe;
 use App\Models\Report\Report;
 use App\Models\Shop\ShopLog;
 use App\Models\Stat\ExpLog;
 use App\Models\Stat\StatTransferLog;
 use App\Models\Submission\Submission;
-use App\Models\Submission\SubmissionCharacter;
-use App\Models\User\UserCharacterLog;
-
-use App\Traits\Commenter;
-use App\Models\User\UserVolume;
-use App\Models\Volume\Volume;
-use App\Models\Volume\Book;
-
-use App\Models\Character\CharacterDesignUpdate;
-use App\Models\Character\CharacterTransfer;
+use App\Models\Theme;
 use App\Models\Trade;
-use App\Models\Recipe\Recipe;
-use App\Models\User\UserRecipeLog;
+use App\Models\Volume\Volume;
+use App\Traits\Commenter;
+use Auth;
+use Cache;
+use Carbon\Carbon;
+use Config;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+use Laravel\Fortify\TwoFactorAuthenticatable;
 
 class User extends Authenticatable implements MustVerifyEmail {
     use Commenter, Notifiable, TwoFactorAuthenticatable;
@@ -124,8 +115,7 @@ class User extends Authenticatable implements MustVerifyEmail {
     /**
      * Get user theme.
      */
-    public function theme()
-    {
+    public function theme() {
         return $this->belongsTo('App\Models\Theme');
     }
 
@@ -136,9 +126,8 @@ class User extends Authenticatable implements MustVerifyEmail {
         return $this->belongsTo('App\Models\Theme', 'decorator_theme_id');
     }
 
-
     /**
-     * Get User Granted Themes 
+     * Get User Granted Themes.
      */
     /**
      * Get user theme.
@@ -164,8 +153,7 @@ class User extends Authenticatable implements MustVerifyEmail {
     /**
      * Get user staff profile data.
      */
-    public function staffProfile()
-    {
+    public function staffProfile() {
         return $this->hasOne('App\Models\User\StaffProfile');
     }
 
@@ -235,15 +223,14 @@ class User extends Authenticatable implements MustVerifyEmail {
     /**
      * Get the user's awards.
      */
-    public function awards()
-    {
+    public function awards() {
         return $this->belongsToMany('App\Models\Award\Award', 'user_awards')->withPivot('count', 'data', 'updated_at', 'id')->whereNull('user_awards.deleted_at');
     }
-    /** 
-    * Get the user's items.
+
+    /**
+     * Get the user's items.
      */
-    public function recipes()
-    {
+    public function recipes() {
         return $this->belongsToMany('App\Models\Recipe\Recipe', 'user_recipes')->withPivot('id');
     }
 
@@ -347,7 +334,9 @@ class User extends Authenticatable implements MustVerifyEmail {
      **********************************************************************************************/
 
     /**
-     * Checks if the user has the named recipe
+     * Checks if the user has the named recipe.
+     *
+     * @param mixed $theme_id
      *
      * @return bool
      */
@@ -355,9 +344,10 @@ class User extends Authenticatable implements MustVerifyEmail {
         $theme = Theme::find($theme_id);
         $user_has = $this->recipes && $this->recipes->contains($theme);
         $default = $theme->is_user_selectable;
+
         return $default ? true : $user_has;
     }
-    
+
     /**
      * Get the user's alias.
      *
@@ -450,10 +440,12 @@ class User extends Authenticatable implements MustVerifyEmail {
      *
      * @return string
      */
-    public function getDisplayNamePronounsAttribute()
-    {
-        if($this->profile->pronouns) return ($this->displayName.' ('.$this->profile->pronouns.')');
-        else return ($this->displayName);
+    public function getDisplayNamePronounsAttribute() {
+        if ($this->profile->pronouns) {
+            return $this->displayName.' ('.$this->profile->pronouns.')';
+        } else {
+            return $this->displayName;
+        }
     }
 
     /**
@@ -537,17 +529,18 @@ class User extends Authenticatable implements MustVerifyEmail {
     }
 
     // Check if user is online and display When they were online
-    public function isOnline()
-    {
+    public function isOnline() {
+        $onlineStatus = Cache::has('user-is-online-'.$this->id);
+        $online = Carbon::createFromTimeStamp(strtotime(Cache::get('user-is-online-time-'.$this->id)));
+        $onlineTime = isset($this->last_seen) ? Carbon::parse($this->last_seen)->diffForHumans() : 'A long time ago.';
 
-      $onlineStatus = Cache::has('user-is-online-' . $this->id);
-      $online = Carbon::createFromTimeStamp(strtotime(Cache::get('user-is-online-time-' . $this->id)));
-      $onlineTime = isset($this->last_seen) ? Carbon::parse($this->last_seen)->diffForHumans() : 'A long time ago.';
+        if ($onlineStatus) {
+            $result = '<i class="fas fa-circle text-success mr-2" data-toggle="tooltip" title="This user is online."></i>';
+        } else {
+            $result = '<i class="far fa-circle text-secondary mr-2" data-toggle="tooltip" title="This user was last online '.$onlineTime.'."></i>';
+        }
 
-      if($onlineStatus) $result = '<i class="fas fa-circle text-success mr-2" data-toggle="tooltip" title="This user is online."></i>';
-      else  $result = '<i class="far fa-circle text-secondary mr-2" data-toggle="tooltip" title="This user was last online ' . $onlineTime .'."></i>';
-
-      return $result;
+        return $result;
     }
 
     /**
@@ -578,14 +571,16 @@ class User extends Authenticatable implements MustVerifyEmail {
                 return $bday->format('d M').$icon;
                 break;
             case 3:
-                return $bday->format('d M Y') . $icon;
-            break;
+                return $bday->format('d M Y').$icon;
+                break;
             case 4:
-                if(Auth::check()) return $bday->format('M');
-            break;
+                if (Auth::check()) {
+                    return $bday->format('M');
+                }
+                break;
             case 5:
                 return $bday->format('M');
-            break;
+                break;
         }
     }
 
@@ -606,16 +601,20 @@ class User extends Authenticatable implements MustVerifyEmail {
      *
      * @return int
      */
-    public function getDonationShopCooldownAttribute()
-    {
+    public function getDonationShopCooldownAttribute() {
         // Fetch log for most recent collection
         $log = ItemLog::where('recipient_id', $this->id)->where('log_type', 'Collected from Donation Shop')->orderBy('id', 'DESC')->first();
         // If there is no log, by default, the cooldown is null
-        if(!$log) return null;
+        if (!$log) {
+            return null;
+        }
 
         $expiryTime = $log->created_at->addMinutes(Config::get('lorekeeper.settings.donation_shop.cooldown'));
         // If the cooldown would already be up, it is null
-        if($expiryTime <= Carbon::now()) return null;
+        if ($expiryTime <= Carbon::now()) {
+            return null;
+        }
+
         // Otherwise, calculate the remaining time
         return $expiryTime;
 
@@ -789,40 +788,47 @@ class User extends Authenticatable implements MustVerifyEmail {
             return $query->paginate(30);
         }
     }
-        /**
+
+    /**
      * Get the user's award logs.
      *
-     * @param  int  $limit
-     * @return \Illuminate\Support\Collection|\Illuminate\Pagination\LengthAwarePaginator
+     * @param int $limit
+     *
+     * @return \Illuminate\Pagination\LengthAwarePaginator|\Illuminate\Support\Collection
      */
-    public function getAwardLogs($limit = 10)
-    {
+    public function getAwardLogs($limit = 10) {
         $user = $this;
-        $query = AwardLog::with('award')->where(function($query) use ($user) {
+        $query = AwardLog::with('award')->where(function ($query) use ($user) {
             $query->with('sender')->where('sender_type', 'User')->where('sender_id', $user->id)->whereNotIn('log_type', ['Staff Grant', 'Prompt Rewards', 'Claim Rewards']);
-        })->orWhere(function($query) use ($user) {
+        })->orWhere(function ($query) use ($user) {
             $query->with('recipient')->where('recipient_type', 'User')->where('recipient_id', $user->id)->where('log_type', '!=', 'Staff Removal');
         })->orderBy('id', 'DESC');
-        if($limit) return $query->take($limit)->get();
-        else return $query->paginate(30);
+        if ($limit) {
+            return $query->take($limit)->get();
+        } else {
+            return $query->paginate(30);
+        }
     }
 
     /**
      * Get the user's recipe logs.
      *
-     * @param  int  $limit
-     * @return \Illuminate\Support\Collection|\Illuminate\Pagination\LengthAwarePaginator
+     * @param int $limit
+     *
+     * @return \Illuminate\Pagination\LengthAwarePaginator|\Illuminate\Support\Collection
      */
-    public function getRecipeLogs($limit = 10)
-    {
+    public function getRecipeLogs($limit = 10) {
         $user = $this;
-        $query = UserRecipeLog::with('recipe')->where(function($query) use ($user) {
+        $query = UserRecipeLog::with('recipe')->where(function ($query) use ($user) {
             $query->with('sender')->where('sender_id', $user->id)->whereNotIn('log_type', ['Staff Grant', 'Prompt Rewards', 'Claim Rewards']);
-        })->orWhere(function($query) use ($user) {
+        })->orWhere(function ($query) use ($user) {
             $query->with('recipient')->where('recipient_id', $user->id)->where('log_type', '!=', 'Staff Removal');
         })->orderBy('id', 'DESC');
-        if($limit) return $query->take($limit)->get();
-        else return $query->paginate(30);
+        if ($limit) {
+            return $query->take($limit)->get();
+        } else {
+            return $query->paginate(30);
+        }
     }
 
     /**
@@ -926,9 +932,9 @@ class User extends Authenticatable implements MustVerifyEmail {
      *
      * @return \Illuminate\Pagination\LengthAwarePaginator
      */
-    public function getUsernameLogs()
-    {
+    public function getUsernameLogs() {
         $query = UsernameLog::where('user_id', $this->id)->orderBy('updated_at', 'DESC');
+
         return $query->paginate(30);
     }
 
@@ -1013,26 +1019,25 @@ class User extends Authenticatable implements MustVerifyEmail {
         return CharacterBookmark::where('user_id', $this->id)->where('character_id', $character->id)->first();
     }
 
-
-
     /**
-     * Check if there are any Admin Notifications
+     * Check if there are any Admin Notifications.
+     *
+     * @param mixed $user
      *
      * @return int
      */
-     public function hasAdminNotification($user)
-     {
+    public function hasAdminNotification($user) {
         $count = [];
-        $count[] = $this->hasPower('manage_submissions')    ? Submission::where('status', 'Pending')->whereNotNull('prompt_id')->count()    : 0; //submissionCount
-        $count[] = $this->hasPower('manage_submissions')    ? Submission::where('status', 'Pending')->whereNull('prompt_id')->count()       : 0; //claimCount
-        $count[] = $this->hasPower('manage_characters')     ? CharacterDesignUpdate::characters()->where('status', 'Pending')->count()      : 0; //designCount
-        $count[] = $this->hasPower('manage_characters')     ? CharacterDesignUpdate::myos()->where('status', 'Pending')->count()            : 0; //myoCount
-        $count[] = $this->hasPower('manage_characters')     ? CharacterTransfer::active()->where('is_approved', 0)->count()                 : 0; //transferCount
-        $count[] = $this->hasPower('manage_characters')     ? Trade::where('status', 'Pending')->count()                                    : 0; //tradeCount
-        $count[] = $this->hasPower('manage_characters')     ? Trade::where('status', 'Pending')->count()                                    : 0; //tradeCount
-        $count[] = $this->hasPower('manage_submissions')    ? GallerySubmission::pending()->collaboratorApproved()->count()                 : 0; //galleryCount
-        $count[] = $this->hasPower('manage_reports')        ? Report::where('status', 'Pending')->count()                                   : 0; //reportCount
-        $count[] = $this->hasPower('manage_reports')        ? Report::assignedToMe($this)->count()                                          : 0; //assignedReportCount
+        $count[] = $this->hasPower('manage_submissions') ? Submission::where('status', 'Pending')->whereNotNull('prompt_id')->count() : 0; //submissionCount
+        $count[] = $this->hasPower('manage_submissions') ? Submission::where('status', 'Pending')->whereNull('prompt_id')->count() : 0; //claimCount
+        $count[] = $this->hasPower('manage_characters') ? CharacterDesignUpdate::characters()->where('status', 'Pending')->count() : 0; //designCount
+        $count[] = $this->hasPower('manage_characters') ? CharacterDesignUpdate::myos()->where('status', 'Pending')->count() : 0; //myoCount
+        $count[] = $this->hasPower('manage_characters') ? CharacterTransfer::active()->where('is_approved', 0)->count() : 0; //transferCount
+        $count[] = $this->hasPower('manage_characters') ? Trade::where('status', 'Pending')->count() : 0; //tradeCount
+        $count[] = $this->hasPower('manage_characters') ? Trade::where('status', 'Pending')->count() : 0; //tradeCount
+        $count[] = $this->hasPower('manage_submissions') ? GallerySubmission::pending()->collaboratorApproved()->count() : 0; //galleryCount
+        $count[] = $this->hasPower('manage_reports') ? Report::where('status', 'Pending')->count() : 0; //reportCount
+        $count[] = $this->hasPower('manage_reports') ? Report::assignedToMe($this)->count() : 0; //assignedReportCount
 
         // If Adoption Center is installed:
         // $count[] = $this->hasPower('manage_submissions') && $this->hasPower('manage_characters') ? Surrender::where('status', 'Pending')->count() : 0; //surrenderCount
@@ -1041,79 +1046,91 @@ class User extends Authenticatable implements MustVerifyEmail {
         // $count[] = $this->hasPower('manage_affiliates')     ? Affiliate::where('status', 'Pending')->count()                                : 0; //affiliateCount
 
         return array_sum($count);
-     }
+    }
+
     /**
      * Get the user's owned volumes.
      */
-    public function volumes()
-    {
+    public function volumes() {
         return $this->belongsToMany('App\Models\Volume\Volume', 'user_volumes')->withPivot('id');
     }
 
     /**
      * Get the user's volume logs.
      *
-     * @param  int  $limit
-     * @return \Illuminate\Support\Collection|\Illuminate\Pagination\LengthAwarePaginator
+     * @param int $limit
+     *
+     * @return \Illuminate\Pagination\LengthAwarePaginator|\Illuminate\Support\Collection
      */
-    public function getVolumeLogs($limit = 10)
-    {
+    public function getVolumeLogs($limit = 10) {
         $user = $this;
-        $query = UserVolumeLog::with('volume')->where(function($query) use ($user) {
+        $query = UserVolumeLog::with('volume')->where(function ($query) use ($user) {
             $query->with('sender')->where('sender_id', $user->id)->whereNotIn('log_type', ['Staff Grant', 'Prompt Rewards', 'Claim Rewards']);
-        })->orWhere(function($query) use ($user) {
+        })->orWhere(function ($query) use ($user) {
             $query->with('recipient')->where('recipient_id', $user->id)->where('log_type', '!=', 'Staff Removal');
         })->orderBy('id', 'DESC');
-        if($limit) return $query->take($limit)->get();
-        else return $query->paginate(30);
+        if ($limit) {
+            return $query->take($limit)->get();
+        } else {
+            return $query->paginate(30);
+        }
     }
 
-     /**
-     * Checks if the user has the named volume
+    /**
+     * Checks if the user has the named volume.
+     *
+     * @param mixed $volume_id
      *
      * @return bool
      */
-    public function hasVolume($volume_id)
-    {
+    public function hasVolume($volume_id) {
         $volume = Volume::find($volume_id);
         $user_has = $this->volumes->contains($volume);
+
         return $user_has;
-        }
-        
+    }
+
     /**
-     * Checks if the user has the named recipe
+     * Checks if the user has the named recipe.
+     *
+     * @param mixed $recipe_id
      *
      * @return bool
      */
-    public function hasRecipe($recipe_id)
-    {
+    public function hasRecipe($recipe_id) {
         $recipe = Recipe::find($recipe_id);
         $user_has = $this->recipes->contains($recipe);
         $default = !$recipe->needs_unlocking;
+
         return $default ? true : $user_has;
     }
 
-
     /**
      * Returned volume listed that are owned
-     * Reversal simply
+     * Reversal simply.
+     *
+     * @param mixed $ids
+     * @param mixed $reverse
      *
      * @return object
      */
-    public function ownedVolumes($ids, $reverse = false)
-    {
-        $volumes = Volume::find($ids); $ownedvolumes = [];
-        foreach($volumes as $volume)
-        {
-            if($reverse) {
-                if(!$this->volumes->contains($volume)) $ownedvolumes[] = $volume;
-            }
-            else {
-                if($this->volumes->contains($volume)) $ownedvolumes[] = $volume;
+    public function ownedVolumes($ids, $reverse = false) {
+        $volumes = Volume::find($ids);
+        $ownedvolumes = [];
+        foreach ($volumes as $volume) {
+            if ($reverse) {
+                if (!$this->volumes->contains($volume)) {
+                    $ownedvolumes[] = $volume;
+                }
+            } else {
+                if ($this->volumes->contains($volume)) {
+                    $ownedvolumes[] = $volume;
+                }
             }
         }
+
         return $ownedvolumes;
-}
+    }
 
     /*
     * Returned recipes listed that are owned
@@ -1121,19 +1138,21 @@ class User extends Authenticatable implements MustVerifyEmail {
      *
      * @return object
      */
-    public function ownedRecipes($ids, $reverse = false)
-    {
-        $recipes = Recipe::find($ids); $recipeCollection = [];
-        foreach($recipes as $recipe)
-        {
-            if($reverse) {
-                if(!$this->recipes->contains($recipe)) $recipeCollection[] = $recipe;
-            }
-            else {
-                if($this->recipes->contains($recipe)) $recipeCollection[] = $recipe;
+    public function ownedRecipes($ids, $reverse = false) {
+        $recipes = Recipe::find($ids);
+        $recipeCollection = [];
+        foreach ($recipes as $recipe) {
+            if ($reverse) {
+                if (!$this->recipes->contains($recipe)) {
+                    $recipeCollection[] = $recipe;
+                }
+            } else {
+                if ($this->recipes->contains($recipe)) {
+                    $recipeCollection[] = $recipe;
+                }
             }
         }
+
         return $recipeCollection;
     }
-
 }

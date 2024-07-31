@@ -6,8 +6,7 @@ use App\Models\Model;
 use App\Models\User\UserVolume;
 use Auth;
 
-class Volume extends Model
-{
+class Volume extends Model {
     /**
      * The attributes that are mass assignable.
      *
@@ -32,9 +31,9 @@ class Volume extends Model
      * @var array
      */
     public static $createRules = [
-        'name' => 'required|unique:volumes',
+        'name'        => 'required|unique:volumes',
         'description' => 'nullable',
-        'image' => 'mimes:png',
+        'image'       => 'mimes:png',
     ];
 
     /**
@@ -43,9 +42,9 @@ class Volume extends Model
      * @var array
      */
     public static $updateRules = [
-        'name' => 'required',
+        'name'        => 'required',
         'description' => 'nullable',
-        'image' => 'mimes:png',
+        'image'       => 'mimes:png',
     ];
 
     /**********************************************************************************************
@@ -55,16 +54,14 @@ class Volume extends Model
     /**
      * Get the users who have this volume.
      */
-    public function users()
-    {
+    public function users() {
         return $this->belongsToMany('App\Models\User\User', 'user_volumes')->withPivot('id');
     }
 
     /**
-     * Get the prompts parent
+     * Get the prompts parent.
      */
-    public function book()
-    {
+    public function book() {
         return $this->belongsTo('App\Models\Volume\Book', 'book_id');
     }
 
@@ -75,45 +72,46 @@ class Volume extends Model
     /**
      * Scope a query to sort items in alphabetical order.
      *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @param  bool                                   $reverse
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param bool                                  $reverse
+     *
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeSortAlphabetical($query, $reverse = false)
-    {
+    public function scopeSortAlphabetical($query, $reverse = false) {
         return $query->orderBy('name', $reverse ? 'DESC' : 'ASC');
     }
 
     /**
      * Scope a query to sort items by newest first.
      *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     *
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeSortNewest($query)
-    {
+    public function scopeSortNewest($query) {
         return $query->orderBy('id', 'DESC');
     }
 
     /**
      * Scope a query to sort features oldest first.
      *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     *
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeSortOldest($query)
-    {
+    public function scopeSortOldest($query) {
         return $query->orderBy('id');
     }
 
     /**
      * Scope a query to show only visible volumes.
      *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param mixed|null                            $user
+     *
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeVisible($query, $user = null)
-    {
+    public function scopeVisible($query, $user = null) {
         if ($user && $user->hasPower('edit_data')) {
             return $query;
         }
@@ -130,9 +128,8 @@ class Volume extends Model
      *
      * @return string
      */
-    public function getIdUrlAttribute()
-    {
-        return url('world/' . __('volumes.library') . '/' . __('volumes.volume') . '/' . $this->id);
+    public function getIdUrlAttribute() {
+        return url('world/'.__('volumes.library').'/'.__('volumes.volume').'/'.$this->id);
     }
 
     /**
@@ -140,13 +137,12 @@ class Volume extends Model
      *
      * @return string
      */
-    public function getDisplayNameAttribute()
-    {
+    public function getDisplayNameAttribute() {
         if (!$this->is_visible) {
-            return '<i class="fas fa-eye-slash"></i> <a href="' . $this->idUrl . '" class="display-item">' . $this->volumePrefix() . $this->name . '</a>';
+            return '<i class="fas fa-eye-slash"></i> <a href="'.$this->idUrl.'" class="display-item">'.$this->volumePrefix().$this->name.'</a>';
         }
-        return '<a href="' . $this->idUrl . '" class="display-item">' . $this->volumePrefix() . $this->name . '</a>';
 
+        return '<a href="'.$this->idUrl.'" class="display-item">'.$this->volumePrefix().$this->name.'</a>';
     }
 
     /**
@@ -154,8 +150,7 @@ class Volume extends Model
      *
      * @return string
      */
-    public function getImageDirectoryAttribute()
-    {
+    public function getImageDirectoryAttribute() {
         return 'images/data/volumes';
     }
 
@@ -164,9 +159,8 @@ class Volume extends Model
      *
      * @return string
      */
-    public function getImageFileNameAttribute()
-    {
-        return $this->id . '-image.png';
+    public function getImageFileNameAttribute() {
+        return $this->id.'-image.png';
     }
 
     /**
@@ -174,8 +168,7 @@ class Volume extends Model
      *
      * @return string
      */
-    public function getImagePathAttribute()
-    {
+    public function getImagePathAttribute() {
         return public_path($this->imageDirectory);
     }
 
@@ -184,13 +177,12 @@ class Volume extends Model
      *
      * @return string
      */
-    public function getImageUrlAttribute()
-    {
+    public function getImageUrlAttribute() {
         if (!$this->has_image) {
             return null;
         }
 
-        return asset($this->imageDirectory . '/' . $this->imageFileName);
+        return asset($this->imageDirectory.'/'.$this->imageFileName);
     }
 
     /**
@@ -198,32 +190,30 @@ class Volume extends Model
      *
      * @return string
      */
-    public function getAssetTypeAttribute()
-    {
+    public function getAssetTypeAttribute() {
         return 'volumes';
     }
 
     /**
-     * global check for if any users have this volume
+     * global check for if any users have this volume.
      *
      * @return bool
      */
-    public function checkGlobal()
-    {
+    public function checkGlobal() {
         if (!$this->is_global) {
             return false;
         } elseif ($this->is_global && UserVolume::where('volume_id', $this->id)->exists()) {
             return true;
         }
+
         return false;
     }
 
-    public function prevNextVolume($type)
-    {
+    public function prevNextVolume($type) {
         if (!$this->book_id) {
             return null;
         }
-        $query = Volume::visible(Auth::user() ?? null)->where('book_id', $this->book_id);
+        $query = self::visible(Auth::user() ?? null)->where('book_id', $this->book_id);
 
         if ($query->count()) {
             $query = $query->orderBy('sort', 'DESC')->get();
@@ -238,52 +228,48 @@ class Volume extends Model
         if (!isset($vol)) {
             return null;
         }
+
         return $vol ?? null;
     }
 
-    public function volumeName($user, $isAdmin = false)
-    {
+    public function volumeName($user, $isAdmin = false) {
         if ($this->isUnlocked($user, $isAdmin)) {
             return $this->displayName;
         }
-        return '<i>?????</i>';
 
+        return '<i>?????</i>';
     }
 
-    public function volumeSummary($user, $isAdmin = false)
-    {
+    public function volumeSummary($user, $isAdmin = false) {
         if ($this->isUnlocked($user, $isAdmin)) {
             return $this->summary;
         }
-        return '<i>?????</i>';
 
+        return '<i>?????</i>';
     }
 
-    public function volumeDesc($user, $isAdmin = false)
-    {
+    public function volumeDesc($user, $isAdmin = false) {
         if ($this->isUnlocked($user, $isAdmin)) {
             return $this->parsed_description;
         }
-        return '<i>?????</i>';
 
+        return '<i>?????</i>';
     }
 
-    public function isUnlocked($user, $isAdmin = false)
-    {
+    public function isUnlocked($user, $isAdmin = false) {
         if ($isAdmin || $user && $user->hasVolume($this->id) || $this->checkGlobal() || $this->book && $this->book->is_public) {
             return true;
         }
-        return false;
 
+        return false;
     }
 
     /**
-     * Get the chapter/number prefix
+     * Get the chapter/number prefix.
      *
      * @return string
      */
-    public function volumePrefix()
-    {
+    public function volumePrefix() {
         if (!$this->book_id) {
             return null;
         }
@@ -306,21 +292,22 @@ class Volume extends Model
 
         if (!is_null($numeric) && $this->book->text_prefix) {
             //just getting a space between the prefices
-            return $this->book->text_prefix . ' '. $numeric . ': ';
+            return $this->book->text_prefix.' '.$numeric.': ';
         }
 
-        return $this->book->text_prefix . $numeric . ': ';
+        return $this->book->text_prefix.$numeric.': ';
     }
 
     /**
      * Get a roman numeral for the sort number
-     * https://stackoverflow.com/questions/14994941/numbers-to-roman-numbers-with-php
+     * https://stackoverflow.com/questions/14994941/numbers-to-roman-numbers-with-php.
+     *
+     * @param mixed $number
      *
      * @return string
      */
-    public function numberToRomanRepresentation($number)
-    {
-        $map = array('M' => 1000, 'CM' => 900, 'D' => 500, 'CD' => 400, 'C' => 100, 'XC' => 90, 'L' => 50, 'XL' => 40, 'X' => 10, 'IX' => 9, 'V' => 5, 'IV' => 4, 'I' => 1);
+    public function numberToRomanRepresentation($number) {
+        $map = ['M' => 1000, 'CM' => 900, 'D' => 500, 'CD' => 400, 'C' => 100, 'XC' => 90, 'L' => 50, 'XL' => 40, 'X' => 10, 'IX' => 9, 'V' => 5, 'IV' => 4, 'I' => 1];
         $returnValue = '';
         while ($number > 0) {
             foreach ($map as $roman => $int) {
@@ -331,6 +318,7 @@ class Volume extends Model
                 }
             }
         }
+
         return $returnValue;
     }
 }

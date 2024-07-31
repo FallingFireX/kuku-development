@@ -4,7 +4,7 @@ namespace App\Models;
 
 use App\Traits\Commentable;
 
-class SitePage extends Model {
+class SiteCreds extends Model {
     use Commentable;
 
     /**
@@ -13,7 +13,7 @@ class SitePage extends Model {
      * @var array
      */
     protected $fillable = [
-        'creds'
+        'creds',
     ];
 
     /**
@@ -22,5 +22,4 @@ class SitePage extends Model {
      * @var string
      */
     protected $table = 'site_creds';
-
 }

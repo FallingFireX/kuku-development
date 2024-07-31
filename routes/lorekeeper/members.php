@@ -125,7 +125,7 @@ Route::group(['prefix' => 'characters', 'namespace' => 'Users'], function () {
     Route::post('class/edit/{id}', 'CharacterController@postClassModal');
 });
 
-Route::group(['prefix' => __('awards.awardcase'), 'namespace' => 'Users'], function() {
+Route::group(['prefix' => __('awards.awardcase'), 'namespace' => 'Users'], function () {
     Route::get('/', 'AwardCaseController@getIndex');
     Route::post('edit', 'AwardCaseController@postEdit');
     Route::post('claim/{id}', 'AwardCaseController@postClaimAward');
@@ -160,7 +160,7 @@ Route::group(['prefix' => 'trades', 'namespace' => 'Users'], function () {
     Route::post('{id}/cancel-trade', 'TradeController@postCancelTrade');
 });
 
-Route::group(['prefix' => 'crafting', 'namespace' => 'Users'], function() {
+Route::group(['prefix' => 'crafting', 'namespace' => 'Users'], function () {
     Route::get('/', 'CraftingController@getIndex');
     Route::get('craft/{id}', 'CraftingController@getCraftRecipe');
     Route::post('craft/{id}', 'CraftingController@postCraftRecipe');
@@ -211,7 +211,7 @@ Route::group(['prefix' => 'myo', 'namespace' => 'Characters'], function () {
     //this is useless but im not sure if we dont include it things will get weird or not
     Route::post('{slug}/approval/{id}', 'CharacterController@postCharacterApprovalSpecificImage');
 });
-Route::group(['prefix' => 'breeding-permissions', 'namespace' => 'Users'], function() {
+Route::group(['prefix' => 'breeding-permissions', 'namespace' => 'Users'], function () {
     Route::get('/', 'AccountController@getBreedingPermissions');
 });
 

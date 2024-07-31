@@ -122,9 +122,9 @@ return [
     |       Default: 0/Disabled, 1 to enable.
     |
     */
-    'character_codes' => '{category}-{number}',
+    'character_codes'         => '{category}-{number}',
     'character_number_digits' => 5,
-    'character_pull_number' => 'all',
+    'character_pull_number'   => 'all',
 
     'reset_character_status_on_transfer'                => 0,
     'reset_character_profile_on_transfer'               => 0,
@@ -312,8 +312,8 @@ return [
 
     'donation_shop' => [
         'item_donations' => 0,
-        'cooldown' => 5,
-        'expiry' => 0,
+        'cooldown'       => 5,
+        'expiry'         => 0,
     ],
 
     /*

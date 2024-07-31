@@ -98,8 +98,11 @@ function getAssetModelString($type, $namespaced = true) {
             break;
 
         case 'awards':
-            if($namespaced) return '\App\Models\Award\Award';
-            else return 'Award';
+            if ($namespaced) {
+                return '\App\Models\Award\Award';
+            } else {
+                return 'Award';
+            }
             break;
 
         case 'currencies':
@@ -159,8 +162,11 @@ function getAssetModelString($type, $namespaced = true) {
             break;
 
         case 'user_awards':
-            if($namespaced) return '\App\Models\User\UserAward';
-            else return 'UserAward';
+            if ($namespaced) {
+                return '\App\Models\User\UserAward';
+            } else {
+                return 'UserAward';
+            }
             break;
 
         case 'characters':
@@ -172,8 +178,11 @@ function getAssetModelString($type, $namespaced = true) {
             break;
 
         case 'recipes':
-            if($namespaced) return '\App\Models\Recipe\Recipe';
-            else return 'Recipe';
+            if ($namespaced) {
+                return '\App\Models\Recipe\Recipe';
+            } else {
+                return 'Recipe';
+            }
             break;
 
         case 'character_items':
@@ -185,13 +194,19 @@ function getAssetModelString($type, $namespaced = true) {
             break;
 
         case 'themes':
-            if ($namespaced) return '\App\Models\Theme';
-            else return 'Theme';
+            if ($namespaced) {
+                return '\App\Models\Theme';
+            } else {
+                return 'Theme';
+            }
             break;
-    
+
         case 'statuses':
-            if($namespaced) return '\App\Models\Status\StatusEffect';
-            else return 'StatusEffect';
+            if ($namespaced) {
+                return '\App\Models\Status\StatusEffect';
+            } else {
+                return 'StatusEffect';
+            }
             break;
 
         case 'elements':
@@ -201,7 +216,7 @@ function getAssetModelString($type, $namespaced = true) {
                 return 'Element';
             }
             break;
-        // these are special cases, as they do not specifically have a unique model
+            // these are special cases, as they do not specifically have a unique model
         case 'exp':
             return 'Exp';
             break;
@@ -468,13 +483,14 @@ function fillUserAssets($assets, $sender, $recipient, $logType, $data) {
                     return false;
                 }
             }
-        }
-        elseif($key == 'awards' && count($contents))
-        {
+        } elseif ($key == 'awards' && count($contents)) {
             $service = new \App\Services\AwardCaseManager;
-            foreach($contents as $asset)
-                if(!$service->creditAward($sender, $recipient, $logType, $data, $asset['asset'], $asset['quantity'])) return false;
-        } elseif($key == 'currencies' && count($contents)) {
+            foreach ($contents as $asset) {
+                if (!$service->creditAward($sender, $recipient, $logType, $data, $asset['asset'], $asset['quantity'])) {
+                    return false;
+                }
+            }
+        } elseif ($key == 'currencies' && count($contents)) {
             $service = new \App\Services\CurrencyManager;
             foreach ($contents as $asset) {
                 if (!$service->creditCurrency($sender, $recipient, $logType, $data['data'], $asset['asset'], $asset['quantity'])) {
@@ -516,12 +532,13 @@ function fillUserAssets($assets, $sender, $recipient, $logType, $data) {
                     return false;
                 }
             }
-        }
-        elseif($key == 'user_awards' && count($contents))
-        {
+        } elseif ($key == 'user_awards' && count($contents)) {
             $service = new \App\Services\AwardCaseManager;
-            foreach($contents as $asset)
-                if(!$service->moveStack($sender, $recipient, $logType, $data, $asset['asset'])) return false;
+            foreach ($contents as $asset) {
+                if (!$service->moveStack($sender, $recipient, $logType, $data, $asset['asset'])) {
+                    return false;
+                }
+            }
         } elseif ($key == 'characters' && count($contents)) {
             $service = new App\Services\CharacterManager;
             foreach ($contents as $asset) {
@@ -529,16 +546,21 @@ function fillUserAssets($assets, $sender, $recipient, $logType, $data) {
                     return false;
                 }
             }
-        } else if ($key == 'themes' && count($contents)) {
+        } elseif ($key == 'themes' && count($contents)) {
             $service = new \App\Services\ThemeManager;
-            foreach ($contents as $asset)
-                if (!$service->creditTheme($recipient, $asset['asset'])) return false;
+            foreach ($contents as $asset) {
+                if (!$service->creditTheme($recipient, $asset['asset'])) {
+                    return false;
+                }
+            }
         }
-        if($key == 'recipes' && count($contents))
-        {
+        if ($key == 'recipes' && count($contents)) {
             $service = new \App\Services\RecipeService;
-            foreach($contents as $asset)
-                if(!$service->creditRecipe($sender, $recipient, null, $logType, $data, $asset['asset'])) return false;
+            foreach ($contents as $asset) {
+                if (!$service->creditRecipe($sender, $recipient, null, $logType, $data, $asset['asset'])) {
+                    return false;
+                }
+            }
         } elseif ($key == 'exp' && count($contents)) {
             $service = new App\Services\Stat\ExperienceManager;
             if (!$service->creditExp($sender, $recipient, $logType, $data['data'], $contents['quantity'], false)) {
@@ -616,19 +638,20 @@ function fillCharacterAssets($assets, $sender, $recipient, $logType, $data, $sub
             if (!$service->creditStat($sender, $recipient, $logType, $data['data'], $contents['quantity'])) {
                 return false;
             }
-        }
-        elseif($key == 'awards' && count($contents))
-        {
+        } elseif ($key == 'awards' && count($contents)) {
             $service = new \App\Services\AwardCaseManager;
-            foreach($contents as $asset)
-                if(!$service->creditAward($sender, ( $asset['asset']->is_character_owned ? $recipient : $item_recipient), $logType, $data, $asset['asset'], $asset['quantity'])) return false;
-        }
-
-        elseif($key == 'statuses' && count($contents))
-        {
+            foreach ($contents as $asset) {
+                if (!$service->creditAward($sender, ($asset['asset']->is_character_owned ? $recipient : $item_recipient), $logType, $data, $asset['asset'], $asset['quantity'])) {
+                    return false;
+                }
+            }
+        } elseif ($key == 'statuses' && count($contents)) {
             $service = new \App\Services\StatusEffectManager;
-            foreach($contents as $asset)
-                if(!$service->creditStatusEffect($sender, $recipient, $logType, $data['data'], $asset['asset'], $asset['quantity'])) return false;
+            foreach ($contents as $asset) {
+                if (!$service->creditStatusEffect($sender, $recipient, $logType, $data['data'], $asset['asset'], $asset['quantity'])) {
+                    return false;
+                }
+            }
         }
     }
 
@@ -662,6 +685,10 @@ function createRewardsString($array) {
 
 /**
  * Returns an asset from provided data.
+ *
+ * @param mixed $type
+ * @param mixed $id
+ * @param mixed $isCharacter
  */
 function findReward($type, $id, $isCharacter = false) {
     $reward = null;
@@ -685,5 +712,6 @@ function findReward($type, $id, $isCharacter = false) {
             $reward = \App\Models\Raffle\Raffle::find($id);
             break;
     }
+
     return $reward;
 }

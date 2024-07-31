@@ -2,18 +2,16 @@
 
 namespace App\Models\User;
 
-use Config;
 use App\Models\Model;
 
-class UsernameLog extends Model
-{
+class UsernameLog extends Model {
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'user_id', 'old_username', 'new_username', 'updated_at'
+        'user_id', 'old_username', 'new_username', 'updated_at',
     ];
 
     /**

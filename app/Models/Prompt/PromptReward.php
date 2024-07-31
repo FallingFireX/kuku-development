@@ -78,7 +78,7 @@ class PromptReward extends Model {
                 break;
             case 'Recipe':
                 return $this->belongsTo('App\Models\Recipe\Recipe', 'rewardable_id');
-                break;  
+                break;
             case 'Points':
                 return $this->belongsTo(Stat::class, 'rewardable_id');
                 break;

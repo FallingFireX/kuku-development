@@ -22,9 +22,9 @@ class Kernel extends ConsoleKernel {
         $schedule->command('check-news')
             ->everyMinute();
         $schedule->command('check-sales')
-                ->everyMinute();
+            ->everyMinute();
         $schedule->command('change-feature')
-                ->monthly();
+            ->monthly();
         $schedule->command('clean-donations')
             ->everyMinute();
         $schedule->command('check-pet-drops')
@@ -46,8 +46,7 @@ class Kernel extends ConsoleKernel {
         $schedule->command('check-pet-drops')
             ->everyMinute();
         $schedule->command('distribute-birthday-rewards')
-                ->monthly();
-
+            ->monthly();
     }
 
     /**

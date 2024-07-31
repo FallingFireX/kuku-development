@@ -49,8 +49,8 @@ class UpdateCreditsTracker extends Command {
             if (!$cred->exists()) {
                 DB::table('site_creds')->insert([
                     'key'      => $key,
-                    'creator' => $data['creator'],
-                    'credits' => $data['credits'],
+                    'creator'  => $data['creator'],
+                    'credits'  => $data['credits'],
                 ]);
                 $this->info('Added:   '.$key.' / Credits: '.$data['credits']);
             } else {

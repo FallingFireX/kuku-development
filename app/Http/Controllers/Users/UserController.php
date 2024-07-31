@@ -3,6 +3,9 @@
 namespace App\Http\Controllers\Users;
 
 use App\Http\Controllers\Controller;
+use App\Models\Award\Award;
+use App\Models\Award\AwardCategory;
+use App\Models\Character\BreedingPermission;
 use App\Models\Character\Character;
 use App\Models\Character\CharacterImage;
 use App\Models\Character\Sublist;
@@ -14,17 +17,6 @@ use App\Models\Gallery\GalleryCharacter;
 use App\Models\Gallery\GallerySubmission;
 use App\Models\Item\Item;
 use App\Models\Item\ItemCategory;
-use App\Models\Item\ItemLog;
-
-use App\Models\User\UserAward;
-use App\Models\Award\Award;
-use App\Models\Award\AwardCategory;
-use App\Models\Award\AwardLog;
-
-use App\Models\Gallery\GalleryFavorite;
-
-use App\Models\Character\CharacterCategory;
-use App\Models\Character\BreedingPermission;
 use App\Models\Pet\Pet;
 use App\Models\Pet\PetCategory;
 use App\Models\User\User;
@@ -100,7 +92,7 @@ class UserController extends Controller {
         return view('user.profile', [
             'user'       => $this->user,
             'name'       => $name,
-            'awards' => $this->user->awards()->orderBy('user_awards.updated_at', 'DESC')->whereNull('deleted_at')->where('count','>',0)->take(4)->get(),
+            'awards'     => $this->user->awards()->orderBy('user_awards.updated_at', 'DESC')->whereNull('deleted_at')->where('count', '>', 0)->take(4)->get(),
             'items'      => $this->user->items()->where('count', '>', 0)->orderBy('user_items.updated_at', 'DESC')->take(4)->get(),
             'characters' => $characters,
             'aliases'    => $aliases->orderBy('is_primary_alias', 'DESC')->orderBy('site')->get(),
@@ -224,22 +216,21 @@ class UserController extends Controller {
     /**
      * Shows the user's breeding permissions.
      *
-     * @param  \Illuminate\Http\Request       $request
-     * @param  string                         $name
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function getUserBreedingPermissions(Request $request)
-    {
+    public function getUserBreedingPermissions(Request $request) {
         $permissions = BreedingPermission::where('recipient_id', $this->user->id);
         $used = $request->get('used');
-        if(!$used) $used = 0;
+        if (!$used) {
+            $used = 0;
+        }
 
         $permissions = $permissions->where('is_used', $used);
 
         return view('user.breeding_permissions', [
-            'user' => $this->user,
+            'user'        => $this->user,
             'permissions' => $permissions->orderBy('id', 'DESC')->paginate(20)->appends($request->query()),
-            'sublists' => Sublist::orderBy('sort', 'DESC')->get()
+            'sublists'    => Sublist::orderBy('sort', 'DESC')->get(),
         ]);
     }
 
@@ -280,11 +271,11 @@ class UserController extends Controller {
     /**
      * Shows a user's awardcase.
      *
-     * @param  string  $name
+     * @param string $name
+     *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function getUserAwardCase($name)
-    {
+    public function getUserAwardCase($name) {
         $categories = AwardCategory::orderBy('sort', 'DESC')->get();
         $awards = count($categories) ?
             $this->user->awards()
@@ -300,18 +291,19 @@ class UserController extends Controller {
                 ->orderBy('updated_at')
                 ->get()
                 ->groupBy(['award_category_id', 'id']);
+
         return view('user.awardcase', [
-            'user' => $this->user,
-            'categories' => $categories->keyBy('id'),
-            'awards' => $awards,
+            'user'        => $this->user,
+            'categories'  => $categories->keyBy('id'),
+            'awards'      => $awards,
             'userOptions' => User::where('id', '!=', $this->user->id)->orderBy('name')->pluck('name', 'id')->toArray(),
-            'user' => $this->user,
-            'logs' => $this->user->getAwardLogs(),
-            'sublists' => Sublist::orderBy('sort', 'DESC')->get()
+            'user'        => $this->user,
+            'logs'        => $this->user->getAwardLogs(),
+            'sublists'    => Sublist::orderBy('sort', 'DESC')->get(),
         ]);
     }
-    
-     /**
+
+    /**
      * Shows a user's pets.
      *
      * @param string $name
@@ -449,19 +441,20 @@ class UserController extends Controller {
     /**
      * Shows a user's award logs.
      *
-     * @param  string  $name
+     * @param string $name
+     *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function getUserAwardLogs($name)
-    {
+    public function getUserAwardLogs($name) {
         $user = $this->user;
+
         return view('user.award_logs', [
             'user' => $this->user,
-            'logs' => $this->user->getAwardLogs(0)
+            'logs' => $this->user->getAwardLogs(0),
         ]);
     }
-    
-     /**
+
+    /**
      * Shows a user's pet logs.
      *
      * @param string $name
@@ -574,14 +567,14 @@ class UserController extends Controller {
     /**
      * Shows a user's display name logs.
      *
-     * @param  string  $name
+     * @param string $name
+     *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function getUsernameLogs($name)
-    {
+    public function getUsernameLogs($name) {
         return view('user.username_logs', [
             'user' => $this->user,
-            'logs' => $this->user->getUsernameLogs()
+            'logs' => $this->user->getUsernameLogs(),
         ]);
     }
 
@@ -602,16 +595,17 @@ class UserController extends Controller {
     /**
      * Shows a user's recipe logs.
      *
-     * @param  string  $name
+     * @param string $name
+     *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function getUserRecipeLogs($name)
-    {
+    public function getUserRecipeLogs($name) {
         $user = $this->user;
+
         return view('user.recipe_logs', [
-            'user' => $this->user,
-            'logs' => $this->user->getRecipeLogs(0),
-            'sublists' => Sublist::orderBy('sort', 'DESC')->get()
+            'user'     => $this->user,
+            'logs'     => $this->user->getRecipeLogs(0),
+            'sublists' => Sublist::orderBy('sort', 'DESC')->get(),
         ]);
     }
 

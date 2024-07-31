@@ -1,8 +1,8 @@
-<?php namespace App\Services\Item;
+<?php
+
+namespace App\Services\Item;
 
 use App\Models\Item\Item;
-use App\Models\User\User;
-use App\Models\User\UserItem;
 use App\Models\User\UserVolume;
 use App\Models\User\UserVolumeLog;
 use App\Models\Volume\Book;
@@ -11,8 +11,7 @@ use App\Services\Service;
 use Carbon\Carbon;
 use DB;
 
-class BookService extends Service
-{
+class BookService extends Service {
     /*
     |--------------------------------------------------------------------------
     | Book Service
@@ -27,8 +26,7 @@ class BookService extends Service
      *
      * @return array
      */
-    public function getEditData()
-    {
+    public function getEditData() {
         return [
             'books' => Book::orderBy('name')->pluck('name', 'id'),
         ];
@@ -41,8 +39,7 @@ class BookService extends Service
      *
      * @return mixed
      */
-    public function getTagData($tag)
-    {
+    public function getTagData($tag) {
         $bookData['book_id'] = $tag->data['book_id'] ?? null;
 
         return $bookData;
@@ -56,8 +53,7 @@ class BookService extends Service
      *
      * @return bool
      */
-    public function updateData($tag, $data)
-    {
+    public function updateData($tag, $data) {
         $bookData['book_id'] = $data['book_id'] ?? null;
 
         DB::beginTransaction();
@@ -82,12 +78,10 @@ class BookService extends Service
      *
      * @return bool
      */
-    public function act($stacks, $user, $data)
-    {
+    public function act($stacks, $user, $data) {
         DB::beginTransaction();
 
         try {
-
             foreach ($stacks as $key => $stack) {
                 // We don't want to let anyone who isn't the owner of the slot to use it,
                 // so do some validation...
@@ -100,42 +94,39 @@ class BookService extends Service
                     for ($q = 0; $q < $data['quantities'][$key]; $q++) {
                         $book = Book::visible()->find($stack->item->tag($data['tag'])->getData()['book_id']);
 
-                        if(!isset($book)){
+                        if (!isset($book)) {
                             throw new \Exception('Invalid '.__('volumes.book').'.');
                         }
 
                         if (!$book->volumes) {
-                            throw new \Exception('This ' . __('volumes.book') . ' doesn\'t contain any ' . __('volumes.volumes') . '. Contact an admin.');
+                            throw new \Exception('This '.__('volumes.book').' doesn\'t contain any '.__('volumes.volumes').'. Contact an admin.');
                         }
 
                         foreach ($book->volumes as $volume) {
-
                             if (!$user->volumes->contains($volume) && $volume->visible()) {
                                 //credit the volume
                                 //doing it here because we can just use the item tags instead of putting it in the asset helper or w/e
                                 if (!UserVolume::create(['user_id' => $user->id, 'volume_id' => $volume->id])) {
-                                    throw new \Exception('Error crediting ' . __('volumes.volume') . '.');
+                                    throw new \Exception('Error crediting '.__('volumes.volume').'.');
                                 }
 
                                 if (!UserVolumeLog::create(
                                     [
-                                        'sender_id' => null,
+                                        'sender_id'    => null,
                                         'recipient_id' => $user->id,
                                         'character_id' => null,
-                                        'volume_id' => $volume->id,
-                                        'log' => 'Unlocked Volume (Unlocked from using a ' . $stack->item->name . ')',
-                                        'log_type' => 'Unlocked Volume',
-                                        'data' => 'Unlocked from using a' . $stack->item->name,
-                                        'created_at' => Carbon::now(),
-                                        'updated_at' => Carbon::now(),
+                                        'volume_id'    => $volume->id,
+                                        'log'          => 'Unlocked Volume (Unlocked from using a '.$stack->item->name.')',
+                                        'log_type'     => 'Unlocked Volume',
+                                        'data'         => 'Unlocked from using a'.$stack->item->name,
+                                        'created_at'   => Carbon::now(),
+                                        'updated_at'   => Carbon::now(),
                                     ]
                                 )) {
                                     throw new \Exception('Error making log');
                                 }
                             }
-
                         }
-
                     }
                 }
             }

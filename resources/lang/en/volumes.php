@@ -17,21 +17,20 @@ return [
     /
     */
 
-    'book' => 'book',                         // use __
-    'books' => 'books',                       // use __
+    'book'   => 'book',                         // use __
+    'books'  => 'books',                       // use __
     'books_' => 'book|books',                // Use trans_choice instead of __
 
-    
-    'volume' => 'volume',                         // use __
-    'volumes' => 'volumes',                       // use __
+    'volume'   => 'volume',                         // use __
+    'volumes'  => 'volumes',                       // use __
     'volumes_' => 'volume|volumes',                // Use trans_choice instead of __
 
-    'library' => 'library',                 // use __
-    'libraries' => 'libraries',               // use __
+    'library'    => 'library',                 // use __
+    'libraries'  => 'libraries',               // use __
     'libraries_' => 'library|libraries',    // Use trans_choice instead of __
 
-    'bookshelf' => 'bookshelf',                         // use __
-    'bookshelves' => 'bookshelves',                       // use __
+    'bookshelf'    => 'bookshelf',                         // use __
+    'bookshelves'  => 'bookshelves',                       // use __
     'bookshelves_' => 'bookshelf|bookshelves',                // Use trans_choice instead of __
 
 ];

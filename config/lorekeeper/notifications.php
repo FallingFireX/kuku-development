@@ -350,44 +350,44 @@ return [
     ],
     // AWARD_GRANT
     341 => [
-        'name' => 'Award Grant',
+        'name'    => 'Award Grant',
         'message' => 'You have earned the following award(s): {award_name} (×{award_quantity}). Congratulations! (<a href="{url}">View Awards</a>)',
-        'url' => 'awardcase'
+        'url'     => 'awardcase',
     ],
 
     // AWARD_REMOVAL
     342 => [
-        'name' => 'Award Removal',
+        'name'    => 'Award Removal',
         'message' => '{award_name} (×{award_quantity}) was removed from your Awards by <a href="{sender_url}">{sender_name}</a>. (<a href="{url}">View Awards</a>)',
-        'url' => 'awardcase'
+        'url'     => 'awardcase',
     ],
 
     // AWARD_TRANSFER
     343 => [
-        'name' => 'Award Transfer',
+        'name'    => 'Award Transfer',
         'message' => 'You have received {award_name} (×{award_quantity}) from <a href="{sender_url}">{sender_name}</a>. (<a href="{url}">View Awards</a>)',
-        'url' => 'awardcase'
+        'url'     => 'awardcase',
     ],
 
     // FORCED_AWARD_TRANSFER
     344 => [
-        'name' => 'Forced Award Transfer',
+        'name'    => 'Forced Award Transfer',
         'message' => '{item_name} (×{item_quantity}) was removed from {character_name} by <a href="{sender_url}">{sender_name}</a>. (<a href="{url}">View Inventory</a>)',
-        'url' => 'character/{character_slug}/inventory'
+        'url'     => 'character/{character_slug}/inventory',
     ],
 
     // CHARACTER_AWARD_GRANT
     345 => [
-        'name' => 'Character Award Grant',
+        'name'    => 'Character Award Grant',
         'message' => '{character_name} has received a staff grant of {award_name} (×{award_quantity}) from <a href="{sender_url}">{sender_name}</a>. (<a href="{url}">View Awards</a>)',
-        'url' => 'character/{character_slug}/awardcase'
+        'url'     => 'character/{character_slug}/awardcase',
     ],
 
     // CHARACTER_AWARD_REMOVAL
     346 => [
-        'name' => 'Character Award Removal',
+        'name'    => 'Character Award Removal',
         'message' => '{award_name} (×{award_quantity}) was removed from {character_name} by <a href="{sender_url}">{sender_name}</a>. (<a href="{url}">View Awards</a>)',
-        'url' => 'character/{character_slug}/awardcase'
+        'url'     => 'character/{character_slug}/awardcase',
     ],
 
     // PET_REMOVAL
@@ -587,49 +587,49 @@ return [
 
     // BREEDING_PERMISSION_GRANTED
     517 => [
-        'name' => 'Breeding Permission Granted',
+        'name'    => 'Breeding Permission Granted',
         'message' => '<a href="{sender_url}">{sender_name}</a> has granted you a {type} breeding permission for <a href="character/{character_slug}">{character_name}</a>. (<a href="{url}">View Breeding Permissions</a>)',
-        'url' => 'breeding-permissions'
+        'url'     => 'breeding-permissions',
     ],
 
     // BREEDING_PERMISSION_USED
     518 => [
-        'name' => 'Breeding Permission Used',
+        'name'    => 'Breeding Permission Used',
         'message' => '<a href="{sender_url}">{sender_name}</a> has marked a {type} breeding permission (#{permission_id}) for <a href="character/{character_slug}">{character_name}</a> as used. (<a href="{url}?used=1">View Breeding Permissions</a>)',
-        'url' => 'breeding-permissions'
+        'url'     => 'breeding-permissions',
     ],
 
     // BREEDING_PERMISSION_TRANSFER
     519 => [
-        'name' => 'Breeding Permission Transfer',
+        'name'    => 'Breeding Permission Transfer',
         'message' => '<a href="{sender_url}">{sender_name}</a> has transferred a {type} breeding permission for <a href="character/{character_slug}">{character_name}</a> to you. (<a href="{url}">View Breeding Permissions</a>)',
-        'url' => 'breeding-permissions'
+        'url'     => 'breeding-permissions',
     ],
 
     // FORCED_BREEDING_PERMISSION_TRANSFER
     520 => [
-        'name' => 'Forced Breeding Permission Transfer',
+        'name'    => 'Forced Breeding Permission Transfer',
         'message' => '<a href="{sender_url}">{sender_name}</a> has transferred a {type} breeding permission for <a href="character/{character_slug}">{character_name}</a> from you. (<a href="{url}">View Breeding Permissions</a>)',
-        'url' => 'breeding-permissions'
+        'url'     => 'breeding-permissions',
     ],
     // CHARACTER_STATUS_GRANT
     521 => [
-        'name' => 'Character Status Effect Grant',
+        'name'    => 'Character Status Effect Grant',
         'message' => '{character_name} has been given the status effect {status_name} (×{status_quantity}) by <a href="{sender_url}">{sender_name}</a>. (<a href="{url}">View Status Effects</a>)',
-        'url' => 'character/{character_slug}/status-effects'
+        'url'     => 'character/{character_slug}/status-effects',
     ],
 
     // CHARACTER_STATUS_REMOVAL
     522 => [
-        'name' => 'Character Status Effect Removal',
+        'name'    => 'Character Status Effect Removal',
         'message' => '{status_name} (×{status_quantity})  was removed from {character_name} by <a href="{sender_url}">{sender_name}</a>. (<a href="{url}">View Status Effects</a>)',
-        'url' => 'character/{character_slug}/status-effects'
+        'url'     => 'character/{character_slug}/status-effects',
     ],
 
     // RECIPE_GRANT
     600 => [
-        'name' => 'Recipe Grant',
+        'name'    => 'Recipe Grant',
         'message' => 'You have received a staff grant of the crafting recipe {recipe_name} from <a href="{sender_url}">{sender_name}</a>. (<a href="{url}">View Unlocked Recipes</a>)',
-        'url' => 'crafting'
+        'url'     => 'crafting',
     ],
 ];

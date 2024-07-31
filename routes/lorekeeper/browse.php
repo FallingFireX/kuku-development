@@ -34,8 +34,8 @@ Route::group(['prefix' => 'news'], function () {
 /**************************************************************************************************
     Dev Logs
 **************************************************************************************************/
-# PROFILES
-Route::group(['prefix' => 'devlogs'], function() {
+// PROFILES
+Route::group(['prefix' => 'devlogs'], function () {
     Route::get('/', 'DevLogsController@getIndex');
     Route::get('{id}.{slug?}', 'DevLogsController@getdevLogs');
     Route::get('{id}.', 'DevLogsController@getdevLogs');
@@ -95,7 +95,7 @@ Route::group(['prefix' => 'user', 'namespace' => 'Users'], function () {
     Route::get('{name}/recipe-logs', 'UserController@getUserRecipeLogs');
 });
 
-# STAFF TEAM
+// STAFF TEAM
 Route::group(['prefix' => 'team'], function () {
     Route::get('/', 'BrowseController@getTeamIndex');
     Route::get('{name}/gear-logs', 'UserController@getUserGearLogs');
@@ -133,7 +133,7 @@ Route::group(['prefix' => 'character', 'namespace' => 'Characters'], function ()
     Route::get('{slug}/stats/logs/count', 'CharacterController@getCharacterCountLogs');
 
     Route::get('{slug}/gallery', 'CharacterController@getCharacterGallery');
-    # lineage
+    // lineage
     Route::get('{slug}/lineage', 'CharacterLineageController@getCharacterLineage');
     Route::get('{slug}/children', 'CharacterLineageController@getCharacterChildren');
     Route::get('{slug}/grandchildren', 'CharacterLineageController@getCharacterGrandChildren');

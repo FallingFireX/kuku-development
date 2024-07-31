@@ -3,8 +3,8 @@
 namespace App\Services;
 
 use App\Models\Raffle\Raffle;
-use App\Models\User\User;
 use App\Models\Raffle\RaffleGroup;
+use App\Models\User\User;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 
@@ -133,8 +133,7 @@ class RaffleService extends Service {
         DB::commit();
 
         return true;
-    }   
-
+    }
 
     /**
      * Updates the unread raffles flag for all users so that
@@ -142,9 +141,9 @@ class RaffleService extends Service {
      *
      * @return bool
      */
-    private function alertUsers()
-    {
+    private function alertUsers() {
         User::query()->update(['is_raffles_unread' => 1]);
+
         return true;
     }
 }

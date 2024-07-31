@@ -2,11 +2,9 @@
 
 namespace App\Services;
 
-use Config;
-
-use App\Models\Feature\FeatureSubcategory;
 use App\Models\Feature\Feature;
 use App\Models\Feature\FeatureCategory;
+use App\Models\Feature\FeatureSubcategory;
 use App\Models\Species\Species;
 use App\Models\Species\Subtype;
 use Illuminate\Support\Facades\DB;
@@ -120,30 +118,6 @@ class FeatureService extends Service {
     }
 
     /**
-     * Handle category data.
-     *
-     * @param  array                                     $data
-     * @param  \App\Models\Feature\FeatureCategory|null  $category
-     * @return array
-     */
-    private function populateCategoryData($data, $category = null)
-    {
-        if(isset($data['description']) && $data['description']) $data['parsed_description'] = parse($data['description']);
-
-        if(isset($data['remove_image']))
-        {
-            if($category && $category->has_image && $data['remove_image'])
-            {
-                $data['has_image'] = 0;
-                $this->deleteImage($category->categoryImagePath, $category->categoryImageFileName);
-            }
-            unset($data['remove_image']);
-        }
-
-        return $data;
-    }
-
-    /**
      * Delete a category.
      *
      * @param FeatureCategory $category
@@ -203,65 +177,71 @@ class FeatureService extends Service {
         return $this->rollbackReturn(false);
     }
 
-     /**********************************************************************************************
-     
-        FEATURE SUBCATEGORIES
+    /**********************************************************************************************
+
+       FEATURE SUBCATEGORIES
 
     **********************************************************************************************/
 
     /**
      * Create a subcategory.
      *
-     * @param  array                 $data
-     * @param  \App\Models\User\User $user
+     * @param array                 $data
+     * @param \App\Models\User\User $user
+     *
      * @return \App\Models\Feature\FeatureSubcategory|bool
      */
-    public function createFeatureSubcategory($data, $user)
-    {
+    public function createFeatureSubcategory($data, $user) {
         DB::beginTransaction();
 
         try {
             $data = $this->populateSubcategoryData($data);
 
             $image = null;
-            if(isset($data['image']) && $data['image']) {
+            if (isset($data['image']) && $data['image']) {
                 $data['has_image'] = 1;
                 $image = $data['image'];
                 unset($data['image']);
+            } else {
+                $data['has_image'] = 0;
             }
-            else $data['has_image'] = 0;
 
             $subcategory = FeatureSubcategory::create($data);
 
-            if ($image) $this->handleImage($image, $subcategory->subcategoryImagePath, $subcategory->subcategoryImageFileName);
+            if ($image) {
+                $this->handleImage($image, $subcategory->subcategoryImagePath, $subcategory->subcategoryImageFileName);
+            }
 
             return $this->commitReturn($subcategory);
-        } catch(\Exception $e) { 
+        } catch (\Exception $e) {
             $this->setError('error', $e->getMessage());
         }
+
         return $this->rollbackReturn(false);
     }
 
     /**
      * Update a subcategory.
      *
-     * @param  \App\Models\Feature\FeatureSubcategory  $subcategory
-     * @param  array                                $data
-     * @param  \App\Models\User\User                $user
+     * @param \App\Models\Feature\FeatureSubcategory $subcategory
+     * @param array                                  $data
+     * @param \App\Models\User\User                  $user
+     *
      * @return \App\Models\Feature\FeatureSubcategory|bool
      */
-    public function updateFeatureSubcategory($subcategory, $data, $user)
-    {
+    public function updateFeatureSubcategory($subcategory, $data, $user) {
         DB::beginTransaction();
 
         try {
             // More specific validation
-            if(FeatureSubcategory::where('name', $data['name'])->where('id', '!=', $subcategory->id)->exists()) throw new \Exception("The name has already been taken.");
+            if (FeatureSubcategory::where('name', $data['name'])->where('id', '!=', $subcategory->id)->exists()) {
+                throw new \Exception('The name has already been taken.');
+            }
 
             $data = $this->populateSubcategoryData($data, $subcategory);
 
-            $image = null;            
-            if(isset($data['image']) && $data['image']) {
+            $image = null;
+            if (isset($data['image']) && $data['image']) {
                 $data['has_image'] = 1;
                 $image = $data['image'];
                 unset($data['image']);
@@ -269,88 +249,73 @@ class FeatureService extends Service {
 
             $subcategory->update($data);
 
-            if ($subcategory) $this->handleImage($image, $subcategory->subcategoryImagePath, $subcategory->subcategoryImageFileName);
+            if ($subcategory) {
+                $this->handleImage($image, $subcategory->subcategoryImagePath, $subcategory->subcategoryImageFileName);
+            }
 
             return $this->commitReturn($subcategory);
-        } catch(\Exception $e) { 
+        } catch (\Exception $e) {
             $this->setError('error', $e->getMessage());
         }
+
         return $this->rollbackReturn(false);
-    }
-
-    /**
-     * Handle subcategory data.
-     *
-     * @param  array                                     $data
-     * @param  \App\Models\Feature\FeatureSubcategory|null  $subcategory
-     * @return array
-     */
-    private function populateSubcategoryData($data, $subcategory = null)
-    {
-        if(isset($data['description']) && $data['description']) $data['parsed_description'] = parse($data['description']);
-        
-        if(isset($data['remove_image']))
-        {
-            if($subcategory && $subcategory->has_image && $data['remove_image']) 
-            { 
-                $data['has_image'] = 0; 
-                $this->deleteImage($subcategory->subcategoryImagePath, $subcategory->subcategoryImageFileName); 
-            }
-            unset($data['remove_image']);
-        }
-
-        return $data;
     }
 
     /**
      * Delete a subcategory.
      *
-     * @param  \App\Models\Feature\FeatureSubcategory  $subcategory
+     * @param \App\Models\Feature\FeatureSubcategory $subcategory
+     *
      * @return bool
      */
-    public function deleteFeatureSubcategory($subcategory)
-    {
+    public function deleteFeatureSubcategory($subcategory) {
         DB::beginTransaction();
 
         try {
             // Check first if the subcategory is currently in use
-            if(Feature::where('feature_subcategory_id', $subcategory->id)->exists()) throw new \Exception("A trait with this subcategory exists. Please change its subcategory first.");
-            
-            if($subcategory->has_image) $this->deleteImage($subcategory->subcategoryImagePath, $subcategory->subcategoryImageFileName); 
+            if (Feature::where('feature_subcategory_id', $subcategory->id)->exists()) {
+                throw new \Exception('A trait with this subcategory exists. Please change its subcategory first.');
+            }
+
+            if ($subcategory->has_image) {
+                $this->deleteImage($subcategory->subcategoryImagePath, $subcategory->subcategoryImageFileName);
+            }
             $subcategory->delete();
 
             return $this->commitReturn(true);
-        } catch(\Exception $e) { 
+        } catch (\Exception $e) {
             $this->setError('error', $e->getMessage());
         }
+
         return $this->rollbackReturn(false);
     }
 
     /**
      * Sorts subcategory order.
      *
-     * @param  array  $data
+     * @param array $data
+     *
      * @return bool
      */
-    public function sortFeatureSubcategory($data)
-    {
+    public function sortFeatureSubcategory($data) {
         DB::beginTransaction();
 
         try {
             // explode the sort array and reverse it since the order is inverted
             $sort = array_reverse(explode(',', $data));
 
-            foreach($sort as $key => $s) {
+            foreach ($sort as $key => $s) {
                 FeatureSubcategory::where('id', $s)->update(['sort' => $key]);
             }
 
             return $this->commitReturn(true);
-        } catch(\Exception $e) { 
+        } catch (\Exception $e) {
             $this->setError('error', $e->getMessage());
         }
+
         return $this->rollbackReturn(false);
     }
-    
+
     /**********************************************************************************************
 
         FEATURES
@@ -362,6 +327,7 @@ class FeatureService extends Service {
      *
      * @param array                 $data
      * @param \App\Models\User\User $user
+     * @param mixed|null            $parent
      *
      * @return \App\Models\Feature\Feature|bool
      */
@@ -369,19 +335,36 @@ class FeatureService extends Service {
         DB::beginTransaction();
 
         try {
-            if(isset($data['feature_category_id']) && $data['feature_category_id'] == 'none') $data['feature_category_id'] = null;
-            if(isset($data['feature_subcategory_id']) && $data['feature_subcategory_id'] == 'none') $data['feature_subcategory_id'] = null;
-            if(isset($data['species_id']) && $data['species_id'] == 'none') $data['species_id'] = null;
-            if(isset($data['subtype_id']) && $data['subtype_id'] == 'none') $data['subtype_id'] = null;
+            if (isset($data['feature_category_id']) && $data['feature_category_id'] == 'none') {
+                $data['feature_category_id'] = null;
+            }
+            if (isset($data['feature_subcategory_id']) && $data['feature_subcategory_id'] == 'none') {
+                $data['feature_subcategory_id'] = null;
+            }
+            if (isset($data['species_id']) && $data['species_id'] == 'none') {
+                $data['species_id'] = null;
+            }
+            if (isset($data['subtype_id']) && $data['subtype_id'] == 'none') {
+                $data['subtype_id'] = null;
+            }
 
-            if((isset($data['feature_category_id']) && $data['feature_category_id']) && !FeatureCategory::where('id', $data['feature_category_id'])->exists()) throw new \Exception("The selected trait category is invalid.");
-            if((isset($data['feature_subcategory_id']) && $data['feature_subcategory_id']) && !FeatureCategory::where('id', $data['feature_subcategory_id'])->exists()) throw new \Exception("The selected trait subcategory is invalid.");
-            if((isset($data['species_id']) && $data['species_id']) && !Species::where('id', $data['species_id'])->exists()) throw new \Exception("The selected species is invalid.");
-            if(isset($data['subtype_id']) && $data['subtype_id'])
-            {
+            if ((isset($data['feature_category_id']) && $data['feature_category_id']) && !FeatureCategory::where('id', $data['feature_category_id'])->exists()) {
+                throw new \Exception('The selected trait category is invalid.');
+            }
+            if ((isset($data['feature_subcategory_id']) && $data['feature_subcategory_id']) && !FeatureCategory::where('id', $data['feature_subcategory_id'])->exists()) {
+                throw new \Exception('The selected trait subcategory is invalid.');
+            }
+            if ((isset($data['species_id']) && $data['species_id']) && !Species::where('id', $data['species_id'])->exists()) {
+                throw new \Exception('The selected species is invalid.');
+            }
+            if (isset($data['subtype_id']) && $data['subtype_id']) {
                 $subtype = Subtype::find($data['subtype_id']);
-                if(!(isset($data['species_id']) && $data['species_id'])) throw new \Exception('Species must be selected to select a subtype.');
-                if(!$subtype || $subtype->species_id != $data['species_id']) throw new \Exception('Selected subtype invalid or does not match species.');
+                if (!(isset($data['species_id']) && $data['species_id'])) {
+                    throw new \Exception('Species must be selected to select a subtype.');
+                }
+                if (!$subtype || $subtype->species_id != $data['species_id']) {
+                    throw new \Exception('Selected subtype invalid or does not match species.');
+                }
             }
             if (isset($data['species_id']) && $data['species_id'] == 'none') {
                 $data['species_id'] = null;
@@ -407,17 +390,18 @@ class FeatureService extends Service {
             }
 
             // An alt type of a feature should not have the same name as an unrelated feature
-            if($parent && Feature::where('name', $data['name'])
-            ->where('id', '!=', $parent->id)
-            ->whereNotIn('id', $parent->altTypes()->pluck('id')->toArray())
-            ->exists() ||
+            if ($parent && Feature::where('name', $data['name'])
+                ->where('id', '!=', $parent->id)
+                ->whereNotIn('id', $parent->altTypes()->pluck('id')->toArray())
+                ->exists() ||
             // An alt type of a feature should not have the same name
             // as a feature with the same rarity and species
-            Feature::where('name', $data['name'])->where(function($query) use ($data) {
+            Feature::where('name', $data['name'])->where(function ($query) use ($data) {
                 return $query->where('rarity_id', $data['rarity_id'])
-                ->where('species_id', $data['species_id']);
-            })->exists())
-                throw new \Exception("The name has already been taken.");
+                    ->where('species_id', $data['species_id']);
+            })->exists()) {
+                throw new \Exception('The name has already been taken.');
+            }
 
             $data = $this->populateData($data);
 
@@ -455,6 +439,7 @@ class FeatureService extends Service {
      * @param Feature               $feature
      * @param array                 $data
      * @param \App\Models\User\User $user
+     * @param mixed|null            $parent
      *
      * @return \App\Models\Feature\Feature|bool
      */
@@ -465,7 +450,7 @@ class FeatureService extends Service {
             if (isset($data['feature_category_id']) && $data['feature_category_id'] == 'none') {
                 $data['feature_category_id'] = null;
             }
-            if(isset($data['feature_subcategory_id']) && $data['feature_subcategory_id'] == 'none') {
+            if (isset($data['feature_subcategory_id']) && $data['feature_subcategory_id'] == 'none') {
                 $data['feature_subcategory_id'] = null;
             }
             if (isset($data['species_id']) && $data['species_id'] == 'none') {
@@ -476,32 +461,39 @@ class FeatureService extends Service {
             }
 
             // More specific validation
-            if(
+            if (
                 // Two completely separate features should not have the same name
                 // But alt types of this feature should be able
                 (!$parent && Feature::where('name', $data['name'])->where('id', '!=', $feature->id)->where('parent_id', '!=', $feature->id)->exists()) ||
                 // An alt type of a feature should not have the same name as an unrelated feature
                 ($parent && Feature::where('name', $data['name'])
-                ->where('id', '!=', $feature->id)
-                ->where('id', '!=', $parent->id)
-                ->whereNotIn('id', $parent->altTypes()->pluck('id')->toArray())
-                ->exists()) ||
+                    ->where('id', '!=', $feature->id)
+                    ->where('id', '!=', $parent->id)
+                    ->whereNotIn('id', $parent->altTypes()->pluck('id')->toArray())
+                    ->exists()) ||
                 // An alt type of a feature should not have the same name
                 // as a feature with the same rarity or species
                 ($parent && Feature::where('name', $data['name'])
-                ->where('id', '!=', $feature->id)
-                ->whereNotIn('id', $parent->altTypes()->pluck('id')->toArray())
-                ->where(function($query) use ($data) {
-                    return $query->where('rarity_id', $data['rarity_id'])
-                    ->where('species_id', $data['species_id']);
-                })->exists())
-            ) throw new \Exception("The name has already been taken.");
+                    ->where('id', '!=', $feature->id)
+                    ->whereNotIn('id', $parent->altTypes()->pluck('id')->toArray())
+                    ->where(function ($query) use ($data) {
+                        return $query->where('rarity_id', $data['rarity_id'])
+                            ->where('species_id', $data['species_id']);
+                    })->exists())
+            ) {
+                throw new \Exception('The name has already been taken.');
+            }
 
-            if((isset($data['feature_category_id']) && $data['feature_category_id']) && !FeatureCategory::where('id', $data['feature_category_id'])->exists()) throw new \Exception("The selected trait category is invalid.");
-            if((isset($data['feature_subcategory_id']) && $data['feature_subcategory_id']) && !FeatureCategory::where('id', $data['feature_subcategory_id'])->exists()) throw new \Exception("The selected trait subcategory is invalid.");
-            if((isset($data['species_id']) && $data['species_id']) && !Species::where('id', $data['species_id'])->exists()) throw new \Exception("The selected species is invalid.");
-            if(isset($data['subtype_id']) && $data['subtype_id'])
-            {
+            if ((isset($data['feature_category_id']) && $data['feature_category_id']) && !FeatureCategory::where('id', $data['feature_category_id'])->exists()) {
+                throw new \Exception('The selected trait category is invalid.');
+            }
+            if ((isset($data['feature_subcategory_id']) && $data['feature_subcategory_id']) && !FeatureCategory::where('id', $data['feature_subcategory_id'])->exists()) {
+                throw new \Exception('The selected trait subcategory is invalid.');
+            }
+            if ((isset($data['species_id']) && $data['species_id']) && !Species::where('id', $data['species_id'])->exists()) {
+                throw new \Exception('The selected species is invalid.');
+            }
+            if (isset($data['subtype_id']) && $data['subtype_id']) {
                 $subtype = Subtype::find($data['subtype_id']);
                 if (!(isset($data['species_id']) && $data['species_id'])) {
                     throw new \Exception('Species must be selected to select a subtype.');
@@ -532,51 +524,56 @@ class FeatureService extends Service {
             }
 
             // Handle alternate types
-            if(isset($data['alt']) && !$parent) {
-                foreach($data['alt']['id'] as $key=>$alt) {
+            if (isset($data['alt']) && !$parent) {
+                foreach ($data['alt']['id'] as $key=>$alt) {
                     // Collect data for the alt type
                     $altData[$key] = [
-                        'id' => $alt ? $alt : null,
-                        'parent_id' => $feature->id,
+                        'id'                  => $alt ? $alt : null,
+                        'parent_id'           => $feature->id,
                         'feature_category_id' => $data['alt']['feature_category_id'][$key],
-                        'name' => $data['alt']['name'][$key],
-                        'display_mode' => $data['alt']['display_mode'][$key],
-                        'rarity_id' => $data['alt']['rarity_id'][$key],
-                        'species_id' => $data['alt']['species_id'][$key],
-                        'subtype_id' => $data['alt']['subtype_id'][$key],
-                        'description' => $alt ? $data['alt']['description'][$key] : null,
-                        'display_separate' => $alt ? (isset($data['alt']['display_separate'][$key]) ? 1 : 0) : 1,
-                        'image' => isset($data['alt']['image'][$key]) ? $data['alt']['image'][$key] : null,
-                        'remove_image' => $alt ? (isset($data['alt']['remove_image'][$key]) ? 1 : 0) : 0,
+                        'name'                => $data['alt']['name'][$key],
+                        'display_mode'        => $data['alt']['display_mode'][$key],
+                        'rarity_id'           => $data['alt']['rarity_id'][$key],
+                        'species_id'          => $data['alt']['species_id'][$key],
+                        'subtype_id'          => $data['alt']['subtype_id'][$key],
+                        'description'         => $alt ? $data['alt']['description'][$key] : null,
+                        'display_separate'    => $alt ? (isset($data['alt']['display_separate'][$key]) ? 1 : 0) : 1,
+                        'image'               => $data['alt']['image'][$key] ?? null,
+                        'remove_image'        => $alt ? (isset($data['alt']['remove_image'][$key]) ? 1 : 0) : 0,
                     ];
 
                     // If the ID is already set, modify the existing feature
-                    if($alt) {
+                    if ($alt) {
                         $altFeature = Feature::where('id', $alt)->first();
-                        if(!$altFeature) throw new \Exception('Failed to locate alternate type.');
+                        if (!$altFeature) {
+                            throw new \Exception('Failed to locate alternate type.');
+                        }
 
-                        if(!$this->updateFeature($altFeature, $altData[$key], $user, $feature))
+                        if (!$this->updateFeature($altFeature, $altData[$key], $user, $feature)) {
                             throw new \Exception('Failed to update alternate type.');
+                        }
                     }
                     // Otherwise create the feature
-                    else
-                        if(!$this->createFeature($altData[$key], $user, $feature))
-                            throw new \Exception('Failed to create alternate type.');
+                    elseif (!$this->createFeature($altData[$key], $user, $feature)) {
+                        throw new \Exception('Failed to create alternate type.');
+                    }
                 }
 
                 // Check for removed alt types
-                if($feature->altTypes()->whereNotIn('id', $data['alt']['id'])) {
-                    foreach($feature->altTypes()->whereNotIn('id', $data['alt']['id'])->get() as $deletedType) {
-                        if(!$this->deleteFeature($deletedType))
+                if ($feature->altTypes()->whereNotIn('id', $data['alt']['id'])) {
+                    foreach ($feature->altTypes()->whereNotIn('id', $data['alt']['id'])->get() as $deletedType) {
+                        if (!$this->deleteFeature($deletedType)) {
                             throw new \Exception('Failed to delete removed alternate type.');
+                        }
                     }
                 }
-            }
-            elseif($feature->altTypes->count() && !$parent) {
+            } elseif ($feature->altTypes->count() && !$parent) {
                 // Remove extant alt types
-                foreach($feature->altTypes as $altType)
-                    if(!$this->deleteFeature($altType))
+                foreach ($feature->altTypes as $altType) {
+                    if (!$this->deleteFeature($altType)) {
                         throw new \Exception('Failed to delete alternate type(s).');
+                    }
+                }
             }
 
             return $this->commitReturn($feature);
@@ -588,28 +585,92 @@ class FeatureService extends Service {
     }
 
     /**
+     * Processes user input for creating/updating a feature.
+     *
+     * @param Feature $feature
+     *
+     * @return array
+     */
+    public function deleteFeature($feature) {
+        DB::beginTransaction();
+
+        try {
+            // Check first if the feature is currently in use
+            if (DB::table('character_features')->where('feature_id', $feature->id)->exists()) {
+                throw new \Exception('A character with this trait exists. Please remove the trait first.');
+            }
+
+            if ($feature->has_image) {
+                $this->deleteImage($feature->imagePath, $feature->imageFileName);
+            }
+            $feature->delete();
+
+            return $this->commitReturn(true);
+        } catch (\Exception $e) {
+            $this->setError('error', $e->getMessage());
+        }
+
+        return $this->rollbackReturn(false);
+    }
+
+    /**
+     * Deletes a feature.
+     *
+     * @param \App\Models\Feature\Feature $feature
+     * @param mixed                       $check
+     *
+     * @return bool
+     */
+    public function deleteMassFeature($feature, $check) {
+        DB::beginTransaction();
+
+        try {
+            if (!$check || $check != 1) {
+                throw new \Exception('Error confirming');
+            }
+            // Check first if the feature is currently in use
+            $features = CharacterFeature::where('feature_id', $feature->id);
+
+            $count = $features->count();
+
+            foreach ($features as $featured) {
+                $featured->delete();
+            }
+
+            if ($count) {
+                flash($count.' characters had this trait deleted.');
+            } else {
+                flash('0 Characters had this trait.');
+            }
+
+            if ($feature->has_image) {
+                $this->deleteImage($feature->imagePath, $feature->imageFileName);
+            }
+            $feature->delete();
+
+            return $this->commitReturn(true);
+        } catch (\Exception $e) {
+            $this->setError('error', $e->getMessage());
+        }
+    }
+
+    /**
      * Handle category data.
      *
      * @param array                                    $data
      * @param \App\Models\Feature\FeatureCategory|null $category
      *
-     * @param  array                        $data
-     * @param  \App\Models\Feature\Feature  $feature
      * @return array
      */
-    private function populateData($data, $feature = null)
-    {
-        if(isset($data['description']) && $data['description']) $data['parsed_description'] = parse($data['description']);
-        else $data['parsed_description'] = null;
-        if(isset($data['species_id']) && $data['species_id'] == 'none') $data['species_id'] = null;
-        if(isset($data['feature_category_id']) && $data['feature_category_id'] == 'none') $data['feature_category_id'] = null;
-        if(isset($data['feature_subcategory_id']) && $data['feature_subcategory_id'] == 'none') $data['feature_subcategory_id'] = null;
-        if(isset($data['remove_image']))
-        {
-            if($feature && $feature->has_image && $data['remove_image'])
-            {
+    private function populateCategoryData($data, $category = null) {
+        if (isset($data['description']) && $data['description']) {
+            $data['parsed_description'] = parse($data['description']);
+        }
+
+        if (isset($data['remove_image'])) {
+            if ($category && $category->has_image && $data['remove_image']) {
                 $data['has_image'] = 0;
-                $this->deleteImage($feature->imagePath, $feature->imageFileName);
+                $this->deleteImage($category->categoryImagePath, $category->categoryImageFileName);
             }
             unset($data['remove_image']);
         }
@@ -618,62 +679,61 @@ class FeatureService extends Service {
     }
 
     /**
-     * Processes user input for creating/updating a feature.
+     * Handle subcategory data.
      *
-     * @param array   $data
-     * @param Feature $feature
+     * @param array                                       $data
+     * @param \App\Models\Feature\FeatureSubcategory|null $subcategory
      *
      * @return array
      */
-    public function deleteFeature($feature)
-    {
-        DB::beginTransaction();
-
-        try {
-            // Check first if the feature is currently in use
-            if(DB::table('character_features')->where('feature_id', $feature->id)->exists()) throw new \Exception("A character with this trait exists. Please remove the trait first.");
-
-            if($feature->has_image) $this->deleteImage($feature->imagePath, $feature->imageFileName);
-            $feature->delete();
-
-            return $this->commitReturn(true);
-        } catch(\Exception $e) {
-            $this->setError('error', $e->getMessage());
+    private function populateSubcategoryData($data, $subcategory = null) {
+        if (isset($data['description']) && $data['description']) {
+            $data['parsed_description'] = parse($data['description']);
         }
-        return $this->rollbackReturn(false);
+
+        if (isset($data['remove_image'])) {
+            if ($subcategory && $subcategory->has_image && $data['remove_image']) {
+                $data['has_image'] = 0;
+                $this->deleteImage($subcategory->subcategoryImagePath, $subcategory->subcategoryImageFileName);
+            }
+            unset($data['remove_image']);
+        }
+
+        return $data;
     }
 
-        /**
-     * Deletes a feature.
+    /**
+     * Handle category data.
      *
-     * @param  \App\Models\Feature\Feature  $feature
-     * @return bool
+     * @param array                       $data
+     * @param array                       $data
+     * @param \App\Models\Feature\Feature $feature
+     *
+     * @return array
      */
-    public function deleteMassFeature($feature, $check)
-    {
-        DB::beginTransaction();
-
-        try {
-            if(!$check || $check != 1) throw new \Exception('Error confirming');
-            // Check first if the feature is currently in use
-            $features = CharacterFeature::where('feature_id', $feature->id);
-            
-            $count = $features->count();
-            
-            foreach($features as $featured)
-            {
-                $featured->delete();
+    private function populateData($data, $feature = null) {
+        if (isset($data['description']) && $data['description']) {
+            $data['parsed_description'] = parse($data['description']);
+        } else {
+            $data['parsed_description'] = null;
+        }
+        if (isset($data['species_id']) && $data['species_id'] == 'none') {
+            $data['species_id'] = null;
+        }
+        if (isset($data['feature_category_id']) && $data['feature_category_id'] == 'none') {
+            $data['feature_category_id'] = null;
+        }
+        if (isset($data['feature_subcategory_id']) && $data['feature_subcategory_id'] == 'none') {
+            $data['feature_subcategory_id'] = null;
+        }
+        if (isset($data['remove_image'])) {
+            if ($feature && $feature->has_image && $data['remove_image']) {
+                $data['has_image'] = 0;
+                $this->deleteImage($feature->imagePath, $feature->imageFileName);
             }
+            unset($data['remove_image']);
+        }
 
-            if($count) flash($count . ' characters had this trait deleted.');
-            else flash('0 Characters had this trait.');
-            
-            if($feature->has_image) $this->deleteImage($feature->imagePath, $feature->imageFileName); 
-            $feature->delete();
-
-            return $this->commitReturn(true);
-        } catch(\Exception $e) {
-            $this->setError('error', $e->getMessage());
-}
+        return $data;
     }
 }

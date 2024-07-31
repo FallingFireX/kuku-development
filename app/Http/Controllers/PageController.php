@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\SitePage;
-use App\Models\SiteCreds;
 use Illuminate\Support\Facades\DB;
 
 class PageController extends Controller {
@@ -40,7 +39,7 @@ class PageController extends Controller {
     public function getCreditsPage() {
         return view('pages.credits', [
             'credits'    => SitePage::where('key', 'credits')->first(),
-            'creds' => DB::table('site_creds')->get(),
+            'creds'      => DB::table('site_creds')->get(),
             'extensions' => DB::table('site_extensions')->get(),
         ]);
     }

@@ -2,29 +2,15 @@
 
 namespace App\Models\Character;
 
-use Config;
-use DB;
-use Settings;
-
-use App\Models\Character\Character;
-use App\Models\Character\CharacterCategory;
-use App\Models\Character\CharacterTransfer;
-use App\Models\Character\CharacterBookmark;
-use App\Models\Character\CharacterLineage;
-use App\Models\Character\CharacterLineageBlacklist;
-
-use App\Models\Character\CharacterCurrency;
 use App\Facades\Notifications;
+
+use App\Models\Award\Award;
+use App\Models\Award\AwardLog;
 use App\Models\Currency\Currency;
 use App\Models\Currency\CurrencyLog;
 use App\Models\Gallery\GalleryCharacter;
 use App\Models\Item\Item;
 use App\Models\Item\ItemLog;
-use App\Models\Award\Award;
-use App\Models\Award\AwardLog;
-
-use App\Models\Status\StatusEffect;
-use App\Models\Status\StatusEffectLog;
 use App\Models\Level\LevelLog;
 use App\Models\Model;
 use App\Models\Rarity;
@@ -33,6 +19,8 @@ use App\Models\Stat\ExpLog;
 use App\Models\Stat\Stat;
 use App\Models\Stat\StatLog;
 use App\Models\Stat\StatTransferLog;
+use App\Models\Status\StatusEffect;
+use App\Models\Status\StatusEffectLog;
 use App\Models\Submission\Submission;
 use App\Models\Submission\SubmissionCharacter;
 use App\Models\Trade;
@@ -40,8 +28,7 @@ use App\Models\User\User;
 use App\Models\User\UserCharacterLog;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\SoftDeletes;
-
-use App\Models\Character\CharacterTransformation as Transformation;
+use Settings;
 
 class Character extends Model {
     use SoftDeletes;
@@ -258,27 +245,25 @@ class Character extends Model {
     public function items() {
         return $this->belongsToMany(Item::class, 'character_items')->withPivot('count', 'data', 'updated_at', 'id')->whereNull('character_items.deleted_at');
     }
+
     /**
      * Get the character's awards.
      */
-    public function awards()
-    {
+    public function awards() {
         return $this->belongsToMany('App\Models\Award\Award', 'character_awards')->withPivot('count', 'data', 'updated_at', 'id')->whereNull('character_awards.deleted_at');
     }
 
     /**
      * Get the lineage of the character.
      */
-    public function lineage()
-    {
+    public function lineage() {
         return $this->hasOne('App\Models\Character\CharacterLineage', 'character_id');
     }
 
     /**
      * Get the character's associated breeding permissions.
      */
-    public function breedingPermissions()
-    {
+    public function breedingPermissions() {
         return $this->hasMany('App\Models\Character\BreedingPermission', 'character_id');
     }
 
@@ -423,8 +408,7 @@ class Character extends Model {
      *
      * @return string
      */
-    public function getGenotypeAttribute()
-    {
+    public function getGenotypeAttribute() {
         return $this->genotype;
     }
 
@@ -433,8 +417,7 @@ class Character extends Model {
      *
      * @return string
      */
-    public function getPhenotypeAttribute()
-    {
+    public function getPhenotypeAttribute() {
         return $this->phenotype;
     }
 
@@ -443,8 +426,7 @@ class Character extends Model {
      *
      * @return string
      */
-    public function getGenderAttribute()
-    {
+    public function getGenderAttribute() {
         return $this->gender;
     }
 
@@ -498,10 +480,12 @@ class Character extends Model {
      *
      * @return int
      */
-    public function getMaxBreedingPermissionsAttribute()
-    {
+    public function getMaxBreedingPermissionsAttribute() {
         $currencies = $this->getCurrencies(true)->where('id', Settings::get('breeding_permission_currency'))->first();
-        if(!$currencies) return 0;
+        if (!$currencies) {
+            return 0;
+        }
+
         return $currencies->quantity;
     }
 
@@ -510,8 +494,7 @@ class Character extends Model {
      *
      * @return int
      */
-    public function getAvailableBreedingPermissionsAttribute()
-    {
+    public function getAvailableBreedingPermissionsAttribute() {
         return $this->maxBreedingPermissions - $this->breedingPermissions->count();
     }
 
@@ -689,8 +672,7 @@ class Character extends Model {
      *
      * @return \Illuminate\Support\Collection
      */
-    public function getStatusEffects()
-    {
+    public function getStatusEffects() {
         // Get a list of status effects that need to be displayed
 
         $owned = CharacterStatusEffect::where('character_id', $this->id)->pluck('quantity', 'status_effect_id')->toArray();
@@ -699,11 +681,11 @@ class Character extends Model {
 
         $statuses = $statuses->orderBy('name', 'DESC')->get();
 
-        foreach($statuses as $status) {
-            $status->quantity = isset($owned[$status->id]) ? $owned[$status->id] : 0;
+        foreach ($statuses as $status) {
+            $status->quantity = $owned[$status->id] ?? 0;
         }
 
-        $statuses = $statuses->filter(function($status) {
+        $statuses = $statuses->filter(function ($status) {
             return $status->quantity > 0;
         });
 
@@ -734,19 +716,22 @@ class Character extends Model {
     /**
      * Get the character's status effect logs.
      *
-     * @param  int  $limit
-     * @return \Illuminate\Support\Collection|\Illuminate\Pagination\LengthAwarePaginator
+     * @param int $limit
+     *
+     * @return \Illuminate\Pagination\LengthAwarePaginator|\Illuminate\Support\Collection
      */
-    public function getStatusEffectLogs($limit = 10)
-    {
+    public function getStatusEffectLogs($limit = 10) {
         $character = $this;
-        $query = StatusEffectLog::with('status')->where(function($query) use ($character) {
+        $query = StatusEffectLog::with('status')->where(function ($query) use ($character) {
             $query->with('recipient.rank')->where('sender_type', 'Character')->where('sender_id', $character->id)->where('log_type', '!=', 'Staff Grant');
-        })->orWhere(function($query) use ($character) {
+        })->orWhere(function ($query) use ($character) {
             $query->with('recipient.rank')->where('recipient_type', 'Character')->where('recipient_id', $character->id)->where('log_type', '!=', 'Staff Removal');
         })->orderBy('id', 'DESC');
-        if($limit) return $query->take($limit)->get();
-        else return $query->paginate(30);
+        if ($limit) {
+            return $query->take($limit)->get();
+        } else {
+            return $query->paginate(30);
+        }
     }
 
     /**
@@ -775,21 +760,24 @@ class Character extends Model {
     /**
      * Get the character's award logs.
      *
-     * @param  int  $limit
-     * @return \Illuminate\Support\Collection|\Illuminate\Pagination\LengthAwarePaginator
+     * @param int $limit
+     *
+     * @return \Illuminate\Pagination\LengthAwarePaginator|\Illuminate\Support\Collection
      */
-    public function getAwardLogs($limit = 10)
-    {
+    public function getAwardLogs($limit = 10) {
         $character = $this;
 
-        $query = AwardLog::with('award')->where(function($query) use ($character) {
+        $query = AwardLog::with('award')->where(function ($query) use ($character) {
             $query->with('sender.rank')->where('sender_type', 'Character')->where('sender_id', $character->id)->where('log_type', '!=', 'Staff Grant');
-        })->orWhere(function($query) use ($character) {
+        })->orWhere(function ($query) use ($character) {
             $query->with('recipient.rank')->where('recipient_type', 'Character')->where('recipient_id', $character->id)->where('log_type', '!=', 'Staff Removal');
         })->orderBy('id', 'DESC');
 
-        if($limit) return $query->take($limit)->get();
-        else return $query->paginate(30);
+        if ($limit) {
+            return $query->take($limit)->get();
+        } else {
+            return $query->paginate(30);
+        }
     }
 
     /**
@@ -895,12 +883,13 @@ class Character extends Model {
      * Finds the lineage blacklist level of this character.
      * 0 is no restriction at all
      * 1 is no ancestors but no children
-     * 2 is no lineage at all
+     * 2 is no lineage at all.
+     *
+     * @param mixed $maxLevel
      *
      * @return int
      */
-    public function getLineageBlacklistLevel($maxLevel = 2)
-    {
+    public function getLineageBlacklistLevel($maxLevel = 2) {
         return CharacterLineageBlacklist::getBlacklistLevel($this, $maxLevel);
     }
 

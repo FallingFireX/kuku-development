@@ -12,7 +12,7 @@ class LootTable extends Model {
      * @var array
      */
     protected $fillable = [
-        'name', 'display_name', 'data'
+        'name', 'display_name', 'data',
     ];
 
     /**
@@ -36,8 +36,8 @@ class LootTable extends Model {
      * @var array
      */
     public static $createRules = [
-        'name'         => 'required',
-        'display_name' => 'required',
+        'name'                => 'required',
+        'display_name'        => 'required',
         'subtable_criteria.*' => 'required_with:subtable_status_id.*',
         'subtable_quantity.*' => 'required_with:subtable_quantity.*',
     ];
@@ -48,8 +48,8 @@ class LootTable extends Model {
      * @var array
      */
     public static $updateRules = [
-        'name'         => 'required',
-        'display_name' => 'required',
+        'name'                => 'required',
+        'display_name'        => 'required',
         'subtable_criteria.*' => 'required_with:subtable_status_id.*',
         'subtable_quantity.*' => 'required_with:subtable_quantity.*',
     ];

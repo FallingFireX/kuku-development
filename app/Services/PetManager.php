@@ -314,7 +314,7 @@ class PetManager extends Service {
             if (!$pet->level && config('lorekeeper.pet_bonding_enabled')) {
                 $pet->level()->create([
                     'bonding_level'   => 0,
-                    'bonding' => 0,
+                    'bonding'         => 0,
                 ]);
             }
 
@@ -359,12 +359,14 @@ class PetManager extends Service {
 
     /**
      * Bonds with a pet.
+     *
+     * @param mixed $pet
+     * @param mixed $user
      */
     public function bondPet($pet, $user) {
         DB::beginTransaction();
 
         try {
-
             if (!config('lorekeeper.pets.pet_bonding_enabled')) {
                 throw new \Exception('Pet bonding is not enabled.');
             }
@@ -379,7 +381,7 @@ class PetManager extends Service {
             if (!$pet->level) {
                 $pet->level()->create([
                     'bonding_level'   => 0,
-                    'bonding' => 0,
+                    'bonding'         => 0,
                 ]);
                 $pet = $pet->fresh();
             }
@@ -409,7 +411,7 @@ class PetManager extends Service {
                     // function fillUserAssets($assets, $sender, $recipient, $logType, $data) {
                     fillUserAssets($assets, null, $pet->user, 'Pet Level Up', ['data' => 'Received rewards from leveling up '.$pet->pet->name]);
 
-                    flash('You received: '. createRewardsString($assets))->success();
+                    flash('You received: '.createRewardsString($assets))->success();
                 }
 
                 // level up
@@ -598,6 +600,7 @@ class PetManager extends Service {
      * @param \App\Models\Pet\Pet   $pet
      * @param int                   $quantity
      * @param mixed                 $variant_id
+     * @param mixed|null            $evolution_id
      *
      * @return bool
      */
@@ -633,10 +636,10 @@ class PetManager extends Service {
                 }
 
                 $user_pet = UserPet::create([
-                    'user_id'    => $recipient->id,
-                    'pet_id'     => $pet->id,
-                    'data'       => json_encode($data),
-                    'variant_id' => $variant?->id,
+                    'user_id'      => $recipient->id,
+                    'pet_id'       => $pet->id,
+                    'data'         => json_encode($data),
+                    'variant_id'   => $variant?->id,
                     'evolution_id' => $evolution?->id,
                 ]);
             }
@@ -702,7 +705,6 @@ class PetManager extends Service {
     /**
      * Debits an pet from a user.
      *
-
      * @param \App\Models\User\User   $user
      * @param string                  $type
      * @param array                   $data

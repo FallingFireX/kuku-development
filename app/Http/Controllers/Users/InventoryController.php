@@ -154,24 +154,6 @@ class InventoryController extends Controller {
     }
 
     /**
-     * Donates an inventory stack.
-     *
-     * @param  \Illuminate\Http\Request       $request
-     * @param  App\Services\InventoryManager  $service
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    private function postDonate(Request $request, InventoryManager $service)
-    {
-        if($service->donateStack(Auth::user(), UserItem::find($request->get('ids')), $request->get('quantities'))) {
-            flash('Item donated successfully.')->success();
-        }
-        else {
-            foreach($service->errors()->getMessages()['error'] as $error) flash($error)->error();
-        }
-        return redirect()->back();
-    }
-
-    /**
      * Shows the inventory selection widget.
      *
      * @param int $id
@@ -298,6 +280,25 @@ class InventoryController extends Controller {
     public function postConsolidateInventory(Request $request, InventoryManager $service) {
         if ($service->consolidateInventory(Auth::user())) {
             flash('Inventory consolidated.')->success();
+        } else {
+            foreach ($service->errors()->getMessages()['error'] as $error) {
+                flash($error)->error();
+            }
+        }
+
+        return redirect()->back();
+    }
+
+    /**
+     * Donates an inventory stack.
+     *
+     * @param App\Services\InventoryManager $service
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    private function postDonate(Request $request, InventoryManager $service) {
+        if ($service->donateStack(Auth::user(), UserItem::find($request->get('ids')), $request->get('quantities'))) {
+            flash('Item donated successfully.')->success();
         } else {
             foreach ($service->errors()->getMessages()['error'] as $error) {
                 flash($error)->error();

@@ -15,7 +15,7 @@ class Feature extends Model {
      * @var array
      */
     protected $fillable = [
-        'feature_category_id', 'species_id', 'subtype_id', 'rarity_id', 'name', 'has_image', 'description', 'parsed_description', 'parent_id', 'is_visible', 'hash','feature_subcategory_id',
+        'feature_category_id', 'species_id', 'subtype_id', 'rarity_id', 'name', 'has_image', 'description', 'parsed_description', 'parent_id', 'is_visible', 'hash', 'feature_subcategory_id',
     ];
 
     /**
@@ -30,13 +30,13 @@ class Feature extends Model {
      * @var array
      */
     public static $createRules = [
-        'feature_category_id' => 'nullable',
-        'species_id'          => 'nullable',
-        'subtype_id'          => 'nullable',
-        'rarity_id'           => 'required|exists:rarities,id',
-        'name'                => 'required|unique:features|between:3,100',
-        'description'         => 'nullable',
-        'image'               => 'mimes:png',
+        'feature_category_id'    => 'nullable',
+        'species_id'             => 'nullable',
+        'subtype_id'             => 'nullable',
+        'rarity_id'              => 'required|exists:rarities,id',
+        'name'                   => 'required|unique:features|between:3,100',
+        'description'            => 'nullable',
+        'image'                  => 'mimes:png',
         'feature_subcategory_id' => 'nullable',
     ];
 
@@ -46,13 +46,13 @@ class Feature extends Model {
      * @var array
      */
     public static $updateRules = [
-        'feature_category_id' => 'nullable',
-        'species_id'          => 'nullable',
-        'subtype_id'          => 'nullable',
-        'rarity_id'           => 'required|exists:rarities,id',
-        'name'                => 'required|between:3,100',
-        'description'         => 'nullable',
-        'image'               => 'mimes:png',
+        'feature_category_id'    => 'nullable',
+        'species_id'             => 'nullable',
+        'subtype_id'             => 'nullable',
+        'rarity_id'              => 'required|exists:rarities,id',
+        'name'                   => 'required|between:3,100',
+        'description'            => 'nullable',
+        'image'                  => 'mimes:png',
         'feature_subcategory_id' => 'nullable',
     ];
 
@@ -93,24 +93,21 @@ class Feature extends Model {
     /**
      * Get the parent of this feature, if present.
      */
-    public function parent()
-    {
+    public function parent() {
         return $this->belongsTo('App\Models\Feature\Feature', 'parent_id');
     }
 
     /**
      * Get alternate types of this feature.
      */
-    public function altTypes()
-    {
+    public function altTypes() {
         return $this->hasMany('App\Models\Feature\Feature', 'parent_id');
     }
 
     /**
      * Get the category the feature belongs to.
      */
-    public function subcategory()
-    {
+    public function subcategory() {
         return $this->belongsTo('App\Models\Feature\FeatureSubcategory', 'feature_subcategory_id');
     }
 
@@ -224,16 +221,17 @@ class Feature extends Model {
 
         return $query->where('is_visible', 1);
     }
-     /**
+
+    /**
      * Scope a query to sort features in subcategory order.
      *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @param  bool                                   $reverse
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     *
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeSortSubcategory($query)
-    {
+    public function scopeSortSubcategory($query) {
         $ids = FeatureSubcategory::orderBy('sort', 'DESC')->pluck('id')->toArray();
+
         return count($ids) ? $query->orderByRaw(DB::raw('FIELD(feature_subcategory_id, '.implode(',', $ids).')')) : $query;
     }
 
@@ -248,28 +246,30 @@ class Feature extends Model {
      *
      * @return string
      */
-    public function getDisplayNameAttribute()
-    {
-        if(($this->parent_id || $this->altTypes->count()) && $this->display_mode != 0) {
-            switch($this->display_mode) {
+    public function getDisplayNameAttribute() {
+        if (($this->parent_id || $this->altTypes->count()) && $this->display_mode != 0) {
+            switch ($this->display_mode) {
                 case 1:
                     $name = $this->name.' ('.($this->species ? $this->species->name : 'None').')';
                 case 2:
-                    if($this->subtype)
+                    if ($this->subtype) {
                         $name = $this->name.' ('.$this->subtype->name.')';
+                    }
                     break;
                 case 3:
-                    if($this->parent)
+                    if ($this->parent) {
                         $name = $this->parent->name.' ('.$this->name.')';
+                    }
                     break;
                 case 4:
-                    if($this->parent)
+                    if ($this->parent) {
                         $name = $this->name.' '.$this->parent->name;
+                    }
                     break;
             }
         }
 
-        return '<a href="'.($this->parent_id && !$this->display_separate ? $this->parent->url : $this->url).'" class="display-trait">'.(isset($name) ? $name : $this->name).'</a>'.($this->rarity? ' (' . $this->rarity->displayName . ')' : '');
+        return '<a href="'.($this->parent_id && !$this->display_separate ? $this->parent->url : $this->url).'" class="display-trait">'.($name ?? $this->name).'</a>'.($this->rarity ? ' ('.$this->rarity->displayName.')' : '');
     }
 
     /**
@@ -277,37 +277,44 @@ class Feature extends Model {
      *
      * @return string
      */
-    public function getSelectionNameAttribute()
-    {
-        if(($this->parent_id || $this->altTypes->count()) && $this->display_mode != 0) {
-            switch($this->display_mode) {
+    public function getSelectionNameAttribute() {
+        if (($this->parent_id || $this->altTypes->count()) && $this->display_mode != 0) {
+            switch ($this->display_mode) {
                 case 1:
                     $name = $this->name.' ('.($this->species ? $this->species->name : 'None').')';
                     break;
                 case 2:
-                    if($this->subtype)
+                    if ($this->subtype) {
                         $name = $this->name.' ('.$this->subtype->name.')';
+                    }
                     break;
                 case 3:
-                    if($this->parent)
+                    if ($this->parent) {
                         $name = $this->parent->name.' ('.$this->name.')';
+                    }
                     break;
                 case 4:
-                    if($this->parent)
+                    if ($this->parent) {
                         $name = $this->name.' '.$this->parent->name;
+                    }
                     break;
             }
         }
-        if(!isset($name)) $name = $this->name;
+        if (!isset($name)) {
+            $name = $this->name;
+        }
 
-        if($this->parent_id && $name == $this->parent->name) {
+        if ($this->parent_id && $name == $this->parent->name) {
             $diffArray = [];
-            if($this->rarity_id && $this->parent->rarity_id && $this->rarity_id != $this->parent->rarity_id)
+            if ($this->rarity_id && $this->parent->rarity_id && $this->rarity_id != $this->parent->rarity_id) {
                 $diffArray[] = $this->rarity->name;
-            if($this->species_id && $this->parent->species_id && $this->species_id != $this->parent->species_id)
+            }
+            if ($this->species_id && $this->parent->species_id && $this->species_id != $this->parent->species_id) {
                 $diffArray[] = $this->species->name;
-            if($this->subtype_id && $this->parent->subtype_id && $this->subtype_id != $this->parent->subtype_id)
+            }
+            if ($this->subtype_id && $this->parent->subtype_id && $this->subtype_id != $this->parent->subtype_id) {
                 $diffArray[] = $this->subtype->name;
+            }
 
             $name = $this->name.' ('.implode('/', $diffArray).')';
         }

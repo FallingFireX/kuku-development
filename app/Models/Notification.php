@@ -159,12 +159,12 @@ class Notification extends Model {
     public const GEAR_TRANSFER = 256;
     public const FORCED_GEAR_TRANSFER = 257;
     public const SKILL_GRANT = 258;
-    const AWARD_GRANT                       = 341;
-    const AWARD_REMOVAL                     = 342;
-    const AWARD_TRANSFER                    = 343;
-    const FORCED_AWARD_TRANSFER             = 344;
-    const CHARACTER_AWARD_GRANT             = 345;
-    const CHARACTER_AWARD_REMOVAL           = 346;
+    public const AWARD_GRANT = 341;
+    public const AWARD_REMOVAL = 342;
+    public const AWARD_TRANSFER = 343;
+    public const FORCED_AWARD_TRANSFER = 344;
+    public const CHARACTER_AWARD_GRANT = 345;
+    public const CHARACTER_AWARD_REMOVAL = 346;
     public const CHARACTER_ITEM_GRANT = 501;
     public const CHARACTER_ITEM_REMOVAL = 502;
     public const GALLERY_SUBMISSION_COLLABORATOR = 505;
@@ -178,11 +178,11 @@ class Notification extends Model {
     public const GALLERY_SUBMISSION_STAFF_COMMENTS = 513;
     public const GALLERY_SUBMISSION_EDITED = 514;
     public const GALLERY_SUBMISSION_PARTICIPANT = 515;
-    const BREEDING_PERMISSION_GRANTED         = 517;
-    const BREEDING_PERMISSION_USED            = 518;
-    const BREEDING_PERMISSION_TRANSFER        = 519;
-    const FORCED_BREEDING_PERMISSION_TRANSFER = 520;
-    const CHARACTER_STATUS_GRANT            = 521;
-    const CHARACTER_STATUS_REMOVAL          = 522;
-    const RECIPE_GRANT                      = 600; // Draginraptor - Crafting
+    public const BREEDING_PERMISSION_GRANTED = 517;
+    public const BREEDING_PERMISSION_USED = 518;
+    public const BREEDING_PERMISSION_TRANSFER = 519;
+    public const FORCED_BREEDING_PERMISSION_TRANSFER = 520;
+    public const CHARACTER_STATUS_GRANT = 521;
+    public const CHARACTER_STATUS_REMOVAL = 522;
+    public const RECIPE_GRANT = 600; // Draginraptor - Crafting
 }

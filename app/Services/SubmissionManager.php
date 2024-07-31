@@ -2,20 +2,18 @@
 
 namespace App\Services;
 
-
-use App\Models\User\UserAward;
 use App\Facades\Notifications;
 use App\Facades\Settings;
+use App\Models\Award\Award;
 use App\Models\Character\Character;
 use App\Models\Currency\Currency;
 use App\Models\Element\Element;
 use App\Models\Item\Item;
-use App\Models\Award\Award;
 use App\Models\Loot\LootTable;
 use App\Models\Prompt\Prompt;
+use App\Models\Raffle\Raffle;
 use App\Models\Recipe\Recipe;
 use App\Models\Status\StatusEffect;
-use App\Models\Raffle\Raffle;
 use App\Models\Submission\Submission;
 use App\Models\Submission\SubmissionCharacter;
 use App\Models\User\User;
@@ -103,36 +101,38 @@ class SubmissionManager extends Service {
             ]);
 
             // Retrieve all reward IDs for characters
-            $currencyIds = []; 
-            $itemIds = []; 
+            $currencyIds = [];
+            $itemIds = [];
             $tableIds = [];
-            $awardIds = []; 
+            $awardIds = [];
             $statusIds = [];
             $elementIds = [];
-            if(isset($data['character_currency_id'])) {
-                foreach($data['character_currency_id'] as $c)
-                {
-                    foreach($c as $currencyId) $currencyIds[] = $currencyId;
+            if (isset($data['character_currency_id'])) {
+                foreach ($data['character_currency_id'] as $c) {
+                    foreach ($c as $currencyId) {
+                        $currencyIds[] = $currencyId;
+                    }
                 } // Non-expanded character rewards
-            }
-            elseif(isset($data['character_rewardable_id']))
-            {
-                $data['character_rewardable_id'] = array_map(array($this, 'innerNull'),$data['character_rewardable_id']);
-                foreach($data['character_rewardable_id'] as $ckey => $c)
-                {
-                    foreach($c as $key => $id) {
-
-                        switch($data['character_rewardable_type'][$ckey][$key])
-                        {
-                            case 'Currency': $currencyIds[] = $id; break;
-                            case 'Item': $itemIds[] = $id; break;
-                            case 'StatusEffect': $statusIds[] = $id; break;
-                            case 'LootTable': $tableIds[] = $id; break;
+            } elseif (isset($data['character_rewardable_id'])) {
+                $data['character_rewardable_id'] = array_map([$this, 'innerNull'], $data['character_rewardable_id']);
+                foreach ($data['character_rewardable_id'] as $ckey => $c) {
+                    foreach ($c as $key => $id) {
+                        switch ($data['character_rewardable_type'][$ckey][$key]) {
+                            case 'Currency': $currencyIds[] = $id;
+                                break;
+                            case 'Item': $itemIds[] = $id;
+                                break;
+                            case 'StatusEffect': $statusIds[] = $id;
+                                break;
+                            case 'LootTable': $tableIds[] = $id;
+                                break;
                         }
                     }
                 } // Expanded character rewards
             }
-            array_unique($currencyIds);            array_unique($itemIds);            array_unique($tableIds);
+            array_unique($currencyIds);
+            array_unique($itemIds);
+            array_unique($tableIds);
             array_unique($statusIds);
             $currencies = Currency::whereIn('id', $currencyIds)->where('is_character_owned', 1)->get()->keyBy('id');
             $items = Item::whereIn('id', $itemIds)->get()->keyBy('id');
@@ -140,17 +140,16 @@ class SubmissionManager extends Service {
             $statuses = StatusEffect::whereIn('id', $statusIds)->get()->keyBy('id');
 
             // Attach characters
-            foreach($characters as $c)
-            {
+            foreach ($characters as $c) {
                 // Users might not pass in clean arrays (may contain redundant data) so we need to clean that up
                 $assets = $this->processRewards($data + ['character_id' => $c->id, 'currencies' => $currencies, 'items' => $items, 'tables' => $tables, 'statuses' => $statuses], true);
 
                 // Now we have a clean set of assets (redundant data is gone, duplicate entries are merged)
                 // so we can attach the character to the submission
                 SubmissionCharacter::create([
-                    'character_id' => $c->id,
+                    'character_id'  => $c->id,
                     'submission_id' => $submission->id,
-                    'data' => json_encode(getDataReadyAssets($assets))
+                    'data'          => json_encode(getDataReadyAssets($assets)),
                 ]);
             }
             // Set characters that have been attached.
@@ -460,7 +459,6 @@ class SubmissionManager extends Service {
             // Get the updated set of rewards
             $rewards = $this->processRewards($data, false, true);
 
-
             // Logging data
             $promptLogType = $submission->prompt_id ? 'Prompt Rewards' : 'Claim Rewards';
             $promptData = [
@@ -496,9 +494,9 @@ class SubmissionManager extends Service {
                                 break;
                             case 'LootTable': $tableIds[] = $id;
                                 break;
-                            case 'Award': $awardIds[] = $id; 
+                            case 'Award': $awardIds[] = $id;
                                 break;
-                            case 'StatusEffect': $statusIds[] = $id; 
+                            case 'StatusEffect': $statusIds[] = $id;
                                 break;
                             case 'Element': $elementIds[] = $id;
                                 break;
@@ -703,14 +701,14 @@ class SubmissionManager extends Service {
                         case 'Item': if ($data['character_rewardable_quantity'][$data['character_id']][$key]) {
                             addAsset($assets, $data['items'][$reward], $data['character_rewardable_quantity'][$data['character_id']][$key]);
                         } break;
-                        case 'Award': if($data['character_rewardable_quantity'][$data['character_id']][$key]) {
-                            addAsset($assets, $data['awards'][$reward], $data['character_rewardable_quantity'][$data['character_id']][$key]); 
+                        case 'Award': if ($data['character_rewardable_quantity'][$data['character_id']][$key]) {
+                            addAsset($assets, $data['awards'][$reward], $data['character_rewardable_quantity'][$data['character_id']][$key]);
                         } break;
                         case 'LootTable': if ($data['character_rewardable_quantity'][$data['character_id']][$key]) {
                             addAsset($assets, $data['tables'][$reward], $data['character_rewardable_quantity'][$data['character_id']][$key]);
                         } break;
-                         case 'StatusEffect': if($data['character_rewardable_quantity'][$data['character_id']][$key]) {
-                            addAsset($assets, $data['statuses'][$reward], $data['character_rewardable_quantity'][$data['character_id']][$key]); 
+                        case 'StatusEffect': if ($data['character_rewardable_quantity'][$data['character_id']][$key]) {
+                            addAsset($assets, $data['statuses'][$reward], $data['character_rewardable_quantity'][$data['character_id']][$key]);
                         } break;
                         case 'Exp': if ($data['character_rewardable_quantity'][$data['character_id']][$key]) {
                             addAsset($assets, 'Exp', $data['character_rewardable_quantity'][$data['character_id']][$key]);
@@ -773,9 +771,13 @@ class SubmissionManager extends Service {
                             $reward = Raffle::find($data['rewardable_id'][$key]);
                             break;
                         case 'Recipe':
-                            if (!$isStaff) break;
+                            if (!$isStaff) {
+                                break;
+                            }
                             $reward = Recipe::find($data['rewardable_id'][$key]);
-                            if(!$reward->needs_unlocking) throw new \Exception("Invalid recipe selected.");
+                            if (!$reward->needs_unlocking) {
+                                throw new \Exception('Invalid recipe selected.');
+                            }
                             break;
                         case 'Exp': case 'Points':
                             if (!$isStaff) {

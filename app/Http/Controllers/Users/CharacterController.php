@@ -72,24 +72,28 @@ class CharacterController extends Controller {
     /**
      * Sets the user's selected character.
      *
-     * @param  \Illuminate\Http\Request       $request
-     * @param  App\Services\CharacterManager  $service
+     * @param App\Services\CharacterManager $service
+     *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function postSelectCharacter(Request $request, CharacterManager $service)
-    {
+    public function postSelectCharacter(Request $request, CharacterManager $service) {
         if ($service->selectCharacter($request->only(['character_id']), Auth::user())) {
             flash('Character selected successfully.')->success();
+
             return redirect()->back();
+        } else {
+            foreach ($service->errors()->getMessages()['error'] as $error) {
+                flash($error)->error();
+            }
         }
-        else {
-            foreach($service->errors()->getMessages()['error'] as $error) flash($error)->error();
-        }
+
         return redirect()->back();
     }
-    
-     /**
-     * Sorts the characters pets
+
+    /**
+     * Sorts the characters pets.
+     *
+     * @param mixed $slug
      */
     public function postSortCharacterPets(CharacterManager $service, Request $request, $slug) {
         if ($service->sortCharacterPets($request->only(['sort']), Auth::user())) {

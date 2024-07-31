@@ -4,7 +4,7 @@ return [
 
     // number of pets to display on character profile
     'display_pet_count' => 5,
-    
+
     /*
     |--------------------------------------------------------------------------
     | Pet Bonding
@@ -15,5 +15,5 @@ return [
     |
     */
     'pet_bonding_enabled' => false,
-    'initial_level_name' => 'Wary',
+    'initial_level_name'  => 'Wary',
 ];

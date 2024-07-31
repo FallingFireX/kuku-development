@@ -2,16 +2,11 @@
 
 namespace App\Models\Item;
 
-use Config;
-use DB;
 use App\Models\Model;
-use App\Models\Item\ItemCategory;
-
-use App\Models\User\User;
-use App\Models\Shop\Shop;
 use App\Models\Prompt\Prompt;
-use App\Models\User\UserItem;
-
+use App\Models\Shop\Shop;
+use App\Models\User\User;
+use Config;
 
 class Item extends Model {
     /**
@@ -381,31 +376,44 @@ class Item extends Model {
      *
      * @return bool
      */
-    public function getCanDonateAttribute()
-    {
-        if(!$this->allow_transfer) return 0;
+    public function getCanDonateAttribute() {
+        if (!$this->allow_transfer) {
+            return 0;
+        }
         $setting = Config::get('lorekeeper.settings.donation_shop.item_donations');
-        switch($setting) {
+        switch ($setting) {
             case 0:
                 return 1;
                 break;
             case 1:
-                if($this->category->can_donate) return 1;
-                else return 0;
+                if ($this->category->can_donate) {
+                    return 1;
+                } else {
+                    return 0;
+                }
                 break;
             case 2:
-                if($this->hasTag('donateable')) return 1;
-                else return 0;
+                if ($this->hasTag('donateable')) {
+                    return 1;
+                } else {
+                    return 0;
+                }
                 break;
             case 3:
-                if($this->category->can_donate) return 1;
-                elseif($this->hasTag('donateable')) return 1;
-                else return 0;
+                if ($this->category->can_donate) {
+                    return 1;
+                } elseif ($this->hasTag('donateable')) {
+                    return 1;
+                } else {
+                    return 0;
+                }
                 break;
-        };
+        }
+
         return 0;
     }
-     /**
+
+    /**
      * Gets the admin edit URL.
      *
      * @return string

@@ -1,7 +1,9 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Facades\Settings;
+use App\Models\Character\Character;
 use App\Models\Gallery\GallerySubmission;
 use App\Models\SitePage;
 use App\Services\LinkService;
@@ -11,11 +13,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Laravel\Socialite\Facades\Socialite;
 
-use App\Models\Character\Character;
-
-use App\Services\DeviantArtService;
-class HomeController extends Controller
-{
+class HomeController extends Controller {
     /*
     |--------------------------------------------------------------------------
     | Home Controller
@@ -30,13 +28,13 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function getIndex()
-    {
-        if(Settings::get('featured_character')) {
+    public function getIndex() {
+        if (Settings::get('featured_character')) {
             $character = Character::find(Settings::get('featured_character'));
+        } else {
+            $character = null;
         }
-        else $character = null;
-   
+
         if (config('lorekeeper.extensions.show_all_recent_submissions.enable')) {
             $query = GallerySubmission::visible(Auth::check() ? Auth::user() : null)->accepted()->orderBy('created_at', 'DESC');
             $gallerySubmissions = $query->get()->take(8);
@@ -45,8 +43,8 @@ class HomeController extends Controller
         }
 
         return view('welcome', [
-            'about' => SitePage::where('key', 'about')->first(),
-            'featured' => $character,
+            'about'               => SitePage::where('key', 'about')->first(),
+            'featured'            => $character,
             'gallerySubmissions'  => $gallerySubmissions,
         ]);
     }

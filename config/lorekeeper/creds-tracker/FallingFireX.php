@@ -1,9 +1,9 @@
 <?php
 
 return [
-    'creator' => 'FallingFireX', 
+    'creator' => 'FallingFireX',
     'credits' => json_encode([
-        'Item: Import Assets' => '#',
+        'Item: Import Assets'    => '#',
         'Item: Redemption Varma' => '#',
     ]),
 ];

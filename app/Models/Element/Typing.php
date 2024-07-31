@@ -80,6 +80,6 @@ class Typing extends Model {
             // .'" style="color: white; background-color: '.$element->colour.';">'.$element->name.'</span></a>';
         });
 
-        return implode(' ', $elements->toArray()); 
+        return implode(' ', $elements->toArray());
     }
 }

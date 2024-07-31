@@ -4,16 +4,12 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddBookExtras extends Migration
-{
+class AddBookExtras extends Migration {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
-    public function up()
-    {
-        Schema::table('books', function(Blueprint $table) {
+    public function up() {
+        Schema::table('books', function (Blueprint $table) {
             $table->boolean('is_public')->default(false)->nullable(false);
             $table->boolean('has_next')->default(false)->nullable(false);
             $table->integer('bookshelf_id')->unsigned()->nullable()->default(null);
@@ -29,7 +25,7 @@ class AddBookExtras extends Migration
             $table->integer('sort')->unsigned()->default(0);
         });
 
-        Schema::table('volumes', function(Blueprint $table) {
+        Schema::table('volumes', function (Blueprint $table) {
             $table->integer('sort')->unsigned()->default(0);
         });
 
@@ -52,21 +48,18 @@ class AddBookExtras extends Migration
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
-    public function down()
-    {
+    public function down() {
         Schema::dropIfExists('bookshelves');
         Schema::dropIfExists('book_authors');
         Schema::dropIfExists('book_tags');
-        Schema::table('books', function(Blueprint $table) {
+        Schema::table('books', function (Blueprint $table) {
             $table->dropColumn('is_public');
             $table->dropColumn('has_next');
             $table->dropColumn('bookshelf_id');
             $table->dropColumn('sort');
         });
-        Schema::table('volumes', function(Blueprint $table) {
+        Schema::table('volumes', function (Blueprint $table) {
             $table->dropColumn('sort');
         });
     }

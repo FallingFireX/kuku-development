@@ -6,9 +6,7 @@ use App\Models\Character\Character;
 use App\Models\Model;
 use App\Models\User\User;
 
-class BookAuthor extends Model
-{
-
+class BookAuthor extends Model {
     /**
      * The attributes that are mass assignable.
      *
@@ -34,8 +32,7 @@ class BookAuthor extends Model
     /**
      * Get the image associated with this record.
      */
-    public function book()
-    {
+    public function book() {
         return $this->belongsTo('App\Models\Volume\Book', 'book_id');
     }
 
@@ -50,8 +47,7 @@ class BookAuthor extends Model
      *
      * @return string
      */
-    public function displayLink()
-    {
+    public function displayLink() {
         switch ($this->author_type) {
             case 'OnsiteUser':
                 $user = User::find($this->author);
@@ -62,10 +58,10 @@ class BookAuthor extends Model
                 return $user->displayName;
                 break;
             case 'OffsiteUser':
-                return '<a href="https://www.' . $this->author . '">' . $this->author . '</a>';
+                return '<a href="https://www.'.$this->author.'">'.$this->author.'</a>';
                 break;
             case 'OffsiteCharacter':
-                return '<a href="https://www.' . $this->author . '">' . $this->author . '</a>';
+                return '<a href="https://www.'.$this->author.'">'.$this->author.'</a>';
                 break;
             case 'OnsiteCharacter':
                 $character = Character::find($this->author);

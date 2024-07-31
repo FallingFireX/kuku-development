@@ -49,7 +49,7 @@ return [
             ],
             [
                 'name' => 'Dev Logs',
-                'url' => 'admin/devlogs'
+                'url'  => 'admin/devlogs',
             ],
         ],
     ],
@@ -118,11 +118,11 @@ return [
             ],
             [
                 'name' => 'Award Grants',
-                'url' => 'admin/grants/awards'
+                'url'  => 'admin/grants/awards',
             ],
             [
                 'name' => 'Recipe Grants',
-                'url' => 'admin/grants/recipes'
+                'url'  => 'admin/grants/recipes',
             ],
             [
                 'name' => 'EXP Grants',
@@ -188,11 +188,11 @@ return [
             ],
             [
                 'name' => 'Award Categories',
-                'url' => 'admin/data/award-categories'
+                'url'  => 'admin/data/award-categories',
             ],
             [
                 'name' => 'Awards',
-                'url' => 'admin/data/awards'
+                'url'  => 'admin/data/awards',
             ],
             [
                 'name' => 'Character Categories',
@@ -220,7 +220,7 @@ return [
             ],
             [
                 'name' => 'Status Effects',
-                'url' => 'admin/data/status-effects'
+                'url'  => 'admin/data/status-effects',
             ],
             [
                 'name' => 'Shops',
@@ -248,11 +248,11 @@ return [
             ],
             [
                 'name' => 'Library',
-                'url' => 'admin/data/volumes'
+                'url'  => 'admin/data/volumes',
             ],
             [
                 'name' => 'Recipes',
-                'url' => 'admin/data/recipes'
+                'url'  => 'admin/data/recipes',
             ],
             [
                 'name' => 'Pets',
@@ -327,8 +327,8 @@ return [
             ],
             [
                 'name' => 'Theme Manager',
-                'url' => 'admin/themes'
+                'url'  => 'admin/themes',
             ],
-        ]
+        ],
     ],
 ];

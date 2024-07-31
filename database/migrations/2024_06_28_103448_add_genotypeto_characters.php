@@ -4,28 +4,21 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddGenotypetoCharacters extends Migration
-{
+class AddGenotypetoCharacters extends Migration {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
-    public function up()
-    {
-        Schema::table('characters', function (Blueprint $table){
+    public function up() {
+        Schema::table('characters', function (Blueprint $table) {
             $table->string('genotype', 191)->nullable()->after('sort');
         });
     }
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
-    public function down()
-    {
-        Schema::table('characters', function (Blueprint $table){
+    public function down() {
+        Schema::table('characters', function (Blueprint $table) {
             $table->dropColumn('genotype');
         });
     }

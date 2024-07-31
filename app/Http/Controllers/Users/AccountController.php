@@ -2,19 +2,14 @@
 
 namespace App\Http\Controllers\Users;
 
-use File;
-use Settings;
-use Carbon\Carbon;
 use App\Http\Controllers\Controller;
+use App\Models\Character\BreedingPermission;
+use App\Models\Notification;
 use App\Models\Theme;
 use App\Models\User\StaffProfile;
-use App\Models\Character\BreedingPermission;
-use App\Models\User\UsernameLog;
-use App\Models\ThemeEditor;
-use Illuminate\Support\Facades\Storage;
-use App\Models\Notification;
 use App\Models\User\User;
 use App\Models\User\UserAlias;
+use App\Models\User\UsernameLog;
 use App\Services\UserService;
 use BaconQrCode\Renderer\Color\Rgb;
 use BaconQrCode\Renderer\Image\SvgImageBackEnd;
@@ -22,11 +17,13 @@ use BaconQrCode\Renderer\ImageRenderer;
 use BaconQrCode\Renderer\RendererStyle\Fill;
 use BaconQrCode\Renderer\RendererStyle\RendererStyle;
 use BaconQrCode\Writer;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Fortify\Contracts\TwoFactorAuthenticationProvider;
 use Laravel\Fortify\RecoveryCode;
+use Settings;
 
 class AccountController extends Controller {
     /*
@@ -87,13 +84,13 @@ class AccountController extends Controller {
         $usernameCooldown = Settings::get('username_change_cooldown');
 
         return view('account.settings', [
-            'themeOptions' => $themeOptions + Auth::user()->themes()->where('theme_type', 'base')->get()->pluck('displayName', 'id')->toArray(),
-            'decoratorThemes' => $decoratorOptions + Auth::user()->themes()->where('theme_type', 'decorator')->get()->pluck('displayName', 'id')->toArray(),
-            'links' => $links ? $links : null,
-            'usernameCooldown' => $usernameCooldown,
-            'canChangeName' => $daysSinceNameChange >= $usernameCooldown,
-            'usernameCountdown' => $usernameCooldown - $daysSinceNameChange
-        
+            'themeOptions'      => $themeOptions + Auth::user()->themes()->where('theme_type', 'base')->get()->pluck('displayName', 'id')->toArray(),
+            'decoratorThemes'   => $decoratorOptions + Auth::user()->themes()->where('theme_type', 'decorator')->get()->pluck('displayName', 'id')->toArray(),
+            'links'             => $links ? $links : null,
+            'usernameCooldown'  => $usernameCooldown,
+            'canChangeName'     => $daysSinceNameChange >= $usernameCooldown,
+            'usernameCountdown' => $usernameCooldown - $daysSinceNameChange,
+
         ]);
     }
 
@@ -104,48 +101,48 @@ class AccountController extends Controller {
      */
     public function postProfile(Request $request) {
         Auth::user()->profile->update([
-            'pronouns' => $request->get('pronouns'),
-            'text' => $request->get('text'),
+            'pronouns'    => $request->get('pronouns'),
+            'text'        => $request->get('text'),
             'parsed_text' => parse($request->get('text')),
         ]);
         flash('Profile updated successfully.')->success();
 
         return redirect()->back();
     }
-    
+
     /**
      * Edits the user's staff profile.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function postStaffProfile(Request $request, UserService $service)
-    {
+    public function postStaffProfile(Request $request, UserService $service) {
         $request->validate(staffProfile::$createRules);
-        if($service->updateStaffProfile($request->only(['text']), Auth::user())) {
+        if ($service->updateStaffProfile($request->only(['text']), Auth::user())) {
             flash('Staff profile updated successfully.')->success();
+        } else {
+            foreach ($service->errors()->getMessages()['error'] as $error) {
+                flash($error)->error();
+            }
         }
-        else {
-            foreach($service->errors()->getMessages()['error'] as $error) flash($error)->error();
-        }
+
         return redirect()->back();
     }
-    
+
     /**
      * Edits the user's staff contacts/links.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function postStaffLinks(Request $request, UserService $service)
-    {
+    public function postStaffLinks(Request $request, UserService $service) {
         $request->validate(staffProfile::$createRules);
-        if($service->updateStaffLinks($request->only(['site', 'url']), Auth::user())) {
+        if ($service->updateStaffLinks($request->only(['site', 'url']), Auth::user())) {
             flash('Staff links updated successfully.')->success();
+        } else {
+            foreach ($service->errors()->getMessages()['error'] as $error) {
+                flash($error)->error();
+            }
         }
-        else {
-            foreach($service->errors()->getMessages()['error'] as $error) flash($error)->error();
-        }
+
         return redirect()->back();
     }
 
@@ -162,24 +159,26 @@ class AccountController extends Controller {
                 flash($error)->error();
             }
         }
+
         return redirect()->back();
     }
 
     /**
      * Edits the user's theme.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\RedirectResponse
      */
     public function postTheme(Request $request, UserService $service) {
         if ($service->updateTheme($request->only(['theme', 'decorator_theme']), Auth::user())) {
             flash('Theme updated successfully.')->success();
         } else {
-            foreach ($service->errors()->getMessages()['error'] as $error) flash($error)->error();
+            foreach ($service->errors()->getMessages()['error'] as $error) {
+                flash($error)->error();
+            }
         }
+
         return redirect()->back();
     }
-
 
     /**
      * Edits the user's username.
@@ -360,20 +359,21 @@ class AccountController extends Controller {
     }
 
     /**
-     * Changes user dev log notification setting
+     * Changes user dev log notification setting.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  App\Services\UserService  $service
+     * @param App\Services\UserService $service
+     *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function postdevLogNotif(Request $request, UserService $service)
-    {
-        if($service->updatedevLogNotif($request->input('dev_log_notif'), Auth::user())) {
+    public function postdevLogNotif(Request $request, UserService $service) {
+        if ($service->updatedevLogNotif($request->input('dev_log_notif'), Auth::user())) {
             flash('Setting updated successfully.')->success();
+        } else {
+            foreach ($service->errors()->getMessages()['error'] as $error) {
+                flash($error)->error();
+            }
         }
-        else {
-            foreach($service->errors()->getMessages()['error'] as $error) flash($error)->error();
-        }
+
         return redirect()->back();
     }
 
@@ -581,14 +581,14 @@ class AccountController extends Controller {
     /**
      * Shows the user's owned breeding permissions.
      *
-     * @param  \Illuminate\Http\Request       $request
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function getBreedingPermissions(Request $request)
-    {
+    public function getBreedingPermissions(Request $request) {
         $permissions = BreedingPermission::where('recipient_id', Auth::user()->id);
         $used = $request->get('used');
-        if(!$used) $used = 0;
+        if (!$used) {
+            $used = 0;
+        }
 
         $permissions = $permissions->where('is_used', $used);
 

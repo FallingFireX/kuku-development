@@ -4,10 +4,12 @@ namespace App\Http\Controllers\Admin\Characters;
 
 use App\Facades\Settings;
 use App\Http\Controllers\Controller;
+use App\Models\Character\BreedingPermission;
 use App\Models\Character\Character;
 use App\Models\Character\CharacterCategory;
 use App\Models\Character\CharacterLineageBlacklist;
 use App\Models\Character\CharacterTransfer;
+use App\Models\Character\CharacterTransformation as Transformation;
 use App\Models\Feature\Feature;
 use App\Models\Rarity;
 use App\Models\Species\Species;
@@ -16,19 +18,12 @@ use App\Models\Stat\Stat;
 use App\Models\Trade;
 use App\Models\User\User;
 use App\Models\User\UserItem;
-use App\Models\Character\BreedingPermission;
-
-use App\Services\AwardCaseManager;
 use App\Services\CharacterManager;
 use App\Services\TradeManager;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-use App\Models\Character\CharacterTransformation as Transformation;
-
-
-class CharacterController extends Controller
-{
+class CharacterController extends Controller {
     /*
     |--------------------------------------------------------------------------
     | Admin / Character Controller
@@ -56,16 +51,16 @@ class CharacterController extends Controller
      */
     public function getCreateCharacter() {
         return view('admin.masterlist.create_character', [
-            'categories'  => CharacterCategory::orderBy('sort')->get(),
-            'userOptions' => User::query()->orderBy('name')->pluck('name', 'id')->toArray(),
-            'characterOptions' => CharacterLineageBlacklist::getAncestorOptions(),            
-            'rarities'    => ['0' => 'Select Rarity'] + Rarity::orderBy('sort', 'DESC')->pluck('name', 'id')->toArray(),
-            'specieses'   => ['0' => 'Select Species'] + Species::orderBy('sort', 'DESC')->pluck('name', 'id')->toArray(),
-            'subtypes'    => ['0' => 'Pick a Species First'],
-            'features'    => Feature::GetDropdownItems(1),
-            'transformations' => ['0' => 'Pick a Species First'],
-            'isMyo'       => false,
-            'stats'       => Stat::orderBy('name')->get(),
+            'categories'       => CharacterCategory::orderBy('sort')->get(),
+            'userOptions'      => User::query()->orderBy('name')->pluck('name', 'id')->toArray(),
+            'characterOptions' => CharacterLineageBlacklist::getAncestorOptions(),
+            'rarities'         => ['0' => 'Select Rarity'] + Rarity::orderBy('sort', 'DESC')->pluck('name', 'id')->toArray(),
+            'specieses'        => ['0' => 'Select Species'] + Species::orderBy('sort', 'DESC')->pluck('name', 'id')->toArray(),
+            'subtypes'         => ['0' => 'Pick a Species First'],
+            'features'         => Feature::GetDropdownItems(1),
+            'transformations'  => ['0' => 'Pick a Species First'],
+            'isMyo'            => false,
+            'stats'            => Stat::orderBy('name')->get(),
         ]);
     }
 
@@ -76,15 +71,15 @@ class CharacterController extends Controller
      */
     public function getCreateMyo() {
         return view('admin.masterlist.create_character', [
-            'userOptions' => User::query()->orderBy('name')->pluck('name', 'id')->toArray(),
+            'userOptions'      => User::query()->orderBy('name')->pluck('name', 'id')->toArray(),
             'characterOptions' => CharacterLineageBlacklist::getAncestorOptions(),
-            'rarities'    => ['0' => 'Select Rarity'] + Rarity::orderBy('sort', 'DESC')->pluck('name', 'id')->toArray(),
-            'specieses'   => ['0' => 'Select Species'] + Species::orderBy('sort', 'DESC')->pluck('name', 'id')->toArray(),
-            'subtypes'    => ['0' => 'Pick a Species First'],
-            'features' => Feature::GetDropdownItems(1),
-            'transformations' => ['0' => 'Pick a Species First'],
-            'isMyo'       => true,
-            'stats'       => Stat::orderBy('name')->get(),
+            'rarities'         => ['0' => 'Select Rarity'] + Rarity::orderBy('sort', 'DESC')->pluck('name', 'id')->toArray(),
+            'specieses'        => ['0' => 'Select Species'] + Species::orderBy('sort', 'DESC')->pluck('name', 'id')->toArray(),
+            'subtypes'         => ['0' => 'Pick a Species First'],
+            'features'         => Feature::GetDropdownItems(1),
+            'transformations'  => ['0' => 'Pick a Species First'],
+            'isMyo'            => true,
+            'stats'            => Stat::orderBy('name')->get(),
         ]);
     }
 
@@ -109,13 +104,14 @@ class CharacterController extends Controller
      */
     public function getCreateCharacterMyoTransformation(Request $request) {
         $species = $request->input('species');
+
         return view('admin.masterlist._create_character_transformation', [
-            'transformations' => ['0' => 'Select '.ucfirst(__('transformations.transformation'))] + Transformation::where('species_id','=',$species)->orWhereNull('species_id')->orderBy('sort', 'DESC')->pluck('name', 'id')->toArray(),
+            'transformations' => ['0' => 'Select '.ucfirst(__('transformations.transformation'))] + Transformation::where('species_id', '=', $species)->orWhereNull('species_id')->orderBy('sort', 'DESC')->pluck('name', 'id')->toArray(),
             'isMyo'           => $request->input('myo'),
         ]);
     }
-    
-     /**
+
+    /**
      * Gets the stats that are available for a specific species/subtype.
      *
      * @return \Illuminate\Contracts\Support\Renderable
@@ -131,7 +127,7 @@ class CharacterController extends Controller
         })->orWhereDoesntHave('limits')->orderBy('name', 'ASC')->get();
 
         return view('admin.masterlist._create_character_stats', [
-            'stats' => $stats,
+            'stats'      => $stats,
             'species_id' => $species,
             'subtype_id' => $subtype,
         ]);
@@ -172,7 +168,7 @@ class CharacterController extends Controller
             'generate_ancestors',
 
             'species_id', 'subtype_id', 'rarity_id', 'feature_id', 'feature_data',
-            'image', 'thumbnail', 'image_description', 'transformation_id','transformation_info','transformation_description', 'stats', 'genotype', 'phenotype', 'gender', 'eyecolor', 'spd', 'def', 'atk'
+            'image', 'thumbnail', 'image_description', 'transformation_id', 'transformation_info', 'transformation_description', 'stats', 'genotype', 'phenotype', 'gender', 'eyecolor', 'spd', 'def', 'atk',
         ]);
         if ($character = $service->createCharacter($data, Auth::user())) {
             flash('Character created successfully.')->success();
@@ -222,7 +218,7 @@ class CharacterController extends Controller
             'generate_ancestors',
 
             'species_id', 'subtype_id', 'rarity_id', 'feature_id', 'feature_data',
-            'image', 'thumbnail', 'transformation_id','transformation_info','transformation_description', 'stats', 'genotype', 'phenotype', 'gender', 'eyecolor', 'spd', 'def', 'atk'
+            'image', 'thumbnail', 'transformation_id', 'transformation_info', 'transformation_description', 'stats', 'genotype', 'phenotype', 'gender', 'eyecolor', 'spd', 'def', 'atk',
         ]);
         if ($character = $service->createCharacter($data, Auth::user(), true)) {
             flash('MYO slot created successfully.')->success();
@@ -500,42 +496,48 @@ class CharacterController extends Controller
     /**
      * Shows the use breeding permission modal.
      *
-     * @param  string  $slug
-     * @param  int     $id
+     * @param string $slug
+     * @param int    $id
+     *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function getUseBreedingPermission($slug, $id)
-    {
+    public function getUseBreedingPermission($slug, $id) {
         $this->character = Character::where('slug', $slug)->first();
-        if(!$this->character) abort(404);
+        if (!$this->character) {
+            abort(404);
+        }
 
         return view('character.admin._use_breeding_permission', [
-            'character' => $this->character,
-            'breedingPermission' => BreedingPermission::find($id)
+            'character'          => $this->character,
+            'breedingPermission' => BreedingPermission::find($id),
         ]);
     }
 
     /**
      * Marks a breeding permission as used.
      *
-     * @param  \Illuminate\Http\Request       $request
-     * @param  App\Services\CharacterManager  $service
-     * @param  string                         $slug
-     * @param  int                            $id
+     * @param App\Services\CharacterManager $service
+     * @param string                        $slug
+     * @param int                           $id
+     *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function postUseBreedingPermission(Request $request, CharacterManager $service, $slug, $id)
-    {
+    public function postUseBreedingPermission(Request $request, CharacterManager $service, $slug, $id) {
         $this->character = Character::where('slug', $slug)->first();
-        if(!$this->character) abort(404);
+        if (!$this->character) {
+            abort(404);
+        }
 
         if ($service->useBreedingPermission($this->character, BreedingPermission::find($id), Auth::user())) {
             flash('Breeding permission marked used successfully.')->success();
+
             return redirect()->back();
+        } else {
+            foreach ($service->errors()->getMessages()['error'] as $error) {
+                flash($error)->error();
+            }
         }
-        else {
-            foreach($service->errors()->getMessages()['error'] as $error) flash($error)->error();
-        }
+
         return redirect()->back();
     }
 

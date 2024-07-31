@@ -5,15 +5,14 @@ namespace App\Models\Volume;
 use App\Models\Model;
 use Auth;
 
-class Bookshelf extends Model
-{
+class Bookshelf extends Model {
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'name', 'has_image', 'summary','sort'
+        'name', 'has_image', 'summary', 'sort',
     ];
 
     protected $appends = ['image_url'];
@@ -31,7 +30,7 @@ class Bookshelf extends Model
      * @var array
      */
     public static $createRules = [
-        'name' => 'required|unique:bookshelves',
+        'name'  => 'required|unique:bookshelves',
         'image' => 'mimes:png',
     ];
 
@@ -41,7 +40,7 @@ class Bookshelf extends Model
      * @var array
      */
     public static $updateRules = [
-        'name' => 'required',
+        'name'  => 'required',
         'image' => 'mimes:png',
     ];
 
@@ -50,10 +49,9 @@ class Bookshelf extends Model
      **********************************************************************************************/
 
     /**
-     * get the books attached to the bookshelf
+     * get the books attached to the bookshelf.
      */
-    public function books()
-    {
+    public function books() {
         return $this->hasMany('App\Models\Volume\Book')->where('bookshelf_id', $this->id)->visible(Auth::user() ?? null)->orderBy('sort', 'DESC');
     }
 
@@ -64,37 +62,36 @@ class Bookshelf extends Model
     /**
      * Scope a query to sort items in alphabetical order.
      *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @param  bool                                   $reverse
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param bool                                  $reverse
+     *
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeSortAlphabetical($query, $reverse = false)
-    {
+    public function scopeSortAlphabetical($query, $reverse = false) {
         return $query->orderBy('name', $reverse ? 'DESC' : 'ASC');
     }
 
     /**
      * Scope a query to sort items by newest first.
      *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     *
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeSortNewest($query)
-    {
+    public function scopeSortNewest($query) {
         return $query->orderBy('id', 'DESC');
     }
 
     /**
      * Scope a query to sort features oldest first.
      *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     *
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeSortOldest($query)
-    {
+    public function scopeSortOldest($query) {
         return $query->orderBy('id');
     }
-
 
     /**********************************************************************************************
     ACCESSORS
@@ -105,8 +102,7 @@ class Bookshelf extends Model
      *
      * @return string
      */
-    public function getImageDirectoryAttribute()
-    {
+    public function getImageDirectoryAttribute() {
         return 'images/data/books/bookshelves';
     }
 
@@ -115,9 +111,8 @@ class Bookshelf extends Model
      *
      * @return string
      */
-    public function getImageFileNameAttribute()
-    {
-        return $this->id . '-image.png';
+    public function getImageFileNameAttribute() {
+        return $this->id.'-image.png';
     }
 
     /**
@@ -125,8 +120,7 @@ class Bookshelf extends Model
      *
      * @return string
      */
-    public function getImagePathAttribute()
-    {
+    public function getImagePathAttribute() {
         return public_path($this->imageDirectory);
     }
 
@@ -135,22 +129,19 @@ class Bookshelf extends Model
      *
      * @return string
      */
-    public function getImageUrlAttribute()
-    {
+    public function getImageUrlAttribute() {
         if (!$this->has_image) {
             return null;
         }
 
-        return asset($this->imageDirectory . '/' . $this->imageFileName);
+        return asset($this->imageDirectory.'/'.$this->imageFileName);
     }
-
 
     public function getDisplayNameAttribute() {
         return '<a href="'.$this->url.'">'.$this->name.'</a>';
     }
 
-
     public function getUrlAttribute() {
-        return url('world/' . __('volumes.library') . '?bookshelf_id=' . $this->id);
+        return url('world/'.__('volumes.library').'?bookshelf_id='.$this->id);
     }
 }

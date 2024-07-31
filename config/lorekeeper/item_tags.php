@@ -26,46 +26,46 @@ return [
     ],
 
     'theme' => [
-        'name' => 'Theme',
-        'text_color' => "#ffffff",
-        'background_color' => '#573f7e'
+        'name'             => 'Theme',
+        'text_color'       => '#ffffff',
+        'background_color' => '#573f7e',
     ],
     'volume' => [
-        'name' => 'Volume',
-        'text_color' => '#ffffff',
-        'background_color' => '#1fd1a7'
+        'name'             => 'Volume',
+        'text_color'       => '#ffffff',
+        'background_color' => '#1fd1a7',
     ],
 
     'book' => [
-        'name' => 'Book',
-        'text_color' => '#ffffff',
-        'background_color' => '#1fd1a7'
+        'name'             => 'Book',
+        'text_color'       => '#ffffff',
+        'background_color' => '#1fd1a7',
     ],
     'breedingperm' => [
-        'name' => 'Breeding Permission',
-        'text_color' => '#ffffff',
-        'background_color' => '#cbbd8a'
+        'name'             => 'Breeding Permission',
+        'text_color'       => '#ffffff',
+        'background_color' => '#cbbd8a',
     ],
     'donateable' => [
-        'name' => 'Donateable',
-        'text_color' => '#ffffff',
-        'background_color' => '#9e5663'
+        'name'             => 'Donateable',
+        'text_color'       => '#ffffff',
+        'background_color' => '#9e5663',
     ],
     'recipe' => [
-        'name' => 'Recipe',
-        'text_color' => '#ffffff',
-        'background_color' => '#6D18A7'
+        'name'             => 'Recipe',
+        'text_color'       => '#ffffff',
+        'background_color' => '#6D18A7',
     ],
     'buff' => [
-        'name' => 'Buff',
-        'text_color' => '#ffffff',
-        'background_color' => '#a4b88d'
+        'name'             => 'Buff',
+        'text_color'       => '#ffffff',
+        'background_color' => '#a4b88d',
     ],
 
     'cure' => [
-        'name' => 'Cure',
-        'text_color' => '#ffffff',
-        'background_color' => '#b4676b'
+        'name'             => 'Cure',
+        'text_color'       => '#ffffff',
+        'background_color' => '#b4676b',
     ],
 
     'splice' => [
