@@ -368,10 +368,10 @@
                 {!! Form::label($j[$i], null, ['class' => $em ? 'font-weight-bold' : '']) !!}
                 <div class="row">
                     <div class="col-sm-6 pr-sm-1">
-                        {!! Form::select($k[$i].'_id', $characterOptions, old($k[$i].'_id'), ['class' => 'form-control text-left character-select mb-1', 'placeholder' => 'None']) !!}
+                    {!! Form::select($k[$i].'_id', $characterOptions, !old($k[$i].'_id') ? $lineage[$k[$i].'_id'] : old($k[$i].'_id'), ['class' => 'form-control text-left character-select mb-1', 'placeholder' => 'None']) !!}
                     </div>
                     <div class="col-sm-6 pl-sm-1">
-                        {!! Form::text($k[$i].'_name', old($k[$i].'_name'), ['class' => 'form-control mb-1']) !!}
+                    {!! Form::text($k[$i].'_name', !old($k[$i].'_name') ? $lineage[$k[$i].'_name'] : old($k[$i].'_name'), ['class' => 'form-control mb-1']) !!}
                     </div>
                 </div>
             </div>
