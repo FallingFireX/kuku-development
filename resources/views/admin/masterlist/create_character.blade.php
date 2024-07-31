@@ -319,11 +319,7 @@
             </div>
         @endif
 
-        
-    <h3>Lineage</h3>
-
-    <div class="alert alert-info">Enter a sire and dam to autogenerate ancestry or enter ancestors manually. Do not enter anything if there are no ancestors in that slot.</div>
-
+    
     <h3>Lineage</h3>
 
 <div class="alert alert-info">Enter a sire and dam to autogenerate ancestry or enter ancestors manually. Do not enter anything if there are no ancestors in that slot.</div>
@@ -475,6 +471,15 @@
                 $("#stats").html(res);
             }).fail(function(jqXHR, textStatus, errorThrown) {
                 alert("AJAX call failed: " + textStatus + ", " + errorThrown);
+            });
+        });
+
+        $(document).ready(function()
+        {
+            $('.character-select').selectize();
+            $('#advanced_lineage').on('click', function(e)
+            {
+                e.preventDefault();
             });
         });
     </script>
