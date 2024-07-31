@@ -1336,9 +1336,11 @@ class CharacterManager extends Service {
                 'log_type'               => $type,
                 'data'                   => $data,
             ]);
+            return $this->commitReturn(true);
         } catch (\Exception $e) {
             $this->setError('error', $e->getMessage());
         }
+        return $this->rollbackReturn(false);
     }
 
     /**

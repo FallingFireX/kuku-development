@@ -523,26 +523,23 @@ class CharacterController extends Controller {
     /**
      * Creates a new breeding permission for a character.
      *
-     * @param App\Services\CharacterManager $service
-     * @param string                        $slug
-     *
+     * @param  \Illuminate\Http\Request       $request
+     * @param  App\Services\CharacterManager  $service
+     * @param  string                         $slug
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function postNewBreedingPermission(Request $request, CharacterManager $service, $slug) {
-        if (!Auth::check()) {
-            abort(404);
-        }
+    public function postNewBreedingPermission(Request $request, CharacterManager $service, $slug)
+    {
+        if(!Auth::check()) abort(404);
 
         $request->validate(BreedingPermission::$createRules);
 
-        if ($service->createBreedingPermission($request->only(['recipient_id', 'type', 'description']), $this->character, Auth::user())) {
+        if($service->createBreedingPermission($request->only(['recipient_id', 'type', 'description']), $this->character, Auth::user())) {
             flash('Breeding permission created successfully.')->success();
-        } else {
-            foreach ($service->errors()->getMessages()['error'] as $error) {
-                flash($error)->error();
-            }
         }
-
+        else {
+            foreach($service->errors()->getMessages()['error'] as $error) flash($error)->error();
+        }
         return redirect()->back();
     }
 
