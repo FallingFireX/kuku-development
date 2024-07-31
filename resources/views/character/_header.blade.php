@@ -49,7 +49,7 @@
             {{ $bookmark ? 'Edit Bookmark' : 'Bookmark' }}</a>
     @endif
     @if (config('lorekeeper.extensions.character_TH_profile_link') && $character->profile->link)
-        <a class="btn btn-outline-info float-right" data-character-id="{{ $character->id }}" href="{{ $character->profile->link }}"><i class="fa-brands fa-deviantart"></i> DA Import</a>
+        <a class="btn btn-outline-info float-right" data-character-id="{{ $character->id }}" href="{{ $character->profile->link }}"><i class="fab fa-deviantart"></i> DA Import</a>
     @endif
     @if (!$character->is_visible)
         <i class="fas fa-eye-slash"></i>
