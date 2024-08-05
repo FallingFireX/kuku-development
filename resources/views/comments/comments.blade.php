@@ -93,6 +93,15 @@
                     'searchreplace visualblocks code fullscreen spoiler',
                     'insertdatetime media table paste code help wordcount'
                 ],
+                mobile: {
+                    theme: 'silver',
+                    toolbar_mode: 'floating',
+                    height: 300,
+                    toolbar: [
+                        'bold italic underline | forecolor backcolor | selectdropdown',
+                        'alignleft aligncenter alignright | numlist bullist'
+                    ],
+                },
                 toolbar: 'undo redo | formatselect | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | spoiler-add spoiler-remove | removeformat | code',
                 content_css: [
                     '{{ asset('css/app.css') }}',
