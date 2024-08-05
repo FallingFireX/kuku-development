@@ -68,7 +68,7 @@
             @endif
 
             @if($user->profile->pronouns)
-            div class="row col-sm-7">
+            <div class="row col-sm-7">
                     <div class="col-md-3 col-4">
                         <h5>Pronouns</h5>
                     </div>
