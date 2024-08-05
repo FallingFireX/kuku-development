@@ -60,11 +60,9 @@
     <div class="card character-bio">
         <div class="card-header">
             <ul class="nav nav-tabs card-header-tabs">
+                
                 <li class="nav-item">
-                    <a class="nav-link active" id="statsTab" data-toggle="tab" href="#stats" role="tab">Stats</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" id="notesTab" data-toggle="tab" href="#notes" role="tab">Description</a>
+                    <a class="nav-link active" id="notesTab" data-toggle="tab" href="#notes" role="tab">Description</a>
                 </li>
                 @if($character->getLineageBlacklistLevel() < 2)
                 <li class="nav-item">
@@ -79,13 +77,13 @@
                         <a class="nav-link" id="settingsTab" data-toggle="tab" href="#settings-{{ $character->slug }}" role="tab"><i class="fas fa-cog"></i></a>
                     </li>
                 @endif
+                <li class="nav-item">
+                    <a class="nav-link" id="statsTab" data-toggle="tab" href="#stats" role="tab">Stats</a>
+                </li>
             </ul>
         </div>
         <div class="card-body tab-content">
-            <div class="tab-pane fade show active" id="stats">
-                @include('character._tab_stats', ['character' => $character])
-            </div>
-            <div class="tab-pane fade" id="notes">
+            <div class="tab-pane fade  show active" id="notes">
                 @include('character._tab_notes', ['character' => $character])
             </div>
             @if($character->getLineageBlacklistLevel() < 2)
@@ -113,6 +111,9 @@
                     </div>
                 </div>
             @endif
+            <div class="tab-pane fade" id="stats">
+                @include('character._tab_stats', ['character' => $character])
+            </div>
         </div>
     </div>
     <br>
