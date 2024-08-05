@@ -127,6 +127,7 @@
     <div id="app">
         <div class="site-header-image" id="header" style="position: relative;">
             @include('layouts._clock')
+            <img id="logo" src="{{ asset('images/logo.png') }}">
         </div>
        
         @include('layouts._nav')
