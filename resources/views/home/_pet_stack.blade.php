@@ -29,8 +29,6 @@
         </div>
     @endif
 
-    <a class="btn btn-primary btn-lg btn-block h5 mt-3" href="{{ $stack->pageUrl(Auth::check() ? Auth::user()->id : null) }}">View Page</a>
-
     @if ($user && !$readOnly && ($stack->user_id == $user->id || $user->hasPower('edit_inventories')))
         <div class="card mt-3">
             <ul class="list-group list-group-flush">
