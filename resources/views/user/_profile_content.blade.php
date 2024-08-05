@@ -70,9 +70,9 @@
             @if($user->profile->pronouns)
             <div class="row col-sm-6">
                     <div class="col-md-3 col-4">
-                        <h5>Pronouns</h5>
+                        <h6><b>Pronouns</b></h6>
                     </div>
-                    <div class="col-md-9 col-8">
+                    <div class="col-md-8 col-8">
                 {{ $user->profile->pronouns }}
                 </div>
             </div>
