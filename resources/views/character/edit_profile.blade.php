@@ -28,18 +28,18 @@
     @endif
 
     {!! Form::open(['url' => $character->url . '/profile/edit']) !!}
-    @if (Auth::check() && Auth::user()->hasPower('manage_characters'))
+@if(!$character->is_myo_slot)
+    <div class="form-group">
+        {!! Form::label('name', 'Name') !!}
+        {!! Form::text('name', $character->name, ['class' => 'form-control']) !!}
+    </div>
+    @if(Config::get('lorekeeper.extensions.character_TH_profile_link'))
         <div class="form-group">
-            {!! Form::label('name', 'Name') !!}
-            {!! Form::text('name', $character->name, ['class' => 'form-control']) !!}
+            {!! Form::label('link', 'Profile Link') !!}
+            {!! Form::text('link', $character->profile->link, ['class' => 'form-control']) !!}
         </div>
-        @if (config('lorekeeper.extensions.character_TH_profile_link'))
-            <div class="form-group">
-                {!! Form::label('link', 'Profile Link') !!}
-                {!! Form::text('link', $character->profile->link, ['class' => 'form-control']) !!}
-            </div>
-        @endif
-        {!! Form::label('custom_values', "Custom Values") !!}
+    @endif
+    {!! Form::label('custom_values', "Custom Values") !!}
     <div id="customValues">
         @foreach ($character->profile->custom_values as $value)
             <div class="form-row">
@@ -62,7 +62,7 @@
         @endforeach
     </div>
     <a href="#" class="add-custom-value-row btn btn-primary mb-3">Add Custom Value</a>
-
+@endif
     @endif
     <div class="form-group">
         {!! Form::label('text', 'Profile Content') !!}
