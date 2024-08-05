@@ -59,7 +59,7 @@
                 <div class="col-lg-6 col-md-9 col-8">{!! $user->rank->displayName !!} {!! add_help($user->rank->parsed_description) !!}</div>
             </div>
             @if ($user->birthdayDisplay && isset($user->birthday))
-                <div class="row col-sm-7">
+                <div class="row col-sm-6">
                     <div class="col-md-3 col-4">
                         <h5>Birthday</h5>
                     </div>
