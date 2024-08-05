@@ -68,7 +68,7 @@
             @endif
 
             @if($user->profile->pronouns)
-            <div class="row col-sm-7">
+            <div class="row col-sm-6">
                     <div class="col-md-3 col-4">
                         <h5>Pronouns</h5>
                     </div>
@@ -83,11 +83,6 @@
 
 @if (isset($user->profile->parsed_text))
 <div class="card mb-3" style="clear:both;">
-        @if($user->profile->pronouns)
-            <h5 class="card-header">
-                {{ $user->profile->pronouns }}
-            </h5>
-        @endif
         <div class="card-body">
             {!! $user->profile->parsed_text !!}
         </div>
