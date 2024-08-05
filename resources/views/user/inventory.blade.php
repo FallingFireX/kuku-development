@@ -1,14 +1,14 @@
 @extends('user.layout')
 
 @section('profile-title')
-    {{ $user->name }}'s Inventory
+    {{ $user->name }}'s Bank
 @endsection
 
 @section('profile-content')
     {!! breadcrumbs(['Users' => 'users', $user->name => $user->url, 'Inventory' => $user->url . '/inventory']) !!}
 
     <h1>
-        Inventory
+        Bank
     </h1>
 
     <div class="text-right mb-3">

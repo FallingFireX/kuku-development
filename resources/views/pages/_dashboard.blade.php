@@ -94,8 +94,8 @@
                 <div class="card-body text-center" style="margin-bottom: 0.5rem">
                     <img src="{{ asset('images/inventory.png') }}" alt="Inventory" class="card-img" />
                     <br>
-                    <br><a href="{{ url('inventory') }}">My Inventory</a></li>
-                    <br><a href="{{ Auth::user()->url . '/item-logs' }}">Item Logs</a></li>
+                    <br><a href="{{ url('inventory') }}">My Bank</a></li>
+                    <br><a href="{{ Auth::user()->url . '/item-logs' }}">Bank Logs</a></li>
                     </div>
             </div>
         </div>
@@ -103,8 +103,8 @@
             <div class="card">
                 <div class="card-body text-center">
                     <img src="{{ asset('images/currency.png') }}" alt="Bank" class="card-img" />
-                    <br><a href="{{ url('bank') }}">Bank</a></li>
-                    <br><a href="{{ Auth::user()->url . '/currency-logs' }}">Currency Logs</a></li>
+                    <br><a href="{{ url('bank') }}">Wallet</a></li>
+                    <br><a href="{{ Auth::user()->url . '/currency-logs' }}">Wallet Logs</a></li>
                 </div>
             </div>
         </div>

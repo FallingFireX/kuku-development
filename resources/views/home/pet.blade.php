@@ -1,17 +1,17 @@
 @extends('home.layout')
 
 @section('home-title')
-    Pets
+    Familiars
 @endsection
 
 @section('home-content')
     {!! breadcrumbs(['Pets' => 'pets']) !!}
 
     <h1>
-        Pets
+    Familiars
     </h1>
 
-    <p>These are your pets. Click on a pet to view more details and actions you can perform on it.</p>
+    <p>These are your Familiars. Click on a Familiars to view more details and actions you can perform on it.</p>
 
     @foreach ($pets as $categoryId => $categoryPets)
         <div class="card mb-3 inventory-category">

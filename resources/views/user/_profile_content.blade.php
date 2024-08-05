@@ -89,7 +89,7 @@
     <div class="col-md-6 mb-4 profile-assets" style="clear:both;">
         <div class="card profile-currencies profile-assets-card mb-4">
             <div class="card-body text-center">
-                <h5 class="card-title">Bank</h5>
+                <h5 class="card-title">Wallet</h5>
                 <div class="profile-assets-content">
                     @foreach($user->getCurrencies(false) as $currency)
                         <div>{!! $currency->display($currency->quantity) !!}</div>
@@ -125,7 +125,7 @@
     <div class="card-deck mb-4 profile-assets" style="clear:both;">
         <div class="card profile-inventory profile-assets-card">
             <div class="card-body text-center">
-                <h5 class="card-title">Inventory</h5>
+                <h5 class="card-title">Bank</h5>
                 <div class="profile-assets-content">
                     @if (count($items))
                         <div class="row">
@@ -185,7 +185,7 @@
     <div class="card-deck mb-4 profile-assets">
     <div class="card profile-currencies profile-assets-card">
         <div class="card-body text-center">
-            <h5 class="card-title">Pets</h5>
+            <h5 class="card-title">Familiars</h5>
             <div class="card-body">
                 @if (count($pets))
                     <div class="row">
@@ -199,7 +199,7 @@
                         @endforeach
                     </div>
                 @else
-                    <div>No pets owned.</div>
+                    <div>No Familiars owned.</div>
                 @endif
             </div>
             <div class="text-right"><a href="{{ $user->url . '/pets' }}">View all...</a></div>
