@@ -75,6 +75,7 @@
                     <div class="col-md-9 col-8">
                 {{ $user->profile->pronouns }}
                 </div>
+            </div>
             @endif
         </div>
     </div>
