@@ -125,7 +125,7 @@
 
 <body>
     <div id="app">
-        <div class="site-header-image" id="header" style="background-image: url('{{ asset('images/header.png') }}'); position: center;">
+        <div class="site-header-image" id="header" style="background-image: url('{{ asset('images/header.png') }}'); position: relative;">
             @include('layouts._clock')
         </div>
        
