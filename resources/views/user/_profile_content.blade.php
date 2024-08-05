@@ -29,10 +29,10 @@
         <!-- User Information -->
         <div class="row no-gutters">
             <div class="row col-sm-6">
-                <div class="col-lg-4 col-md-3 col-4">
+                <div class="col-lg-3 col-md-3 col-4">
                     <h5>Alias</h5>
                 </div>
-                <div class="col-lg-10 col-md-9 col-8">
+                <div class="col-lg-6 col-md-9 col-8">
                     {!! $user->displayAlias !!}
                     @if (count($aliases) > 1 && config('lorekeeper.extensions.aliases_on_userpage'))
                         <a class="small collapse-toggle collapsed" href="#otherUserAliases" data-toggle="collapse">&nbsp;</a>
@@ -53,10 +53,10 @@
                 <div class="col-md-9 col-8">{!! format_date($user->created_at, false) !!} ({{ $user->created_at->diffForHumans() }})</div>
             </div>
             <div class="row col-sm-6">
-                <div class="col-lg-4 col-md-3 col-4">
+                <div class="col-lg-3 col-md-3 col-4">
                     <h5>Rank</h5>
                 </div>
-                <div class="col-lg-10 col-md-9 col-8">{!! $user->rank->displayName !!} {!! add_help($user->rank->parsed_description) !!}</div>
+                <div class="col-lg-6 col-md-9 col-8">{!! $user->rank->displayName !!} {!! add_help($user->rank->parsed_description) !!}</div>
             </div>
             @if ($user->birthdayDisplay && isset($user->birthday))
                 <div class="row col-sm-7">
@@ -64,6 +64,16 @@
                         <h5>Birthday</h5>
                     </div>
                     <div class="col-md-9 col-8">{!! $user->birthdayDisplay !!}</div>
+                </div>
+            @endif
+
+            @if($user->profile->pronouns)
+            div class="row col-sm-7">
+                    <div class="col-md-3 col-4">
+                        <h5>Pronouns</h5>
+                    </div>
+                    <div class="col-md-9 col-8">
+                {{ $user->profile->pronouns }}
                 </div>
             @endif
         </div>
