@@ -266,6 +266,7 @@
                         <h5 class="card-title mb-0 text-muted"><i class="fas fa-lock mr-2"></i> Account-bound</h5>
                     </li>
                 @endif
+                @if ($user && !$readOnly && ($stack->user_id == $user->id || $user->hasPower('edit_inventories')))
                 <li class="list-group-item">
                     <a class="card-title h5 collapse-title" data-toggle="collapse" href="#deleteForm">
                         @if ($stack->user_id != $user->id)
@@ -279,6 +280,7 @@
                     </div>
                     {!! Form::close() !!}
                 </li>
+                @endif
             </ul>
         </div>
     @endif
