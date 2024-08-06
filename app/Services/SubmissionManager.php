@@ -100,58 +100,6 @@ class SubmissionManager extends Service {
                 ]), // list of rewards and addons
             ]);
 
-            // Retrieve all reward IDs for characters
-            $currencyIds = [];
-            $itemIds = [];
-            $tableIds = [];
-            $awardIds = [];
-            $statusIds = [];
-            $elementIds = [];
-            if (isset($data['character_currency_id'])) {
-                foreach ($data['character_currency_id'] as $c) {
-                    foreach ($c as $currencyId) {
-                        $currencyIds[] = $currencyId;
-                    }
-                } // Non-expanded character rewards
-            } elseif (isset($data['character_rewardable_id'])) {
-                $data['character_rewardable_id'] = array_map([$this, 'innerNull'], $data['character_rewardable_id']);
-                foreach ($data['character_rewardable_id'] as $ckey => $c) {
-                    foreach ($c as $key => $id) {
-                        switch ($data['character_rewardable_type'][$ckey][$key]) {
-                            case 'Currency': $currencyIds[] = $id;
-                                break;
-                            case 'Item': $itemIds[] = $id;
-                                break;
-                            case 'StatusEffect': $statusIds[] = $id;
-                                break;
-                            case 'LootTable': $tableIds[] = $id;
-                                break;
-                        }
-                    }
-                } // Expanded character rewards
-            }
-            array_unique($currencyIds);
-            array_unique($itemIds);
-            array_unique($tableIds);
-            array_unique($statusIds);
-            $currencies = Currency::whereIn('id', $currencyIds)->where('is_character_owned', 1)->get()->keyBy('id');
-            $items = Item::whereIn('id', $itemIds)->get()->keyBy('id');
-            $tables = LootTable::whereIn('id', $tableIds)->get()->keyBy('id');
-            $statuses = StatusEffect::whereIn('id', $statusIds)->get()->keyBy('id');
-
-            // Attach characters
-            foreach ($characters as $c) {
-                // Users might not pass in clean arrays (may contain redundant data) so we need to clean that up
-                $assets = $this->processRewards($data + ['character_id' => $c->id, 'currencies' => $currencies, 'items' => $items, 'tables' => $tables, 'statuses' => $statuses], true);
-
-                // Now we have a clean set of assets (redundant data is gone, duplicate entries are merged)
-                // so we can attach the character to the submission
-                SubmissionCharacter::create([
-                    'character_id'  => $c->id,
-                    'submission_id' => $submission->id,
-                    'data'          => json_encode(getDataReadyAssets($assets)),
-                ]);
-            }
             // Set characters that have been attached.
             $this->createCharacterAttachments($submission, $data);
 
@@ -162,7 +110,6 @@ class SubmissionManager extends Service {
 
         return $this->rollbackReturn(false);
     }
-
     /**
      * Edits an existing submission.
      *
@@ -916,6 +863,9 @@ class SubmissionManager extends Service {
         $currencyIds = [];
         $itemIds = [];
         $tableIds = [];
+        $awardIds = [];
+        $statusIds = [];
+        $elementIds = [];
         if (isset($data['character_currency_id'])) {
             foreach ($data['character_currency_id'] as $c) {
                 foreach ($c as $currencyId) {
@@ -928,47 +878,51 @@ class SubmissionManager extends Service {
                 foreach ($c as $key => $id) {
                     switch ($data['character_rewardable_type'][$ckey][$key]) {
                         case 'Currency': $currencyIds[] = $id;
-                            break;
-                        case 'Item': $itemIds[] = $id;
-                            break;
-                        case 'LootTable': $tableIds[] = $id;
-                            break;
+                                break;
+                            case 'Item': $itemIds[] = $id;
+                                break;
+                            case 'StatusEffect': $statusIds[] = $id;
+                                break;
+                            case 'LootTable': $tableIds[] = $id;
+                                break;
                     }
                 }
             } // Expanded character rewards
         }
-        array_unique($currencyIds);
-        array_unique($itemIds);
-        array_unique($tableIds);
-        $currencies = Currency::whereIn('id', $currencyIds)->where('is_character_owned', 1)->get()->keyBy('id');
-        $items = Item::whereIn('id', $itemIds)->get()->keyBy('id');
-        $tables = LootTable::whereIn('id', $tableIds)->get()->keyBy('id');
+            array_unique($currencyIds);
+            array_unique($itemIds);
+            array_unique($tableIds);
+            array_unique($statusIds);
+            $currencies = Currency::whereIn('id', $currencyIds)->where('is_character_owned', 1)->get()->keyBy('id');
+            $items = Item::whereIn('id', $itemIds)->get()->keyBy('id');
+            $tables = LootTable::whereIn('id', $tableIds)->get()->keyBy('id');
+            $statuses = StatusEffect::whereIn('id', $statusIds)->get()->keyBy('id');
 
         // Attach characters
         foreach ($characters as $key => $c) {
-            // if ($submission->prompt_id) {
-            //     if (isset($data['character_is_focus']) && $data['character_is_focus'][$c->id]) {
-            //         if ($submission->prompt->level_req) {
-            //             if (!$c->level || $c->level->current_level < $submission->prompt->level_req) {
-            //                 throw new \Exception('One or more characters are not high enough level to enter this prompt');
-            //             }
-            //         }
-            //         foreach ($submission->prompt->skills as $skill) {
-            //             if ($skill->skill->parent) {
-            //                 $charaSkill = $c->skills()->where('skill_id', $skill->skill->id)->first();
-            //                 if (!$charaSkill || $charaSkill->level < $skill->parent_level) {
-            //                     throw new \Exception('Skill level too low on one or more characters.');
-            //                 }
-            //             }
-            //             if ($skill->skill->prerequisite) {
-            //                 $charaSkill = $c->skills()->where('skill_id', $skill->skill->prerequisite->sid)->first();
-            //                 if (!$charaSkill) {
-            //                     throw new \Exception('Skill not unlocked on one or more characters.');
-            //                 }
-            //             }
-            //         }
-            //     }
-            // }
+            if ($submission->prompt_id) {
+                if (isset($data['character_is_focus']) && $data['character_is_focus'][$c->id]) {
+                    if ($submission->prompt->level_req) {
+                        if (!$c->level || $c->level->current_level < $submission->prompt->level_req) {
+                            throw new \Exception('One or more characters are not high enough level to enter this prompt');
+                        }
+                    }
+                    foreach ($submission->prompt->skills as $skill) {
+                        if ($skill->skill->parent) {
+                            $charaSkill = $c->skills()->where('skill_id', $skill->skill->id)->first();
+                            if (!$charaSkill || $charaSkill->level < $skill->parent_level) {
+                                throw new \Exception('Skill level too low on one or more characters.');
+                            }
+                        }
+                        if ($skill->skill->prerequisite) {
+                            $charaSkill = $c->skills()->where('skill_id', $skill->skill->prerequisite->sid)->first();
+                            if (!$charaSkill) {
+                                throw new \Exception('Skill not unlocked on one or more characters.');
+                            }
+                        }
+                    }
+                }
+            }
 
             // Users might not pass in clean arrays (may contain redundant data) so we need to clean that up
             $assets = $this->processRewards($data + ['character_id' => $c->id, 'currencies' => $currencies, 'items' => $items, 'tables' => $tables], true);
