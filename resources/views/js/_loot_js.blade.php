@@ -87,10 +87,6 @@ $( document ).ready(function() {
         });
     }
 
-<<<<<<< HEAD
-});
-</script>
-=======
                 var $clone = null;
                 if (val == 'Item') $clone = $itemSelect.clone();
                 else if (val == 'Pet') $clone = $PetSelect.clone();
@@ -122,4 +118,3 @@ $( document ).ready(function() {
 
     });
 </script>
->>>>>>> a2863246a7308f90c911df813e185a260b26ea6b
