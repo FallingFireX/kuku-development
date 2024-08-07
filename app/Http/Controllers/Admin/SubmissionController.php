@@ -70,6 +70,7 @@ class SubmissionController extends Controller {
         $inventory = isset($submission->data['user']) ? parseAssetData($submission->data['user']) : null;
         if (!$submission) {
             abort(404);
+        }
 
         $count['all'] = Submission::submitted($prompt->id, $submission->user_id)->count();
         $count['Hour'] = Submission::submitted($prompt->id, $submission->user_id)->where('created_at', '>=', now()->startOfHour())->count();
@@ -111,7 +112,7 @@ class SubmissionController extends Controller {
             'limit' => $limit,
         ] : []));
     }
-}
+
 
     /**
      * Shows the claim index page.
