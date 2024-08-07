@@ -424,5 +424,4 @@
             });
         </script>
     @endif
-    @endif
 @endsection
