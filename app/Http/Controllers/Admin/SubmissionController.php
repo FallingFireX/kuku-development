@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers\Admin;
 
+use Config;
+use Carbon\Carbon;
+
 use App\Http\Controllers\Controller;
 use App\Models\Award\Award;
 use App\Models\Character\Character;
@@ -67,6 +70,18 @@ class SubmissionController extends Controller {
         $inventory = isset($submission->data['user']) ? parseAssetData($submission->data['user']) : null;
         if (!$submission) {
             abort(404);
+
+        $count['all'] = Submission::submitted($prompt->id, $submission->user_id)->count();
+        $count['Hour'] = Submission::submitted($prompt->id, $submission->user_id)->where('created_at', '>=', now()->startOfHour())->count();
+        $count['Day'] = Submission::submitted($prompt->id, $submission->user_id)->where('created_at', '>=', now()->startOfDay())->count();
+        $count['Week'] = Submission::submitted($prompt->id, $submission->user_id)->where('created_at', '>=', now()->startOfWeek())->count();
+        $count['Month'] = Submission::submitted($prompt->id, $submission->user_id)->where('created_at', '>=', now()->startOfMonth())->count();
+        $count['Year'] = Submission::submitted($prompt->id, $submission->user_id)->where('created_at', '>=', now()->startOfYear())->count();
+
+        if($prompt->limit_character) {
+            $limit = $prompt->limit * Character::visible()->where('is_myo_slot', 0)->where('user_id', $submission->user_id)->count();
+        } else {
+            $limit = $prompt->limit;
         }
 
         return view('admin.submissions.submission', [
@@ -91,8 +106,12 @@ class SubmissionController extends Controller {
             'recipes'             => Recipe::orderBy('name')->pluck('name', 'id'),
             'count'               => Submission::where('prompt_id', $submission->prompt_id)->where('status', 'Approved')->where('user_id', $submission->user_id)->count(),
             'elements'            => Element::orderBy('name')->pluck('name', 'id'),
+            'count' => $count,
+            'prompt' => $prompt,
+            'limit' => $limit,
         ] : []));
     }
+}
 
     /**
      * Shows the claim index page.

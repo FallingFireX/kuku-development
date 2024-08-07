@@ -62,6 +62,48 @@ class SubmissionManager extends Service {
                 if (!$prompt) {
                     throw new \Exception('Invalid prompt selected.');
                 }
+                    
+                //check that the prompt limit hasn't been hit
+                if($prompt->limit) {
+                    //check that the user hasn't hit the prompt submission limit
+                    //filter the submissions by hour/day/week/etc and count
+                    $count['all'] = Submission::submitted($prompt->id, $user->id)->count();
+                    $count['Hour'] = Submission::submitted($prompt->id, $user->id)->where('created_at', '>=', now()->startOfHour())->count();
+                    $count['Day'] = Submission::submitted($prompt->id, $user->id)->where('created_at', '>=', now()->startOfDay())->count();
+                    $count['Week'] = Submission::submitted($prompt->id, $user->id)->where('created_at', '>=', now()->startOfWeek())->count();
+                    $count['Month'] = Submission::submitted($prompt->id, $user->id)->where('created_at', '>=', now()->startOfMonth())->count();
+                    $count['Year'] = Submission::submitted($prompt->id, $user->id)->where('created_at', '>=', now()->startOfYear())->count();
+
+                    //if limit by character is on... multiply by # of chars. otherwise, don't
+                    if($prompt->limit_character) {
+                        $limit = $prompt->limit * Character::visible()->where('is_myo_slot', 0)->where('user_id', $user->id)->count();
+                    } else { $limit = $prompt->limit; }
+                    //if limit by time period is on
+                    if($prompt->limit_period) {
+                        if($count[$prompt->limit_period] >= $limit) throw new \Exception("You have already submitted to this prompt the maximum number of times.");
+                    } else if($count['all'] >= $limit) throw new \Exception("You have already submitted to this prompt the maximum number of times.");
+                }
+            }
+            else $prompt = null;
+
+            // The character identification comes in both the slug field and as character IDs
+            // that key the reward ID/quantity arrays. 
+            // We'll need to match characters to the rewards for them.
+            // First, check if the characters are accessible to begin with.
+            if(isset($data['slug'])) {
+                $characters = Character::myo(0)->visible()->whereIn('slug', $data['slug'])->get();
+                if(count($characters) != count($data['slug'])) throw new \Exception("One or more of the selected characters do not exist.");
+            }
+            else $characters = [];
+
+            // Get a list of rewards, then create the submission itself
+            $promptRewards = createAssetsArray();
+            if(!$isClaim) 
+            {
+                foreach($prompt->rewards as $reward) 
+                {
+                    addAsset($promptRewards, $reward->reward, $reward->quantity);
+                }
 
                 if ($prompt->staff_only && !$user->isStaff) {
                     throw new \Exception('This prompt may only be submitted to by staff members.');
