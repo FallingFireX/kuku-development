@@ -108,7 +108,7 @@ class SubmissionController extends Controller {
             // 'count'               => Submission::where('prompt_id', $submission->prompt_id)->where('status', 'Approved')->where('user_id', $submission->user_id)->count(),
             'elements'            => Element::orderBy('name')->pluck('name', 'id'),
             'count' => $count,
-            'prompt' => $prompt,
+            'prompt' => $submission->prompt,
             'limit' => $limit,
         ] : []));
     }
