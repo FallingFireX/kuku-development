@@ -79,10 +79,10 @@ class SubmissionController extends Controller {
         $count['Month'] = Submission::submitted($submission->prompt->id, $submission->user_id)->where('created_at', '>=', now()->startOfMonth())->count();
         $count['Year'] = Submission::submitted($submission->prompt->id, $submission->user_id)->where('created_at', '>=', now()->startOfYear())->count();
 
-        if($prompt->limit_character) {
-            $limit = $prompt->limit * Character::visible()->where('is_myo_slot', 0)->where('user_id', $submission->user_id)->count();
+        if($submission->prompt->limit_character) {
+            $limit = $submission->prompt->limit * Character::visible()->where('is_myo_slot', 0)->where('user_id', $submission->user_id)->count();
         } else {
-            $limit = $prompt->limit;
+            $limit = $submission->prompt->limit;
         }
 
         return view('admin.submissions.submission', [
