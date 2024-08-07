@@ -11,19 +11,23 @@
         {!! breadcrumbs(['Admin Panel' => 'admin', 'Claim Queue' => 'admin/claims/pending', 'Claim (#' . $submission->id . ')' => $submission->viewUrl]) !!}
     @endif
 
-@if($submission->status == 'Pending')
+    @if ($submission->status == 'Pending')
 
-    <h1>
-        {{ $submission->prompt_id ? 'Submission' : 'Claim' }} (#{{ $submission->id }})
-        <span class="float-right badge badge-{{ $submission->status == 'Pending' ? 'secondary' : ($submission->status == 'Approved' ? 'success' : 'danger') }}">{{ $submission->status }}</span>
-    </h1>
+        <h1>
+            {{ $submission->prompt_id ? 'Submission' : 'Claim' }} (#{{ $submission->id }})
+            <span class="float-right badge badge-{{ $submission->status == 'Pending' || $submission->status == 'Draft' ? 'secondary' : ($submission->status == 'Approved' ? 'success' : 'danger') }}">
+                {{ $submission->status }}
+            </span>
+        </h1>
 
-    <div class="mb-1">
-        <div class="row">
-            <div class="col-md-2 col-4"><h5>User</h5></div>
-            <div class="col-md-10 col-8">{!! $submission->user->displayName !!}</div>
-        </div>
-        @if($submission->prompt_id)
+        <div class="mb-1">
+            <div class="row">
+                <div class="col-md-2 col-4">
+                    <h5>User</h5>
+                </div>
+                <div class="col-md-10 col-8">{!! $submission->user->displayName !!}</div>
+            </div>
+            @if($submission->prompt_id)
             <div class="row">
                 <div class="col-md-2 col-4"><h5>Prompt</h5></div>
                 <div class="col-md-10 col-8">{!! $submission->prompt->displayName !!}</div>
@@ -50,52 +54,6 @@
                 </div>
             </div>
         @endif
-        <div class="row">
-            <div class="col-md-2 col-4"><h5>URL</h5></div>
-            <div class="col-md-10 col-8"><a href="{{ $submission->url }}">{{ $submission->url }}</a></div>
-        </div>
-        <div class="row">
-            <div class="col-md-2 col-4"><h5>Submitted</h5></div>
-            <div class="col-md-10 col-8">{!! format_date($submission->created_at) !!} ({{ $submission->created_at->diffForHumans() }})</div>
-        </div>
-    </div>
-    <h2>Comments</h2>
-    <div class="card mb-3"><div class="card-body">{!! nl2br(($submission->comments)) !!}</div></div>
-    @if(Auth::check() && $submission->staff_comments && ($submission->user_id == Auth::user()->id || Auth::user()->hasPower('manage_submissions')))
-        <h2>Staff Comments ({!! $submission->staff->displayName !!})</h2>
-        <div class="card mb-3"><div class="card-body">
-		    @if(isset($submission->parsed_staff_comments))
-                {!! $submission->parsed_staff_comments !!}
-            @else
-                {!! $submission->staff_comments !!}
-            @endif
-		</div></div>
-    @endif
-
-    @if ($submission->status == 'Pending')
-
-        <h1>
-            {{ $submission->prompt_id ? 'Submission' : 'Claim' }} (#{{ $submission->id }})
-            <span class="float-right badge badge-{{ $submission->status == 'Pending' || $submission->status == 'Draft' ? 'secondary' : ($submission->status == 'Approved' ? 'success' : 'danger') }}">
-                {{ $submission->status }}
-            </span>
-        </h1>
-
-        <div class="mb-1">
-            <div class="row">
-                <div class="col-md-2 col-4">
-                    <h5>User</h5>
-                </div>
-                <div class="col-md-10 col-8">{!! $submission->user->displayName !!}</div>
-            </div>
-            @if ($submission->prompt_id)
-                <div class="row">
-                    <div class="col-md-2 col-4">
-                        <h5>Prompt</h5>
-                    </div>
-                    <div class="col-md-10 col-8">{!! $submission->prompt->displayName !!}</div>
-                </div>
-                
             @endif
             <div class="row">
                 <div class="col-md-2 col-4">
