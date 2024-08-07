@@ -60,7 +60,7 @@
         </div>
     </div>
     <h2>Comments</h2>
-    <div class="card mb-3"><div class="card-body">{!! nl2br(htmlentities($submission->comments)) !!}</div></div>
+    <div class="card mb-3"><div class="card-body">{!! nl2br(($submission->comments)) !!}</div></div>
     @if(Auth::check() && $submission->staff_comments && ($submission->user_id == Auth::user()->id || Auth::user()->hasPower('manage_submissions')))
         <h2>Staff Comments ({!! $submission->staff->displayName !!})</h2>
         <div class="card mb-3"><div class="card-body">
