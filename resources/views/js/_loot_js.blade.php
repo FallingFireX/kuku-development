@@ -86,6 +86,10 @@ $( document ).ready(function() {
             $(this).parent().parent().remove();
         });
     }
+    function attachRewardTypeListener(node) {
+            node.on('change', function(e) {
+                var val = $(this).val();
+                var $cell = $(this).parent().parent().find('.loot-row-select');
 
                 var $clone = null;
                 if (val == 'Item') $clone = $itemSelect.clone();
