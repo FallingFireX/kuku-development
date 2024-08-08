@@ -96,7 +96,7 @@
                     e.preventDefault();
                     removePetRow($(this));
                 })
-                $clone.addPetListener($clone.find('.pet-select'));
+                $clone.addPetListener($clone.find('.default.pet-select'));
                 $clone.find('.default.pet-select').selectize();
             }
 
