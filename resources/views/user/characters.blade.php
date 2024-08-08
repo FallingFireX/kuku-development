@@ -11,7 +11,7 @@
         {!! $user->displayName !!}'s Characters
     </h1>
     <div class="text-right mb-2">
-        <a class="btn btn-primary create-folder mx-1" href="{{ url('characters') }}"><i class="fas fa-pencil"></i> Sort/Manage Kukuri</a>
+        <a class="btn btn-primary create-folder mx-1" href="{{ url('characters') }}"><i class="fa-solid fa-pencil"></i> Sort/Manage Kukuri</a>
     </div>
     @include('user._characters', ['characters' => $characters, 'myo' => false])
 @endsection
