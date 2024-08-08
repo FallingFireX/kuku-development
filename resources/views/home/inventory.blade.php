@@ -43,16 +43,16 @@
             <div class="tab-pane fade {{ $loop->first ? 'show active' : '' }}" id="category-{{ isset($categories[$categoryId]) ? $categoryId : 'misc'}}">
                 @foreach($categoryItems->chunk(4) as $chunk)
                 @foreach($chunk as $item)
-                <div class="col-sm-3 col-6 text-center inventory-item" data-id="{{ $stack->first()->pivot->id }}" data-name="{{ $user->name }}'s {{ $stack->first()->name }}">
-                                    @if ($stack->first()->has_image)
+                <div class="col-sm-3 col-6 text-center inventory-item" data-id="{{ $item->first()->pivot->id }}" data-name="{{ $user->name }}'s {{ $item->first()->name }}">
+                                    @if ($item->first()->has_image)
                                         <div class="mb-1">
                                             <a href="#" class="inventory-stack">
-                                                <img src="{{ $stack->first()->imageUrl }}" alt="{{ $stack->first()->name }}" />
+                                                <img src="{{ $item->first()->imageUrl }}" alt="{{ $item->first()->name }}" />
                                             </a>
                                         </div>
                                     @endif
                                     <div>
-                                        <a href="#" class="inventory-stack inventory-stack-name">{{ $stack->first()->name }} x{{ $stack->sum('pivot.count') }}</a>
+                                        <a href="#" class="inventory-stack inventory-stack-name">{{ $item->first()->name }} x{{ $item->sum('pivot.count') }}</a>
                                     </div>
                                 </div>
                 @endforeach
