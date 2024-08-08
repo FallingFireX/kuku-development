@@ -30,8 +30,9 @@
         </ul>
     </div>
     <div class="card-body tab-content">
+    <div class="tab-pane fade {{ $loop->first ? 'show active' : '' }}" id="category-{{ isset($categories[$categoryId]) ? $categoryId : 'misc'}}">
         @foreach($items as $categoryId => $categoryItems)
-            <div class="tab-pane fade {{ $loop->first ? 'show active' : '' }}" id="category-{{ isset($categories[$categoryId]) ? $categoryId : 'misc'}}">
+            
             @foreach ($categoryItems->chunk(4) as $chunk)
                         <div class="row mb-3">
                             @foreach ($chunk as $itemId => $stack)
