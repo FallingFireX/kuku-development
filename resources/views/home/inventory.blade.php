@@ -27,9 +27,7 @@
 
     <div id="defView" class="hide">
         @foreach ($items as $categoryId => $categoryItems)
-        <div class="row justify-content-center">
-            <div class="col-md-4">
-                <div class="card mb-4">
+            <div class="card mb-3 inventory-category">
                 <h5 class="card-header inventory-header">
                     {!! isset($categories[$categoryId]) ? '<a href="' . $categories[$categoryId]->searchUrl . '">' . $categories[$categoryId]->name . '</a>' : 'Miscellaneous' !!}
                     <a class="small inventory-collapse-toggle collapse-toggle" href="#categoryId_{!! isset($categories[$categoryId]) ? $categories[$categoryId]->id : 'miscellaneous' !!}" data-toggle="collapse">Show</a>
@@ -54,7 +52,6 @@
                         </div>
                     @endforeach
                 </div>
-            </div>
             </div>
         @endforeach
     </div>
