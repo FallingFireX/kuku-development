@@ -70,18 +70,19 @@ class SubmissionController extends Controller {
         $inventory = isset($submission->data['user']) ? parseAssetData($submission->data['user']) : null;
         if (!$submission) {
             abort(404);
+        }
 
-        $count['all'] = Submission::submitted($prompt->id, $submission->user_id)->count();
-        $count['Hour'] = Submission::submitted($prompt->id, $submission->user_id)->where('created_at', '>=', now()->startOfHour())->count();
-        $count['Day'] = Submission::submitted($prompt->id, $submission->user_id)->where('created_at', '>=', now()->startOfDay())->count();
-        $count['Week'] = Submission::submitted($prompt->id, $submission->user_id)->where('created_at', '>=', now()->startOfWeek())->count();
-        $count['Month'] = Submission::submitted($prompt->id, $submission->user_id)->where('created_at', '>=', now()->startOfMonth())->count();
-        $count['Year'] = Submission::submitted($prompt->id, $submission->user_id)->where('created_at', '>=', now()->startOfYear())->count();
+        $count['all'] = Submission::submitted($submission->prompt->id, $submission->user_id)->count();
+        $count['Hour'] = Submission::submitted($submission->prompt->id, $submission->user_id)->where('created_at', '>=', now()->startOfHour())->count();
+        $count['Day'] = Submission::submitted($submission->prompt->id, $submission->user_id)->where('created_at', '>=', now()->startOfDay())->count();
+        $count['Week'] = Submission::submitted($submission->prompt->id, $submission->user_id)->where('created_at', '>=', now()->startOfWeek())->count();
+        $count['Month'] = Submission::submitted($submission->prompt->id, $submission->user_id)->where('created_at', '>=', now()->startOfMonth())->count();
+        $count['Year'] = Submission::submitted($submission->prompt->id, $submission->user_id)->where('created_at', '>=', now()->startOfYear())->count();
 
-        if($prompt->limit_character) {
-            $limit = $prompt->limit * Character::visible()->where('is_myo_slot', 0)->where('user_id', $submission->user_id)->count();
+        if($submission->prompt->limit_character) {
+            $limit = $submission->prompt->limit * Character::visible()->where('is_myo_slot', 0)->where('user_id', $submission->user_id)->count();
         } else {
-            $limit = $prompt->limit;
+            $limit = $submission->prompt->limit;
         }
 
         return view('admin.submissions.submission', [
@@ -104,14 +105,13 @@ class SubmissionController extends Controller {
             'tables'              => LootTable::orderBy('name')->pluck('name', 'id'),
             'raffles'             => Raffle::where('rolled_at', null)->where('is_active', 1)->orderBy('name')->pluck('name', 'id'),
             'recipes'             => Recipe::orderBy('name')->pluck('name', 'id'),
-            'count'               => Submission::where('prompt_id', $submission->prompt_id)->where('status', 'Approved')->where('user_id', $submission->user_id)->count(),
             'elements'            => Element::orderBy('name')->pluck('name', 'id'),
             'count' => $count,
-            'prompt' => $prompt,
+            'prompt' => $submission->prompt,
             'limit' => $limit,
         ] : []));
     }
-}
+
 
     /**
      * Shows the claim index page.
@@ -176,6 +176,7 @@ class SubmissionController extends Controller {
             'recipes'             => Recipe::orderBy('name')->pluck('name', 'id'),
             'count'               => Submission::where('prompt_id', $id)->where('status', 'Approved')->where('user_id', $submission->user_id)->count(),
             'rewardsData'         => isset($submission->data['rewards']) ? parseAssetData($submission->data['rewards']) : null,
+            'elements'            => Element::orderBy('name')->pluck('name', 'id'),
         ] : []));
     }
 

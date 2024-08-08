@@ -62,6 +62,10 @@ class SubmissionManager extends Service {
                 if (!$prompt) {
                     throw new \Exception('Invalid prompt selected.');
                 }
+
+                if ($prompt->staff_only && !$user->isStaff) {
+                    throw new \Exception('This prompt may only be submitted to by staff members.');
+                }
                     
                 //check that the prompt limit hasn't been hit
                 if($prompt->limit) {
@@ -83,8 +87,9 @@ class SubmissionManager extends Service {
                         if($count[$prompt->limit_period] >= $limit) throw new \Exception("You have already submitted to this prompt the maximum number of times.");
                     } else if($count['all'] >= $limit) throw new \Exception("You have already submitted to this prompt the maximum number of times.");
                 }
+            } else {
+                $prompt = null;
             }
-            else $prompt = null;
 
             // The character identification comes in both the slug field and as character IDs
             // that key the reward ID/quantity arrays. 
