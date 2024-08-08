@@ -44,7 +44,7 @@ class Character extends Model {
         'is_sellable', 'is_tradeable', 'is_giftable',
         'sale_value', 'transferrable_at', 'is_visible',
         'is_gift_art_allowed', 'is_gift_writing_allowed', 'is_trading', 'sort',
-        'is_myo_slot', 'name', 'trade_id', 'owner_url', 'class_id', 'genotype', 'phenotype', 'gender', 'eyecolor', 'spd', 'def', 'atk',
+        'is_myo_slot', 'name', 'trade_id', 'owner_url', 'folder_id' , 'class_id', 'genotype', 'phenotype', 'gender', 'eyecolor', 'spd', 'def', 'atk',
     ];
 
     /**
@@ -279,6 +279,14 @@ class Character extends Model {
      */
     public function skills() {
         return $this->hasMany('App\Models\Character\CharacterSkill', 'character_id');
+    }
+
+    /**
+     * Gets which folder the character currently resides in.
+     */
+    public function folder()
+    {
+        return $this->belongsTo('App\Models\Character\CharacterFolder', 'folder_id');
     }
 
     /**********************************************************************************************
