@@ -19,40 +19,40 @@
     </div>
 
     <div>
-        <ul class="nav nav-tabs card-header-tabs">
-            @foreach($items as $categoryId => $categoryItems)
+    <ul class="nav nav-tabs card-header-tabs">
+        @foreach ($items as $categoryId => $categoryItems)
             <li class="nav-item">
-                    <a class="nav-link {{ $loop->first ? 'active' : '' }}" id="categoryTab-{{ isset($categories[$categoryId]) ? $categoryId : 'misc'}}" data-toggle="tab" href="#category-{{ isset($categories[$categoryId]) ? $categoryId : 'misc'}}" role="tab">
-                        {!! isset($categories[$categoryId]) ? $categories[$categoryId]->name : 'Miscellaneous' !!}
-                    </a>
-                </li>
-            @endforeach
-        </ul>
-    </div>
-    <div class="card-body tab-content">
-        @foreach($items as $categoryId => $categoryItems)
-            <div class="tab-pane fade {{ $loop->first ? 'show active' : '' }}" id="category-{{ isset($categories[$categoryId]) ? $categoryId : 'misc'}}">
-            @foreach ($categoryItems->chunk(4) as $chunk)
-                        <div class="row mb-3">
-                            @foreach ($chunk as $itemId => $stack)
-                            <div class="col-sm-3 col-6 text-center inventory-item" data-id="{{ $stack->first()->pivot->id }}" data-name="{{ $user->name }}'s {{ $stack->first()->name }}">
-                                    @if ($stack->first()->has_image)
-                                        <div class="mb-1">
-                                            <a href="#" class="inventory-stack">
-                                                <img src="{{ $stack->first()->imageUrl }}" style="height: 75px;" alt="{{ $stack->first()->name }}" />
-                                            </a>
-                                        </div>
-                                    @endif
-                                    <div>
-                                        <a href="#" class="inventory-stack inventory-stack-name">{{ $stack->first()->name }} x{{ $stack->sum('pivot.count') }}</a>
-                                    </div>
-                            </div>
-                            @endforeach
-            @endforeach
-                        </div>
-            </div>
+                <a class="nav-link {{ $loop->first ? 'active' : '' }}" id="categoryTab-{{ isset($categories[$categoryId]) ? $categoryId : 'misc' }}" data-toggle="tab" href="#category-{{ isset($categories[$categoryId]) ? $categoryId : 'misc' }}"
+                    role="tab">
+                    {!! isset($categories[$categoryId]) ? $categories[$categoryId]->name : 'Miscellaneous' !!}
+                </a>
+            </li>
         @endforeach
-    </div>
+    </ul>
+</div>
+<div class="card-body tab-content">
+    @foreach ($items as $categoryId => $categoryItems)
+        <div class="tab-pane fade {{ $loop->first ? 'show active' : '' }}" id="category-{{ isset($categories[$categoryId]) ? $categoryId : 'misc' }}">
+            @foreach ($categoryItems->chunk(4) as $chunk)
+                <div class="row mb-3">
+                    @foreach ($chunk as $itemId => $stack)
+                        <div class="col-sm-3 col-6 text-center inventory-item" data-id="{{ $stack->first()->pivot->id }}" data-name="{{ $user->name }}'s {{ $stack->first()->name }}">
+                            @if ($stack->first()->has_image)
+                                <div class="mb-1">
+                                    <a href="#" class="inventory-stack">
+                                        <img src="{{ $stack->first()->imageUrl }}" style="height: 75px;" alt="{{ $stack->first()->name }}" />
+                                    </a>
+                                </div>
+                            @endif
+                            <div>
+                                <a href="#" class="inventory-stack inventory-stack-name">{{ $stack->first()->name }} x{{ $stack->sum('pivot.count') }}</a>
+                            </div>
+                        </div>
+                    @endforeach
+            @endforeach
+        </div>
+    @endforeach
+</div>
 
 
     <!-- <div id="defView" class="hide">
