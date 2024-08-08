@@ -40,7 +40,7 @@
                                     @if ($stack->first()->has_image)
                                         <div class="mb-1">
                                             <a href="#" class="inventory-stack">
-                                                <img src="{{ $stack->first()->imageUrl }}" alt="{{ $stack->first()->name }}" />
+                                                <img src="{{ $stack->first()->imageUrl }}" style="height: 50px;" alt="{{ $stack->first()->name }}" />
                                             </a>
                                         </div>
                                     @endif
@@ -90,7 +90,7 @@
             </div>
         @endforeach
     </div>
--->
+
     <div id="sumView" class="hide">
         @foreach ($items as $categoryId => $categoryItems)
             <div class="card mb-2">
