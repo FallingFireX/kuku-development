@@ -55,7 +55,7 @@
 
     {!! Form::close() !!}
     
-    <div id="petList">
+    <div id="pet-row">
             <div class="d-flex mb-2">
                 {!! Form::select('pet_ids[]', $pets, null, ['class' => 'form-control mr-2 default pet-select', 'placeholder' => 'Select Pet']) !!}
                 {!! Form::text('quantities[]', 1, ['class' => 'form-control mr-2', 'placeholder' => 'Quantity']) !!}
