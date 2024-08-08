@@ -63,7 +63,7 @@
     @endforeach
 </div>
 
-    <div id="defView" class="hide">
+    <!-- <div id="defView" class="hide">
         @foreach ($items as $categoryId => $categoryItems)
             <div class="card mb-3 inventory-category">
                 <h5 class="card-header inventory-header">
@@ -120,7 +120,7 @@
                 </div>
             </div>
         @endforeach
-    </div>
+    </div> -->
 
     <div class="text-right mb-4">
         <a href="{{ url(Auth::user()->url . '/item-logs') }}">View logs...</a>
