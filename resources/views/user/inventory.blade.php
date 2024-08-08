@@ -124,7 +124,7 @@
             </div>
         @endforeach
     </div> -->
-
+<br><br>
     <h3>Latest Activity</h3>
     <div class="mb-4 logs-table">
         <div class="logs-table-header">
