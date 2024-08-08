@@ -58,7 +58,7 @@
     <div class="form-group">
     <div id="petList">
             <div class="pet-row hide mb-2">
-                {!! Form::select('pet_ids[]', $pets, null, ['class' => 'form-control mr-2 default pet-select', 'placeholder' => 'Select Pet']) !!}
+                {!! Form::select('pet_ids[]', $pets, null, ['class' => 'form-control mr-2 pet-select', 'placeholder' => 'Select Pet']) !!}
                 {!! Form::text('quantities[]', 1, ['class' => 'form-control mr-2', 'placeholder' => 'Quantity']) !!}
                 {!! Form::select('variant[]', ['none' => 'No Variant', 'randomize' => 'Randomize Variant'], null, ['class' => 'form-control mr-2 variant-select']) !!}
                 {!! Form::select('evolution[]', ['none' => 'No Evolution', 'randomize' => 'Randomize Evolution'], null, ['class' => 'form-control mr-2 evolution-select']) !!}
