@@ -90,7 +90,7 @@
             </div>
         @endforeach
     </div>
-
+-->
     <div id="sumView" class="hide">
         @foreach ($items as $categoryId => $categoryItems)
             <div class="card mb-2">
@@ -123,7 +123,7 @@
                 </div>
             </div>
         @endforeach
-    </div> -->
+    </div> 
 <br><br>
     <h3>Latest Activity</h3>
     <div class="mb-4 logs-table">
