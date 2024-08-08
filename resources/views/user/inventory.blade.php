@@ -33,8 +33,9 @@
     <div class="card-body tab-content">
         @foreach($items as $categoryId => $categoryItems)
             <div class="tab-pane fade {{ $loop->first ? 'show active' : '' }}" id="category-{{ isset($categories[$categoryId]) ? $categoryId : 'misc'}}">
-                @foreach($categoryItems->chunk(4) as $chunk)
-                @foreach($chunk as $item)
+            @foreach ($categoryItems->chunk(4) as $chunk)
+                        <div class="row mb-3">
+                            @foreach ($chunk as $itemId => $stack)
                 <div class="col-sm-3 col-6 text-center inventory-item" data-id="{{ $stack->first()->pivot->id }}" data-name="{{ $user->name }}'s {{ $stack->first()->name }}">
                                     @if ($stack->first()->has_image)
                                         <div class="mb-1">
