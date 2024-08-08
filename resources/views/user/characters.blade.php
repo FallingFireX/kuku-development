@@ -10,6 +10,8 @@
     <h1>
         {!! $user->displayName !!}'s Characters
     </h1>
-
+    <div class="text-right mb-2">
+        <a class="btn btn-primary create-folder mx-1" href="#"><i class="fas fa-plus"></i> Sort/Manage Kukuri</a>
+    </div>
     @include('user._characters', ['characters' => $characters, 'myo' => false])
 @endsection
