@@ -40,7 +40,7 @@
                             @if ($stack->first()->has_image)
                                 <div class="mb-1">
                                     <a href="#" class="inventory-stack">
-                                        <img src="{{ $stack->first()->imageUrl }}" style="height: 150px;" alt="{{ $stack->first()->name }}" />
+                                        <img src="{{ $stack->first()->imageUrl }}" alt="{{ $stack->first()->name }}" />
                                     </a>
                                 </div>
                             @endif
