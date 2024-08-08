@@ -18,11 +18,10 @@
         </div>
     </div>
 
-<div class="card character-bio">
-    <div class="card-header">
+    <div>
         <ul class="nav nav-tabs card-header-tabs">
             @foreach($items as $categoryId => $categoryItems)
-                <li class="nav-item">
+            <li class="nav-item">
                     <a class="nav-link {{ $loop->first ? 'active' : '' }}" id="categoryTab-{{ isset($categories[$categoryId]) ? $categoryId : 'misc'}}" data-toggle="tab" href="#category-{{ isset($categories[$categoryId]) ? $categoryId : 'misc'}}" role="tab">
                         {!! isset($categories[$categoryId]) ? $categories[$categoryId]->name : 'Miscellaneous' !!}
                     </a>
@@ -54,7 +53,7 @@
             </div>
         @endforeach
     </div>
-</div>
+
 
     <!-- <div id="defView" class="hide">
         @foreach ($items as $categoryId => $categoryItems)
