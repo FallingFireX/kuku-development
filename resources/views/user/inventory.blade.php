@@ -18,7 +18,7 @@
         </div>
     </div>
 
-    <div class="card character-bio">
+<div class="card character-bio">
     <div class="card-header">
         <ul class="nav nav-tabs card-header-tabs">
             @foreach($items as $categoryId => $categoryItems)
@@ -36,7 +36,7 @@
             @foreach ($categoryItems->chunk(4) as $chunk)
                         <div class="row mb-3">
                             @foreach ($chunk as $itemId => $stack)
-                <div class="col-sm-3 col-6 text-center inventory-item" data-id="{{ $stack->first()->pivot->id }}" data-name="{{ $user->name }}'s {{ $stack->first()->name }}">
+                            <div class="col-sm-3 col-6 text-center inventory-item" data-id="{{ $stack->first()->pivot->id }}" data-name="{{ $user->name }}'s {{ $stack->first()->name }}">
                                     @if ($stack->first()->has_image)
                                         <div class="mb-1">
                                             <a href="#" class="inventory-stack">
@@ -55,7 +55,7 @@
     </div>
 </div>
 
-    <div id="defView" class="hide">
+    <!-- <div id="defView" class="hide">
         @foreach ($items as $categoryId => $categoryItems)
             <div class="card mb-3 inventory-category">
                 <h5 class="card-header inventory-header">
@@ -122,7 +122,7 @@
                 </div>
             </div>
         @endforeach
-    </div>
+    </div> -->
 
     <h3>Latest Activity</h3>
     <div class="mb-4 logs-table">
