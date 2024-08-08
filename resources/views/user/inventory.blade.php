@@ -47,11 +47,11 @@
                                     <div>
                                         <a href="#" class="inventory-stack inventory-stack-name">{{ $stack->first()->name }} x{{ $stack->sum('pivot.count') }}</a>
                                     </div>
-                                </div>
+                            </div>
                             @endforeach
             @endforeach
                         </div>
-                </div>
+            </div>
         @endforeach
     </div>
 </div>
