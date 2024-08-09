@@ -245,9 +245,9 @@ class PetService extends Service {
                 unset($data['image']);
             }
 
-            $pet->update($data, $pet);
+            $pet->update($data);
 
-            if ($pet) {
+            if ($image) {
                 $this->handleImage($image, $pet->imagePath, $pet->imageFileName);
             }
 
