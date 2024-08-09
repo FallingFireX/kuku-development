@@ -137,7 +137,7 @@ p {
 }
 
 .sidebar ul li {
-    background-color: #A3D4BE;
+    background-color: white;
     border-top-left-radius: .25rem;
     border-bottom-left-radius: .25rem;
     margin-bottom: 1em;
@@ -154,7 +154,7 @@ p {
 }
 
 .sidebar .sidebar-header {
-    background-color: #A3D4BE;
+    background-color: #343a40;
 }
 .sidebar .sidebar-header a {
     color: #527f56;
