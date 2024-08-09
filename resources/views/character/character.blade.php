@@ -52,23 +52,35 @@
             @endif
             <br>
             <p></p>
+            <!--Pets relocation-->
             <div class="card mb-7">
                 <div class="card-header">
-                    <p>test</p>
+                @if (count($image->character->pets))
+                    <div class="row justify-content-center text-center">
+                        {{-- get one random pet --}}
+                        @php
+                            $pets = $image->character->pets()->orderBy('sort', 'DESC')->limit(config('lorekeeper.pets.display_pet_count'))->get();
+                        @endphp
+                        @foreach ($pets as $pet)
+                            @if (config('lorekeeper.pets.pet_bonding_enabled'))
+                                @include('character._pet_bonding_info', ['pet' => $pet])
+                            @else
+                                <div class="ml-2 mr-3">
+                                    <img src="{{ $pet->pet->variantImage($pet->id) }}" style="max-width: 75px;" />
+                                    <br>
+                                    <span class="text-light badge badge-dark" style="font-size:95%;">{!! $pet->pet_name !!}</span>
+                                </div>
+                            @endif
+                        @endforeach
+                        <div class="ml-auto float-right mr-3">
+                            <a href="{{ $character->url . '/pets' }}" class="btn btn-outline-info btn-sm">View All</a>
+                        </div>
+                    </div>
+                @endif
                 </div>
             </div>
         </div>
         
-
-        <!-- <div class="col-md-7">
-            <div class="card mb-7">
-                <div class="card-header">
-                    <p>test</p>
-                </div>
-            </div>
-            <br>
-            <p></p>
-        </div> -->
         @include('character._image_info', ['image' => $character->image])
     </div>
         
