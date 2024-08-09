@@ -53,7 +53,7 @@
             <br>
             <p></p>
         </div>
-        @include('character._image_info', ['image' => $character->image])
+        
 
         <div class="col-md-7">
             <div class="card character-bio">
@@ -63,8 +63,8 @@
             </div>
             <br>
             <p></p>
-    </div>
-    
+        </div>
+        @include('character._image_info', ['image' => $character->image])
     </div>
         
         
