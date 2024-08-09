@@ -59,11 +59,11 @@
                     Familiars
                 </h5>
                 <div class="card-body">
-                @if (count($image->character->pets))
+                @if (count($pet->image->character->pets))
                     <div class="row justify-content-center text-center">
                         {{-- get one random pet --}}
                         @php
-                            $pets = $image->character->pets()->orderBy('sort', 'DESC')->limit(config('lorekeeper.pets.display_pet_count'))->get();
+                            $pets = $pet->image->character->pets()->orderBy('sort', 'DESC')->limit(config('lorekeeper.pets.display_pet_count'))->get();
                         @endphp
                         @foreach ($pets as $pet)
                             @if (config('lorekeeper.pets.pet_bonding_enabled'))
