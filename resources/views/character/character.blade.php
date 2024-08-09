@@ -54,7 +54,10 @@
             <p></p>
             <!--Pets relocation-->
             <div class="card mb-7">
-                <div class="card-header">
+                <h5 class="card-header">
+                    Familiars
+    </h5>
+                <div class="card-body">
                 @if (count($image->character->pets))
                     <div class="row justify-content-center text-center">
                         {{-- get one random pet --}}
@@ -66,7 +69,7 @@
                                 @include('character._pet_bonding_info', ['pet' => $pet])
                             @else
                                 <div class="ml-2 mr-3">
-                                    <img src="{{ $pet->pet->variantImage($pet->id) }}" style="max-width: 75px;" />
+                                    <img src="{{ $pet->pet->variantImage($pet->id) }}" style="max-width: 80%;" />
                                     <br>
                                     <span class="text-light badge badge-dark" style="font-size:95%;">{!! $pet->pet_name !!}</span>
                                 </div>
