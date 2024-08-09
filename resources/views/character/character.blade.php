@@ -72,8 +72,8 @@
                             @if (config('lorekeeper.pets.pet_bonding_enabled'))
                                 @include('character._pet_bonding_info', ['pet' => $pet])
                             @else
-                                <div class="ml-2 mr-3">
-                                    <img src="{{ $pet->pet->variantImage($pet->id) }}" style="max-width: 70%;" />
+                                <div class="col md-6">
+                                    <img src="{{ $pet->pet->variantImage($pet->id) }}" style="max-width: 100%;" />
                                     <br>
                                     <span class="text-light badge badge-dark" style="font-size:95%;">{!! $pet->pet_name !!}</span>
                                 </div>
