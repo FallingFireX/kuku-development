@@ -222,7 +222,6 @@ class PetService extends Service {
      */
     public function updatePet($pet, $data, $user) {
         DB::beginTransaction();
-        dd($data);
 
         try {
             if (isset($data['pet_category_id']) && $data['pet_category_id'] == 'none') {
@@ -241,6 +240,7 @@ class PetService extends Service {
 
             $image = null;
             if (isset($data['image']) && $data['image']) {
+                dd($pet->has_image);
                 $data['has_image'] = 1;
                 $image = $data['image'];
                 unset($data['image']);
