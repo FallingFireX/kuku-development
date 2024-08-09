@@ -38,7 +38,7 @@
 
     <div id="sortable" class="row sortable justify-content-center">
         @foreach($character->pets()->orderBy('sort', 'DESC')->get() as $pet)
-            <div class="col-md-3 col-6" data-id="{{ $pet->id }}">
+            <div class="col-md-3 col-6" data-id="{{ $pet->id }}" style="padding-top:20px;">
                 <div class="card mb-3 inventory-category h-100" data-id="{{ $pet->id }}">
                     <div class="card-body inventory-body text-center">
                         <div class="mb-1">
