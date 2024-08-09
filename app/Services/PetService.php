@@ -236,11 +236,10 @@ class PetService extends Service {
                 throw new \Exception('The selected pet category is invalid.');
             }
 
-            $data = $this->populateData($data);
+            $data = $this->populateData($data, $pet);
 
             $image = null;
             if (isset($data['image']) && $data['image']) {
-                dd($pet->image);
                 $data['has_image'] = 1;
                 $image = $data['image'];
                 unset($data['image']);
