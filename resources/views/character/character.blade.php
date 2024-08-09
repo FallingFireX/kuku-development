@@ -69,7 +69,7 @@
                                 @include('character._pet_bonding_info', ['pet' => $pet])
                             @else
                                 <div class="ml-2 mr-3">
-                                    <img src="{{ $pet->pet->variantImage($pet->id) }}" style="max-width: 80%;" />
+                                    <img src="{{ $pet->pet->variantImage($pet->id) }}" style="max-width: 100px;" />
                                     <br>
                                     <span class="text-light badge badge-dark" style="font-size:95%;">{!! $pet->pet_name !!}</span>
                                 </div>

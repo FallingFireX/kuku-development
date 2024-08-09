@@ -211,7 +211,7 @@
                         <a href="#" class="btn btn-outline-info btn-sm edit-features mb-3" data-id="{{ $image->id }}"><i class="fas fa-cog"></i> Edit</a>
                     </div>
                 @endif
-                @if (count($image->character->pets))
+                <!-- @if (count($image->character->pets))
                     <div class="row justify-content-center text-center">
                         {{-- get one random pet --}}
                         @php
@@ -232,7 +232,7 @@
                             <a href="{{ $character->url . '/pets' }}" class="btn btn-outline-info btn-sm">View All</a>
                         </div>
                     </div>
-                @endif
+                @endif -->
                 @if (count($image->character->equipment()))
                     <div class="mb-1 mt-4">
                         <div class="mb-0">
