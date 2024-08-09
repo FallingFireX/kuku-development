@@ -54,7 +54,21 @@
             <p></p>
         </div>
         @include('character._image_info', ['image' => $character->image])
+
+        <div class="col-md-7">
+            <div class="card character-bio">
+                <div class="card-header">
+                    <p>test</p>
+                </div>
+            </div>
+            <br>
+            <p></p>
     </div>
+    
+    </div>
+        
+        
+    
         
     {{-- Info --}}
     <div class="card character-bio">
