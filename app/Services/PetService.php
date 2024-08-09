@@ -240,7 +240,7 @@ class PetService extends Service {
 
             $image = null;
             if (isset($data['image']) && $data['image']) {
-                dd($pet->has_image);
+                dd($pet->image);
                 $data['has_image'] = 1;
                 $image = $data['image'];
                 unset($data['image']);
