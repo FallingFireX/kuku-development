@@ -52,18 +52,11 @@
             @endif
             <br>
             <p></p>
-        </div>
-        
-
-        <div class="col-md-7">
-            <div class="card character-bio">
-                <div class="card-header">
+            div class="card-header">
                     <p>test</p>
                 </div>
-            </div>
-            <br>
-            <p></p>
         </div>
+                    
         @include('character._image_info', ['image' => $character->image])
     </div>
         
