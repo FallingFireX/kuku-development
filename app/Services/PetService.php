@@ -222,6 +222,7 @@ class PetService extends Service {
      */
     public function updatePet($pet, $data, $user) {
         DB::beginTransaction();
+        dd($data);
 
         try {
             if (isset($data['pet_category_id']) && $data['pet_category_id'] == 'none') {
