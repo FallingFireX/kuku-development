@@ -63,7 +63,7 @@ return [
     // Awards - Uri
     'awards' => [
         'user_featured'             => 1,   // Number of awards displayed prominently on the user profile
-        'character_featured'        => 1,   // Number of awards displayed prominently on the character page
+        'character_featured'        => 5,   // Number of awards displayed prominently on the character page
     ],
 
     // MYO Image Hide/Remove - Mercury
