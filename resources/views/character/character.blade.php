@@ -93,10 +93,11 @@
         
     <div class="my-3 card"><div class="row justify-content-center align-items-center">
     @include('widgets._awardcase_feature', ['target' => $character, 'count' => Config::get('lorekeeper.extensions.awards.character_featured'), 'float' => true])
-    <div class="ml-auto float-right mr-3">
+        <div class="ml-auto float-right mr-3">
             <a href="{{ $character->slug . '/'.__('awards.awardcase') }}" class="btn btn-outline-info btn-sm">View All</a>
         </div>  
-    </div>      
+    </div>  
+    </div>    
     <br><br>
         
     {{-- Info --}}
