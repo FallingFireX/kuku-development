@@ -6,7 +6,10 @@
             </div>
         @endforeach
         <div class="ml-auto float-right mr-3">
-            <a href="{{ $character->url . '/pets' }}" class="btn btn-outline-info btn-sm">View All</a>
+            @php
+            $character = $this->character;
+            @endphp
+            <a href="{{ $character->url . '/'.__('awards.awardcase') }}" class="btn btn-outline-info btn-sm">View All</a>
         </div>
     </div></div>
 @endif
