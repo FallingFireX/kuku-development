@@ -105,7 +105,6 @@
                                 <div class="col">
                                     <img src="{{ $award->award->image($award->id) }}" style="max-width: 100%;" />
                                 </div>
-                            @endif
                         @endforeach
                         <div class="ml-auto float-right mr-3">
                             <a href="{{ $character->url . '/pets' }}" class="btn btn-outline-info btn-sm">View All</a>
