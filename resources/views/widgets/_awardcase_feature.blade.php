@@ -1,3 +1,5 @@
+$character = Character::find(character_id);
+
 @if($target->awards->where('is_featured',1)->where('pivot.count','>',0)->count() && $count)
     <div class="my-3 card {{ $float ? 'float' : '' }}"><div class="row justify-content-center align-items-center">
         @foreach($target->awards->where('is_featured',1)->where('pivot.count','>',0)->unique()->take($count) as $award)
