@@ -91,27 +91,7 @@
         @include('character._image_info', ['image' => $character->image])
     </div>
         
-    <div class="card mb-7">
-                <h5 class="card-header">
-                    Award Wall
-                </h5>
-                @php
-                $awards = \App\Models\Award\Award:: orderBy('name')->pluck('name', 'id');
-                @endphp
-                <div class="card-body">
-                @foreach($awards as $categoryId=>$categoryAwards)
-                    <div class="card mb-3 awards-category">
-                                    @foreach($awards as $awardId=>$stack)
-                                        <div class="col-sm-3 col-6 text-center awards-award" data-id="{{ $awards->first()->id }}" data-name="{{ $character->name ? $character->name : $character->slug }}'s {{ $awards->first()->name }}">
-                                            <div class="mb-1">
-                                                <a href="#" class="awards-stack {{ $awards->first()->is_featured ? 'alert alert-secondary' : '' }}"><img src="{{ $awards->first()->imageUrl }}" alt="{{ $awards->first()->name }}" class="mw-100"/></a>
-                                            </div>
-                                        </div>
-                                    @endforeach
-                                </div>
-                            @endforeach
-                        </div>
-                    </div>
+    @include('widgets._awardcase_feature', ['target' => $character, 'count' => Config::get('lorekeeper.extensions.awards.character_featured'), 'float' => true])
             
     
         
