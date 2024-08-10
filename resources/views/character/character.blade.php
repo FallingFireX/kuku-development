@@ -91,7 +91,7 @@
         @include('character._image_info', ['image' => $character->image])
     </div>
         
-    <div class="my-3 card {{ $float ? 'float' : '' }}"><div class="row justify-content-center align-items-center">
+    <div class="my-3 card float"><div class="row justify-content-center align-items-center">
     @include('widgets._awardcase_feature', ['target' => $character, 'count' => Config::get('lorekeeper.extensions.awards.character_featured'), 'float' => true])
     <div class="ml-auto float-right mr-3">
             <a href="{{ $character->slug . '/'.__('awards.awardcase') }}" class="btn btn-outline-info btn-sm">View All</a>
