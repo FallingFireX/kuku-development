@@ -91,7 +91,29 @@
         @include('character._image_info', ['image' => $character->image])
     </div>
         
-        
+    <div class="card mb-7">
+                <h5 class="card-header">
+                    Award Wall
+                </h5>
+                <div class="card-body">
+                    @php
+                        $awards = \App\Models\Award\Award::orderBy('name')->pluck('name', 'id');
+                    @endphp
+                @if (count($character->image->character->awards))
+                    <div class="row justify-content-center text-center">
+                        @foreach ($awards as $award)
+                                <div class="col">
+                                    <img src="{{ $award->award->image($award->id) }}" style="max-width: 100%;" />
+                                </div>
+                            @endif
+                        @endforeach
+                        <div class="ml-auto float-right mr-3">
+                            <a href="{{ $character->url . '/pets' }}" class="btn btn-outline-info btn-sm">View All</a>
+                        </div>
+                    </div>
+                @endif
+                </div>
+            </div>
     
         
     {{-- Info --}}
