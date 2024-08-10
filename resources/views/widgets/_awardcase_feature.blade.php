@@ -1,3 +1,5 @@
+@extends('character.layout', ['isMyo' => $character->is_myo_slot])
+
 @if($target->awards->where('is_featured',1)->where('pivot.count','>',0)->count() && $count)
     <div class="my-3 card {{ $float ? 'float' : '' }}"><div class="row justify-content-center align-items-center">
     @php
