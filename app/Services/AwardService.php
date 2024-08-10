@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\Character\Character;
 use App\Models\Award\Award;
 use App\Models\Award\AwardCategory;
 use App\Models\Award\AwardProgression;
