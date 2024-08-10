@@ -95,30 +95,33 @@
                 <h5 class="card-header">
                     Award Wall
                 </h5>
+                @php
+                $awards = \App\Models\Award\Award:: orderBy('name')->pluck('name', 'id');
+                @endphp
                 <div class="card-body">
                 @foreach($awards as $categoryId=>$categoryAwards)
-    <div class="card mb-3 awards-category">
-        <h5 class="card-header awards-header">
-            {!! isset($categories[$categoryId]) ? '<a href="'.$categories[$categoryId]->searchUrl.'">'.$categories[$categoryId]->name.'</a>' : 'Miscellaneous' !!}
-        </h5>
-        <div class="card-body awards-body">
-            @foreach($categoryAwards->chunk(4) as $chunk)
-                <div class="row mb-3">
-                    @foreach($chunk as $awardId=>$stack)
-                        <div class="col-sm-3 col-6 text-center awards-award" data-id="{{ $stack->first()->pivot->id }}" data-name="{{ $character->name ? $character->name : $character->slug }}'s {{ $stack->first()->name }}">
-                            <div class="mb-1">
-                                <a href="#" class="awards-stack {{ $stack->first()->is_featured ? 'alert alert-secondary' : '' }}"><img src="{{ $stack->first()->imageUrl }}" alt="{{ $stack->first()->name }}" class="mw-100"/></a>
-                            </div>
-                            <div>
-                                <a href="#" class="awards-stack awards-stack-name">{{ $stack->first()->name }}@if($stack->first()->user_limit != 1) x{{ $stack->sum('pivot.count') }}@endif</a>
-                            </div>
+                    <div class="card mb-3 awards-category">
+                        <h5 class="card-header awards-header">
+                            {!! isset($categories[$categoryId]) ? '<a href="'.$categories[$categoryId]->searchUrl.'">'.$categories[$categoryId]->name.'</a>' : 'Miscellaneous' !!}
+                        </h5>
+                        <div class="card-body awards-body">
+                            @foreach($categoryAwards->chunk(4) as $chunk)
+                                <div class="row mb-3">
+                                    @foreach($chunk as $awardId=>$stack)
+                                        <div class="col-sm-3 col-6 text-center awards-award" data-id="{{ $stack->first()->pivot->id }}" data-name="{{ $character->name ? $character->name : $character->slug }}'s {{ $stack->first()->name }}">
+                                            <div class="mb-1">
+                                                <a href="#" class="awards-stack {{ $stack->first()->is_featured ? 'alert alert-secondary' : '' }}"><img src="{{ $stack->first()->imageUrl }}" alt="{{ $stack->first()->name }}" class="mw-100"/></a>
+                                            </div>
+                                            <div>
+                                                <a href="#" class="awards-stack awards-stack-name">{{ $stack->first()->name }}@if($stack->first()->user_limit != 1) x{{ $stack->sum('pivot.count') }}@endif</a>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            @endforeach
                         </div>
-                    @endforeach
-                </div>
-            @endforeach
-        </div>
-    </div>
-@endforeach
+                    </div>
+                @endforeach
                 </div>
             </div>
     
