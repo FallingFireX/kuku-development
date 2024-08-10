@@ -16,7 +16,6 @@
             $character->fullName => $character->url,
         ]) !!}
     @endif
-    @include('widgets._awardcase_feature', ['target' => $character, 'count' => Config::get('lorekeeper.extensions.awards.character_featured'), 'float' => true])
     @include('character._header', ['character' => $character])
     
 
@@ -98,7 +97,6 @@
         </div>  
      
     </div>    
-    <br>
         
     {{-- Info --}}
     <div class="card character-bio">
