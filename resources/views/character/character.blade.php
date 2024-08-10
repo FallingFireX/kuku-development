@@ -102,12 +102,9 @@
                 @foreach($awards as $categoryId=>$categoryAwards)
                     <div class="card mb-3 awards-category">
                                     @foreach($awards as $awardId=>$stack)
-                                        <div class="col-sm-3 col-6 text-center awards-award" data-id="{{ $awards->first()->pivot->id }}" data-name="{{ $character->name ? $character->name : $character->slug }}'s {{ $awards->first()->name }}">
+                                        <div class="col-sm-3 col-6 text-center awards-award" data-id="{{ $awards->first()->id }}" data-name="{{ $character->name ? $character->name : $character->slug }}'s {{ $awards->first()->name }}">
                                             <div class="mb-1">
                                                 <a href="#" class="awards-stack {{ $awards->first()->is_featured ? 'alert alert-secondary' : '' }}"><img src="{{ $awards->first()->imageUrl }}" alt="{{ $awards->first()->name }}" class="mw-100"/></a>
-                                            </div>
-                                            <div>
-                                                <a href="#" class="awards-stack awards-stack-name">{{ $awards->first()->name }}@if($awards->first()->user_limit != 1) x{{ $awards->sum('pivot.count') }}@endif</a>
                                             </div>
                                         </div>
                                     @endforeach
