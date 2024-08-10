@@ -103,7 +103,7 @@
                     <div class="row justify-content-center text-center">
                         @foreach ($awards as $award)
                                 <div class="col">
-                                    <img src="{{ $award->award->image($award->id) }}" style="max-width: 100%;" />
+                                <img src="{{ $award->imageUrl }}" alt="{{ $award->name }}"/></a></div>
                                 </div>
                         @endforeach
                         <div class="ml-auto float-right mr-3">
