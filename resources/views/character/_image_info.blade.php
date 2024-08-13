@@ -126,7 +126,7 @@
                                         @if ($key)
                                             <strong>{!! $group->first()->feature->category->displayName !!}: </strong>
                                         @else
-                                            <strong>Miscellaneous:</strong>
+                                            <strong>Rank:</strong>
                                         @endif
                                         @foreach ($group as $feature)
                                             <!-- <div class="ml-md-2">-->{!! $feature->feature->displayName !!} @if ($feature->data) 
