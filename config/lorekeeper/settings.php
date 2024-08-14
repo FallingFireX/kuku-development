@@ -339,7 +339,7 @@ return [
     |
     */
 
-    'allow_username_changes'                            => 0,
+    'allow_username_changes'                            => 1,
     'username_change_cooldown'                          => 30,
 
     /*
