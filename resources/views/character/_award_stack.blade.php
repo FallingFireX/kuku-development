@@ -9,7 +9,7 @@
     </div>
 
     @if($award->is_featured)
-        <div class="alert alert-success mt-2">
+        <div class="alert alert-success mt-2" background-color=transparent;>
             This {{ __('awards.award') }} is featured!
         </div>
     @endif
@@ -88,7 +88,6 @@
                     </div>
                 </div>
             @endif
-            @endif
             <div><a class="card-title h5 btn btn-sm btn-outline-primary" data-toggle="collapse" href="#deleteForm">@if($owner_id != $user->id) [ADMIN] @endif Delete {{ ucfirst(__('awards.award')) }}</a></div>
             <div id="deleteForm" class="collapse">
                 <p>This action is not reversible. Are you sure you want to delete this {{ __('awards.award') }}?</p>
@@ -97,7 +96,7 @@
                 </div>
             </div>
         </div></div>
-    
+    @endif
     {!! Form::close() !!}
 @endif
 
@@ -118,3 +117,4 @@
         $($rowId).find('.quantity-select').prop('name', $checkbox.checked ? 'quantities[]' : '')
     }
 </script>
+
