@@ -88,7 +88,7 @@
                     </div>
                 </div>
             @endif
-            @if($user->hasPower('edit_inventories') && $award->is_user_owned)
+            @endif
             <div><a class="card-title h5 btn btn-sm btn-outline-primary" data-toggle="collapse" href="#deleteForm">@if($owner_id != $user->id) [ADMIN] @endif Delete {{ ucfirst(__('awards.award')) }}</a></div>
             <div id="deleteForm" class="collapse">
                 <p>This action is not reversible. Are you sure you want to delete this {{ __('awards.award') }}?</p>
@@ -96,9 +96,8 @@
                     {!! Form::button('Delete', ['class' => 'btn btn-danger', 'name' => 'action', 'value' => 'delete', 'type' => 'submit']) !!}
                 </div>
             </div>
-            @endif
         </div></div>
-    @endif
+    
     {!! Form::close() !!}
 @endif
 
