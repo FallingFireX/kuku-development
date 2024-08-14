@@ -9,7 +9,7 @@
     </div>
 
     @if($award->is_featured)
-        <div class="alert alert-success mt-2" background-color=transparent;>
+        <div class="alert alert-success mt-2">
             This {{ __('awards.award') }} is featured!
         </div>
     @endif
@@ -117,4 +117,3 @@
         $($rowId).find('.quantity-select').prop('name', $checkbox.checked ? 'quantities[]' : '')
     }
 </script>
-
