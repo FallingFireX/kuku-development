@@ -972,19 +972,18 @@ class CharacterController extends Controller {
     /**
      * Deletes an award stack.
      *
-     * @param App\Services\CharacterManager $service
-     *
+     * @param  \Illuminate\Http\Request       $request
+     * @param  App\Services\CharacterManager  $service
      * @return \Illuminate\Http\RedirectResponse
      */
-    private function postDeleteAward(Request $request, AwardCaseManager $service) {
-        if ($service->deleteStack($this->character, CharacterAward::find($request->get('ids')), $request->get('quantities'))) {
+    private function postDeleteAward(Request $request, AwardCaseManager $service)
+    {
+        if($service->deleteStack($this->character, CharacterAward::find($request->get('ids')), $request->get('quantities'))) {
             flash(ucfirst(__('awards.award')).' deleted successfully.')->success();
-        } else {
-            foreach ($service->errors()->getMessages()['error'] as $error) {
-                flash($error)->error();
-            }
         }
-
+        else {
+            foreach($service->errors()->getMessages()['error'] as $error) flash($error)->error();
+        }
         return redirect()->back();
     }
 
