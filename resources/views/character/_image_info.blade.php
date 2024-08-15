@@ -191,13 +191,13 @@
                 @endphp
 
                 <div class="row">
-                        <div class="col-lg-4 col-md-6 col-4">
+                        <div class="col-lg-6 col-md-6 col-4">
                         <span data-toggle="tooltip" title="Past and present injuries can be seen in this link">
                             <b>See all </b><a href="{{ $character->url . '/status-effects' }}">Illnesses and Injuries</a>
                         </div>
                     </div>
                 
-                    <br><br>
+                    <br>
                 @if ($type || (Auth::check() && Auth::user()->hasPower('manage_characters')))
                     <div class="row">
                         <div class="col-lg-4 col-md-6 col-4">
