@@ -269,8 +269,13 @@
             {!! Form::text('phenotype', old('phenotype'), ['class' => 'form-control', 'phenotype']) !!}
         </div>
 
+        <div class="form-group" id='eyecolor'>
+            {!! Form::label('eyecolor') !!}{!! add_help('This is text that will show alongside the ' . __('transformations.transformation') . ' name on the image info area. Explains why the character takes this form, how, etc. Should be pretty short.') !!}
+            {!! Form::text('eyecolor', old('eyecolor'), ['class' => 'form-control', 'eyecolor']) !!}
+        </div>
+
         <div class="form-group" id='atk'>
-            {!! Form::label('atk') !!}
+            {!! Form::label('atk') !!}{!! add_help('This is text that will show alongside the ' . __('transformations.transformation') . ' name on the image info area. Explains why the character takes this form, how, etc. Should be pretty short.') !!}
             {!! Form::text('atk', old('atk'), ['class' => 'form-control', 'atk']) !!}
         </div>
         <div class="form-group" id='def'>
@@ -298,11 +303,6 @@
             {!! Form::text('spd', old('spd'), ['class' => 'form-control', 'spd']) !!}
         </div>
          -->
-
-        <div class="form-group" id='eyecolor'>
-            {!! Form::label('eyecolor') !!}{!! add_help('This is text that will show alongside the ' . __('transformations.transformation') . ' name on the image info area. Explains why the character takes this form, how, etc. Should be pretty short.') !!}
-            {!! Form::text('eyecolor', old('eyecolor'), ['class' => 'form-control', 'eyecolor']) !!}
-        </div>
 
         <div class="form-group">
             {!! Form::label('Traits') !!} @if ($isMyo)
