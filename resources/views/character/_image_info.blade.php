@@ -109,10 +109,14 @@
                     <div class="col-lg-2 col-md-6 col-8">{!! '<strong>SPD: </strong> ', $image->spd ? $image->spd : '0' !!}</div>
                 </div>
                 <br>
-                <div>
-                <strong>Biorhythm: </strong> {!! $image->bio ? $image->bio : 'not set' !!}
-                <br>
-                <strong>Diet: </strong> {!! $image->diet ? $image->diet : 'not set' !!}
+                <div class="row">
+                    <div class="col-lg-4 col-md-6 col-4"><strong>Biorhythm </strong></div>
+                    <div class="col-lg-8 col-md-6 col-8">{!! $image->bio ? $image->bio : 'not set' !!}</div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-4 col-md-6 col-4"><strong>Diet </strong></div>
+                    <div class="col-lg-8 col-md-6 col-8">{!! $image->diet ? $image->diet : 'not set' !!}</div>
+                </div>
                 </div>
                 <br><p></p>
                 <div class="mb-3">
