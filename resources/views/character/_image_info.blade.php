@@ -109,6 +109,8 @@
                     <div class="col-lg-2 col-md-6 col-8">{!! '<strong>SPD: </strong> ', $image->spd ? $image->spd : '0' !!}</div>
                 </div>
                 <br>
+                <strong>Biorhythm: </strong> {!! $image->atk ? $image->atk : '0' !!}
+                <strong>Diet: </strong> {!! $image->atk ? $image->atk : '0' !!}
                 
                 <div class="mb-3">
                    
@@ -180,13 +182,6 @@
                     }
                     $type = $type ?? null;
                 @endphp
-
-                <div class="row">
-                    <div class="col-lg-4 col-md-6 col-4"><strong>Bio</strong></div>
-                    <div class="col-lg-8 col-md-6 col-8">test</div>
-                </div>
-                
-                    <strong>Diet: </strong> {!! $image->atk ? $image->atk : '0' !!}
                 
                     <br><br>
                 @if ($type || (Auth::check() && Auth::user()->hasPower('manage_characters')))

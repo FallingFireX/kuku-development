@@ -75,6 +75,16 @@
             {!! Form::text('spd', $image->spd, ['class' => 'form-control mr-2']) !!}
         </div>
 
+<div class="form-group" id='biorhythm'>
+            {!! Form::label('biorhythm') !!}
+            {!! Form::select('biorhythm', ['Duirnal' => 'Duirnal', 'Crepuscular' => 'Crepuscular', 'Nocturnal' => 'Nocturnal'], $image->bio, ['class' => 'form-control']) !!}
+        </div>
+
+<div class="form-group" id='diet'>
+            {!! Form::label('diet') !!}
+            {!! Form::select('diet', ['Carnivore' => 'Carnivore', 'Omnivore' => 'Omnivore', 'Herbivore' => 'Herbivore'], $image->diet, ['class' => 'form-control']) !!}
+        </div>
+
 <div class="text-right">
     {!! Form::submit('Edit', ['class' => 'btn btn-primary']) !!}
 </div>
