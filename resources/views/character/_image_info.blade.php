@@ -129,10 +129,10 @@
                                             <strong>Rank:</strong>
                                         @endif
                                         @foreach ($group as $feature)
-                                            <!-- <div class="ml-md-2">-->{!! $feature->feature->displayName !!} @if ($feature->data) 
+                                            {!! $feature->feature->displayName !!} 
+                                            @if ($feature->data) 
                                                     ({{ $feature->data }})
                                                 @endif
-                                            <!-- </div> -->
                                         @endforeach
                                     </div>
                                 @endforeach
@@ -180,6 +180,16 @@
                     }
                     $type = $type ?? null;
                 @endphp
+
+                <div class="row">
+                    <div class="col-lg-4 col-md-6 col-4"><strong>Bio</strong></div>
+                    <div class="col-lg-8 col-md-6 col-8">test</div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-4 col-md-6 col-4"><strong>Diet</strong></div>
+                    <div class="col-lg-8 col-md-6 col-8">test</div>
+                </div>
+                    <br><br>
                 @if ($type || (Auth::check() && Auth::user()->hasPower('manage_characters')))
                     <div class="row">
                         <div class="col-lg-4 col-md-6 col-4">

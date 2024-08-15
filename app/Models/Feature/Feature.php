@@ -269,13 +269,6 @@ class Feature extends Model {
             }
         }
 
-        if ($this->rarity = "none"){
-            $this->rarity="";
-        }
-        else{
-            $this->rarity=$this->rarity;
-        }
-
         return '<a href="'.($this->parent_id && !$this->display_separate ? $this->parent->url : $this->url).'" class="display-trait">'.($name ?? $this->name).'</a>'.($this->rarity ? ' ('.$this->rarity->displayName.')' : '');
     }
 
