@@ -189,7 +189,7 @@
                     }
                     $type = $type ?? null;
                 @endphp
-                <br><br>
+                <br>
                 <div class="row">
                         <div class="col-lg-6 col-md-6 col-4">
                         <span data-toggle="tooltip" title="Past and present injuries can be seen in this link">
