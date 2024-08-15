@@ -80,7 +80,7 @@
                         <b>Illnesses/Injuries</b>
                     </div>
                     <div class= col-lg-8 col-md-6 col-8>
-                    @if(count($statuses))
+                    
                                 @foreach($statuses as $status)
                                     
                                                     <a href="{{ $status->url }}">
@@ -88,7 +88,7 @@
                                                     </a>
                                                 
                                 @endforeach
-                                @endif
+                                
                         </div>
                     </div>
                 <div class="row">
