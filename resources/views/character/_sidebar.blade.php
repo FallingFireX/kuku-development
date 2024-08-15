@@ -9,7 +9,7 @@
         <div class="sidebar-item"><a href="{{ $character->url . '/inventory' }}" class="{{ set_active('character/' . $character->slug . '/inventory') }}">Bank</a></div>
         <div class="sidebar-item"><a href="{{ $character->url . '/bank' }}" class="{{ set_active('character/' . $character->slug . '/bank') }}">Wallet</a></div>
         @if($character->getLineageBlacklistLevel() < 1)
-            <div class="sidebar-item"><a href="{{ $character->url . '/lineage' }}" class="{{ set_active('character/'.$character->slug.'/lineage') }}">Decendents</a></div>
+            <div class="sidebar-item"><a href="{{ $character->url . '/lineage' }}" class="{{ set_active('character/'.$character->slug.'/lineage') }}">Decendants</a></div>
         @endif
         <div class="sidebar-item"><a href="{{ $character->url . '/'.__('awards.awardcase') }}" class="{{ set_active('character/'.$character->slug.'/'.__('awards.awardcase')) }}">{{ucfirst(__('awards.awards'))}}</a></div>
         <div class="sidebar-item"><a href="{{ $character->url . '/breeding-permissions' }}" class="{{ set_active('character/'.$character->slug.'/breeding-permissions') }}">Breeding Permissions</a></div>

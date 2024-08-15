@@ -289,7 +289,7 @@
 
         <div class="form-group" id='biorhythm'>
             {!! Form::label('biorhythm') !!}
-            {!! Form::select('bio', ['Duirnal' => 'Duirnal', 'Crepuscular' => 'Crepuscular', 'Nocturnal' => 'Nocturnal'], null, ['class' => 'form-control']) !!}
+            {!! Form::select('bio', ['Diurnal' => 'Diurnal', 'Crepuscular' => 'Crepuscular', 'Nocturnal' => 'Nocturnal'], null, ['class' => 'form-control']) !!}
         </div>
         <div class="form-group" id='diet'>
             {!! Form::label('diet') !!}

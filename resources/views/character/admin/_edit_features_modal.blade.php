@@ -77,7 +77,7 @@
 
 <div class="form-group" id='bio'>
             {!! Form::label('bio') !!}
-            {!! Form::select('bio', ['Duirnal' => 'Duirnal', 'Crepuscular' => 'Crepuscular', 'Nocturnal' => 'Nocturnal'], $image->bio, ['class' => 'form-control']) !!}
+            {!! Form::select('bio', ['Diurnal' => 'Diurnal', 'Crepuscular' => 'Crepuscular', 'Nocturnal' => 'Nocturnal'], $image->bio, ['class' => 'form-control']) !!}
         </div>
 
 <div class="form-group" id='diet'>
