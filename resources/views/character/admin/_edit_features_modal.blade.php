@@ -75,9 +75,9 @@
             {!! Form::text('spd', $image->spd, ['class' => 'form-control mr-2']) !!}
         </div>
 
-<div class="form-group" id='biorhythm'>
-            {!! Form::label('biorhythm') !!}
-            {!! Form::select('biorhythm', ['Duirnal' => 'Duirnal', 'Crepuscular' => 'Crepuscular', 'Nocturnal' => 'Nocturnal'], $image->bio, ['class' => 'form-control']) !!}
+        <div class="form-group" id='bio'>
+            {!! Form::label('bio') !!}
+            {!! Form::text('bio', $image->bio, ['class' => 'form-control mr-2']) !!}
         </div>
 
 <div class="form-group" id='diet'>
