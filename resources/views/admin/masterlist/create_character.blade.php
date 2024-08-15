@@ -288,7 +288,7 @@
         </div>
         <div class="form-group" id='diet'>
             {!! Form::label('diet') !!}
-            {!! Form::select('Carnivore' => 'Carnivore', 'Omnivore' => 'Omnivore', 'Herbivore' => 'Herbivore'], null, ['class' => 'form-control']) !!}
+            {!! Form::select('diet',['Carnivore' => 'Carnivore', 'Omnivore' => 'Omnivore', 'Herbivore' => 'Herbivore'], null, ['class' => 'form-control']) !!}
         </div>
 <!-- 
         <div class="form-group" id='stats'>
