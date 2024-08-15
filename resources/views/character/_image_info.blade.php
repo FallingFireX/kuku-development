@@ -36,7 +36,7 @@
 
             {{-- Basic info --}}
             <div class="tab-pane fade show active" id="info-{{ $image->id }}">
-                <div class="row">
+                <!-- <div class="row">
                     <div class="col-lg-4 col-md-6 col-4">
                         <h5>Class</h5>
                     </div>
@@ -47,7 +47,7 @@
                             @endif
                         @endif
                     </div>
-                </div>
+                </div> -->
                 <div class="row">
                     <div class="col-lg-4 col-md-6 col-4">
                         <h5>Species</h5>
@@ -57,12 +57,12 @@
                 @if ($image->subtype_id)
                     <div class="row">
                         <div class="col-lg-4 col-md-6 col-4">
-                            <h5>Subtype</h5>
+                            <h5>Breed</h5>
                         </div>
                         <div class="col-lg-8 col-md-6 col-8">{!! $image->subtype_id ? $image->subtype->displayName : 'None' !!}</div>
                     </div>
                 @endif
-                @if ($image->transformation_id)
+                <!-- @if ($image->transformation_id)
                     <div class="row">
                         <div class="col-lg-4 col-md-6 col-4">
                             <h5>{{ ucfirst(__('transformations.form')) }} {!! add_help('The main image is always the active image') !!}</h5>
@@ -74,10 +74,26 @@
                             @if($image->transformation_description) ({{ $image->transformation_description }}) @endif
                         </div>
                     </div>
-                @endif
+                @endif -->
                 <div class="row">
                     <div class="col-lg-4 col-md-6 col-4">
-                        <h5>Rarity</h5>
+                    <b>Illnesses/Injuries</b>
+                    </div>
+                    <div class= col-lg-8 col-md-6 col-8>
+                    @if(count($statuses))
+                                @foreach($statuses as $status)
+                                    
+                                                    <a href="{{ $status->url }}">
+                                                        {!! $status->displaySeverity($status->quantity) !!}
+                                                    </a>
+                                                
+                                @endforeach
+                            </ul>
+                        </div>
+                    </div>
+                <div class="row">
+                    <div class="col-lg-4 col-md-6 col-4">
+                        <h5>Type</h5>
                     </div>
                     <div class="col-lg-8 col-md-6 col-8">{!! $image->rarity_id ? $image->rarity->displayName : 'None' !!}</div>
                 </div>
