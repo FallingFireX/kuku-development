@@ -117,7 +117,7 @@
                     <div class="col-lg-4 col-md-6 col-4"><strong>Diet </strong></div>
                     <div class="col-lg-8 col-md-6 col-8">{!! $image->diet ? $image->diet : 'not set' !!}</div>
                 </div>
-                </div>
+                
                 <br><p></p>
                 <div class="mb-3">
                    
