@@ -77,22 +77,6 @@
                 @endif -->
                 <div class="row">
                     <div class="col-lg-4 col-md-6 col-4">
-                        <b>Illnesses/Injuries</b>
-                    </div>
-                    <div class= col-lg-8 col-md-6 col-8>
-                    
-                                @foreach($statuses as $status)
-                                    
-                                                    <a href="{{ $status->url }}">
-                                                        {!! $status->displaySeverity($status->quantity) !!}
-                                                    </a>
-                                                
-                                @endforeach
-                                
-                        </div>
-                    </div>
-                <div class="row">
-                    <div class="col-lg-4 col-md-6 col-4">
                         <h5>Type</h5>
                     </div>
                     <div class="col-lg-8 col-md-6 col-8">{!! $image->rarity_id ? $image->rarity->displayName : 'None' !!}</div>
@@ -205,6 +189,12 @@
                     }
                     $type = $type ?? null;
                 @endphp
+
+                <div class="row">
+                        <div class="col-lg-4 col-md-6 col-4">
+                            <a href="{{ $character->url . '/status-effects' }}">Illnesses and Injuries</a>
+                        </div>
+                    </div>
                 
                     <br><br>
                 @if ($type || (Auth::check() && Auth::user()->hasPower('manage_characters')))
