@@ -77,7 +77,7 @@
                 @endif -->
                 <div class="row">
                     <div class="col-lg-4 col-md-6 col-4">
-                    <b>Illnesses/Injuries</b>
+                        <b>Illnesses/Injuries</b>
                     </div>
                     <div class= col-lg-8 col-md-6 col-8>
                     @if(count($statuses))
@@ -88,7 +88,7 @@
                                                     </a>
                                                 
                                 @endforeach
-                            </ul>
+                                @endif
                         </div>
                     </div>
                 <div class="row">
