@@ -697,6 +697,8 @@ class CharacterManager extends Service {
             $image->atk = $data['atk'] ?: null;
             $image->def = $data['def'] ?: null;
             $image->spd = $data['spd'] ?: null;
+            $image->bio = $data['bio'] ?: null;
+            $image->diet = $data['diet'] ?: null;
             $image->save();
 
             $new = [];
@@ -2517,6 +2519,8 @@ class CharacterManager extends Service {
                 $data['def'] ??= null;
                 $data['spd'] ??= null;
                 $data['atk'] ??= null;
+                $data['bio'] ??= null;
+                $data['diet'] ??= null;
             }
 
             $characterData = Arr::only($data, [
@@ -2579,6 +2583,8 @@ class CharacterManager extends Service {
                 $data['def'] ??= null;
                 $data['spd'] ??= null;
                 $data['atk'] ??= null;
+                $data['bio'] ??= null;
+                $data['diet'] ??= null;
 
                 // Use default images for MYO slots without an image provided
                 if (!isset($data['image'])) {
@@ -2591,7 +2597,7 @@ class CharacterManager extends Service {
             }
             $imageData = Arr::only($data, [
                 'species_id', 'subtype_id', 'rarity_id', 'use_cropper',
-                'x0', 'x1', 'y0', 'y1', 'transformation_id', 'transformation_info', 'transformation_description', 'genotype', 'phenotype', 'gender', 'eyecolor',
+                'x0', 'x1', 'y0', 'y1', 'transformation_id', 'transformation_info', 'transformation_description', 'genotype', 'phenotype', 'gender', 'eyecolor', 'bio', 'diet'
             ]);
             $imageData['use_cropper'] = isset($data['use_cropper']);
             $imageData['description'] = $data['image_description'] ?? null;
