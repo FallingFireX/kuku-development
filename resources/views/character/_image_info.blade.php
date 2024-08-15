@@ -186,7 +186,7 @@
                     <div class="col-lg-8 col-md-6 col-8">test</div>
                 </div>
                 
-                    <strong>Diet: </strong> {!! '<strong>ATK: </strong> ', $image->atk ? $image->atk : '0' !!}
+                    <strong>Diet: </strong> {!! $image->atk ? $image->atk : '0' !!}
                 
                     <br><br>
                 @if ($type || (Auth::check() && Auth::user()->hasPower('manage_characters')))
