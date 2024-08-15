@@ -185,10 +185,9 @@
                     <div class="col-lg-4 col-md-6 col-4"><strong>Bio</strong></div>
                     <div class="col-lg-8 col-md-6 col-8">test</div>
                 </div>
-                <div class="row">
-                    <div class="col-lg-4 col-md-6 col-4"><strong>Diet</strong></div>
-                    <div class="col-lg-8 col-md-6 col-8">test</div>
-                </div>
+                
+                    <strong>Diet: </strong> {!! '<strong>ATK: </strong> ', $image->atk ? $image->atk : '0' !!}
+                
                     <br><br>
                 @if ($type || (Auth::check() && Auth::user()->hasPower('manage_characters')))
                     <div class="row">
