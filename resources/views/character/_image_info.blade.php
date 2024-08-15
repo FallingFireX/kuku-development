@@ -112,7 +112,7 @@
                 <strong>Biorhythm: </strong> {!! $image->bio ? $image->bio : 'not set' !!}
                 <br>
                 <strong>Diet: </strong> {!! $image->diet ? $image->diet : 'not set' !!}
-                
+                <br>
                 <div class="mb-3">
                    
                     @if (config('lorekeeper.extensions.traits_by_category'))
