@@ -192,7 +192,8 @@
 
                 <div class="row">
                         <div class="col-lg-4 col-md-6 col-4">
-                            <a href="{{ $character->url . '/status-effects' }}">Illnesses and Injuries</a>
+                        <span data-toggle="tooltip" title="Past and present injuries can be seen in this link">
+                            <b>See all </b><a href="{{ $character->url . '/status-effects' }}">Illnesses and Injuries</a>
                         </div>
                     </div>
                 
