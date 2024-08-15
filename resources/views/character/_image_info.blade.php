@@ -109,8 +109,9 @@
                     <div class="col-lg-2 col-md-6 col-8">{!! '<strong>SPD: </strong> ', $image->spd ? $image->spd : '0' !!}</div>
                 </div>
                 <br>
-                <strong>Biorhythm: </strong> {!! $image->atk ? $image->atk : '0' !!}
-                <strong>Diet: </strong> {!! $image->atk ? $image->atk : '0' !!}
+                <strong>Biorhythm: </strong> {!! $image->bio ? $image->bio : 'not set' !!}
+                <br>
+                <strong>Diet: </strong> {!! $image->diet ? $image->diet : 'not set' !!}
                 
                 <div class="mb-3">
                    
