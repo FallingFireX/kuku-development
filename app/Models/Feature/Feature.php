@@ -269,7 +269,7 @@ class Feature extends Model {
             }
         }
 
-        if ($this->rarity = 'None'){
+        if ($this->rarity = "none"){
             $this->rarity="";
         }
         else{
