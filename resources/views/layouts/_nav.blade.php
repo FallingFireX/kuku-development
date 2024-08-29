@@ -66,6 +66,9 @@
                             <a class="dropdown-item" href="{{ url('comments/liked') }}">
                                 Liked Comments
                             </a>
+                            <a class="dropdown-item" href="{{ url('higher-or-lower') }}">
+                                Higher or Lower
+                            </a>
                         </div>
                     </li>
                     <li class="nav-item dropdown">
