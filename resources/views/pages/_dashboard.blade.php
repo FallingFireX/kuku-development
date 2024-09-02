@@ -5,6 +5,8 @@
     </div>
 </div>
 
+@include('widgets._news', ['textPreview' => true])
+
 <div class="row justify-content-center">
     <div class="col-md-4">
         <div class="card mb-4">
