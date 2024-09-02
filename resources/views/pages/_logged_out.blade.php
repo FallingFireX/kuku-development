@@ -1,4 +1,5 @@
-<h1>{{ config('lorekeeper.settings.site_name', 'Lorekeeper') }}</h1>
+<h1 style="text-align:center">{{ config('lorekeeper.settings.site_name', 'Lorekeeper') }}</h1>
+<br>
 <div class="row justify-content-center">
     <div class="col-md-4">
         <div class="card mb-4">
