@@ -125,6 +125,7 @@ class LootTable extends Model {
     public function roll($quantity = 1) {
         $rewards = createAssetsArray();
 
+        $loot = $this->loot;
         $totalWeight = 0;
         foreach ($loot as $l) {
             $totalWeight += $l->weight;
