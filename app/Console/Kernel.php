@@ -34,13 +34,13 @@ class Kernel extends ConsoleKernel {
         $schedule->exec('rm public/images/avatars/*.tmp')
             ->daily();
         $schedule->command('update-extension-tracker')
-            ->daily();
+            ->daily()->at('01:05');
         $schedule->command('update-credits')
-            ->daily();
+            ->daily()->at('01:10');
         $schedule->command('update-staff-reward-actions')
             ->daily();
         $schedule->command('restock-shops')
-            ->daily();
+            ->daily()->at('01:15');
         $schedule->command('update-timed-stock')
             ->everyMinute();
         $schedule->command('check-pet-drops')
@@ -48,7 +48,7 @@ class Kernel extends ConsoleKernel {
         $schedule->command('distribute-birthday-rewards')
             ->monthly();
         $schedule->command('reset-hol')
-            ->daily();
+            ->daily()->at('02:20');
         $schedule->command('update-timed-daily')
             ->everyMinute();          
 
