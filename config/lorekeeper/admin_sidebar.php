@@ -69,6 +69,10 @@ return [
                 'name' => 'Pages',
                 'url'  => 'admin/pages',
             ],
+            [
+                'name' => 'Random Generators',
+                'url'  => 'admin/data/random',
+            ],
         ],
     ],
     'Users'      => [
@@ -299,6 +303,7 @@ return [
                 'name' => 'Elements',
                 'url'  => 'admin/data/elements',
             ],
+            
         ],
     ],
     'Raffles'    => [

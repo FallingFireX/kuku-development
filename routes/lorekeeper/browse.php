@@ -276,4 +276,12 @@ Route::group(['prefix' => 'reports', 'namespace' => 'Users'], function () {
 
 Route::get('time', function () {
     return date('Y-m-d H:i:s');
+    });
+    
+/**************************************************************************************************
+    Generators
+**************************************************************************************************/
+Route::group(['prefix' => 'generators'], function () {
+    Route::get('/', 'GeneratorController@getGenerators');
+    Route::get('{id}', 'GeneratorController@getGenerator');
 });

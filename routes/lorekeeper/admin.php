@@ -448,6 +448,23 @@ Route::group(['prefix' => 'data', 'namespace' => 'Data', 'middleware' => 'power:
     Route::post('elements/create', 'ElementController@postCreateEditElement');
     Route::post('elements/edit/{id?}', 'ElementController@postCreateEditElement');
     Route::post('elements/delete/{id}', 'ElementController@postDeleteElement');
+    
+    //RANDOM GENERATOR
+    Route::get('random', 'GeneratorController@getIndex');
+    Route::get('random/create/{id}', 'GeneratorController@getCreateRandom');
+    Route::get('random/edit/{id}', 'GeneratorController@getEditRandom');
+    Route::get('random/delete/{id}', 'GeneratorController@getDeleteRandom');
+    Route::post('random/create', 'GeneratorController@postCreateEditRandom');
+    Route::post('random/edit/{id}', 'GeneratorController@postCreateEditRandom');
+    Route::post('random/delete/{id}', 'GeneratorController@postDeleteRandom');
+    Route::get('random/generator/view/{id}', 'GeneratorController@getRandomGeneratorIndex');
+    Route::get('random/generator/create', 'GeneratorController@getCreateRandomGenerator');
+    Route::get('random/generator/edit/{id}', 'GeneratorController@getEditRandomGenerator');
+    Route::get('random/generator/delete/{id}', 'GeneratorController@getDeleteRandomGenerator');
+    Route::post('random/generator/create', 'GeneratorController@postCreateEditRandomGenerator');
+    Route::post('random/generator/edit/{id}', 'GeneratorController@postCreateEditRandomGenerator');
+    Route::post('random/generator/delete/{id}', 'GeneratorController@postDeleteRandomGenerator');
+    Route::post('random/generator/sort', 'GeneratorController@postSortGenerator');
 });
 
 // PAGES
