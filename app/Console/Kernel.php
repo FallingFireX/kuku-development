@@ -50,7 +50,7 @@ class Kernel extends ConsoleKernel {
         $schedule->command('reset-hol')
             ->daily();
         $schedule->command('update-timed-daily')
-                ->everyMinute();          
+            ->everyMinute();          
 
     }
 
