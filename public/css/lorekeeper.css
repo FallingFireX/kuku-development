@@ -556,6 +556,10 @@ tr.outflow {
     background-color: white;
 }
 
+.card {
+    border-color: rgba(0,0,0,0);
+}
+
 /* INVENTORY *************************************************************************************/
 
 .inventory-category .inventory-body .inventory-item img {
