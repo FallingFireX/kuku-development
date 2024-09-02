@@ -66,9 +66,6 @@
                             <a class="dropdown-item" href="{{ url('comments/liked') }}">
                                 Liked Comments
                             </a>
-                            <a class="dropdown-item" href="{{ url('higher-or-lower') }}">
-                                Higher or Lower
-                            </a>
                         </div>
                     </li>
                     <li class="nav-item dropdown">
@@ -76,7 +73,7 @@
                             Activity
                         </a>
                         <div class="dropdown-menu" aria-labelledby="queueDropdown">
-                        <a class="dropdown-item" href="{{ url('higher-or-lower') }}">
+                        <a class="dropdown-item" href="{{ url('/info/games') }}">
                                 Minigames
                             </a>
                             <a class="dropdown-item" href="{{ url('generators') }}">
@@ -197,9 +194,6 @@
                         </a>
                         <a class="dropdown-item" href="{{ url('world/item-categories') }}">
                             Items
-                        </a>
-                        <a class="dropdown-item" href="{{ url(__('dailies.dailies')) }}">
-                        {{__('dailies.dailies')}}
                         </a>
                     </div>
                 </li>
