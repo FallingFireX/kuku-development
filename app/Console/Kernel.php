@@ -49,6 +49,9 @@ class Kernel extends ConsoleKernel {
             ->monthly();
         $schedule->command('reset-hol')
             ->daily();
+        $schedule->command('update-timed-daily')
+                ->everyMinute();          
+
     }
 
     /**

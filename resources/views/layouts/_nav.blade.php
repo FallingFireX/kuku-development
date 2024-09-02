@@ -198,6 +198,9 @@
                         <a class="dropdown-item" href="{{ url('world/item-categories') }}">
                             Items
                         </a>
+                        <a class="dropdown-item" href="{{ url(__('dailies.dailies')) }}">
+                        {{__('dailies.dailies')}}
+                        </a>
                     </div>
                 </li>
                 <li class="nav-item">

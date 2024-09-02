@@ -222,6 +222,12 @@ Route::group(['prefix' => 'shops'], function () {
     Route::get('donation-shop/{id}', 'ShopController@getDonationShopStock')->where(['id' => '[0-9]+']);
 });
 
+Route::group(['prefix' => __('dailies.dailies')], function() {
+    Route::get('/', 'DailyController@getIndex');
+    Route::get('{id}', 'DailyController@getDaily')->where(['id' => '[0-9]+']);
+});
+
+
 /**************************************************************************************************
     Pet Drops
 **************************************************************************************************/
