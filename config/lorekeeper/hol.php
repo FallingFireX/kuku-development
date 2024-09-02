@@ -13,11 +13,11 @@ return [
     */
 
     //daily plays for HOL
-    'hol_plays' => 5, 
+    'hol_plays' => 1, 
 
     //amount to grant when guess is successful
     'currency_grant' => 1,
     
     //id of currency to grant
-    'currency_id' => 1,
+    'currency_id' => 2,
 ];
