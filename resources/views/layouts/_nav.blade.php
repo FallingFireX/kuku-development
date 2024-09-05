@@ -1,6 +1,12 @@
 <div class="mx-auto test-center d-flex justify-content-center" style="margin-right: 16.66666% !important">
             
-                    
+                    <a class="currency-nav bg-dark" href="{{ url('/bank') }}">
+                    @if(Auth::check())
+                    @foreach(Auth::user()->getCurrencies(true) as $currency)
+                        {!!$currency->display($currency->quantity) !!} <i>&nbsp;&nbsp;</i>
+                    @endforeach
+                    @endif
+                    </a>
                 
     <div class="clock-styling bg-dark">
         
