@@ -1,9 +1,9 @@
 <h1>Welcome, {!! Auth::user()->displayName !!}!</h1>
-<div class="card mb-4 timestamp">
+<!-- <div class="card mb-4 timestamp" style="background-color: rgba(0,0,0,0)">
     <div class="card-body">
         <i class="far fa-clock"></i> {!! LiveClock() !!}
     </div>
-</div>
+</div> -->
 
 @include('widgets._news', ['textPreview' => true])
 
