@@ -1,6 +1,6 @@
 <div class="mx-auto test-center d-flex justify-content-center" style="margin-right: 16.66666% !important">
             
-                    <a class="nav-link" href="{{ url('/bank') }}">
+                    <a class="nav-link bg-dark" href="{{ url('/bank') }}" style="color: white; border-radius: 15px 0px 0px 0px; pointer-events:none;">
                     @foreach(Auth::user()->getCurrencies(true) as $currency)
                         {!!$currency->display($currency->quantity) !!}
                     @endforeach
