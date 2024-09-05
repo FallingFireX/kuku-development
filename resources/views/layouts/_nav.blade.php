@@ -1,7 +1,7 @@
-<div class="card mb-4 timestamp" style="background-color: rgba(0,0,0,0)">
-    <div class="card-body">
-        <i class="far fa-clock"></i> {!! LiveClock() !!}
-    </div>
+<div class="clock-styling bg-dark" style="position: absolute; bottom: 0; right: 0; margin-right: 3em;">
+    
+    <i class="far fa-clock"></i> <span id="clock" class="text-right" style="font-size:12px"></span>
+
 </div>
 <nav class="navbar navbar-expand-md navbar-dark bg-dark col-lg-8" id="headerNav" style="margin:auto">
 
