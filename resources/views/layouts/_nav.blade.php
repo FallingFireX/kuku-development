@@ -1,5 +1,5 @@
-<div class="mx-auto test-center d-flex justify-content-center">
-    <div class="clock-styling bg-dark" style="position: absolute; bottom: 0; right: 0; margin-right: 3em;">
+<div class="mx-auto test-center d-flex justify-content-center" style="margin-right: 16.66666% !important">
+    <div class="clock-styling bg-dark">
         
         <i class="far fa-clock"></i> <span id="clock" class="text-right" style="font-size:12px"></span>
 
