@@ -1,9 +1,17 @@
 <div class="mx-auto test-center d-flex justify-content-center" style="margin-right: 16.66666% !important">
+    @if(Auth::check())
+        <li class="nav-bank" style="color: #fff; line-height: 36px;">
+            @foreach(Auth::user()->getCurrencies(false) as $currency)
+                <span class="ml-2">{!! $currency->display($currency->quantity) !!}</span>
+            @endforeach
+        </li>
+    @endif
     <div class="clock-styling bg-dark">
         
         <i class="far fa-clock"></i> <span id="clock" class="text-right" style="font-size:12px"></span>
 
     </div>
+
     </div>
 <nav class="navbar navbar-expand-md navbar-dark bg-dark col-lg-8" id="headerNav" style="margin:auto">
 
