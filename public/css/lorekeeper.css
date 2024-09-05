@@ -320,8 +320,7 @@ p {
 }
 
 .currency-nav {
-    padding-right: .5rem;
-    padding-left: .5rem;
+    padding: 5px 15px;
     color: white; 
     border-radius: 15px 0px 0px 0px; 
     pointer-events:none;
