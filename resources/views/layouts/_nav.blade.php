@@ -1,11 +1,11 @@
 <div class="mx-auto test-center d-flex justify-content-center" style="margin-right: 16.66666% !important">
-            <li class="nav-item">
+            
                     <a class="nav-link" href="{{ url('/bank') }}">
                     @foreach(Auth::user()->getCurrencies(true) as $currency)
                         {!!$currency->display($currency->quantity) !!}
                     @endforeach
                     </a>
-                </li>
+                
     <div class="clock-styling bg-dark">
         
         <i class="far fa-clock"></i> <span id="clock" class="text-right" style="font-size:12px"></span>
