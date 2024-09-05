@@ -8,7 +8,7 @@
     <div class="col-md-6">
         @include('widgets._news', ['textPreview' => true])
     </div>
-    <div class="col-md-5">
+    <div class="col-md-6">
         @include('widgets._carousel')
     </div>
 </div>
