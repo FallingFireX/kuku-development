@@ -1,14 +1,17 @@
 <nav class="navbar navbar-expand-md navbar-dark bg-dark col-lg-8" id="headerNav" style="margin:auto">
     
     <div class="container-fluid">
-        <!-- <a class="navbar-brand" href="{{ url('/') }}">
-            {{ config('lorekeeper.settings.site_name', 'Lorekeeper') }}
-        </a> -->
-        <span class="button">
+         <a class="navbar-brand" href="{{ url('/') }}">
+            <span class="text">HOME</span>
+            <span class="icon"><</span>
+            
+        </a> 
+        <!-- <span class="button">
             <a href="{{ url('/') }}">
                 <span class="text">HOME</span>
                 <span class="icon"><</span>
-            </a>
+                {{ config('lorekeeper.settings.site_name', 'Lorekeeper') }}
+            </a> -->
         </span>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
             <span class="navbar-toggler-icon"></span>
