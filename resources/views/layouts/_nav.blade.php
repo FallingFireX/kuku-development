@@ -1,9 +1,10 @@
-<nav class="navbar navbar-expand-md navbar-dark bg-dark col-lg-8" id="headerNav" style="margin:auto">
 <div class="card mb-4 timestamp" style="background-color: rgba(0,0,0,0)">
     <div class="card-body">
         <i class="far fa-clock"></i> {!! LiveClock() !!}
     </div>
 </div>
+<nav class="navbar navbar-expand-md navbar-dark bg-dark col-lg-8" id="headerNav" style="margin:auto">
+
     <div class="container-fluid">
          <a class="navbar-brand" href="{{ url('/') }}">
             {{ config('lorekeeper.settings.site_name', 'Lorekeeper') }}
