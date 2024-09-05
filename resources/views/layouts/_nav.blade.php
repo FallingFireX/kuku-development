@@ -8,7 +8,7 @@
                 
     <div class="clock-styling bg-dark">
         
-        <i class="far fa-clock"></i> <span id="clock" class="text-right" style="font-size:12px"></span>
+        <i class="far fa-clock"></i> <span id="clock" class="text-right" style="font-size:13px"></span>
 
     </div>
 
