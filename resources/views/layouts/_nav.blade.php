@@ -13,7 +13,7 @@
     </div>
 
     </div>
-<nav class="navbar navbar-expand-md navbar-dark bg-dark col-lg-8" id="headerNav" style="margin:auto">
+<nav class="navbar navbar-expand-md navbar-dark bg-dark col-lg-8" id="headerNav" style="margin:auto; border-radius: 10px 0px 0px 0px">
 
     <div class="container-fluid">
          <a class="navbar-brand" href="{{ url('/') }}">
