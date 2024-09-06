@@ -237,6 +237,8 @@
                     $(this).next().toggle();
                 });
 
+                $('.modal').appendTo("body");
+
                 // CLOCK
                 function time() {
                     setInterval(function() { 
