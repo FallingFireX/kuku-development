@@ -1,18 +1,17 @@
 <div class="mx-auto test-center d-flex justify-content-center" style="margin-right: 16.66666% !important">
             
                     <a class="currency-nav bg-dark" href="{{ url('/bank') }}">
-                    @foreach(Auth::user()->getCurrencies(true) as $currency)
-                        {!!$currency->display($currency->quantity) !!} <i>&nbsp;&nbsp;</i>
-                    @endforeach
-                    </a>
-                
-    <div class="clock-styling bg-dark">
-        
+                    @if(Auth::check())
+                        @foreach(Auth::user()->getCurrencies(true) as $currency)
+                            {!!$currency->display($currency->quantity) !!} <i>&nbsp;&nbsp;</i>
+                        @endforeach
+                    @endif
+                    </a>                
+    <div class="clock-styling bg-dark">        
         <i class="far fa-clock"></i> <span id="clock" class="text-right" style="font-size:13px"></span>
-
     </div>
+</div>
 
-    </div>
 <nav class="navbar navbar-expand-md navbar-dark bg-dark col-lg-8" id="headerNav" style="margin:auto; border-radius: 10px 0px 0px 0px">
 
     <div class="container-fluid">
