@@ -4,9 +4,18 @@
         <i class="far fa-clock"></i> {!! LiveClock() !!}
     </div>
 </div> -->
-
+<div class="row">
+    <div class="col-md-6">
+        @include('widgets._news', ['textPreview' => true])
+    </div>
+    <div class="col-md-6">
+        @include('widgets._carousel')
+    </div>
+</div>
+<!-- <div class="col-md-5">
 @include('widgets._news', ['textPreview' => true])
-
+</div> -->
+<br>
 <div class="row justify-content-center">
     <div class="col-md-4">
         <div class="card mb-4">
