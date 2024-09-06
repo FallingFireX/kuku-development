@@ -2,12 +2,14 @@
             
                     <a class="currency-nav bg-dark" href="{{ url('/bank') }}">
                     @if(Auth::check())
-                        @foreach(Auth::user()->getCurrencies(true) as $currency)
-                            {!!$currency->display($currency->quantity) !!} <i>&nbsp;&nbsp;</i>
-                        @endforeach
+                    @foreach(Auth::user()->getCurrencies(true) as $currency)
+                        {!!$currency->display($currency->quantity) !!} <i>&nbsp;&nbsp;</i>
+                    @endforeach
                     @endif
-                    </a>                
-    <div class="clock-styling bg-dark">        
+                    </a>
+                
+    <div class="clock-styling bg-dark">
+        
         <i class="far fa-clock"></i> <span id="clock" class="text-right" style="font-size:13px"></span>
     </div>
 </div>
