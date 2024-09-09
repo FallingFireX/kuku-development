@@ -12,50 +12,7 @@
     {!! breadcrumbs(['Users' => 'users', $user->name => $user->url]) !!}
 
 @include('widgets._awardcase_feature', ['target' => $user, 'count' => Config::get('lorekeeper.extensions.awards.user_featured'), 'float' => false])
-<!-- 
-@if(isset($user->profile->parsed_text))
-    <div class="card mb-3" style="clear:both;">
-        @if($user->profile->pronouns)
-            <h5 class="card-header">
-                {{ $user->profile->pronouns }}
-            </h5>
-        @endif
-        <div class="card-body">
-            {!! $user->profile->parsed_text !!}
-        </div>
-    </div>
-@endif -->
 
-
-<!-- Uncomment this to restore the original character display.
-    <h2>
-        <a href="{{ $user->url.'/characters' }}">Characters</a>
-        @if(isset($sublists) && $sublists->count() > 0)
-            @foreach($sublists as $sublist)
-            / <a href="{{ $user->url.'/sublist/'.$sublist->key }}">{{ $sublist->name }}</a>
-            @endforeach
-        @endif
-    </h2>
-
-    @foreach($characters->take(4)->get()->chunk(4) as $chunk)
-        <div class="row mb-4">
-            @foreach($chunk as $character)
-                <div class="col-md-3 col-6 text-center">
-                    <div>
-                        <a href="{{ $character->url }}"><img src="{{ $character->image->thumbnailUrl }}" class="img-thumbnail" alt="{{ $character->fullName }}" /></a>
-                    </div>
-                    <div class="mt-1">
-                        <a href="{{ $character->url }}" class="h5 mb-0"> @if(!$character->is_visible) <i class="fas fa-eye-slash"></i> @endif {{ $character->fullName }}</a>
-                    </div>
-                </div>
-            @endforeach
-        </div>
-    @endforeach
-
-    <div class="text-right"><a href="{{ $user->url.'/characters' }}">View all...</a></div>
-    <hr>
-    <br><br>
--->
     @if (mb_strtolower($user->name) != mb_strtolower($name))
         <div class="alert alert-info">This user has changed their name to <strong>{{ $user->name }}</strong>.</div>
     @endif
