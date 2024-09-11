@@ -63,7 +63,7 @@
                     @endphp
                 @if (count($character->image->character->pets))
                     <div class="row justify-content-center text-center">
-                        {{-- get one random pet --}}
+                        {{-- get one random pet --}} 
                         @php
                             $pets = $character->image->character->pets()->orderBy('sort', 'DESC')->limit(config('lorekeeper.pets.display_pet_count'))->get();
                         @endphp
@@ -75,7 +75,7 @@
                                     <img src="{{ $pet->pet->variantImage($pet->id) }}" style="max-width: 100%;" />
                                     <br>
                                     <span class="text-light badge badge-dark" style="font-size:95%;">{!! $pet->pet_name !!}</span>
-                                    <span class="text-light badge badge-dark" style="font-size:95%;">{!! $pet->name !!}</span>
+                                    <span class="text-light badge badge-dark" style="font-size:95%;">{!! $pet->pet->displayName !!}</span>
                                 </div>
                             @endif
                         @endforeach
