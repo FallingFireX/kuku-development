@@ -75,7 +75,7 @@
                                     <img src="{{ $pet->pet->variantImage($pet->id) }}" style="max-width: 100%;" />
                                     <br>
                                     <span class="text-light badge badge-dark" style="font-size:95%;">{!! $pet->pet_name !!}</span>
-                                    <span class="text-light badge badge-dark" style="font-size:95%;">{!! $pets->name !!}</span>
+                                    <span class="text-light badge badge-dark" style="font-size:95%;">{!! $pet->name !!}</span>
                                 </div>
                             @endif
                         @endforeach
