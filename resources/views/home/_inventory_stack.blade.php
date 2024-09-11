@@ -21,7 +21,7 @@
         @endif
     </div>
 
-    {!! $description !!}
+    {!! $item->description !!}
             
 
     <h5>Item Variations</h5>
