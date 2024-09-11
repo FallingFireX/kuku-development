@@ -19,9 +19,8 @@
                 @endforeach
             </div>
         @endif
-    </div>
 
-    @if ($item->description)
+        @if ($item->description)
         <div class="mb-2">
             <a data-toggle="collapse" href="#itemDescription" class="h5">Description <i class="fas fa-caret-down"></i></a>
             <div class="card collapse show mt-1" id="itemDescription">
@@ -31,6 +30,9 @@
             </div>
         </div>
     @endif 
+    </div>
+
+    
 
     <h5>Item Variations</h5>
     @if ($user && $user->hasPower('edit_inventories'))
