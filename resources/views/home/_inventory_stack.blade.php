@@ -21,8 +21,9 @@
         @endif
     </div>
 
+    <div class="world-entry-text">
     {!! $item->description !!}
-            
+</div>    
 
     <h5>Item Variations</h5>
     @if ($user && $user->hasPower('edit_inventories'))
