@@ -215,9 +215,6 @@
                         </a>
                     </div>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ url('gallery') }}">Gallery</a>
-                </li>
             </ul>
 
             <!-- Right Side Of Navbar -->

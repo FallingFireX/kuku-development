@@ -1,4 +1,4 @@
-@if (!$stack)
+@if (!$stack) 
     <div class="text-center">
         Invalid stack selected.</div>
 @else
@@ -20,6 +20,69 @@
             </div>
         @endif
     </div>
+
+    {!! $description !!}
+            @if (((isset($item->uses) && $item->uses) || (isset($item->source) && $item->source) || $shops->count() || (isset($item->data['prompts']) && $item->data['prompts'])) && config('lorekeeper.extensions.item_entry_expansion.extra_fields'))
+                <div class="text-right">
+                    <a data-toggle="collapse" href="#item-{{ $item->id }}" class="text-primary">
+                        <strong>Show details...</strong>
+                    </a>
+                </div>
+                <div class="collapse" id="item-{{ $item->id }}">
+                    @if (isset($item->uses) && $item->uses)
+                        <p>
+                            <strong>Uses:</strong> {{ $item->uses }}
+                        </p>
+                    @endif
+                    @if ((isset($item->source) && $item->source) || $shops->count() || (isset($item->data['prompts']) && $item->data['prompts']))
+                        <h5>Availability</h5>
+                        <div class="row">
+                            @if (isset($item->source) && $item->source)
+                                <div class="col">
+                                    <p>
+                                        <strong>Source:</strong>
+                                    </p>
+                                    <p>
+                                        {!! $item->source !!}
+                                    </p>
+                                </div>
+                            @endif
+                            @if ($shops->count())
+                                <div class="col">
+                                    <p>
+                                        <strong>Purchaseable At:</strong>
+                                    </p>
+                                    <div class="row">
+                                        @foreach ($shops as $shop)
+                                            <div class="col">
+                                                <a href="{{ $shop->url }}">
+                                                    {{ $shop->name }}
+                                                </a>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                </div>
+                            @endif
+                            @if (isset($item->data['prompts']) && $item->data['prompts'])
+                                <div class="col">
+                                    <p>
+                                        <strong>Drops From:</strong>
+                                    </p>
+                                    <div class="row">
+                                        @foreach ($item->prompts as $prompt)
+                                            <div class="col">
+                                                <a href="{{ $prompt->url }}">
+                                                    {{ $prompt->name }}
+                                                </a>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                </div>
+                            @endif
+                        </div>
+                    @endif
+                </div>
+            @endif
 
     <h5>Item Variations</h5>
     @if ($user && $user->hasPower('edit_inventories'))
