@@ -113,6 +113,7 @@ Route::group(['prefix' => 'character', 'namespace' => 'Characters'], function ()
     Route::get('{slug}', 'CharacterController@getCharacter');
     Route::get('{slug}/profile', 'CharacterController@getCharacterProfile');
     Route::get('{slug}/'.__('awards.awardcase'), 'CharacterController@getCharacterAwards');
+    Route::get('{slug}/links', 'CharacterController@getCharacterLinks');
     Route::get('{slug}/bank', 'CharacterController@getCharacterBank');
     Route::get('{slug}/status-effects', 'CharacterController@getCharacterStatusEffects');
     Route::get('{slug}/level', 'CharacterController@getCharacterLevel');
