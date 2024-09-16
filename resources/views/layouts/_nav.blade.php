@@ -171,7 +171,7 @@
                         <a class="dropdown-item" href="{{ url('https://kukuri-arpg.w3spaces.com/newbie-guide.html') }}">
                             Newbie guide
                         </a>
-                        <a class="dropdown-item" href="{{ url('https://kukuri-arpg.w3spaces.com/newbie-guide.html') }}">
+                        <a class="dropdown-item" href="{{ url('info/guide') }}">
                             Site Guide
                         </a>
                         <!-- <a class="dropdown-item" href="{{ url('masterlist') }}">
