@@ -21,22 +21,23 @@
         <div class="card mb-4">
             <div class="card-body text-center">
                 <h5>Game Activities</h5>
-                    <p style="margin-bottom: 0.5rem">Quest
-                    <br>Coliseum
-                    <br>Activity Letters
-                    <br>Traveling Merchant
+                    <p style="margin-bottom: 0.5rem">
+                    <a href="https://kukuri-arpg.w3spaces.com/activities/quests.html">Quest</a>
+                    <br><a href="https://www.deviantart.com/kukuri-arpg/journal/Coliseum-830233023">Coliseum</a>
+                    <br><a href="https://www.deviantart.com/momma-kuku/journal/Activity-letters-743764050">Activity Letters</a>
+                    <br><a href="https://kukuri-arpg.w3spaces.com/activities/traveling-merchant.html">Traveling Merchant</a>
                     <br>
-                    <br>Hunting
-                    <br>Gathering
-                    <br>Excavating
-                    <br>Traveling
+                    <br><a href="https://kukuri-arpg.deviantart.com/journal/Hunting-604748328">Hunting</a>
+                    <br><a href="https://kukuri-arpg.deviantart.com/journal/Gathering-604748136">Gathering</a>
+                    <br><a href="https://kukuri-arpg.deviantart.com/journal/Excavating-629806452">Excavating</a>
+                    <br><a href="https://kukuri-arpg.deviantart.com/journal/Excavating-629806452">Traveling</a>
                     <br>
-                    <br>Breeding
-                    <br>Breeding Slots (Sheet)
-                    <br>Training
-                    <br>Training Completion
+                    <br><a href="https://kukuri-arpg.w3spaces.com/activities/breeding.html">Breeding</a>
+                    <br><a href="https://drive.google.com/drive/folders/1o2QmuzkdqtrNTaLEq6AgMP8r53E1nL1J">Breeding Slots (Sheet)</a>
+                    <br><a href="https://kukuri-arpg.w3spaces.com/training/home.html">Training</a>
+                    <br><a href="https://www.deviantart.com/momma-kuku/journal/Training-Completion-Mar-2021-872871365">Training Completion</a>
                     <br>
-                    <br>Illnesses and Injuries
+                    <br><a href="https://kukuri-arpg.w3spaces.com/activities/Illnesses-injuries.html">Illnesses and Injuries</a>
                 </p>
             </div>
         </div>
@@ -52,22 +53,23 @@
         <div class="card mb-4">
             <div class="card-body text-center">
                 <h5>Resources</h5>
-                    <p style="margin-bottom: 0.5rem">Design Approvals
-                    <br>Import Updates
+                    <p style="margin-bottom: 0.5rem">
+                    <a href="https://kukuri-arpg.deviantart.com/journal/Design-approval-570879060">Design Approvals</a>
+                    <br><a href="https://www.deviantart.com/momma-kuku/journal/Import-updates-September-19-811742986">Import Updates</a>
                     <br>
-                    <br>Genetics and Mutations
-                    <br>Species Information
-                    <br>Physical Features
-                    <br>Blank Imports
+                    <br><a href="https://kukuri-arpg.w3spaces.com/genetics/genes-and-mutations.html">Genetics and Mutations</a>
+                    <br><a href="https://kukuri-arpg.w3spaces.com/genetics/species-info.html">Species Information</a>
+                    <br><a href="https://www.deviantart.com/kukuri-arpg/journal/Traits-828401506">Physical Features</a>
+                    <br><a href="https://drive.google.com/drive/folders/1o2QmuzkdqtrNTaLEq6AgMP8r53E1nL1J">Blank Imports</a>
                     <br>
-                    <br>Adoption Center
-                    <br>Status Updates
-                    <br>Leasing
+                    <br><a href="https://kukuri-arpg.w3spaces.com/adoption-center.html">Adoption Center</a>
+                    <br><a href="https://www.deviantart.com/kukuri-arpg/journal/Status-updates-589917887">Status Updates</a>
+                    <br><a href="https://kukuri-arpg.deviantart.com/journal/Leasing-629806120">Leasing</a>
                     <br>
-                    <br>Bank (Sheet)
-                    <br>Shops
+                    <br><a href="https://kukuri-arpg.deviantart.com/journal/The-Bank-570876859">Bank (Sheet)</a>
+                    <br><a href="{{ url('shops') }}">Shops</a>
                     <br>
-                    <br>Fate Points and Stat Points
+                    <br><a href="https://kukuri-arpg.w3spaces.com/fate-points.html">Fate Points and Stat Points</a>
                 </p>
             </div>
         </div>
