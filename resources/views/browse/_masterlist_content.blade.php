@@ -164,8 +164,7 @@
                 <div>
                     @if(Auth::check() && (Auth::user()->settings->warning_visibility == 0) && isset($character->character_warning) || isset($character->character_warning) && !Auth::check())
                     <a href="{{ $character->url }}"><img class="img-thumbnail" src="{{ asset('/images/content_warning.png') }}" alt="Content Warning"/></a>
-                    @else    
-                    <a href="{{ $character->url }}"><img src="{{ $character->image->thumbnailUrl }}" class="img-thumbnail" alt="Thumbnail for {{ $character->fullName }}"/></a>
+                    
                     @endif
                 </div>
                     <div>
