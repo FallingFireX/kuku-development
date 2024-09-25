@@ -45,8 +45,6 @@
 </div>
 @endif
 
-@include('character._header', ['character' => $character])
-
 {{-- Main Image --}}
 <div class="row mb-3" id="main-tab">
         <div class="col-md-7">
