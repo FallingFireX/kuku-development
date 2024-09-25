@@ -15,8 +15,18 @@
             $character->category->masterlist_sub_id ? $character->category->sublist->name . ' Masterlist' : 'Character masterlist' => $character->category->masterlist_sub_id ? 'sublist/' . $character->category->sublist->key : 'masterlist',
             $character->fullName => $character->url,
         ]) !!}
-    @endif
-    @include('character._header', ['character' => $character])
+@endif
+
+@if(Auth::check() && (Auth::user()->settings->warning_visibility < 2) && isset($character->character_warning) || isset($character->character_warning) && !Auth::check())
+<div id="warning" class="alert alert-danger" style="text-align:center;">
+    <span style="float:right;"><a href="#" data-id="{{ $character->character_warning }}" onclick="changeStyle()"><i class="fas fa-times" aria-hidden="true"></i></a></span>
+        <h1><i class="fa fa-exclamation-triangle mr-2"></i>Character Warning<i class="fa fa-exclamation-triangle ml-2"></i></h1>
+        <h2><p>{!! nl2br(htmlentities($character->character_warning)) !!}</p></h2>
+    <img src="{{ asset('/images/content_warning.png') }}" style="width:30%;" alt="Content Warning"></img>
+</div>
+@endif
+
+@include('character._header', ['character' => $character])
     
 
     @if ($character->images()->where('is_valid', 1)->whereNotNull('transformation_id')->exists())
@@ -36,31 +46,19 @@
         </div>
 @endif
 
-@if(Auth::check() && (Auth::user()->settings->warning_visibility < 2) && isset($character->character_warning) || isset($character->character_warning) && !Auth::check())
-<div id="warning" class="alert alert-danger" style="text-align:center;">
-    <span style="float:right;"><a href="#" data-id="{{ $character->character_warning }}" onclick="changeStyle()"><i class="fas fa-times" aria-hidden="true"></i></a></span>
-        <h1><i class="fa fa-exclamation-triangle mr-2"></i>Character Warning<i class="fa fa-exclamation-triangle ml-2"></i></h1>
-        <h2><p>{!! nl2br(htmlentities($character->character_warning)) !!}</p></h2>
-    <img src="{{ asset('/images/content_warning.png') }}" style="width:30%;" alt="Content Warning"></img>
-</div>
-@endif
-
-{{-- Main Image --}}
-<div class="row mb-3">
-    <div class="col-md-7">
-        <div class="text-center">
-            <a href="{{ $character->image->canViewFull(Auth::check() ? Auth::user() : null) && file_exists( public_path($character->image->imageDirectory.'/'.$character->image->fullsizeFileName)) ? $character->image->fullsizeUrl : $character->image->imageUrl }}" data-lightbox="entry" data-title="{{ $character->fullName }}">
-                <img src="{{ $character->image->canViewFull(Auth::check() ? Auth::user() : null) && file_exists( public_path($character->image->imageDirectory.'/'.$character->image->fullsizeFileName)) ? $character->image->fullsizeUrl : $character->image->imageUrl }}" class="image" alt="{{ $character->fullName }}" />
-            </a>
-        </div>
-        @if($character->image->canViewFull(Auth::check() ? Auth::user() : null) && file_exists( public_path($character->image->imageDirectory.'/'.$character->image->fullsizeFileName)))
-            <div class="text-right">You are viewing the full-size image. <a href="{{ $character->image->imageUrl }}">View watermarked image</a>?</div>
-        @endif
-    </div>
-    @include('character._image_info', ['image' => $character->image])
-</div>
-
-            
+    {{-- Main Image --}}
+    <div class="row mb-3" id="main-tab">
+        <div class="col-md-7">
+            <div class="text-center">
+                <a href="{{ $character->image->canViewFull(Auth::check() ? Auth::user() : null) && file_exists(public_path($character->image->imageDirectory . '/' . $character->image->fullsizeFileName)) ? $character->image->fullsizeUrl : $character->image->imageUrl }}"
+                    data-lightbox="entry" data-title="{{ $character->fullName }}">
+                    <img src="{{ $character->image->canViewFull(Auth::check() ? Auth::user() : null) && file_exists(public_path($character->image->imageDirectory . '/' . $character->image->fullsizeFileName)) ? $character->image->fullsizeUrl : $character->image->imageUrl }}"
+                        class="image" alt="{{ $character->fullName }}" />
+                </a>
+            </div>
+            @if ($character->image->canViewFull(Auth::check() ? Auth::user() : null) && file_exists(public_path($character->image->imageDirectory . '/' . $character->image->fullsizeFileName)))
+                <div class="text-right">You are viewing the full-size image. <a href="{{ $character->image->imageUrl }}">View watermarked image</a>?</div>
+            @endif
             <br>
             <p></p>
             <br>
@@ -102,7 +100,7 @@
             </div>
         </div>
         
-        <!-- @include('character._image_info', ['image' => $character->image]) -->
+        @include('character._image_info', ['image' => $character->image])
     </div>
         
     <div class="my-3 card">
@@ -186,12 +184,6 @@
 
 @section('scripts')
     @parent
-    <script>
-    function changeStyle(){
-        var element = document.getElementById("warning");
-        element.style.display = "none";
-    }
-    </script>
     @include('character._image_js', ['character' => $character])
     @include('character._transformation_js')
 @endsection
