@@ -62,21 +62,7 @@
     @include('character._image_info', ['image' => $character->image])
 </div>
 
-{{-- Info --}}
-<div class="card character-bio">
-    <div class="card-header">
-        <ul class="nav nav-tabs card-header-tabs">
-            <li class="nav-item">
-                <a class="nav-link active" id="statsTab" data-toggle="tab" href="#stats" role="tab">Stats</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" id="notesTab" data-toggle="tab" href="#notes" role="tab">Description</a>
-            </li>
-            @if(Auth::check() && Auth::user()->hasPower('manage_characters'))
-                <li class="nav-item">
-                    <a class="nav-link" id="settingsTab" data-toggle="tab" href="#settings-{{ $character->slug }}" role="tab"><i class="fas fa-cog"></i></a>
-                </li>
-            @endif
+        
             <br>
             <p></p>
             <br>
@@ -117,8 +103,6 @@
                 </div>
             </div>
         </div>
-        
-        @include('character._image_info', ['image' => $character->image])
     </div>
         
     <div class="my-3 card">
