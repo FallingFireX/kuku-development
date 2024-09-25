@@ -27,6 +27,14 @@ return [
             'CH3RVB' => 'https://github.com/CH3RVB/',
         ]),
         'version' => '1.0.1',
+        ],
+    'character_warnings' => [
+        'key' => 'character_warnings',
+        'wiki_key' => 'Character_Warnings',
+        'creators' => json_encode([
+            'Lexi'  => 'https://github.com/redcr0wz/',
+        ]),
+        'version' => '1.0.0',
     ],
 
     'Books' => [

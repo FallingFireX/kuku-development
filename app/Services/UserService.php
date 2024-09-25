@@ -254,6 +254,22 @@ class UserService extends Service {
      * @param string           $code
      * @param array            $data
      * @param \App\Models\User $user
+     * Updates user's warning visibility setting
+     */
+    public function updateWarningVisibility($data, $user)
+    {
+        $user->settings->warning_visibility = $data;
+        $user->settings->save();
+
+        return true;
+    }
+
+    /**
+    * Confirms a user's two-factor auth.
+     *
+     * @param string           $code
+     * @param array            $data
+     * @param \App\Models\User $user 
      *
      * @return bool
      */

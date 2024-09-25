@@ -50,6 +50,7 @@ Route::group(['prefix' => 'account', 'namespace' => 'Users'], function () {
     Route::get('deactivate', 'AccountController@getDeactivate');
     Route::get('deactivate-confirm', 'AccountController@getDeactivateConfirmation');
     Route::post('deactivate', 'AccountController@postDeactivate');
+    Route::post('warning', 'AccountController@postWarningVisibility');
 
     Route::get('bookmarks', 'BookmarkController@getBookmarks');
     Route::get('bookmarks/create', 'BookmarkController@getCreateBookmark');
