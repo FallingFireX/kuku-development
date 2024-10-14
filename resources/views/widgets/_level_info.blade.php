@@ -1,4 +1,4 @@
-<div class="card mb-3">
+<div class="card mb-3"> 
     <div class="card-header h2">
         Level Information
         <span class="badge badge-{{ $level->nextLevel ? 'dark' : 'success' }} text-white mx-1 float-right" data-toggle="tooltip" title="Level {{ $level->current_level }}">
@@ -28,6 +28,18 @@
 
                     {!! Form::close() !!}
                 @endif
+                @if ($level->current_exp >= $level->nextLevel->exp_required && Auth::check() && Auth::user()->hasPower('edit_inventories'))
+                <div class="text-center m-1">
+                        <b>
+                            <p>Rank up kukuri</p>
+                        </b>
+                    </div>
+                    {!! Form::open(['url' => $level->user ? '/stats/level' : $level->character->url . '/stats/level']) !!}
+
+                    {!! Form::submit('Level up!', ['class' => 'btn btn-success mb-2']) !!}
+
+                    {!! Form::close() !!}
+                    @endif
             @else
                 {{ $level->current_exp }} Exp (Max Level)
                 <div class="progress">

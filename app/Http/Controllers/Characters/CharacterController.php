@@ -710,6 +710,7 @@ class CharacterController extends Controller {
             'logs'                  => $this->character->getLevelLogs(0),
         ]);
     }
+    
 
     /**
      * Shows a user's count logs.
