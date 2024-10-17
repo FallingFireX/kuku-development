@@ -9,7 +9,7 @@
             
         <div class="card-body inventory-body">
             <div class="row mb-2">
-                @foreach ($character as $character)
+                @foreach ($characters as $character)
                     <div class="col-md-3 col-6 text-center mb-2">
                         @if(Auth::check() && (Auth::user()->settings->warning_visibility == 0) && isset($character->character_warning) || isset($character->character_warning) && !Auth::check())
                         <a href="{{ $character->url }}"><img class="img-thumbnail" src="{{ asset('/images/content_warning.png') }}" alt="Content Warning"/></a>
