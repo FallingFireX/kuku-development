@@ -22,7 +22,7 @@
     <span style="float:right;"><a href="#" data-id="{{ $character->character_warning }}" onclick="changeStyle()"><i class="fas fa-times" aria-hidden="true"></i></a></span>
         <h1><i class="fa fa-exclamation-triangle mr-2"></i>Character Warning<i class="fa fa-exclamation-triangle ml-2"></i></h1>
         <h2><p>{!! nl2br(htmlentities($character->character_warning)) !!}</p></h2>
-    <img src="{{ asset('/images/content_warning.png') }}" style="width:30%;" alt="Content Warning"></img>
+    <img src="{{ asset('/images/content_warning.png') }}" style="width:20%;" alt="Content Warning"></img>
 </div>
 @endif
 

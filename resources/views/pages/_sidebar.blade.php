@@ -1,5 +1,5 @@
 <ul class="text-center">
-    <li class="sidebar-header"><a href="#" class="card-link">Featured Character</a></li>
+    <li class="sidebar-header"><a href="#" class="card-link">Kukuri of the Month</a></li>
 
     <li class="sidebar-section p-2">
         @if(isset($featured) && $featured)
@@ -15,5 +15,14 @@
         @else
             <p>There is no featured character.</p>
         @endif
+    </li>
+
+    <li class="sidebar-section p-2">
+            <div class="mt-1">
+                <h3>Current Quest</h3>
+                <br>
+                <p>blah blah</p>
+            </div>
+            
     </li>
 </ul>
