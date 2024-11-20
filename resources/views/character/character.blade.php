@@ -121,7 +121,10 @@
             <ul class="nav nav-tabs card-header-tabs">
                 
                 <li class="nav-item">
-                    <a class="nav-link active" id="notesTab" data-toggle="tab" href="#notes" role="tab">Description</a>
+                    <a class="nav-link active" id="notesTab-{{ $image->id }}" data-toggle="tab" href="#personality-{{ $image->id }}" role="tab">Personality</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="notesTab" data-toggle="tab" href="#notes" role="tab">Description</a>
                 </li>
                 @if($character->getLineageBlacklistLevel() < 2)
                 <li class="nav-item">
@@ -143,7 +146,12 @@
             </ul>
         </div>
         <div class="card-body tab-content">
-            <div class="tab-pane fade  show active" id="notes">
+        <div class="tab-pane fade  show active" id="personality-{{ $image->id }}">
+                @if ($character->profile->parsed_text)
+                            {!! $character->profile->parsed_text !!}
+                @endif
+            </div>
+            <div class="tab-pane fade" id="notes">
                 @include('character._tab_notes', ['character' => $character])
             </div>
             @if($character->getLineageBlacklistLevel() < 2)
