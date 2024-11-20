@@ -69,8 +69,3 @@
 
     <div class="text-center mt-4 small text-muted">{{ $features->total() }} result{{ $features->total() == 1 ? '' : 's' }} found.</div>
 @endsection
-
-<!-- {!! $features->render() !!}
-    @foreach ($features as $feature)
-        <div class="card mb-3">
-            <div class="card-body"> -->
