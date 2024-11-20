@@ -52,15 +52,25 @@
         {!! Form::close() !!}
     </div>
 
-    {!! $features->render() !!}
-    @foreach ($features as $feature)
-        <div class="card mb-3">
-            <div class="card-body">
+    <div id="gridView" class="hide">
+    @foreach ($features->chunk(4) as $chunk)
+        <div class="row">
+            @foreach ($chunk as $feature)
+            <div class="col-md-3 col-6 text-center">
+                <div>
                 @include('world._feature_entry', ['feature' => $feature])
+                </div>
             </div>
+            @endforeach
         </div>
     @endforeach
+    </div>
     {!! $features->render() !!}
 
     <div class="text-center mt-4 small text-muted">{{ $features->total() }} result{{ $features->total() == 1 ? '' : 's' }} found.</div>
 @endsection
+
+<!-- {!! $features->render() !!}
+    @foreach ($features as $feature)
+        <div class="card mb-3">
+            <div class="card-body"> -->
