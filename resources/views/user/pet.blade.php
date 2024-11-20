@@ -20,14 +20,14 @@
     @if (!$namespace)
         <div class="container justify-content-right text-right my-3">
             <a href="{{ $user->url . '/pets' }}">
-                <div class="btn btn-primary">Return to Pets</div>
+                <div class="btn btn-primary">Return to Familiars</div>
             </a>
         </div>
     @endif
 
     @if (Auth::check() && ($pet->user_id !== Auth::user()->id && Auth::user()->hasPower('edit_inventories')))
         <div class="alert alert-warning">
-            You are editing this pet as a staff member.
+            You are editing this Familiar as an admin.
         </div>
     @endif
 

@@ -57,7 +57,7 @@
     <div class = "container-flex">
         <div class = "row">
         @foreach ($chunk as $feature)
-            <div class = "col-xs-12 col-s-12 col-md-4 col-lg-4 col-xl-4 mb-3">
+            <div class = "col-xs-12 col-s-12 col-md-4 col-lg-3 col-xl-3 mb-3">
                 <div class="card" style = "height: 100%">
                     <div class="card-body">
                         @include('world._feature_entry', ['feature' => $feature])

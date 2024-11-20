@@ -10,6 +10,9 @@
                     <a class="nav-link" id="notesTab-{{ $image->id }}" data-toggle="tab" href="#notes-{{ $image->id }}" role="tab">Notes</a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link" id="notesTab-{{ $image->id }}" data-toggle="tab" href="#notes-{{ $image->id }}" role="tab">Personality</a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link" id="creditsTab-{{ $image->id }}" data-toggle="tab" href="#credits-{{ $image->id }}" role="tab">Credits</a>
                 </li>
                 @if (isset($showMention) && $showMention)
@@ -229,28 +232,7 @@
                         <a href="#" class="btn btn-outline-info btn-sm edit-features mb-3" data-id="{{ $image->id }}"><i class="fas fa-cog"></i> Edit</a>
                     </div>
                 @endif
-                <!-- @if (count($image->character->pets))
-                    <div class="row justify-content-center text-center">
-                        {{-- get one random pet --}}
-                        @php
-                            $pets = $image->character->pets()->orderBy('sort', 'DESC')->limit(config('lorekeeper.pets.display_pet_count'))->get();
-                        @endphp
-                        @foreach ($pets as $pet)
-                            @if (config('lorekeeper.pets.pet_bonding_enabled'))
-                                @include('character._pet_bonding_info', ['pet' => $pet])
-                            @else
-                                <div class="ml-2 mr-3">
-                                    <img src="{{ $pet->pet->variantImage($pet->id) }}" style="max-width: 75px;" />
-                                    <br>
-                                    <span class="text-light badge badge-dark" style="font-size:95%;">{!! $pet->pet_name !!}</span>
-                                </div>
-                            @endif
-                        @endforeach
-                        <div class="ml-auto float-right mr-3">
-                            <a href="{{ $character->url . '/pets' }}" class="btn btn-outline-info btn-sm">View All</a>
-                        </div>
-                    </div>
-                @endif -->
+                
                 @if (count($image->character->equipment()))
                     <div class="mb-1 mt-4">
                         <div class="mb-0">
@@ -288,6 +270,16 @@
                         <a href="#" class="btn btn-outline-info btn-sm edit-notes" data-id="{{ $image->id }}"><i class="fas fa-cog"></i> Edit</a>
                     </div>
                 @endif
+            </div>
+
+            <div class="tab-pane fade" id="personality-{{ $image->id }}">
+                @if ($character->profile->parsed_text)
+                    <div class="card mb-3">
+                        <div class="card-body parsed-text">
+                            {!! $character->profile->parsed_text !!}
+                        </div>
+                    </div>
+    @endif
             </div>
 
             {{-- Image credits --}}
