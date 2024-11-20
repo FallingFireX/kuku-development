@@ -54,15 +54,17 @@
 
     {!! $features->render() !!}
     @foreach ($features as $feature)
-    <div class = "row">
-        <div class = "col-xs-12 mb-3">
-        <div class="card">
-            <div class="card-body">
-                @include('world._feature_entry', ['feature' => $feature])
+    <div class = "container-flex">
+        <div class = "row">
+            <div class = "col-xs-12 mb-3">
+                <div class="card">
+                    <div class="card-body">
+                        @include('world._feature_entry', ['feature' => $feature])
+                    </div>
+                </div>
             </div>
         </div>
-        </div>
-        </div>
+    </div>
     @endforeach
     {!! $features->render() !!}
 
