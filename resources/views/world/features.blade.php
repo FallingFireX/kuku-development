@@ -53,9 +53,10 @@
     </div>
 
     {!! $features->render() !!}
-    @foreach ($features as $feature)
+    @foreach ($features->chunk(3) as $chunk)
     <div class = "container-flex">
         <div class = "row">
+        @foreach ($chunk as $feature)
             <div class = "col-xs-12 col-s-12 col-md-4 col-lg-4 col-xl-4 mb-3">
                 <div class="card">
                     <div class="card-body">
@@ -63,6 +64,7 @@
                     </div>
                 </div>
             </div>
+            @endforeach
         </div>
     </div>
     @endforeach
