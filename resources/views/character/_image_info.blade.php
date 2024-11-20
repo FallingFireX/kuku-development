@@ -10,7 +10,7 @@
                     <a class="nav-link" id="notesTab-{{ $image->id }}" data-toggle="tab" href="#notes-{{ $image->id }}" role="tab">Notes</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" id="notesTab-{{ $image->id }}" data-toggle="tab" href="#notes-{{ $image->id }}" role="tab">Personality</a>
+                    <a class="nav-link" id="notesTab-{{ $image->id }}" data-toggle="tab" href="#Personality-{{ $image->id }}" role="tab">Personality</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" id="creditsTab-{{ $image->id }}" data-toggle="tab" href="#credits-{{ $image->id }}" role="tab">Credits</a>
@@ -279,7 +279,7 @@
                             {!! $character->profile->parsed_text !!}
                         </div>
                     </div>
-    @endif
+                @endif
             </div>
 
             {{-- Image credits --}}
