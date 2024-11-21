@@ -153,17 +153,17 @@
             </div>
 
             <!-- LINEAGE -->
-             <h4>Lineage:</h4>
-
+             <h5>Lineage:</h5>
+            <br>
             @if($character->getLineageBlacklistLevel() < 2)
             <div class="tab-pane fade" id="lineage">
                 @include('character._tab_lineage', ['character' => $character])
             </div>
             <br>
             <i>This is your kukuri's immediate family tree, you can compare this to other kukuri to see who they are safe to breed to.</i>
-            <br>
+            <br><br>
             View Offspering here:
-            <div class="text-left mb-2">
+            <br><div class="text-left mb-2">
                     <a class="btn btn-primary create-folder mx-1" href="{{ $character->url . '/lineage' }}" class="{{ set_active('character/' . $character->slug . '/lineage') }}"><i class="fas fa-edit"></i> Descendants</a>
                 </div>
             @endif

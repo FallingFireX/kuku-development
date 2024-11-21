@@ -7,7 +7,7 @@
                     <a class="nav-link active" id="infoTab-{{ $image->id }}" data-toggle="tab" href="#info-{{ $image->id }}" role="tab">Info</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" id="notesTab-{{ $image->id }}" data-toggle="tab" href="#notes-{{ $image->id }}" role="tab">Notes</a>
+                    <a class="nav-link" id="notesTab-{{ $image->id }}" data-toggle="tab" href="#notes-{{ $image->id }}" role="tab">Items</a>
                 </li>
                 
                 <li class="nav-item">
@@ -236,7 +236,7 @@
                 @if ($image->parsed_description)
                     <div class="parsed-text imagenoteseditingparse">{!! $image->parsed_description !!}</div>
                 @else
-                    <div class="imagenoteseditingparse">No additional notes given.</div>
+                    <div class="imagenoteseditingparse">No Items have been used on this kukuri.</div>
                 @endif
                 @if (Auth::check() && Auth::user()->hasPower('manage_characters'))
                     <div class="mt-3">
@@ -268,8 +268,8 @@
                         @endforeach
                     </div>
                 </div>
-
-                    <b>Mention this Kukuri</b>
+                    <hr>
+                    <h5>Mention this Kukuri</h5>
                     In the rich text editor:
                     <div class="alert alert-secondary">
                         [character={{ $character->slug }}]
@@ -297,32 +297,6 @@
                     </div>
                 @endif
             </div>
-
-            @if (isset($showMention) && $showMention)
-                {{-- Mention This tab --}}
-                <div class="tab-pane fade" id="mention-{{ $image->id }}">
-                    In the rich text editor:
-                    <div class="alert alert-secondary">
-                        [character={{ $character->slug }}]
-                    </div>
-                    In a comment:
-                    <div class="alert alert-secondary">
-                        [{{ $character->fullName }}]({{ $character->url }})
-                    </div>
-                    <hr>
-                    <div class="my-2">
-                        <strong>For Thumbnails:</strong>
-                    </div>
-                    In the rich text editor:
-                    <div class="alert alert-secondary">
-                        [charthumb={{ $character->slug }}]
-                    </div>
-                    In a comment:
-                    <div class="alert alert-secondary">
-                        [![Thumbnail of {{ $character->fullName }}]({{ $character->image->thumbnailUrl }})]({{ $character->url }})
-                    </div>
-                </div>
-            @endif
 
             @if (Auth::check() && Auth::user()->hasPower('manage_characters'))
                 <div class="tab-pane fade" id="settings-{{ $image->id }}">
