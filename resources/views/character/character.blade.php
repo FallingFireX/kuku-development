@@ -61,30 +61,6 @@
                 <div class="text-right">You are viewing the full-size image. <a href="{{ $character->image->imageUrl }}">View watermarked image</a>?</div>
             @endif
             <br>
-
-            <!-- STATUSES -->
-            @php
-                $statuses = \App\Models\Status\StatusEffect::orderBy('name')->pluck('name', 'id');
-            @endphp
-            @if ($character->image->character->statuses)
-            
-            <div class="row">
-                    @foreach($statuses as $status)    
-                            <div class="col-lg-2 col-md-3 col-6 text-right">
-                                <div class="btn btn-outline-info float-left">
-                                    {!! $status !!}
-                                </div>
-                                </div>
-                            
-                    @endforeach
-                    </div>
-            @else
-                <div class="btn btn-outline-info float-left">
-                    Healthy
-                </div>
-            
-        @endif
-
             <p></p>
             <br>
             <!--Pets relocation-->
