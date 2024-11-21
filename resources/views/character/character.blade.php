@@ -123,19 +123,13 @@
                 <li class="nav-item">
                     <a class="nav-link active" id="notesTab-{{ $image->id }}" data-toggle="tab" href="#personality-{{ $image->id }}" role="tab">Personality</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" id="notesTab" data-toggle="tab" href="#notes" role="tab">Description</a>
-                </li>
                 @if($character->getLineageBlacklistLevel() < 2)
                 <li class="nav-item">
                     <a class="nav-link" id="lineageTab" data-toggle="tab" href="#lineage" role="tab">Lineage</a>
                 </li>
                 @endif
                 <li class="nav-item">
-                    <a class="nav-link" id="skillsTab" data-toggle="tab" href="#skills" role="tab">Skills</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" id="statsTab" data-toggle="tab" href="#stats" role="tab">Stats</a>
+                    <a class="nav-link" id="notesTab" data-toggle="tab" href="#notes" role="tab">DA Data</a>
                 </li>
                 @if (Auth::check() && Auth::user()->hasPower('manage_characters'))
                     <li class="nav-item">
@@ -146,25 +140,24 @@
             </ul>
         </div>
         <div class="card-body tab-content">
+            <!-- PERSONALITY -->
         <div class="tab-pane fade  show active" id="personality-{{ $image->id }}">
+            @if (Auth::check() && Auth::user()->hasPower('manage_characters'))
+                <div class="text-right mb-2">
+                    <a class="btn btn-primary create-folder mx-1" href="{{ url('characters') }}"><i class="fas fa-edit"></i> Edit personality</a>
+                </div>
+            @endif
                 @if ($character->profile->parsed_text)
                             {!! $character->profile->parsed_text !!}
                 @endif
             </div>
-            <div class="tab-pane fade" id="notes">
-                @include('character._tab_notes', ['character' => $character])
-            </div>
+
+            <!-- LINEAGE -->
             @if($character->getLineageBlacklistLevel() < 2)
             <div class="tab-pane fade" id="lineage">
                 @include('character._tab_lineage', ['character' => $character])
             </div>
             @endif
-            <div class="tab-pane fade" id="skills">
-                @include('character._tab_skills', ['character' => $character, 'skills' => $skills])
-            </div>
-            <div class="tab-pane fade" id="stats">
-                @include('character._tab_stats', ['character' => $character])
-            </div>
             @if (Auth::check() && Auth::user()->hasPower('manage_characters'))
                 <div class="tab-pane fade" id="settings-{{ $character->slug }}">
                     {!! Form::open(['url' => $character->is_myo_slot ? 'admin/myo/' . $character->id . '/settings' : 'admin/character/' . $character->slug . '/settings']) !!}
@@ -182,7 +175,10 @@
                     </div>
                 </div>
             @endif
-            
+            <!-- DA Data -->
+            <div class="tab-pane fade" id="notes">
+                @include('character._tab_notes', ['character' => $character])
+            </div>
         </div>
     </div>
     <br>

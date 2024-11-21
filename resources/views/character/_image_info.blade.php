@@ -9,9 +9,7 @@
                 <li class="nav-item">
                     <a class="nav-link" id="notesTab-{{ $image->id }}" data-toggle="tab" href="#notes-{{ $image->id }}" role="tab">Notes</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" id="notesTab-{{ $image->id }}" data-toggle="tab" href="#personality-{{ $image->id }}" role="tab">Personality</a>
-                </li>
+                
                 <li class="nav-item">
                     <a class="nav-link" id="creditsTab-{{ $image->id }}" data-toggle="tab" href="#credits-{{ $image->id }}" role="tab">Credits</a>
                 </li>
@@ -39,18 +37,6 @@
 
             {{-- Basic info --}}
             <div class="tab-pane fade show active" id="info-{{ $image->id }}">
-                <!-- <div class="row">
-                    <div class="col-lg-4 col-md-6 col-4">
-                        <h5>Class</h5>
-                    </div>
-                    <div class="col-lg-8 col-md-6 col-8">{!! $image->character->class_id ? $image->character->class->displayName : 'None' !!}
-                        @if (Auth::check())
-                            @if (Auth::user()->isStaff || (Auth::user()->id == $image->character->user_id && $image->character->class_id == null))
-                                <a href="#" class="btn btn-outline-info btn-sm edit-class ml-1" data-id="{{ $image->character->id }}"><i class="fas fa-cog"></i></a>
-                            @endif
-                        @endif
-                    </div>
-                </div> -->
                 <div class="row">
                     <div class="col-lg-4 col-md-6 col-4">
                         <h5>Species</h5>
@@ -65,19 +51,6 @@
                         <div class="col-lg-8 col-md-6 col-8">{!! $image->subtype_id ? $image->subtype->displayName : 'None' !!}</div>
                     </div>
                 @endif
-                <!-- @if ($image->transformation_id)
-                    <div class="row">
-                        <div class="col-lg-4 col-md-6 col-4">
-                            <h5>{{ ucfirst(__('transformations.form')) }} {!! add_help('The main image is always the active image') !!}</h5>
-                        </div>
-                        <div class="col-lg-8 col-md-6 col-8">
-                            <a href="{{ $image->transformation->url }}">
-                                {!! $image->transformation->displayName !!}
-                            </a>
-                            @if($image->transformation_description) ({{ $image->transformation_description }}) @endif
-                        </div>
-                    </div>
-                @endif -->
                 <div class="row">
                     <div class="col-lg-4 col-md-6 col-4">
                         <h5>Type</h5>
@@ -272,12 +245,6 @@
                 @endif
             </div>
 
-            <div class="tab-pane fade" id="personality-{{ $image->id }}">
-                @if ($character->profile->parsed_text)
-                            {!! $character->profile->parsed_text !!}
-                @endif
-            </div>
-
             {{-- Image credits --}}
             <div class="tab-pane fade" id="credits-{{ $image->id }}">
 
@@ -301,6 +268,28 @@
                         @endforeach
                     </div>
                 </div>
+
+                    <b>Mention this Kukuri</b>
+                    In the rich text editor:
+                    <div class="alert alert-secondary">
+                        [character={{ $character->slug }}]
+                    </div>
+                    In a comment:
+                    <div class="alert alert-secondary">
+                        [{{ $character->fullName }}]({{ $character->url }})
+                    </div>
+                    <hr>
+                    <div class="my-2">
+                        <strong>For Thumbnails:</strong>
+                    </div>
+                    In the rich text editor:
+                    <div class="alert alert-secondary">
+                        [charthumb={{ $character->slug }}]
+                    </div>
+                    In a comment:
+                    <div class="alert alert-secondary">
+                        [![Thumbnail of {{ $character->fullName }}]({{ $character->image->thumbnailUrl }})]({{ $character->url }})
+                    </div>
 
                 @if (Auth::check() && Auth::user()->hasPower('manage_characters'))
                     <div class="mt-3">
