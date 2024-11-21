@@ -66,7 +66,7 @@
             @php
                 $statuses = \App\Models\Status\StatusEffect::orderBy('name')->pluck('name', 'id');
             @endphp
-            @if (count($character->image->character->statuses))
+            @if ($character->image->character->statuses)
             
             <div class="row">
                     @foreach($statuses as $status)    
