@@ -158,31 +158,7 @@
                     }
                     $type = $type ?? null;
                 @endphp
-                <div class="row">
-                        <div class="col-lg-6 col-md-6 col-4">
-                        <!-- STATUSES -->
-                        @php
-                            $statuses = \App\Models\Status\StatusEffect::orderBy('name')->pluck('name', 'id');
-                        @endphp
-                        @if (count($image->character->statuses))
-                        
-                        <div class="row">
-                                @foreach($statuses as $status)    
-                                        <div class="col-lg-2 col-md-3 col-6 text-right">
-                                            <div class="btn btn-danger create-folder mx-1">
-                                                {!! $status->displaySeverity !!}
-                                            </div>
-                                        </div>   
-                                @endforeach
-                        </div>
-                        @else
-                        <div class="btn btn-success create-folder mx-1">
-                                Healthy
-                        </div>
-                    @endif
-                    </div>
-                    </div>
-                    <br>
+                
                 @if ($type || (Auth::check() && Auth::user()->hasPower('manage_characters')))
                     <div class="row">
                         <div class="col-lg-4 col-md-6 col-4">
