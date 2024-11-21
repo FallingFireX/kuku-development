@@ -60,6 +60,38 @@
                 <div class="text-right">You are viewing the full-size image. <a href="{{ $character->image->imageUrl }}">View watermarked image</a>?</div>
             @endif
             <br>
+
+            <!-- STATUSES -->
+            @if(count($statuses))
+            <div class="card mb-4">
+                <ul class="list-group list-group-flush">
+
+                    @foreach($statuses as $status)
+                        <li class="list-group-item">
+                            <div class="row">
+                                <div class="col-lg-2 col-md-3 col-6 text-right">
+                                    <strong>
+                                        <a href="{{ $status->url }}">
+                                            {!! $status->displaySeverity($status->quantity) !!}
+                                        </a>
+                                    </strong>
+                                </div>
+                                <div class="col-lg-10 col-md-9 col-6">
+                                    {{ $status->quantity }}
+                                </div>
+                            </div>
+                        </li>
+                    @endforeach
+                </ul>
+            </div>
+            @else
+            <div class="card mb-4">
+                <div class="card-body">
+                    No current status effects.
+                </div>
+            </div>
+        @endif
+
             <p></p>
             <br>
             <!--Pets relocation-->
