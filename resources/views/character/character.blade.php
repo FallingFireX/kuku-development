@@ -69,8 +69,7 @@
             @if($statuses)
             
             <div class="row">
-                    @foreach($statuses as $status)
-                            
+                    @foreach($statuses as $status)    
                             <div class="col-lg-2 col-md-3 col-6 text-right">
                                 <div class="btn btn-outline-info float-left">
                                     {!! $status !!}
@@ -78,13 +77,12 @@
                                 </div>
                             
                     @endforeach
-            
+                    </div>
             @else
-            <div class="card mb-4">
-                <div class="card-body">
+                <div class="btn btn-outline-info float-left">
                     Healthy
                 </div>
-            </div>
+            
         @endif
 
             <p></p>
