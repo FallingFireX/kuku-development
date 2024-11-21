@@ -63,14 +63,8 @@
             <br>
 
             <!-- STATUSES -->
-            @php
-                $statuses = App\Models\Status\Status::orderBy('name')->pluck('name', 'id');
-            @endphp
-            @if($statuses)
-            <div class="card mb-4">
-                <ul class="list-group list-group-flush">
-
-                    @foreach($statuses as $status)
+           
+                    @foreach($image->character->getStatusEffects())
                         <li class="list-group-item">
                             <div class="row">
                                 <div class="col-lg-2 col-md-3 col-6 text-right">
