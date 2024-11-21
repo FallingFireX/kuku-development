@@ -144,7 +144,7 @@
         <div class="tab-pane fade  show active" id="personality-{{ $image->id }}">
             @if (Auth::check() && Auth::user()->hasPower('manage_characters'))
                 <div class="text-right mb-2">
-                    <a class="btn btn-primary create-folder mx-1" href="{{ url('characters') }}"><i class="fas fa-edit"></i> Edit personality</a>
+                    <a class="btn btn-primary create-folder mx-1" href="{{ $character->url . '/profile/edit' }}" class="{{ set_active('character/' . $character->slug . '/profile/edit') }}"><i class="fas fa-edit"></i> Edit personality</a>
                 </div>
             @endif
                 @if ($character->profile->parsed_text)
@@ -153,10 +153,19 @@
             </div>
 
             <!-- LINEAGE -->
+             <h4>Lineage:</h4>
+
             @if($character->getLineageBlacklistLevel() < 2)
             <div class="tab-pane fade" id="lineage">
                 @include('character._tab_lineage', ['character' => $character])
             </div>
+            <br>
+            <i>This is your kukuri's immediate family tree, you can compare this to other kukuri to see who they are safe to breed to.</i>
+            <br>
+            View Offspering here:
+            <div class="text-left mb-2">
+                    <a class="btn btn-primary create-folder mx-1" href="{{ $character->url . '/lineage' }}" class="{{ set_active('character/' . $character->slug . '/lineage') }}"><i class="fas fa-edit"></i> Descendants</a>
+                </div>
             @endif
             @if (Auth::check() && Auth::user()->hasPower('manage_characters'))
                 <div class="tab-pane fade" id="settings-{{ $character->slug }}">
