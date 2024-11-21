@@ -64,7 +64,7 @@
 
             <!-- STATUSES -->
             @php
-                $statuses = App\Models\Status\StatusEffect::orderBy('name')->pluck('name', 'id');
+                $statuses = \App\Models\Status\StatusEffect::orderBy('name')->pluck('name', 'id');
             @endphp
             @if($statuses)
             <div class="card mb-4">
