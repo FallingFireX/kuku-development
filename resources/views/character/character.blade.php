@@ -154,10 +154,10 @@
             </div>
 
             <!-- LINEAGE -->
-             <h5>Lineage:</h5>
-            <br>
             @if($character->getLineageBlacklistLevel() < 2)
             <div class="tab-pane fade" id="lineage">
+                <h5>Lineage:</h5>
+                <br>
                 @include('character._tab_lineage', ['character' => $character])
                 <br><br>
                 <i>This is your kukuri's immediate family tree, you can compare this to other kukuri to see who they are safe to breed to.</i>
