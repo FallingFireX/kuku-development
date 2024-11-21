@@ -73,13 +73,6 @@
                     @foreach($statuses as $status)
                         <li class="list-group-item">
                             <div class="row">
-                                <div class="col-lg-2 col-md-3 col-6 text-right">
-                                    <strong>
-                                        <a href="{{ $status->url }}">
-                                            {!! $status->displaySeverity($status->quantity) !!}
-                                        </a>
-                                    </strong>
-                                </div>
                                 <div class="col-lg-10 col-md-9 col-6">
                                     {{ $status->quantity }}
                                 </div>
