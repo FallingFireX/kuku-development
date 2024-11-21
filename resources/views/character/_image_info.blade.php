@@ -154,9 +154,13 @@
                     $type = $type ?? null;
                 @endphp
 
+                @if ($image->character->getStatusEffects())
                 @foreach($image->character->getStatusEffects() as $status)
-                    Health: {!! $status->displaySeverity !!}
+                    Health: {!! $status->displaySeverity($status->quantity) !!}
                 @endforeach
+                @else
+                    Health: Healthy
+                @endif
                     
                 
                 @if ($type || (Auth::check() && Auth::user()->hasPower('manage_characters')))
