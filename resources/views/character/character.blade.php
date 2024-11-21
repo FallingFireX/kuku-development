@@ -61,8 +61,8 @@
             @endif
             <br>
 
-            <!-- STATUSES -->
-            @if(count($statuses))
+            <!-- STATUSES --> 
+            @if($statuses)
             <div class="card mb-4">
                 <ul class="list-group list-group-flush">
 
