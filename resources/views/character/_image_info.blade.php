@@ -157,10 +157,8 @@
                 
                 @if ($image->character->getStatusEffects())
                     @foreach($image->character->getStatusEffects() as $status)
-                        <div class="btn btn-warning mx-1">{!! $status->displaySeverity($status->quantity) !!} </div>
+                        <div class="btn btn-danger mx-1">{!! $status->displaySeverity($status->quantity) !!} </div>
                     @endforeach
-                @else
-                    Healthy
                 @endif
                     
                 
