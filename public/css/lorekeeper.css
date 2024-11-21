@@ -939,7 +939,7 @@ tr.accountbound {
 .user-avatar {
     position: relative;
     margin: auto;
-    max-width: 150px;
+    max-width: 125px;
     z-index: 0;
 }
 
