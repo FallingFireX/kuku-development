@@ -68,10 +68,8 @@
             @endphp
             @if($statuses)
             <div class="card mb-4">
-                <ul class="list-group list-group-flush">
-
+               
                     @foreach($statuses as $status)
-                        <li class="list-group-item">
                             <div class="row">
                             <div class="col-lg-2 col-md-3 col-6 text-right">
                                 <div class="btn btn-outline-info float-left">
@@ -79,9 +77,8 @@
                                 </div>
                                 </div>
                             </div>
-                        </li>
                     @endforeach
-                </ul>
+                
             </div>
             @else
             <div class="card mb-4">
