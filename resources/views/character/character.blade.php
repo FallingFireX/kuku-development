@@ -66,7 +66,7 @@
             @php
                 $statuses = \App\Models\Status\StatusEffect::orderBy('name')->pluck('name', 'id');
             @endphp
-            @if($statuses)
+            @if (count($character->image->character->statuses))
             
             <div class="row">
                     @foreach($statuses as $status)    
@@ -183,14 +183,16 @@
             @if($character->getLineageBlacklistLevel() < 2)
             <div class="tab-pane fade" id="lineage">
                 @include('character._tab_lineage', ['character' => $character])
-            </div>
-            <br>
-            <i>This is your kukuri's immediate family tree, you can compare this to other kukuri to see who they are safe to breed to.</i>
-            <br><br>
-            View Offspering here:
-            <br><div class="text-left mb-2">
+                <br><br>
+                <i>This is your kukuri's immediate family tree, you can compare this to other kukuri to see who they are safe to breed to.</i>
+                <br><br>
+                View Offspering here:
+                <br><div class="text-left mb-2">
                     <a class="btn btn-primary create-folder mx-1" href="{{ $character->url . '/lineage' }}" class="{{ set_active('character/' . $character->slug . '/lineage') }}"><i class="fas fa-edit"></i> Descendants</a>
                 </div>
+            </div>
+            <br>
+            
             @endif
             @if (Auth::check() && Auth::user()->hasPower('manage_characters'))
                 <div class="tab-pane fade" id="settings-{{ $character->slug }}">
