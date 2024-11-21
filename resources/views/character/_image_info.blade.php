@@ -153,6 +153,11 @@
                     }
                     $type = $type ?? null;
                 @endphp
+
+                @foreach($image->character->getStatusEffects() as $status)
+                    {!! $status->displaySeverity($status->quantity) !!}
+                @endforeach
+                    
                 
                 @if ($type || (Auth::check() && Auth::user()->hasPower('manage_characters')))
                     <div class="row">
