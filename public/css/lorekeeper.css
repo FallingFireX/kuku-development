@@ -941,7 +941,7 @@ tr.accountbound {
     margin: auto;
     max-width: 150px;
     z-index: 0;
-    bottom: 1.5rem;
+    bottom: .75rem;
 }
 
 @media (max-width: 991px) {
