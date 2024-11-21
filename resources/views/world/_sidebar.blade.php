@@ -20,6 +20,8 @@
         <div class="sidebar-item"><a href="{{ url('world/'.__('volumes.library')) }}" class="{{ set_active('world/'.__('volumes.library')) }}">{{ ucfirst(__('volumes.library')) }}</a></div>
         <div class="sidebar-item"><a href="{{ url('world/'.__('volumes.library').'/'.__('volumes.volumes')) }}" class="{{ set_active('world/'.__('volumes.library').'/'.__('volumes.volumes')) }}">All {{ ucfirst(__('volumes.volumes')) }}</a></div>
         <div class="sidebar-item"><a href="{{ url('world/pets') }}" class="{{ set_active('world/pets*') }}">Familiars</a></div>
+        <div class="sidebar-item"><a href="{{ url('world/border-categories') }}" class="{{ set_active('world/border-categories*') }}">User Border Categories</a></div>
+        <div class="sidebar-item"><a href="{{ url('world/borders') }}" class="{{ set_active('world/borders*') }}">User Borders</a></div>
     </li>
     <li class="sidebar-section">
         <div class="sidebar-section-header">{{ ucfirst(__('awards.awards')) }}</div>

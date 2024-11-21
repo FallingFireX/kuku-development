@@ -19,6 +19,9 @@ $( document ).ready(function() {
     @if(isset($showThemes) && $showThemes)
         var $themeSelect = $('#lootRowData').find('.theme-select');
     @endif
+    @if(isset($showBorders) && $showBorders)
+        var $borderSelect = $('#lootRowData').find('.border-select');
+    @endif
 
     $('#lootTableBody .selectize').selectize();
     attachRemoveListener($('#lootTableBody .remove-loot-button'));
@@ -50,6 +53,10 @@ $( document ).ready(function() {
             else if (val == 'Theme') $clone = $themeSelect.clone();
         @endif
         
+        @if(isset($showBorders) && $showBorders)
+            else if (val == 'Border') $clone = $borderSelect.clone();
+        @endif
+
         $cell.html('');
         $cell.append($clone);
     });
@@ -76,6 +83,9 @@ $( document ).ready(function() {
             @endif
             @if (isset($showThemes) && $showThemes)
                 else if (val == 'Theme') $clone = $themeSelect.clone();
+            @endif
+            @if(isset($showBorders) && $showBorders)
+                else if (val == 'Border') $clone = $borderSelect.clone();
             @endif
 
             $cell.html('');

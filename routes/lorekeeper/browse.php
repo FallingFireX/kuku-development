@@ -77,6 +77,8 @@ Route::group(['prefix' => 'user', 'namespace' => 'Users'], function () {
     Route::get('{name}/bank', 'UserController@getUserBank');
     Route::get('{name}/'.__('awards.awardcase'), 'UserController@getUserAwardCase');
 
+    Route::get('{name}/borders', 'UserController@getUserBorders');
+    
     Route::get('{name}/currency-logs', 'UserController@getUserCurrencyLogs');
     Route::get('{name}/item-logs', 'UserController@getUserItemLogs');
     Route::get('{name}/'.__('awards.award').'-logs', 'UserController@getUserAwardLogs');
@@ -101,6 +103,7 @@ Route::group(['prefix' => 'team'], function () {
     Route::get('/', 'BrowseController@getTeamIndex');
     Route::get('{name}/gear-logs', 'UserController@getUserGearLogs');
     Route::get('{name}/weapon-logs', 'UserController@getUserWeaponLogs');
+    Route::get('{name}/border-logs', 'UserController@getUserBorderLogs');
 });
 
 /**************************************************************************************************
@@ -206,6 +209,10 @@ Route::group(['prefix' => 'world'], function () {
     Route::get('skills/{id}', 'WorldController@getSkill');
     Route::get('elements', 'WorldController@getElements');
     Route::get('elements/{id}', 'WorldController@getElement');
+    Route::get('border-categories', 'WorldController@getBorderCategories');
+    Route::get('borders', 'WorldController@getBorders');
+    Route::get('borders/{id}', 'WorldController@getBorder');
+    Route::get('check-border', 'WorldController@getBorderPreview');
 });
 
 Route::group(['prefix' => 'prompts'], function () {

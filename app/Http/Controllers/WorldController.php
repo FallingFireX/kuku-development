@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Award\Award;
 use App\Models\Award\AwardCategory;
+use App\Models\Border\Border;
+use App\Models\Border\BorderCategory;
 use App\Models\Character\CharacterCategory;
 use App\Models\Character\CharacterClass;
 use App\Models\Character\CharacterTransformation as Transformation;
@@ -16,6 +18,8 @@ use App\Models\Element\Element;
 use App\Models\Feature\Feature;
 use App\Models\Feature\FeatureCategory;
 use App\Models\Feature\FeatureSubcategory;
+use App\Models\Prompt\Prompt;
+use App\Models\Prompt\PromptCategory;
 use App\Models\Item\Item;
 use App\Models\Item\ItemCategory;
 use App\Models\Level\Level;
@@ -37,6 +41,7 @@ use App\Models\Volume\Bookshelf;
 use App\Models\Volume\BookTag;
 use App\Models\Volume\Volume;
 use Illuminate\Http\Request;
+use Config;
 use Illuminate\Support\Facades\Auth;
 
 class WorldController extends Controller {
@@ -1082,6 +1087,25 @@ class WorldController extends Controller {
         ]);
     }
 
+    /*
+     * Shows the border categories page.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function getBorderCategories(Request $request)
+    {
+        $query = BorderCategory::query();
+        $name = $request->get('name');
+        if ($name) {
+            $query->where('name', 'LIKE', '%' . $name . '%');
+        }
+
+        return view('world.border_categories', [
+            'categories' => $query->orderBy('sort', 'DESC')->paginate(20)->appends($request->query()),
+        ]);
+    }
+
     /**
      * Shows the gears page.
      *
@@ -1095,6 +1119,38 @@ class WorldController extends Controller {
         }
         if (isset($data['name'])) {
             $query->where('name', 'LIKE', '%'.$data['name'].'%');
+        }
+
+        return view('world.gears', [
+            'gears'      => $query->paginate(20)->appends($request->query()),
+            'categories' => ['none' => 'Any Category'] + GearCategory::orderBy('sort', 'DESC')->pluck('name', 'id')->toArray(),
+        ]);
+    }
+        
+        /*
+     * Shows the borders page.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function getBorders(Request $request)
+    {
+        $query = Border::base()->active(Auth::user() ?? null);
+        $data = $request->only(['border_category_id', 'name', 'sort', 'is_default', 'artist']);
+        if (isset($data['border_category_id']) && $data['border_category_id'] != 'none') {
+            $query->where('border_category_id', $data['border_category_id']);
+        }
+
+        if (isset($data['is_default']) && $data['is_default'] != 'none') {
+            $query->where('is_default', $data['is_default'])->where('admin_only', 0);
+        }
+
+        if (isset($data['name'])) {
+            $query->where('name', 'LIKE', '%' . $data['name'] . '%');
+        }
+
+        if (isset($data['artist']) && $data['artist'] != 'none') {
+            $query->where('artist_id', $data['artist']);
         }
 
         if (isset($data['sort'])) {
@@ -1119,9 +1175,11 @@ class WorldController extends Controller {
             $query->sortCategory();
         }
 
-        return view('world.gears', [
-            'gears'      => $query->paginate(20)->appends($request->query()),
-            'categories' => ['none' => 'Any Category'] + GearCategory::orderBy('sort', 'DESC')->pluck('name', 'id')->toArray(),
+        return view('world.borders', [
+            'borders' => $query->paginate(20)->appends($request->query()),
+            'categories' => ['none' => 'Any Category'] + BorderCategory::orderBy('sort', 'DESC')->pluck('name', 'id')->toArray(),
+            'is_default' => ['none' => 'Any Type', '0' => 'Unlockable', '1' => 'Default'],
+            'artists' => ['none' => 'Any Artist'] + User::whereIn('id', Border::whereNotNull('artist_id')->pluck('artist_id')->toArray())->pluck('name', 'id')->toArray(),
         ]);
     }
 
@@ -1214,6 +1272,44 @@ class WorldController extends Controller {
 
         return view('world.element_page', [
             'element' => $element,
+        ]);
+    }
+    
+    /*
+     * Shows an individual border's page.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function getBorder($id)
+    {
+        $border = Border::base()->where('id', $id)->active()->first();
+        if (!$border) {
+            abort(404);
+        }
+
+        return view('world._border_page', [
+            'border' => $border,
+            'imageUrl' => $border->imageUrl,
+            'name' => $border->displayName,
+            'description' => $border->parsed_description,
+        ]);
+    }
+
+    public function getBorderPreview(Request $request)
+    {
+        $border = Border::find($request->input('border'));
+        $top = Border::find($request->input('top'));
+        $bottom = Border::find($request->input('bottom'));
+
+        if (!$border || !$top || !$bottom) {
+            return response('<hr class="w-75 d-none d-md-block"/>Select a valid combination to preview.');
+        }
+
+        return view('world._border_ajax', [
+            'top' => $top,
+            'bottom' => $bottom,
+            'border' => $border,
         ]);
     }
 }

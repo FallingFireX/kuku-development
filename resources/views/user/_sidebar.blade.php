@@ -23,6 +23,7 @@
         <div class="sidebar-item"><a href="{{ $user->url . '/pets' }}" class="{{ set_active('user/' . $user->name . '/pets*') }}">Familiars</a></div>
         <!-- <div class="sidebar-item"><a href="{{ $user->url . '/armoury' }}" class="{{ set_active('user/' . $user->name . '/armoury*') }}">Armoury</a></div> -->
         <!-- <div class="sidebar-item"><a href="{{ $user->url . '/stats' }}" class="{{ set_active('user/' . $user->name . '/stats*') }}">Stat Information</a></div> -->
+        <div class="sidebar-item"><a href="{{ $user->url.'/borders' }}" class="{{ set_active('user/'.$user->name.'/borders*') }}">Borders</a></div>
     </li>
     <li class="sidebar-section">
         <div class="sidebar-item"><a href="{{ $user->url.'/username-logs' }}" class="{{ set_active('user/'.$user->name.'/username-logs*') }}">Username History</a></div>
@@ -30,6 +31,7 @@
         <div class="sidebar-item"><a href="{{ $user->url . '/item-logs' }}" class="{{ set_active('user/' . $user->name . '/item-logs*') }}">Bank Logs</a></div>
         <div class="sidebar-item"><a href="{{ $user->url . '/currency-logs' }}" class="{{ set_active('user/' . $user->name . '/currency-logs*') }}">Wallet Logs</a></div>
         <div class="sidebar-item"><a href="{{ $user->url . '/pet-logs' }}" class="{{ set_active($user->url . '/pet-logs*') }}">Familiar Logs</a></div>
+        <div class="sidebar-item"><a href="{{ $user->url.'/border-logs' }}" class="{{ set_active('user/'.$user->name.'/border-logs*') }}">Border Logs</a></div>
         <!-- <div class="sidebar-item"><a href="{{ $user->url.'/'.__('awards.award').'-logs' }}" class="{{ set_active($user->url.'/award-logs*') }}">{{ucfirst(ucfirst(__('awards.award')))}} Logs</a></div> -->
         <div class="sidebar-item"><a href="{{ $user->url . '/submissions' }}" class="{{ set_active('user/' . $user->name . '/submissions*') }}">Submissions</a></div>
         <!-- <div class="sidebar-item"><a href="{{ $user->url.'/recipe-logs' }}" class="{{ set_active($user->url.'/recipe-logs*') }}">Recipe Logs</a></div> -->

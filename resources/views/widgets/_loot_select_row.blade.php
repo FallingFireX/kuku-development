@@ -42,7 +42,8 @@
                     'rewardable_type[]',
                     ['Item' => 'Item', 'Currency' => 'Currency', 'Pet' => 'Pet', 'PetVariant' => 'Pet Variant', 'Gear' => 'Gear', 'Weapon' => 'Weapon', 'Exp' => 'Exp', 'Points' => 'Stat Points'] +
                         ($showLootTables ? ['LootTable' => 'Loot Table'] : []) +
-                        ($showRaffles ? ['Raffle' => 'Raffle Ticket'] : []),
+                        ($showRaffles ? ['Raffle' => 'Raffle Ticket'] : []) +
+                        (isset($showBorders) && $showBorders ? ['Border' => 'Border'] : []),
                     null,
                     ['class' => 'form-control reward-type', 'placeholder' => 'Select Reward Type'],
                 ) !!}</td>
@@ -65,5 +66,8 @@
     @endif
     @if ($showRaffles)
         {!! Form::select('rewardable_id[]', $raffles, null, ['class' => 'form-control raffle-select', 'placeholder' => 'Select Raffle']) !!}
+    @endif
+    @if(isset($showBorders) && $showBorders)
+        {!! Form::select('rewardable_id[]', $borders, null, ['class' => 'form-control border-select', 'placeholder' => 'Select Border']) !!}
     @endif
 </div>

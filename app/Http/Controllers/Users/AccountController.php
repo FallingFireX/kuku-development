@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Users;
 
 use App\Http\Controllers\Controller;
 use App\Models\Character\BreedingPermission;
+use App\Models\Border\Border;
 use App\Models\Notification;
 use App\Models\Theme;
 use App\Models\User\StaffProfile;
@@ -11,6 +12,7 @@ use App\Models\User\User;
 use App\Models\User\UserAlias;
 use App\Models\User\UsernameLog;
 use App\Services\UserService;
+use App\Services\LinkService;
 use BaconQrCode\Renderer\Color\Rgb;
 use BaconQrCode\Renderer\Image\SvgImageBackEnd;
 use BaconQrCode\Renderer\ImageRenderer;
@@ -24,6 +26,7 @@ use Illuminate\Support\Facades\Auth;
 use Laravel\Fortify\Contracts\TwoFactorAuthenticationProvider;
 use Laravel\Fortify\RecoveryCode;
 use Settings;
+use File;
 
 class AccountController extends Controller {
     /*
@@ -33,7 +36,7 @@ class AccountController extends Controller {
     |
     | Handles the user's account management.
     |
-    */
+     */
 
     /**
      * Shows the banned page, or redirects the user to the home page if they aren't banned.
@@ -72,9 +75,12 @@ class AccountController extends Controller {
         if ($user->isStaff || $user->isAdmin) {
             // staff can see all active themes
             $themeOptions = ['0' => 'Select Theme'] + Theme::where('is_active', 1)->where('theme_type', 'base')->get()->pluck('displayName', 'id')->toArray();
+            $borderOptions = ['0' => 'Select Border'] + Border::base()->active(Auth::user() ?? null)->where('is_default', 1)->get()->pluck('settingsName', 'id')->toArray() + Border::base()->where('admin_only', 1)->get()->pluck('settingsName', 'id')->toArray();
+
         } else {
             // members can only see active themes that are user selectable
             $themeOptions = ['0' => 'Select Theme'] + Theme::where('is_active', 1)->where('theme_type', 'base')->where('is_user_selectable', 1)->get()->pluck('displayName', 'id')->toArray();
+             $borderOptions = ['0' => 'Select Border'] + Border::base()->active(Auth::user() ?? null)->where('is_default', 1)->where('admin_only', 0)->get()->pluck('settingsName', 'id')->toArray();
         }
 
         $decoratorOptions = ['0' => 'Select Decorator Theme'] + Theme::where('is_active', 1)->where('theme_type', 'decorator')->where('is_user_selectable', 1)->get()->pluck('displayName', 'id')->toArray();
@@ -82,6 +88,8 @@ class AccountController extends Controller {
         $lastUsernameChange = UsernameLog::where('user_id', Auth::user()->id)->where('is_staff_edit', 0)->orderBy('updated_at', 'DESC')->first();
         $daysSinceNameChange = isset($lastUsernameChange) ? Carbon::now()->diffInDays($lastUsernameChange->updated_at) : Settings::get('username_change_cooldown');
         $usernameCooldown = Settings::get('username_change_cooldown');
+        $default = Border::base()->active(Auth::user() ?? null)->where('is_default', 1)->get();
+        $admin = Border::base()->where('admin_only', 1)->get();
 
         return view('account.settings', [
             'themeOptions'      => $themeOptions + Auth::user()->themes()->where('theme_type', 'base')->get()->pluck('displayName', 'id')->toArray(),
@@ -90,6 +98,11 @@ class AccountController extends Controller {
             'usernameCooldown'  => $usernameCooldown,
             'canChangeName'     => $daysSinceNameChange >= $usernameCooldown,
             'usernameCountdown' => $usernameCooldown - $daysSinceNameChange,
+            'borders' => $borderOptions + Auth::user()->borders()->get()->pluck('settingsName', 'id')->toArray(),
+            'default' => $default,
+            'admin' => $admin,
+            'border_variants' => ['0' => 'Pick a Border First'],
+            'bottom_layers' => ['0' => 'Pick a Border First'],
 
         ]);
     }
@@ -569,6 +582,24 @@ class AccountController extends Controller {
                 flash($error)->error();
             }
         }
+        return redirect()->back();
+    }
+
+    /*
+     * Edits the user's border.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function postBorder(Request $request, UserService $service)
+    {
+        if ($service->updateBorder($request->only('border', 'border_variant_id', 'bottom_border_id','top_border_id'), Auth::user())) {
+            flash('Border updated successfully.')->success();
+        } else {
+            foreach ($service->errors()->getMessages()['error'] as $error) {
+                flash($error)->error();
+            }
+        }
 
         return redirect()->back();
     }
@@ -610,6 +641,47 @@ class AccountController extends Controller {
 
         return view('home.breeding_permissions', [
             'permissions' => $permissions->orderBy('id', 'DESC')->paginate(20)->appends($request->query()),
+        ]);
+    }
+
+    /*
+     * Get applicable variants
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function getBorderVariants(Request $request)
+    {
+        $border = $request->input('border');
+
+        return view('account.border_variants', [
+            'border_variants' => ['0' => 'Select Border Variant'] + Border::where('parent_id', '=', $border)->where('border_type', 'variant')->active(Auth::user() ?? null)->get()
+            ->pluck('settingsName', 'id')
+            ->toArray(),
+        ]);
+    }
+
+    /**
+     * Get applicable layers
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function getBorderLayers(Request $request)
+    {
+        $border = $request->input('border');
+
+        $layeredborder = Border::find($border);
+        if (!$layeredborder || !$layeredborder->topLayers()->count() || !$layeredborder->bottomLayers()->count()) {
+            $bottom_layers = ['0' => 'Pick a Border First'];
+            $top_layers = ['0' => 'Pick a Border First'];
+        }
+
+        return view('account.border_layers', [
+            'top_layers' => $top_layers ?? ['0' => 'Select Top Layer'] + Border::where('parent_id', '=', $border)->where('border_type', 'top')->active(Auth::user() ?? null)->get()
+            ->pluck('settingsName', 'id')
+            ->toArray(),
+            'bottom_layers' => $bottom_layers ?? ['0' => 'Select Bottom Layer'] + Border::where('parent_id', '=', $border)->where('border_type', 'bottom')->active(Auth::user() ?? null)->get()
+            ->pluck('settingsName', 'id')
+            ->toArray(),
         ]);
     }
 }

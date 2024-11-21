@@ -49,7 +49,8 @@
                         'rewardable_type[]',
                         ['Item' => 'Item', 'Currency' => 'Currency', 'Pet' => 'Pet', 'Gear' => 'Gear', 'Weapon' => 'Weapon', 'Exp' => 'Exp', 'Points' => 'Stat Points'] +
                             ($showLootTables ? ['LootTable' => 'Loot Table'] : []) +
-                            ($showRaffles ? ['Raffle' => 'Raffle Ticket'] : []),
+                            ($showRaffles ? ['Raffle' => 'Raffle Ticket'] : []) +
+                            (isset($showBorders) && $showBorders ? ['Border' => 'Border'] : []),
                         $loot->rewardable_type,
                         ['class' => 'form-control reward-type', 'placeholder' => 'Select Reward Type'],
                     ) !!}</td>
@@ -72,6 +73,8 @@
                             {!! Form::select('rewardable_id[]', $stats, $loot->rewardable_id, ['class' => 'form-control points-select selectize', 'placeholder' => 'Select Stat']) !!}
                         @elseif($loot->rewardable_type == 'Exp')
                             {!! Form::text('rewardable_id[]', null, ['class' => 'form-control hide claymore-select', 'placeholder' => 'Enter Reward']) !!}
+                        @elseif(isset($showBorders) && $showBorders && $loot->rewardable_type == 'Border')
+                            {!! Form::select('rewardable_id[]', $borders, $loot->rewardable_id, ['class' => 'form-control border-select selectize', 'placeholder' => 'Select Border']) !!}
                         @endif
                     </td>
                     <td>{!! Form::text('quantity[]', $loot->quantity, ['class' => 'form-control']) !!}</td>
