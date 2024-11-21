@@ -73,8 +73,10 @@
                     @foreach($statuses as $status)
                         <li class="list-group-item">
                             <div class="row">
-                                <div class="col-lg-10 col-md-9 col-6">
+                            <div class="col-lg-2 col-md-3 col-6 text-right">
+                                <div class="btn btn-outline-info float-left">
                                     {!! $status !!}
+                                </div>
                                 </div>
                             </div>
                         </li>
@@ -84,7 +86,7 @@
             @else
             <div class="card mb-4">
                 <div class="card-body">
-                    No current status effects.
+                    Healthy
                 </div>
             </div>
         @endif
