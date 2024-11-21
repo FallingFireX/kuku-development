@@ -63,9 +63,9 @@
             <br>
 
             <!-- STATUSES -->
-            if(isset($statuses) && $statuses){
-                $statuses = App\Models\Status;
-            } 
+            @php
+                $statuses = App\Models\Status::orderBy('name')->pluck('name', 'id');
+            @endphp
             @if($statuses)
             <div class="card mb-4">
                 <ul class="list-group list-group-flush">
