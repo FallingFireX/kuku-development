@@ -154,12 +154,13 @@
                     $type = $type ?? null;
                 @endphp
 
+                
                 @if ($image->character->getStatusEffects())
-                @foreach($image->character->getStatusEffects() as $status)
-                    Health: {!! $status->displaySeverity($status->quantity) !!}
-                @endforeach
+                    @foreach($image->character->getStatusEffects() as $status)
+                        <div class="btn btn-warning mx-1">{!! $status->displaySeverity($status->quantity) !!} </div>
+                    @endforeach
                 @else
-                    Health: Healthy
+                    Healthy
                 @endif
                     
                 
