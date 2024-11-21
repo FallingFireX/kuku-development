@@ -6,6 +6,7 @@
 
 @section('profile-content')
 
+
 <!-- @include('widgets._awardcase_feature', ['target' => $character, 'count' => Config::get('lorekeeper.extensions.awards.character_featured'), 'float' => true]) -->
 
 @if($character->is_myo_slot)
@@ -61,7 +62,10 @@
             @endif
             <br>
 
-            <!-- STATUSES --> 
+            <!-- STATUSES -->
+            if(isset($statuses) && $statuses){
+                $statuses = App\Models\Status;
+            } 
             @if($statuses)
             <div class="card mb-4">
                 <ul class="list-group list-group-flush">
