@@ -145,7 +145,7 @@
     <div class="media-body row mw-100 mx-0 mb-3" style="flex:1;flex-wrap:wrap;">
         @if (isset($compact) && !$compact)
             <div class="d-none d-md-block">
-            {!!  $comment->commenter->userBorder() !!}
+                <div style = "width:50%">{!!  $comment->commenter->userBorder() !!}</div>
             </div>
         @endif
         <div class="d-block bg-light" style="flex:1">
