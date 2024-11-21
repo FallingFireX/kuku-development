@@ -155,6 +155,10 @@
                 @endphp
 
                 @foreach($image->character->getStatusEffects() as $status)
+                    Health: 
+                    @if (!{!! $status->displaySeverity($status->quantity) !!})
+                    Healthy
+                    @else
                     {!! $status->displaySeverity($status->quantity) !!}
                 @endforeach
                     
