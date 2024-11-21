@@ -67,19 +67,18 @@
                 $statuses = \App\Models\Status\StatusEffect::orderBy('name')->pluck('name', 'id');
             @endphp
             @if($statuses)
-            <div class="card mb-4">
-               
+            
+            <div class="row">
                     @foreach($statuses as $status)
-                            <div class="row">
+                            
                             <div class="col-lg-2 col-md-3 col-6 text-right">
                                 <div class="btn btn-outline-info float-left">
                                     {!! $status !!}
                                 </div>
                                 </div>
-                            </div>
+                            
                     @endforeach
-                
-            </div>
+            
             @else
             <div class="card mb-4">
                 <div class="card-body">
