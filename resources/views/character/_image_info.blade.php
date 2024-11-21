@@ -173,18 +173,16 @@
                                             <div class="btn btn-outline-info float-left">
                                                 {!! $status !!}
                                             </div>
-                                            </div>
-                                        
+                                        </div>   
                                 @endforeach
-                                </div>
+                        </div>
                         @else
-                            <div class="btn btn-outline-info float-left">
+                        <div class="btn btn-outline-info float-left">
                                 Healthy
-                            </div>
-                        
+                        </div>
                     @endif
                     </div>
-                
+                    </div>
                     <br>
                 @if ($type || (Auth::check() && Auth::user()->hasPower('manage_characters')))
                     <div class="row">
