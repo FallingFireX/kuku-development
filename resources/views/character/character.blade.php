@@ -74,7 +74,7 @@
                         <li class="list-group-item">
                             <div class="row">
                                 <div class="col-lg-10 col-md-9 col-6">
-                                    {{ $status->name }}
+                                    {!! $status->displaySeverity($status->quantity) !!}
                                 </div>
                             </div>
                         </li>
