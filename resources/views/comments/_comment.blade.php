@@ -141,8 +141,6 @@
             @endif
         </div>
     </div>
-</div>
-@else
 <div id="comment-{{ $comment->getKey() }}" class="{{ isset($reply) && $reply === true ? 'comment_replies border-left col-12 column mw-100 pr-0' : '' }} pt-4" style="flex-basis: 100%;">
     <div class="media-body row mw-100 mx-0 mb-3" style="flex:1;flex-wrap:wrap;">
         @if (isset($compact) && !$compact)
