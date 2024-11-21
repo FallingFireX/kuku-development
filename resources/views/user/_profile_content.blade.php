@@ -12,6 +12,9 @@
         <!-- Username & optional FTO Badge -->
         <div class="row no-gutters">
             <div class="col h2 text-center text-md-left">
+            <div style=" float:left;">
+                {!! $user->userBorder() !!}
+            </div>
                 {!! $user->displayName !!}
                 @if ($user->previousUsername)
                     <small>{!! add_help('Previously known as ' . $user->previousUsername) !!}</small>
