@@ -39,25 +39,18 @@
             <div class="tab-pane fade show active" id="info-{{ $image->id }}">
                 <div class="row">
                     <div class="col-lg-4 col-md-6 col-4">
-                        <h5>Species</h5>
+                        <b>Species</b>
                     </div>
                     <div class="col-lg-8 col-md-6 col-8">{!! $image->species_id ? $image->species->displayName : 'None' !!}</div>
                 </div>
                 @if ($image->subtype_id)
                     <div class="row">
                         <div class="col-lg-4 col-md-6 col-4">
-                            <h5>Breed</h5>
+                            <b>Breed</b>
                         </div>
                         <div class="col-lg-8 col-md-6 col-8">{!! $image->subtype_id ? $image->subtype->displayName : 'None' !!}</div>
                     </div>
                 @endif
-                <div class="row">
-                    <div class="col-lg-4 col-md-6 col-4">
-                        <h5>Type</h5>
-                    </div>
-                    <div class="col-lg-8 col-md-6 col-8">{!! $image->rarity_id ? $image->rarity->displayName : 'None' !!}</div>
-                </div>
-                <hr>
                 <div class="row">
                     <div class="col-lg-4 col-md-6 col-4"><strong>Gender</strong></div>
                     <div class="col-lg-8 col-md-6 col-8">
@@ -168,9 +161,28 @@
                 <br>
                 <div class="row">
                         <div class="col-lg-6 col-md-6 col-4">
-                        <span data-toggle="tooltip" title="Past and present injuries can be seen in this link">
-                            <b>See all </b><a href="{{ $character->url . '/status-effects' }}">Illnesses and Injuries</a>
-                        </div>
+                        <!-- STATUSES -->
+                        @php
+                            $statuses = \App\Models\Status\StatusEffect::orderBy('name')->pluck('name', 'id');
+                        @endphp
+                        @if ($character->image->character->statuses)
+                        
+                        <div class="row">
+                                @foreach($statuses as $status)    
+                                        <div class="col-lg-2 col-md-3 col-6 text-right">
+                                            <div class="btn btn-outline-info float-left">
+                                                {!! $status !!}
+                                            </div>
+                                            </div>
+                                        
+                                @endforeach
+                                </div>
+                        @else
+                            <div class="btn btn-outline-info float-left">
+                                Healthy
+                            </div>
+                        
+                    @endif
                     </div>
                 
                     <br>
