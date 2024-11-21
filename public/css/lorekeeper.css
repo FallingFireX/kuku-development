@@ -931,7 +931,7 @@ tr.accountbound {
   }
 
 [id^="comment"] .user-avatar {
-    margin-right: 0.25rem;
+    margin-right: -1.25rem;
 }
 
   /* USER BORDERS *****************************************************************************************/
@@ -941,6 +941,7 @@ tr.accountbound {
     margin: auto;
     max-width: 150px;
     z-index: 0;
+    bottom: 1.5rem;
 }
 
 @media (max-width: 991px) {
