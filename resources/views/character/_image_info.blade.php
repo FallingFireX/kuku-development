@@ -170,7 +170,7 @@
                                 @foreach($statuses as $status)    
                                         <div class="col-lg-2 col-md-3 col-6 text-right">
                                             <div class="btn btn-danger create-folder mx-1">
-                                                {!! $status !!}
+                                                {!! $status->displaySeverity !!}
                                             </div>
                                         </div>   
                                 @endforeach
