@@ -122,7 +122,7 @@
             <ul class="nav nav-tabs card-header-tabs">
                 
                 <li class="nav-item">
-                    <a class="nav-link active" id="notesTab-{{ $image->id }}" data-toggle="tab" href="#personality-{{ $image->id }}" role="tab">Personality</a>
+                    <a class="nav-link active" id="notesTab" data-toggle="tab" href="#personality" role="tab">Personality</a>
                 </li>
                 @if($character->getLineageBlacklistLevel() < 2)
                 <li class="nav-item">
@@ -142,7 +142,7 @@
         </div>
         <div class="card-body tab-content">
             <!-- PERSONALITY -->
-        <div class="tab-pane fade  show active" id="personality-{{ $image->id }}">
+        <div class="tab-pane fade  show active" id="personality">
             @if (Auth::check() && Auth::user()->hasPower('manage_characters'))
                 <div class="text-right mb-2">
                     <a class="btn btn-primary create-folder mx-1" href="{{ $character->url . '/profile/edit' }}" class="{{ set_active('character/' . $character->slug . '/profile/edit') }}"><i class="fas fa-edit"></i> Edit personality</a>
