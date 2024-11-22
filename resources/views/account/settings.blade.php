@@ -16,11 +16,9 @@
                 <li class="nav-item">
                     <a class="nav-link active" id="sessionTab" data-toggle="tab" href="#session" role="tab">Session</a>
                 </li>
-                @if($character->getLineageBlacklistLevel() < 2)
                 <li class="nav-item">
                     <a class="nav-link" id="preferencesTab" data-toggle="tab" href="#preferences" role="tab">Preferences</a>
                 </li>
-                @endif
                 <li class="nav-item">
                     <a class="nav-link" id="personalizationTab" data-toggle="tab" href="#personalization" role="tab">Personalization</a>
                 </li>
