@@ -98,7 +98,7 @@
                 {!! Form::select('decorator_theme', $decoratorThemes, Auth::user()->decorator_theme_id ? Auth::user()->decorator_theme_id : null , ['class' => 'form-control']) !!}
                 </div>
         </div>
-        <div class="text-right">
+        <div class="text-right"> 
             {!! Form::submit('Edit', ['class' => 'btn btn-primary']) !!}
         </div>
         {!! Form::close() !!}
@@ -214,7 +214,8 @@
         <div class="form-group row">
             <label class="col-md-2 col-form-label">Border Variant</label>
             <div class="col-md-10">
-                {!! Form::select('border_variant_id', $border_variants, Auth::user()->border_variant_id, ['class' => 'form-control', 'id' => 'bordervariant']) !!}
+               
+            {!! Form::select('border_variant_id', $border_variants, Auth::user()->border_variant_id ? Auth::user()->border_variant_id : ($defaultTheme ? $defaultTheme->id : 0) , ['class' => 'form-control']) !!}
             </div>
         </div>
         <div id="layers">
