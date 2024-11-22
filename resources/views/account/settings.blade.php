@@ -148,13 +148,215 @@
 
             <!-- Preferences -->
             <div class="tab-pane fade" id="preferences">
-                test
+                <!-- Birthday visibility -->
+                <div class="card p-3 mb-2">
+                    <h3>Birthday Publicity</h3>
+                    {!! Form::open(['url' => 'account/dob']) !!}
+                    <div class="form-group row">
+                    <label class="col-md-2 col-form-label">Setting</label>
+                        <div class="col-md-10">
+                            {!! Form::select('birthday_setting', ['0' => '0: No one can see your birthday.', '1' => '1: Members can see your day and month.', '2' => '2: Anyone can see your day and month.', '3' => '3: Full date public.', '4' => '4: Members can see the month.', '5' => '5: Anyone can see the month.'],
+                                Auth::user()->settings->birthday_setting,
+                                ['class' => 'form-control'],
+                            ) !!}
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        {!! Form::submit('Edit', ['class' => 'btn btn-primary']) !!}
+                    </div>
+                    {!! Form::close() !!}
+                </div>
+            
+                <!-- Notifications -->
+                @if(Config::get('lorekeeper.extensions.navbar_news_notif'))
+                    <div class="card p-3 mb-2">
+                        <h3>Development Log Notifications</h3>
+                        {!! Form::open(['url' => 'account/devlog-notif']) !!}
+                            <div class="form-group row">
+                                <label class="col-md-2 col-form-label">Setting</label>
+                                <div class="col-md-10">
+                                    {!! Form::select('dev_log_notif', ['0' => '0: Do not receive an alert for unread dev log(s).', '1' => '1: Receive alerts for unread dev log(s).'],Auth::user()->settings->dev_log_notif, ['class' => 'form-control']) !!}
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                {!! Form::submit('Edit', ['class' => 'btn btn-primary']) !!}
+                            </div>
+                        {!! Form::close() !!}
+                    </div>
+                @endif
+
+                <!-- Chara warnings -->
+                <div class="card p-3 mb-2">
+                    <h3>Character Warning Visibility</h3>
+                        <p>Change how you wish characters with content warnings to appear.</p>
+                        {!! Form::open(['url' => 'account/warning']) !!}
+                            <div class="form-group row">
+                                <label class="col-md-2 col-form-label">Setting</label>
+                                <div class="col-md-10">
+                                    {!! Form::select('warning_visibility', ['0' => '0: Pop-up warnings and censored icons', '1' => '1: Pop-up warnings only', '2' => '2: No warnings'] ,Auth::user()->settings->warning_visibility, ['class' => 'form-control']) !!}
+                                </div>
+                            </div>
+                        <div class="text-right">
+                            {!! Form::submit('Edit', ['class' => 'btn btn-primary']) !!}
+                        </div>
+                    {!! Form::close() !!}
+                </div>
             </div>
-            <br>
+           
            
             <!-- PERSONALIZATION -->
             <div class="tab-pane fade" id="personalization">
-                tes test
+                <!-- Avatar -->
+                <div class="card p-3 mb-2">
+                    <h3>Avatar</h3>
+                    @if (Auth::user()->isStaff)
+                        <div class="alert alert-info">For admins - note that .GIF avatars leave a tmp file in the directory (e.g php2471.tmp). There is an automatic schedule to delete these files.
+                        </div>
+                    @endif
+                    {!! Form::open(['url' => 'account/avatar', 'files' => true]) !!}
+                    <div class="form-group row">
+                        {!! Form::label('avatar', 'Update Profile Image', ['class' => 'col-md-2 col-form-label']) !!}
+                        <div class="col-md-10">
+                            {!! Form::file('avatar', ['class' => 'form-control']) !!}
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        {!! Form::submit('Edit', ['class' => 'btn btn-primary']) !!}
+                    </div>
+                    {!! Form::close() !!}
+                </div>
+
+                <!-- Profile -->
+                <div class="card p-3 mb-2">
+                    <h3>Profile</h3>
+                    {!! Form::open(['url' => 'account/profile']) !!}
+                    <div class="form-group">
+                        {!! Form::label('pronouns', 'Preferred Pronouns') !!} {!! add_help('Your preferred pronouns will be displayed in various places across the site. This field can be changed or removed at anytime.') !!}
+                        {!! Form::text('pronouns', Auth::user()->profile->pronouns, ['class' => 'form-control']) !!}
+                    </div>
+                    <div class="form-group">
+                        {!! Form::label('text', 'Profile Text') !!}
+                        {!! Form::textarea('text', Auth::user()->profile->text, ['class' => 'form-control wysiwyg']) !!}
+                    </div>
+                    <div class="text-right">
+                        {!! Form::submit('Edit', ['class' => 'btn btn-primary']) !!}
+                    </div>
+                    {!! Form::close() !!}
+                </div>
+
+                <!-- Theme -->
+                <div class="card p-3 mb-2">
+                    <h3>Theme</h3>
+                    <p>Change the way the site looks for you! </p>
+                    {!! Form::open(['url' => 'account/theme']) !!}
+                        <div class="form-group row">
+                            <label class="col-md-3 col-form-label">Base Theme</label>
+                            <div class="col-md-9">
+                                {!! Form::select('theme', $themeOptions, Auth::user()->theme_id ? Auth::user()->theme_id : ($defaultTheme ? $defaultTheme->id : 0) , ['class' => 'form-control']) !!}
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-3 col-form-label">Decorator Theme {!! add_help('A second complimentary theme that is layered over your base theme, and usually affects only a few pieces of the site.') !!}</label> 
+                            <div class="col-md-9">
+                                {!! Form::select('decorator_theme', $decoratorThemes, Auth::user()->decorator_theme_id ? Auth::user()->decorator_theme_id : null , ['class' => 'form-control']) !!}
+                                </div>
+                        </div>
+                        <div class="text-right"> 
+                            {!! Form::submit('Edit', ['class' => 'btn btn-primary']) !!}
+                        </div>
+                    {!! Form::close() !!}
+                </div>
+
+                <!-- Border -->
+                <div class="card p-3 mb-2">
+                    <h3>Border</h3>
+                    <p>Change your onsite border.</p>
+                    <p>Standard borders behave as normal. Variants may be different colors or even border styles than the main border. If your chosen main border has a "layer" associated with it, you can layer that image with one of its variant's borders.</p>
+                    <p>Variants supersede standard borders, and layers supersede variants.</p>
+                    {!! Form::open(['url' => 'account/border']) !!}
+                    <div class="form-group row">
+                        <label class="col-md-2 col-form-label">Border</label>
+                        <div class="col-md-10">
+                            {!! Form::select('border', $borders, Auth::user()->border_id, ['class' => 'form-control', 'id' => 'border']) !!}
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-md-2 col-form-label">Border Variant</label>
+                        <div class="col-md-10">
+                        
+                        {!! Form::select('border_variant_id', $border_variants, Auth::user()->border_variant_id ? Auth::user()->border_variant_id : ($defaultTheme ? $defaultTheme->id : 0) , ['class' => 'form-control']) !!}
+                        </div>
+                    </div>
+                    <div id="layers">
+                    </div>
+                    <div class="text-right">
+                        {!! Form::submit('Edit', ['class' => 'btn btn-primary']) !!}
+                    </div>
+                    {!! Form::close() !!}
+
+                    <h3 class="text-center">Your Borders</h3>
+                    <div class="card p-3 mb-2 image-info-box">
+                        @if ($default->count())
+                            <h4 class="mb-0">Default</h4>
+                            <hr class="mt-0">
+                            <div class="row">
+                                @foreach ($default as $border)
+                                    <div class="col-md-3 col-6 text-center">
+                                        <div class="shop-image">
+                                            {!! $border->preview() !!}
+                                        </div>
+                                        <div class="shop-name mt-1 text-center">
+                                            <h5>{!! $border->displayName !!}</h5>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                        @endif
+                        @if (Auth::user()->borders->count())
+                            <h4 class="mb-0">Unlocked</h4>
+                            <hr class="mt-0">
+                            <div class="row">
+                                @foreach (Auth::user()->borders as $border)
+                                    <div class="col-md-3 col-6 text-center">
+                                        <div class="shop-image">
+                                            {!! $border->preview() !!}
+                                        </div>
+                                        <div class="shop-name mt-1 text-center">
+                                            <h5>{!! $border->displayName !!}</h5>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                        @endif
+                        @if (Auth::user()->isStaff)
+                            @if ($admin->count())
+                                <h4 class="mb-0">Staff-Only</h4>
+                                <hr class="mt-0">
+                                <small>You can see these as a member of staff</small>
+                                <div class="row">
+                                    @foreach ($admin as $border)
+                                        <div class="col-md-3 col-6 text-center">
+                                            <div class="shop-image">
+                                                {!! $border->preview() !!}
+                                            </div>
+                                            <div class="shop-name mt-1 text-center">
+                                                <h5>{!! $border->displayName !!}</h5>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            @endif
+                        @endif
+                    </div>
+                    <div class="text-right mb-4">
+                        <a href="{{ url(Auth::user()->url . '/border-logs') }}">View logs...</a>
+                    </div>
+                </div>
+
+                <!-- Admin stuff -->
+                @if(Auth::user()->isStaff)
+                    @include('widgets._staff_profile_form', ['user' => Auth::user(), 'adminView' => 0])
+                @endif
             </div>
         </div>
     </div>
@@ -163,208 +365,25 @@
 
 
 
-    <div class="card p-3 mb-2">
-        <h3>Avatar</h3>
-        @if (Auth::user()->isStaff)
-            <div class="alert alert-info">For admins - note that .GIF avatars leave a tmp file in the directory (e.g php2471.tmp). There is an automatic schedule to delete these files.
-            </div>
-        @endif
-        {!! Form::open(['url' => 'account/avatar', 'files' => true]) !!}
-        <div class="form-group row">
-            {!! Form::label('avatar', 'Update Profile Image', ['class' => 'col-md-2 col-form-label']) !!}
-            <div class="col-md-10">
-                {!! Form::file('avatar', ['class' => 'form-control']) !!}
-            </div>
-        </div>
-        <div class="text-right">
-            {!! Form::submit('Edit', ['class' => 'btn btn-primary']) !!}
-        </div>
-        {!! Form::close() !!}
-    </div>
+    
 
     
 
-    <div class="card p-3 mb-2">
-        <h3>Profile</h3>
-        {!! Form::open(['url' => 'account/profile']) !!}
-        <div class="form-group">
-            {!! Form::label('pronouns', 'Preferred Pronouns') !!} {!! add_help('Your preferred pronouns will be displayed in various places across the site. This field can be changed or removed at anytime.') !!}
-            {!! Form::text('pronouns', Auth::user()->profile->pronouns, ['class' => 'form-control']) !!}
-        </div>
-        <div class="form-group">
-            {!! Form::label('text', 'Profile Text') !!}
-            {!! Form::textarea('text', Auth::user()->profile->text, ['class' => 'form-control wysiwyg']) !!}
-        </div>
-        <div class="text-right">
-            {!! Form::submit('Edit', ['class' => 'btn btn-primary']) !!}
-        </div>
-        {!! Form::close() !!}
-    </div>
-
-@if(Auth::user()->isStaff)
-    @include('widgets._staff_profile_form', ['user' => Auth::user(), 'adminView' => 0])
-@endif
-
-<div class="card p-3 mb-2">
-    <h3>Theme</h3>
-    <p>Change the way the site looks for you! </p>
-    {!! Form::open(['url' => 'account/theme']) !!}
-        <div class="form-group row">
-            <label class="col-md-3 col-form-label">Base Theme</label>
-            <div class="col-md-9">
-                {!! Form::select('theme', $themeOptions, Auth::user()->theme_id ? Auth::user()->theme_id : ($defaultTheme ? $defaultTheme->id : 0) , ['class' => 'form-control']) !!}
-            </div>
-        </div>
-        <div class="form-group row">
-            <label class="col-md-3 col-form-label">Decorator Theme {!! add_help('A second complimentary theme that is layered over your base theme, and usually affects only a few pieces of the site.') !!}</label> 
-            <div class="col-md-9">
-                {!! Form::select('decorator_theme', $decoratorThemes, Auth::user()->decorator_theme_id ? Auth::user()->decorator_theme_id : null , ['class' => 'form-control']) !!}
-                </div>
-        </div>
-        <div class="text-right"> 
-            {!! Form::submit('Edit', ['class' => 'btn btn-primary']) !!}
-        </div>
-        {!! Form::close() !!}
-    </div>
-
-
-    <div class="card p-3 mb-2">
-        <h3>Birthday Publicity</h3>
-        {!! Form::open(['url' => 'account/dob']) !!}
-        <div class="form-group row">
-        <label class="col-md-2 col-form-label">Setting</label>
-            <div class="col-md-10">
-                {!! Form::select('birthday_setting', ['0' => '0: No one can see your birthday.', '1' => '1: Members can see your day and month.', '2' => '2: Anyone can see your day and month.', '3' => '3: Full date public.', '4' => '4: Members can see the month.', '5' => '5: Anyone can see the month.'],
-                    Auth::user()->settings->birthday_setting,
-                    ['class' => 'form-control'],
-                ) !!}
-            </div>
-        </div>
-        <div class="text-right">
-            {!! Form::submit('Edit', ['class' => 'btn btn-primary']) !!}
-        </div>
-        {!! Form::close() !!}
-    </div>
-
-    @if(Config::get('lorekeeper.extensions.navbar_news_notif'))
-    <div class="card p-3 mb-2">
-        <h3>Development Log Notifications</h3>
-        {!! Form::open(['url' => 'account/devlog-notif']) !!}
-            <div class="form-group row">
-                <label class="col-md-2 col-form-label">Setting</label>
-                <div class="col-md-10">
-                    {!! Form::select('dev_log_notif', ['0' => '0: Do not receive an alert for unread dev log(s).', '1' => '1: Receive alerts for unread dev log(s).'],Auth::user()->settings->dev_log_notif, ['class' => 'form-control']) !!}
-                </div>
-            </div>
-            <div class="text-right">
-                {!! Form::submit('Edit', ['class' => 'btn btn-primary']) !!}
-            </div>
-        {!! Form::close() !!}
-    </div>
-    @endif
     
-<div class="card p-3 mb-2">
-    <h3>Character Warning Visibility</h3>
-    <p>Change how you wish characters with content warnings to appear.</p>
-    {!! Form::open(['url' => 'account/warning']) !!}
-        <div class="form-group row">
-            <label class="col-md-2 col-form-label">Setting</label>
-            <div class="col-md-10">
-                {!! Form::select('warning_visibility', ['0' => '0: Pop-up warnings and censored icons', '1' => '1: Pop-up warnings only', '2' => '2: No warnings'] ,Auth::user()->settings->warning_visibility, ['class' => 'form-control']) !!}
-            </div>
-        </div>
-        <div class="text-right">
-            {!! Form::submit('Edit', ['class' => 'btn btn-primary']) !!}
-        </div>
-        {!! Form::close() !!}
-    </div>
+
+
+
+
+
 
     
 
-    <div class="card p-3 mb-2">
-        <h3>Border</h3>
-        <p>Change your onsite border.</p>
-        <p>Standard borders behave as normal. Variants may be different colors or even border styles than the main border. If your chosen main border has a "layer" associated with it, you can layer that image with one of its variant's borders.</p>
-        <p>Variants supersede standard borders, and layers supersede variants.</p>
-        {!! Form::open(['url' => 'account/border']) !!}
-        <div class="form-group row">
-            <label class="col-md-2 col-form-label">Border</label>
-            <div class="col-md-10">
-                {!! Form::select('border', $borders, Auth::user()->border_id, ['class' => 'form-control', 'id' => 'border']) !!}
-            </div>
-        </div>
-        <div class="form-group row">
-            <label class="col-md-2 col-form-label">Border Variant</label>
-            <div class="col-md-10">
-               
-            {!! Form::select('border_variant_id', $border_variants, Auth::user()->border_variant_id ? Auth::user()->border_variant_id : ($defaultTheme ? $defaultTheme->id : 0) , ['class' => 'form-control']) !!}
-            </div>
-        </div>
-        <div id="layers">
-        </div>
-        <div class="text-right">
-            {!! Form::submit('Edit', ['class' => 'btn btn-primary']) !!}
-        </div>
-        {!! Form::close() !!}
+    
+    
+    
+    
 
-        <h3 class="text-center">Your Borders</h3>
-        <div class="card p-3 mb-2 image-info-box">
-            @if ($default->count())
-                <h4 class="mb-0">Default</h4>
-                <hr class="mt-0">
-                <div class="row">
-                    @foreach ($default as $border)
-                        <div class="col-md-3 col-6 text-center">
-                            <div class="shop-image">
-                                {!! $border->preview() !!}
-                            </div>
-                            <div class="shop-name mt-1 text-center">
-                                <h5>{!! $border->displayName !!}</h5>
-                            </div>
-                        </div>
-                    @endforeach
-                </div>
-            @endif
-            @if (Auth::user()->borders->count())
-                <h4 class="mb-0">Unlocked</h4>
-                <hr class="mt-0">
-                <div class="row">
-                    @foreach (Auth::user()->borders as $border)
-                        <div class="col-md-3 col-6 text-center">
-                            <div class="shop-image">
-                                {!! $border->preview() !!}
-                            </div>
-                            <div class="shop-name mt-1 text-center">
-                                <h5>{!! $border->displayName !!}</h5>
-                            </div>
-                        </div>
-                    @endforeach
-                </div>
-            @endif
-            @if (Auth::user()->isStaff)
-                @if ($admin->count())
-                    <h4 class="mb-0">Staff-Only</h4>
-                    <hr class="mt-0">
-                    <small>You can see these as a member of staff</small>
-                    <div class="row">
-                        @foreach ($admin as $border)
-                            <div class="col-md-3 col-6 text-center">
-                                <div class="shop-image">
-                                    {!! $border->preview() !!}
-                                </div>
-                                <div class="shop-name mt-1 text-center">
-                                    <h5>{!! $border->displayName !!}</h5>
-                                </div>
-                            </div>
-                        @endforeach
-                    </div>
-                @endif
-            @endif
-        </div>
-        <div class="text-right mb-4">
-            <a href="{{ url(Auth::user()->url . '/border-logs') }}">View logs...</a>
-        </div>
-    </div>
+
 
 
     
