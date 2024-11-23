@@ -21,13 +21,13 @@
             </ul>
         </div>
         <div class="card-body tab-content">
-            <div class="text-right mb-1">
-                <div class="badge badge-primary">Image #{{ $image->id }}</div>
-            </div>
+            
             @if ($image->character->getStatusEffects())
-                <b>{!! $image->character->fullName !!} currently has</b>
+                <b style="font-size:16px">{!! $image->character->fullName !!} currently has</b>
                     @foreach($image->character->getStatusEffects() as $status)
-                        <div class="btn" style="color: red"><h5>{!! $status->displaySeverity($status->quantity) !!}</h5> </div>
+                    <a href="{{ $character->url . '/status-effects' }}" class="{{ set_active('character/'.$character->slug.'/status-effects') }}">
+                        <div class="btn" style="color: red; font-size:16px"><h5>{!! $status->displaySeverity($status->quantity) !!}</h5> </div>
+                    </a>
                     @endforeach
                     <br>
                     
@@ -194,6 +194,9 @@
                         <a href="#" class="btn btn-outline-info btn-sm edit-features mb-3" data-id="{{ $image->id }}"><i class="fas fa-cog"></i> Edit</a>
                     </div>
                 @endif
+                <div class="text-right mb-1">
+                    <div class="badge badge-primary">Image #{{ $image->id }}</div>
+                </div>
                 
                 @if (count($image->character->equipment()))
                     <div class="mb-1 mt-4">
