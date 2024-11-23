@@ -211,7 +211,7 @@ Route::group(['prefix' => 'data', 'namespace' => 'Data', 'middleware' => 'power:
     Route::post('recipes/edit/{id?}', 'RecipeController@postCreateEditRecipe');
     Route::post('recipes/delete/{id}', 'RecipeController@postDeleteRecipe');
 
-    // SHOPS
+    
     // PETS
     Route::get('pet-categories', 'PetController@getIndex');
     Route::get('pet-categories/create', 'PetController@getCreatePetCategory');
@@ -274,7 +274,17 @@ Route::group(['prefix' => 'data', 'namespace' => 'Data', 'middleware' => 'power:
     Route::post('pets/levels/edit/{level_id}/pets/add', 'PetController@postAddPetToLevel');
     Route::post('pets/levels/edit/{level_id}/pets/edit/{id}', 'PetController@postEditPetLevel');
 
-    // SHOPS
+    // RECIPES
+    Route::get('recipe-categories', 'RecipeController@getIndex');
+    Route::get('recipe-categories/create', 'RecipeController@getCreateRecipeCategory');
+    Route::get('recipe-categories/edit/{id}', 'RecipeController@getEditRecipeCategory');
+    Route::get('recipe-categories/delete/{id}', 'RecipeController@getDeleteRecipeCategory');
+    Route::post('recipe-categories/create', 'RecipeController@postCreateEditRecipeCategory');
+    Route::post('recipe-categories/edit/{id?}', 'RecipeController@postCreateEditRecipeCategory');
+    Route::post('recipe-categories/delete/{id}', 'RecipeController@postDeleteRecipeCategory');
+    Route::post('recipe-categories/sort', 'RecipeController@postSortRecipeCategory');
+    
+    # SHOPS
     Route::get('shops', 'ShopController@getIndex');
     Route::get('shops/create', 'ShopController@getCreateShop');
     Route::get('shops/edit/{id}', 'ShopController@getEditShop');

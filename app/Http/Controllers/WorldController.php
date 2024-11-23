@@ -643,12 +643,39 @@ class WorldController extends Controller {
         ]);
     }
 
-    public function getRecipes(Request $request) {
+    /**
+     * Shows the item categories page.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function getRecipeCategories(Request $request)
+    {
+        $query = RecipeCategory::query();
+        $name = $request->get('name');
+        if($name) $query->where('name', 'LIKE', '%'.$name.'%');
+        return view('world.recipes.recipe_categories', [
+            'categories' => $query->orderBy('sort', 'DESC')->paginate(20)->appends($request->query()),
+        ]);
+    }
+
+    /**
+     * Shows the items page.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function getRecipes(Request $request)
+    {
         $query = Recipe::query();
-        $data = $request->only(['name', 'sort']);
-        if (isset($data['name'])) {
+        $data = $request->only(['recipe_category_id', 'name', 'sort']);
+
+        if(isset($data['recipe_category_id']) && $data['recipe_category_id'] != 'none')
+        $query->where('recipe_category_id', $data['recipe_category_id']);
+
+        if(isset($data['name']))
             $query->where('name', 'LIKE', '%'.$data['name'].'%');
-        }
+        
 
         if (isset($data['sort'])) {
             switch ($data['sort']) {
@@ -657,6 +684,9 @@ class WorldController extends Controller {
                     break;
                 case 'alpha-reverse':
                     $query->sortAlphabetical(true);
+                    break;
+                case 'category':
+                    $query->sortCategory();
                     break;
                 case 'newest':
                     $query->sortNewest();
@@ -674,6 +704,7 @@ class WorldController extends Controller {
 
         return view('world.recipes.recipes', [
             'recipes' => $query->paginate(20)->appends($request->query()),
+            'categories' => ['none' => 'Any Category'] + RecipeCategory::orderBy('sort', 'DESC')->pluck('name', 'id')->toArray(),
         ]);
     }
 
@@ -782,15 +813,15 @@ class WorldController extends Controller {
      */
     public function getRecipe($id) {
         $recipe = Recipe::where('id', $id)->first();
-        if (!$recipe) {
-            abort(404);
-        }
+        $categories = RecipeCategory::orderBy('sort', 'DESC')->get();
+        if(!$recipe) abort(404);
 
         return view('world.recipes._recipe_page', [
             'recipe'      => $recipe,
             'imageUrl'    => $recipe->imageUrl,
             'name'        => $recipe->displayName,
             'description' => $recipe->parsed_description,
+            'categories' => $categories->keyBy('id'),
         ]);
     }
 
