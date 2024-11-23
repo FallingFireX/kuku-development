@@ -24,6 +24,14 @@
             <div class="text-right mb-1">
                 <div class="badge badge-primary">Image #{{ $image->id }}</div>
             </div>
+            @if ($image->character->getStatusEffects())
+                <b>{!! $image->character->fullName !!} currently has</b>
+                    @foreach($image->character->getStatusEffects() as $status)
+                        <div class="btn" style="color: red"><h5>{!! $status->displaySeverity($status->quantity) !!}</h5> </div>
+                    @endforeach
+                    <br>
+                    
+                @endif
             @if (!$image->character->is_myo_slot && !$image->is_valid)
                 <div class="alert alert-danger">
                     This version of this {{ __('lorekeeper.character') }} is outdated, and only noted here for recordkeeping purposes. Do not use as an official reference.
@@ -153,13 +161,6 @@
                     }
                     $type = $type ?? null;
                 @endphp
-
-                
-                @if ($image->character->getStatusEffects())
-                    @foreach($image->character->getStatusEffects() as $status)
-                        <div class="btn btn-danger mx-1">{!! $status->displaySeverity($status->quantity) !!} </div>
-                    @endforeach
-                @endif
                     
                 
                 @if ($type || (Auth::check() && Auth::user()->hasPower('manage_characters')))
