@@ -27,6 +27,7 @@ use App\Models\Pet\Pet;
 use App\Models\Pet\PetCategory;
 use App\Models\Rarity;
 use App\Models\Recipe\Recipe;
+use App\Models\Recipe\RecipeCategory;
 use App\Models\Shop\Shop;
 use App\Models\Shop\ShopStock;
 use App\Models\Skill\Skill;
