@@ -8,12 +8,16 @@ use App\Models\Character\CharacterDesignUpdate;
 use App\Models\Character\CharacterItem;
 use App\Models\Item\Item;
 use App\Models\Item\ItemCategory;
+use App\Models\User\UserStorage;
+use App\Models\Item\UserItemLog;
+use App\Services\StorageManager;
 use App\Models\Submission\Submission;
 use App\Models\Trade;
 use App\Models\User\User;
 use App\Models\User\UserItem;
 use App\Services\InventoryManager;
 use Illuminate\Http\Request;
+use DB;
 use Illuminate\Support\Facades\Auth;
 
 class InventoryController extends Controller {
@@ -144,12 +148,34 @@ class InventoryController extends Controller {
                 case 'donate':
                     return $this->postDonate($request, $service);
                     break;
+                case 'deposit':
+                    return $this->postDeposit($request, (new StorageManager));
+                    break;
                 case 'act':
                     return $this->postAct($request);
                     break;
             }
         }
 
+        return redirect()->back();
+    }
+
+    /**
+     * Deposits an inventory stack.
+     *
+     * @param  \Illuminate\Http\Request       $request
+     * @param  App\Services\StorageManager    $service
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    private function postDeposit(Request $request, StorageManager $service)
+    {
+        $stacks = UserItem::find($request->get('ids'));
+        if($service->depositStack(User::find($stacks->first()->user_id), $stacks, $request->get('quantities'))) {
+            flash('Item deposited successfully.')->success();
+        }
+        else {
+            foreach($service->errors()->getMessages()['error'] as $error) flash($error)->error();
+        }
         return redirect()->back();
     }
 

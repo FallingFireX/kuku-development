@@ -112,7 +112,12 @@ Route::group(['prefix' => 'armoury', 'namespace' => 'Users'], function () {
     Route::get('{type}/selector', 'ArmouryController@getSelector');
 });
 
-Route::group(['prefix' => 'characters', 'namespace' => 'Users'], function () {
+Route::group(['prefix' => __('safetydeposit.url'), 'namespace' => 'Users'], function() {
+    Route::get('/', 'StorageController@getIndex');
+    Route::post('withdraw', 'StorageController@postWithdraw');
+});
+
+Route::group(['prefix' => 'characters', 'namespace' => 'Users'], function() {
     Route::get('/', 'CharacterController@getIndex');
     Route::post('sort', 'CharacterController@postSortCharacters');
     Route::post('select-character', 'CharacterController@postSelectCharacter');
