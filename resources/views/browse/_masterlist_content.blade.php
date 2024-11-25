@@ -93,6 +93,11 @@
                 {!! Form::checkbox('is_giftable', 1, Request::get('is_giftable'), ['class' => 'form-check-input', 'data-toggle' => 'toggle', 'data-on' => 'Can Be Gifted', 'data-off' => 'Any Giftable Status', 'data-width' => '202', 'data-height' => '46']) !!}
             </div>
             <hr />
+            <div class="masterlist-search-field">
+                {!! Form::label('genotype', 'Genotype: ') !!} {!! add_help('This will search all kukuri for a given marking. Ex: Entering &quotnCo&quot will return non-dominate collared kukuri') !!}
+                {!! Form::text('genotype', Request::get('genotype'), ['class' => 'form-control mr-2', 'style' => 'width: 250px', 'placeholder' => 'Type a geno string']) !!}
+            </div>
+            <br><br>
             <a href="#" class="float-right btn btn-sm btn-outline-primary add-feature-button">Add Trait</a>
             {!! Form::label('Has Traits: ') !!} {!! add_help('This will narrow the search to characters that have ALL of the selected traits at the same time.') !!}
             <div id="featureBody" class="row w-100">
@@ -108,11 +113,6 @@
                         </div>
                     @endforeach
                 @endif
-            </div>
-
-            <div class="masterlist-search-field">
-                {!! Form::label('genotype', 'Genotype: ') !!} {!! add_help('Example: https://deviantart.com/username OR username') !!}
-                {!! Form::text('genotype', Request::get('genotype'), ['class' => 'form-control mr-2', 'style' => 'width: 250px', 'placeholder' => 'Type a Username']) !!}
             </div>
 
             <hr />
