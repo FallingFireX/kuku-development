@@ -22,7 +22,7 @@
         </div>
         <div class="card-body tab-content">
             
-            @if ($image->character->getStatusEffects())
+            @if ($image->character->getStatusEffects()->count())
                 <b style="font-size:16px">{!! $image->character->fullName !!} currently has</b>
                     @foreach($image->character->getStatusEffects() as $status)
                     <a href="{{ $character->url . '/status-effects' }}" class="{{ set_active('character/'.$character->slug.'/status-effects') }}">
