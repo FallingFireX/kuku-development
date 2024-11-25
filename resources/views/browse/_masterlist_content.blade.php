@@ -109,6 +109,12 @@
                     @endforeach
                 @endif
             </div>
+
+            <div class="masterlist-search-field">
+                {!! Form::label('genotype', 'Genotype: ') !!} {!! add_help('Example: https://deviantart.com/username OR username') !!}
+                {!! Form::text('genotype', Request::get('genotype'), ['class' => 'form-control mr-2', 'style' => 'width: 250px', 'placeholder' => 'Type a Username']) !!}
+            </div>
+
             <hr />
             <div class="masterlist-search-field">
                 {!! Form::checkbox('search_images', 1, Request::get('search_images'), ['class' => 'form-check-input mr-3', 'data-toggle' => 'toggle']) !!}
