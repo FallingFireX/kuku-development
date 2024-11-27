@@ -34,14 +34,24 @@
         </thead>
         <tbody>
             @foreach ($logs as $log)
-                <tr>
-                    <td>{!! $log->user->displayName !!}</td>
-                    <td>{!! $log->action !!}</td>
-                    <td>{!! $log->action_details !!}</td>
-                    <td>{!! format_date($log->created_at) !!} ({!! pretty_date($log->created_at) !!})</td>
-                </tr>
+                <div class="logs-table-row">
+                    <div class="row flex-wrap">
+                        <div class="col-6 col-md-3">
+                            <div class="logs-table-cell">{!! $log->user->displayName !!}</div>
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <div class="logs-table-cell">{!! $log->action !!}</div>
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <div class="logs-table-cell">{!! $log->action_details !!}</div>
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <div class="logs-table-cell">{!! format_date($log->created_at) !!} ({!! pretty_date($log->created_at) !!})</div>
+                        </div>
+                    </div>
+                </div>
             @endforeach
-        </tbody>
-    </table>
+        </div>
+    </div>
     {!! $logs->render() !!}
 @endsection

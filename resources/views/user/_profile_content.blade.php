@@ -14,7 +14,7 @@
             <div class="col h2 text-center text-md-left">
 
                 {!! $user->displayName !!}
-                @if ($user->previousUsername)
+                @if ($user->previousUsername && mb_strtolower($user->name) != mb_strtolower($user->previousUsername))
                     <small>{!! add_help('Previously known as ' . $user->previousUsername) !!}</small>
                 @endif
             </div>
@@ -53,7 +53,7 @@
                 <div class="col-md-3 col-4">
                     <h5>Joined</h5>
                 </div>
-                <div class="col-md-9 col-8">{!! format_date($user->created_at, false) !!} ({{ $user->created_at->diffForHumans() }})</div>
+                <div class="col-md-8 col-8">{!! format_date($user->created_at, false) !!} ({{ $user->created_at->diffForHumans() }})</div>
             </div>
             <div class="row col-sm-6">
                 <div class="col-lg-3 col-md-3 col-4">
@@ -66,7 +66,7 @@
                     <div class="col-md-3 col-4">
                         <h5>Birthday</h5>
                     </div>
-                    <div class="col-md-9 col-8">{!! $user->birthdayDisplay !!}</div>
+                    <div class="col-md-8 col-8">{!! $user->birthdayDisplay !!}</div>
                 </div>
             @endif
 
