@@ -29,37 +29,34 @@
             <!-- SESSION -->
             <div class="tab-pane fade  show active" id="session">
                 <!--USERNAME-->
-            @if (config('lorekeeper.settings.allow_username_changes'))
-                <div class="card p-3 mb-2">
-                    <h3>Change Username</h3>
-                    @if (config('lorekeeper.settings.username_change_cooldown'))
-                        <div class="alert alert-info">
-                            You can change your username once every {{ config('lorekeeper.settings.username_change_cooldown') }} days.
-                        </div>
-                        @if (Auth::user()->logs()->where('type', 'Username Change')->orderBy('created_at', 'desc')->first())
-                            <div class="alert alert-warning">
-                                You last changed your username on {{ Auth::user()->logs()->where('type', 'Username Change')->orderBy('created_at', 'desc')->first()->created_at->format('F jS, Y') }}.
-                                <br />
-                                <b>
-                                    You will be able to change your username again on
-                                    {{ Auth::user()->logs()->where('type', 'Username Change')->orderBy('created_at', 'desc')->first()->created_at->addDays(config('lorekeeper.settings.username_change_cooldown'))->format('F jS, Y') }}.
-                                </b>
-                            </div>
+                <h3>Change Username</h3>
+                    <p>
+                        For security and moderation purposes, all usernames changes will be recorded in your username log.
+                        @if($usernameCooldown > 0)
+                            You may only change your username once {{ $usernameCooldown == 1 ? 'per day' : 'every '. $usernameCooldown .' days' }}.
                         @endif
+                    </p>
+                    @if($canChangeName)
+                        {!! Form::open(['url' => 'account/username']) !!}
+                            <div class="form-group row">
+                                <label class="col-md-2 col-form-label">New Username</label>
+                                <div class="col-md-10">
+                                    {!! Form::text('username', Auth::user()->name, ['class' => 'form-control']) !!}
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-2 col-form-label">Password</label>
+                                <div class="col-md-10">
+                                    {!! Form::password('password', ['class' => 'form-control']) !!}
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                {!! Form::submit('Edit', ['class' => 'btn btn-primary']) !!}
+                            </div>
+                        {!! Form::close() !!}
+                    @else
+                        <p class="alert alert-warning">You must wait {{ $usernameCountdown }} more day{{ $usernameCountdown > 1 ? 's' : '' }} before you can change your username again.</p>
                     @endif
-                    {!! Form::open(['url' => 'account/username']) !!}
-                    <div class="form-group row">
-                        <label class="col-md-2 col-form-label">Username</label>
-                        <div class="col-md-10">
-                            {!! Form::text('username', Auth::user()->name, ['class' => 'form-control']) !!}
-                        </div>
-                    </div>
-                    <div class="text-right">
-                        {!! Form::submit('Edit', ['class' => 'btn btn-primary']) !!}
-                    </div>
-                    {!! Form::close() !!}
-                </div>
-            @endif
 
             <!--EMAIL-->
             <div class="card p-3 mb-2">

@@ -4,6 +4,7 @@ namespace App\Models\User;
 
 use App\Models\Award\AwardLog;
 use App\Models\Border\Border;
+use App\Models\User\UsernameLog;
 use App\Models\Character\Character;
 use App\Models\Character\CharacterBookmark;
 use App\Models\Character\CharacterDesignUpdate;

@@ -14,6 +14,7 @@ use App\Models\Submission\Submission;
 use App\Models\Trade;
 use App\Models\User\StaffProfile;
 use App\Models\User\User;
+use App\Models\User\UsernameLog;
 use App\Models\User\UserUpdateLog;
 use App\Services\CharacterManager;
 use App\Services\GalleryManager;
@@ -454,65 +455,51 @@ class UserService extends Service {
         return $this->rollbackReturn(false);
     }
 
-    /**
-     * Updates a user's username.
-     *
-     * @param string $username
-     * @param User   $user
-     *
-     * @return bool
-     */
-    public function updateUsername($username, $user) {
+    public function updateUsername($data, $user)
+    {
+
         DB::beginTransaction();
 
         try {
-            if (!config('lorekeeper.settings.allow_username_changes')) {
-                throw new \Exception('Username changes are currently disabled.');
-            }
-            if (!$username) {
-                throw new \Exception('Please enter a username.');
-            }
-            if (strlen($username) < 3 || strlen($username) > 25) {
-                throw new \Exception('Username must be between 3 and 25 characters.');
-            }
-            if (!preg_match('/^[a-zA-Z0-9_]+$/', $username)) {
-                throw new \Exception('Username must only contain letters, numbers, and underscores.');
-            }
-            if ($username == $user->name) {
-                throw new \Exception('Username cannot be the same as your current username.');
-            }
-            if (User::where('name', $username)->where('id', '!=', $user->id)->first()) {
-                throw new \Exception('Username already taken.');
-            }
-            // check if there is a cooldown
-            if (config('lorekeeper.settings.username_change_cooldown')) {
-                // these logs are different to the ones in the admin panel
-                // different type
-                $last_change = UserUpdateLog::where('user_id', $user->id)->where('type', 'Username Change')->orderBy('created_at', 'desc')->first();
-                if ($last_change && $last_change->created_at->diffInDays(Carbon::now()) < config('lorekeeper.settings.username_change_cooldown')) {
-                    throw new \Exception('You must wait '
-                        .config('lorekeeper.settings.username_change_cooldown') - $last_change->created_at->diffInDays(Carbon::now()).
-                    ' days before changing your username again.');
-                }
+            if(!Hash::check($data['password'], $user->password)) throw new \Exception("Please make sure you've entered your password correctly.");
+
+            $lastUsernameChange = UsernameLog::where('user_id', $user->id)->where('is_staff_edit', 0)->orderBy('updated_at', 'DESC')->first();
+            if($lastUsernameChange) {
+                $daysSinceNameChange = Carbon::now()->diffInDays($lastUsernameChange->updated_at);
+                if($daysSinceNameChange < Settings::get('username_change_cooldown')) throw new \Exception("You must wait for your cooldown to end before changing your username again.");
             }
 
-            // create log
-            UserUpdateLog::create([
-                'staff_id' => null,
-                'user_id'  => $user->id,
-                'data'     => json_encode(['old_name' => $user->name, 'new_name' => $username]),
-                'type'     => 'Username Change',
-            ]);
+            if(!$this->createUsernameLog($user->id, $user->name, $data['username'], 0)) throw new \Exception("Failed to create log.");
 
-            $user->name = $username;
+            $user->name = $data['username'];
             $user->save();
 
             return $this->commitReturn(true);
-        } catch (\Exception $e) {
+        } catch(\Exception $e) { 
             $this->setError('error', $e->getMessage());
         }
-
         return $this->rollbackReturn(false);
+    }
+
+    /**
+     * Creates a username log.
+     *
+     * @param  int     $userId
+     * @param  string  $oldUsername
+     * @param  string  $newUsername
+     * @return  int
+     */
+    public function createUsernameLog($userId, $oldUsername, $NewUsername, $staffEdit)
+    {
+        return DB::table('username_log')->insert(
+            [
+                'user_id' => $userId,
+                'old_username' => $oldUsername,
+                'new_username' => $NewUsername,
+                'updated_at' => Carbon::now(),
+                'is_staff_edit' => $staffEdit
+            ]
+        );
     }
 
     /**

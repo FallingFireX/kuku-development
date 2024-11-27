@@ -19,7 +19,7 @@
       @foreach($logs as $log)
       <div class="d-flex row flex-wrap col-12 mt-1 pt-1 px-0 ubt-top">
         <div class="col-3">{!! pretty_date($log->updated_at) !!}</div>
-        <div class="col-9">{{ $log->old_username }} to {{ $log->new_username }}</div>
+        <div class="col-9">{{ $log->type }} to {{ $log->new_username }}</div>
       </div>
       @endforeach
   </div>
