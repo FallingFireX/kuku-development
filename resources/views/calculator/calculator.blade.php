@@ -5,7 +5,8 @@
 @endsection
 
 @section('content')
-{!! breadcrumbs(['FP Calculator' => 'fp-calculator']) !!}
+    {!! breadcrumbs(['FP Calculator' => 'fp-calculator']) !!}
+
     <style>
         .calculator {
         width: 100%;
@@ -37,12 +38,8 @@
         display: block;
         }
     </style>
-    
 
-
-
-<body>
-  <div class="calculator">
+<div class="calculator">
     <div class=row>
         <div class = "col-md-4">
             <textarea id="output" readonly></textarea>
@@ -294,5 +291,4 @@
       output.value = '';
     }
   </script>
-
 @endsection
