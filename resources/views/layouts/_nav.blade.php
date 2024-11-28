@@ -84,19 +84,6 @@
                             <a class="dropdown-item" href="{{ url('comments/liked') }}">
                                 Liked Comments
                             </a>
-                        </div>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a id="queueDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                            Activity
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="queueDropdown">
-                        <a class="dropdown-item" href="{{ url('/info/games') }}">
-                                Minigames
-                            </a>
-                            <a class="dropdown-item" href="{{ url('generators') }}">
-                                Random Generators
-                                </a>
                             @if (Auth::check() && Auth::user()->is_raffles_unread && config('lorekeeper.extensions.navbar_news_notif'))
                                 <a class="dropdown-item text-warning" href="{{ url('raffles') }}">
                                     Raffles <i class="fas fa-bell"></i>
@@ -106,16 +93,42 @@
                                     Raffles
                                 </a>
                             @endif
+                        </div>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a id="queueDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                            Activity
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="queueDropdown">
+                           
+                            
                             <a class="dropdown-item" href="{{ url('prompts/prompts') }}">
                                 Activities
                             </a>
                             <a class="dropdown-item" href="{{ url('https://kukuri-arpg.w3spaces.com/activities/quests.html') }}">
                                 Current Quest
                             </a>
+                            <a class="dropdown-item" href="{{ url('crafting') }}">
+                                Crafting
+                            </a>
                             <a class="dropdown-item" href="{{ url('https://kukuri-arpg.w3spaces.com/activities/breeding.html') }}">
                                 Breeding
                             </a>
+
                             <div class="dropdown-divider"></div>
+
+                            <a class="dropdown-item" href="{{ url('/fp-calculator') }}">
+                                FP Calculator
+                            </a>
+                            <a class="dropdown-item" href="{{ url('/info/games') }}">
+                                Minigames
+                            </a>
+                            <a class="dropdown-item" href="{{ url('generators') }}">
+                                Random Generators
+                            </a>
+                           
+                            <div class="dropdown-divider"></div>
+
                             <a class="dropdown-item" href="{{ url('submissions') }}">
                                 My Submissions
                             </a>
@@ -128,9 +141,7 @@
                             <!-- <a class="dropdown-item" href="{{ url('designs') }}">
                                 Design Approvals
                             </a> -->
-                            <a class="dropdown-item" href="{{ url('crafting') }}">
-                                Crafting
-                            </a>
+                            
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="{{ url('characters/transfers/incoming') }}">
                                 Character Transfers
