@@ -5,7 +5,7 @@
 @endsection
 
 @section('content')
-    
+{!! breadcrumbs(['FP Calculator' => 'fp-calculator']) !!}
     <style>
         .calculator {
         width: 100%;
