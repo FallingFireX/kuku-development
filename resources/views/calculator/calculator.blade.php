@@ -209,23 +209,27 @@
     }
 
     function calculateWordCount() {
-      const wordCountInput = document.getElementById('word-count-input').value;
-      const wordCount = parseFloat(wordCountInput);
-      currentSet.Word_Count = document.getElementById('word-count-input').value;
+    const wordCountInput = document.getElementById('word-count-input').value;
+    const wordCount = parseFloat(wordCountInput);
+    currentSet.Word_Count = wordCountInput;
 
-      if (isNaN(wordCount) || wordCount <= 0) {
+    if (isNaN(wordCount) || wordCount <= 0) {
         alert('Please enter a valid word count.');
         return;
-      }
-
-      const result = wordCount / 150;
-      const roundedResult = result % 1 === 0 ? Math.floor(result) : Math.ceil(result);
-      
-      currentSet.Word_Count_FP = roundedResult;
-      currentSet.total += roundedResult;
-
-      renderOutput();
     }
+
+    const result = wordCount / 150;
+
+    // Check the tenths place
+    const decimalPart = result % 1;
+    const roundedResult = decimalPart < 0.1 ? Math.floor(result) : Math.ceil(result);
+
+    currentSet.Word_Count_FP = roundedResult;
+    currentSet.total += roundedResult;
+
+    renderOutput();
+}
+
 
     function finalizeSet() {
       if (currentSet.total === 0) {
