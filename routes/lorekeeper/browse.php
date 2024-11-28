@@ -300,3 +300,9 @@ Route::group(['prefix' => 'generators'], function () {
     Route::get('/', 'GeneratorController@getGenerators');
     Route::get('{id}', 'GeneratorController@getGenerator');
 });
+
+
+/**************************************************************************************************
+    Custom
+**************************************************************************************************/
+Route::get('fp-calculator', 'CustomController@getCalculator');
