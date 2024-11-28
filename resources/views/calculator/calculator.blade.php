@@ -129,9 +129,6 @@
     <i style = "text-align: center">Switching the type will remove the multiplier; make sure that is the last set you do, or do those seperately</i>
     <br>
   </div>
-  @endsection
-  
-@section('scripts')
 
   <script>
     let sets = []; // Array to track multiple sets
