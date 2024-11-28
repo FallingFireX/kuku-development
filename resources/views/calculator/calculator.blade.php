@@ -1,10 +1,9 @@
 @extends('home.layout')
 
-@section('title') Namethatshowsupinbrowsertab @endsection
+@section('title')
+    FP Calculator
+@endsection
 
-
-
-{!! breadcrumbs(['namethatshowsupattopofpage' => 'linkthatgoesthere']) !!}
 @section('content')
     
     <style>
