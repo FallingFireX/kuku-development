@@ -126,7 +126,8 @@
     <i style = "text-align: center">Switching the type will remove the multiplier; make sure that is the last set you do, or do those seperately</i>
     <br>
   </div>
-
+  </div>
+  </div>
   <script>
     let sets = []; // Array to track multiple sets
     let currentSet = {
@@ -292,3 +293,4 @@
     }
   </script>
 @endsection
+
