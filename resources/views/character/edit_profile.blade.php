@@ -107,12 +107,14 @@
             {!! Form::label('alert_user', 'Notify User', ['class' => 'form-check-label ml-3']) !!} {!! add_help('This will send a notification to the user that their character profile has been edited. A notification will not be sent if the character is not visible.') !!}
         </div>
     @endif
-    @if (Auth::check() && Auth::user()->hasPower('manage_characters'))
-        <div class="form-group">
-            {!! Form::checkbox('kotm', 1, $character->kotm, ['class' => 'form-check-input', 'data-toggle' => 'toggle']) !!}
-            {!! Form::label('kotm', 'Kukuri of the Month', ['class' => 'form-check-label ml-3']) !!}
-        </div>
 
+    @if (Auth::check() && Auth::user()->hasPower('manage_characters'))
+    This labels a kuku as being currently or formerly a Kukuri of the month. Only turn on if theyve won!
+    <br>
+    <div class="form-group">
+        {!! Form::checkbox('kotm', 1, $character->kotm, ['class' => 'form-check-input', 'data-toggle' => 'toggle']) !!}
+        {!! Form::label('kotm', 'Kukuri of the Month', ['class' => 'form-check-label ml-3']) !!}
+    </div>
     @endif
 
     <div class="text-right">
@@ -121,5 +123,5 @@
     {!! Form::close() !!}
 
     
-   
+    
 @endsection

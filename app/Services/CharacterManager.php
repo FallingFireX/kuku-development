@@ -1577,6 +1577,7 @@ class CharacterManager extends Service {
             $old = ['is_visible' => $character->is_visible];
 
             $character->is_visible = isset($data['is_visible']);
+            $character->kotm = isset($data['kotm']);
             $character->save();
 
             // Add a log for the character
@@ -1628,14 +1629,15 @@ class CharacterManager extends Service {
                 if (!isset($data['is_links_open'])) {
                     $data['is_links_open'] = 0;
                 }
+                
 
                 $character->is_gift_art_allowed = isset($data['is_gift_art_allowed']) && $data['is_gift_art_allowed'] <= 2 ? $data['is_gift_art_allowed'] : 0;
                 $character->is_gift_writing_allowed = isset($data['is_gift_writing_allowed']) && $data['is_gift_writing_allowed'] <= 2 ? $data['is_gift_writing_allowed'] : 0;
                 $character->is_trading = isset($data['is_trading']);
-                $character->kotm = isset($data['kotm']);
                 $character->is_links_open = $data['is_links_open'];
                 $character->save();
             } else {
+                $character->kotm = isset($data['kotm']);
                 if (!$this->logAdminAction($user, 'Updated Character Profile', 'Updated character profile on '.$character->displayname)) {
                     throw new \Exception('Failed to log admin action.');
                 }
@@ -2544,7 +2546,7 @@ class CharacterManager extends Service {
             $characterData['is_tradeable'] = isset($data['is_tradeable']);
             $characterData['is_giftable'] = isset($data['is_giftable']);
             $characterData['is_visible'] = isset($data['is_visible']);
-            $characterData['kotm'] = isset($data['is_visible']);
+            $characterData['kotm'] = isset($data['kotm']);
             $characterData['sale_value'] = $data['sale_value'] ?? 0;
             $characterData['is_gift_art_allowed'] = 0;
             $characterData['is_gift_writing_allowed'] = 0;
