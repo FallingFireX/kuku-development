@@ -107,9 +107,24 @@
             {!! Form::label('alert_user', 'Notify User', ['class' => 'form-check-label ml-3']) !!} {!! add_help('This will send a notification to the user that their character profile has been edited. A notification will not be sent if the character is not visible.') !!}
         </div>
     @endif
+
     <div class="text-right">
         {!! Form::submit('Edit Profile', ['class' => 'btn btn-primary']) !!}
     </div>
     {!! Form::close() !!}
 
+    
+    @if (Auth::check() && Auth::user()->hasPower('manage_characters'))
+    <hr>
+    {!! Form::open(['url' => $character->url . '/profile/edit']) !!}
+        <div class="form-group">
+            {!! Form::checkbox('kotm', 1, $character->kotm, ['class' => 'form-check-input', 'data-toggle' => 'toggle']) !!}
+            {!! Form::label('kotm', 'Kukuri of the Month', ['class' => 'form-check-label ml-3']) !!}
+        </div>
+    
+        <div class="text-left">
+            {!! Form::submit('Edit Kukuri of the Month status', ['class' => 'btn btn-primary']) !!}
+        </div>
+    {!! Form::close() !!}
+    @endif
 @endsection

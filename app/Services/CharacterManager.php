@@ -1446,6 +1446,7 @@ class CharacterManager extends Service {
             $characterData['is_tradeable'] = isset($data['is_tradeable']);
             $characterData['is_giftable'] = isset($data['is_giftable']);
             $characterData['sale_value'] = $data['sale_value'] ?? 0;
+            $characterData['kotm'] = isset($data['kotm']);
             $characterData['transferrable_at'] = $data['transferrable_at'] ?? null;
             if ($character->is_myo_slot) {
                 $characterData['name'] = (isset($data['name']) && $data['name']) ? $data['name'] : null;
@@ -1631,6 +1632,7 @@ class CharacterManager extends Service {
                 $character->is_gift_art_allowed = isset($data['is_gift_art_allowed']) && $data['is_gift_art_allowed'] <= 2 ? $data['is_gift_art_allowed'] : 0;
                 $character->is_gift_writing_allowed = isset($data['is_gift_writing_allowed']) && $data['is_gift_writing_allowed'] <= 2 ? $data['is_gift_writing_allowed'] : 0;
                 $character->is_trading = isset($data['is_trading']);
+                $character->kotm = isset($data['kotm']);
                 $character->is_links_open = $data['is_links_open'];
                 $character->save();
             } else {
@@ -2542,6 +2544,7 @@ class CharacterManager extends Service {
             $characterData['is_tradeable'] = isset($data['is_tradeable']);
             $characterData['is_giftable'] = isset($data['is_giftable']);
             $characterData['is_visible'] = isset($data['is_visible']);
+            $characterData['kotm'] = isset($data['is_visible']);
             $characterData['sale_value'] = $data['sale_value'] ?? 0;
             $characterData['is_gift_art_allowed'] = 0;
             $characterData['is_gift_writing_allowed'] = 0;

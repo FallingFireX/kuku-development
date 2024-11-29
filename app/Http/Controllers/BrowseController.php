@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Facades\Settings;
+use App\Models\Award\Award;
+use App\Models\Award\AwardCategory;
+use App\Models\Character\CharacterAward;
 use App\Models\Character\Character;
 use App\Models\Character\CharacterCategory;
 use App\Models\Character\CharacterImage;
@@ -212,6 +215,9 @@ class BrowseController extends Controller {
         if ($request->get('is_giftable')) {
             $query->where('is_giftable', 1);
         }
+        if ($request->get('kotm')) {
+            $query->where('kotm', 1);
+        }
 
         if ($request->get('owner')) {
             $owner = User::find($request->get('owner'));
@@ -235,6 +241,7 @@ class BrowseController extends Controller {
             $imageQuery->whereIn('id', $query->pluck('character_image_id')->toArray());
         }
 
+
         // Searching on image properties
         if ($request->get('species_id')) {
             $imageQuery->where('species_id', $request->get('species_id'));
@@ -250,6 +257,8 @@ class BrowseController extends Controller {
                 });
             }
         }
+        
+
         if ($request->get('transformation_id')) {
             $imageQuery->where('transformation_id', $request->get('transformation_id'));
         }
@@ -352,6 +361,7 @@ class BrowseController extends Controller {
             'features'        => Feature::getDropdownItems(),
             'sublists'        => Sublist::orderBy('sort', 'DESC')->get(),
             'userOptions'     => User::query()->orderBy('name')->pluck('name', 'id')->toArray(),
+            'awardOptions'    => Award::query()->orderBy('name')->pluck('name', 'id')->toArray(),
             'transformations' => [0 => 'Any '.ucfirst(__('transformations.transformation'))] + Transformation::orderBy('sort', 'DESC')->pluck('name', 'id')->toArray(),
         ]);
     }

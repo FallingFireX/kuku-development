@@ -49,6 +49,10 @@
     {!! Form::text('sale_value', $character->sale_value, ['class' => 'form-control']) !!}
 </div>
 <div class="form-group">
+    {!! Form::checkbox('kotm', 1, $character->kotm, ['class' => 'form-check-input', 'data-toggle' => 'toggle', 'id' => 'kotm']) !!}
+    {!! Form::label('kotm', 'Kukuri of the Month', ['class' => 'form-check-label ml-3']) !!}
+</div>
+<div class="form-group">
     {!! Form::label('On Transfer Cooldown Until (Optional)') !!}
     <div class="input-group">
         {!! Form::text('transferrable_at', $character->transferrable_at, ['class' => 'form-control datepickeralt']) !!}

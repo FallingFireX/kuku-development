@@ -42,7 +42,7 @@ class Character extends Model {
         'character_image_id', 'character_category_id', 'rarity_id', 'user_id',
         'owner_alias', 'number', 'slug', 'description', 'parsed_description',
         'is_sellable', 'is_tradeable', 'is_giftable',
-        'sale_value', 'transferrable_at', 'is_visible',
+        'sale_value','kotm', 'transferrable_at', 'is_visible',
         'is_gift_art_allowed', 'is_gift_writing_allowed', 'is_trading', 'sort',
         'is_myo_slot', 'name', 'trade_id', 'is_links_open', 'owner_url', 'character_warning', 'folder_id' , 'class_id', 'genotype', 'phenotype', 'gender', 'eyecolor', 'spd', 'def', 'atk',
         'diet', 'bio',
