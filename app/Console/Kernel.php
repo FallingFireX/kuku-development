@@ -24,10 +24,8 @@ class Kernel extends ConsoleKernel {
         $schedule->command('check-sales')
             ->everyMinute();
         $schedule->command('change-feature')
-            ->monthlyOn(1, '00:00');
-        $schedule->command('clean-donations')
             ->everyMinute();
-        $schedule->command('check-pet-drops')
+        $schedule->command('clean-donations')
             ->everyMinute();
         $schedule->exec('rm public/images/avatars/*.tmp')
             ->daily()->at('01:02');
