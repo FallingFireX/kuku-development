@@ -100,7 +100,7 @@
             </div>
             <br>
             <div class="masterlist-search-field">
-                {!! Form::checkbox('kotm', 1, Request::get('kotm'), ['class' => 'form-check-input', 'data-toggle' => 'toggle', 'data-on' => 'KotM Winners', 'data-off' => 'All Kukuri', 'data-width' => '202', 'data-height' => '46']) !!}
+                {!! Form::checkbox('kotm', 1, Request::get('kotm'), ['class' => 'form-check-input', 'data-toggle' => 'toggle', 'data-on' => 'KotM Winners', 'data-off' => 'All Kukuri', 'data-width' => '202', 'data-height' => '46']) !!}{!! add_help('This will filter by kukuri who have won kukuri of the month before!') !!}
             </div>
             <br><br>
             <a href="#" class="float-right btn btn-sm btn-outline-primary add-feature-button">Add Trait</a>
