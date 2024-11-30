@@ -657,4 +657,11 @@ return [
         'message' => 'You have received a staff grant of the user border {border_name} from <a href="{sender_url}">{sender_name}</a>. (<a href="{url}">View Borders</a>)',
         'url' => 'user/{recipient_name}/borders'
     ],
+
+        // BIRTHDAY_REWARDED
+        1105 => [
+            'name' => 'Happy Birthday to You',
+            'message' => 'It\'s your birthday this month, {user_name}! A gift has been left in your inventory. (<a href="{url}">View Inventory</a>)',
+            'url' => 'inventory'
+        ],
 ];

@@ -24,31 +24,27 @@ class Kernel extends ConsoleKernel {
         $schedule->command('check-sales')
             ->everyMinute();
         $schedule->command('change-feature')
-            ->monthly();
+            ->monthlyOn(1, '00:00');
         $schedule->command('clean-donations')
             ->everyMinute();
         $schedule->command('check-pet-drops')
             ->everyMinute();
-        $schedule->command('reset-stamina')
-            ->daily();
         $schedule->exec('rm public/images/avatars/*.tmp')
-            ->daily();
+            ->daily()->at('01:02');
         $schedule->command('update-extension-tracker')
             ->daily()->at('01:05');
         $schedule->command('update-credits')
             ->daily()->at('01:10');
         $schedule->command('update-staff-reward-actions')
-            ->daily();
+            ->daily()->at('01:01');
         $schedule->command('restock-shops')
             ->daily()->at('01:15');
         $schedule->command('update-timed-stock')
-            ->everyMinute();
-        $schedule->command('check-pet-drops')
-            ->everyMinute();
+            ->everyMinute();       
         $schedule->command('distribute-birthday-rewards')
-            ->monthly();
+            ->monthlyOn(1, '00:00'); // Runs on the 1st of every month at midnight
         $schedule->command('reset-hol')
-            ->daily()->at('02:20');
+            ->daily()->at('01:20');
         $schedule->command('update-timed-daily')
             ->everyMinute();          
 
