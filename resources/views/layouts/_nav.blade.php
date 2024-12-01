@@ -185,12 +185,12 @@
                         <a class="dropdown-item" href="{{ url('info/guide') }}">
                             Site Guide
                         </a>
-                        <!-- <a class="dropdown-item" href="{{ url('masterlist') }}">
-                            Character Masterlist
+                        <a class="dropdown-item" href="{{ url('/info/fpguide') }}">
+                            FP guide
                         </a>
-                        <a class="dropdown-item" href="{{ url('myos') }}">
-                            MYO Slot Masterlist
-                        </a> -->
+                        <a class="dropdown-item" href="{{ url('/info/design') }}">
+                            Design FaQ
+                        </a>
                         
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="{{ url('reports/bug-reports') }}">
