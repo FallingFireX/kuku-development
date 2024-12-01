@@ -40,7 +40,7 @@ class Kernel extends ConsoleKernel {
         $schedule->command('update-timed-stock')
             ->everyMinute();       
         $schedule->command('distribute-birthday-rewards')
-            ->monthlyOn(1, '00:00'); // Runs on the 1st of every month at midnight
+            ->monthly();
         $schedule->command('reset-hol')
             ->daily()->at('01:20');
         $schedule->command('update-timed-daily')
