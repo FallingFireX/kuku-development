@@ -24,7 +24,7 @@ class Kernel extends ConsoleKernel {
         $schedule->command('check-sales')
             ->everyMinute();
         $schedule->command('change-feature')
-            ->everyMinute();
+            ->monthly();
         $schedule->command('clean-donations')
             ->everyMinute();
         $schedule->exec('rm public/images/avatars/*.tmp')
@@ -40,7 +40,7 @@ class Kernel extends ConsoleKernel {
         $schedule->command('update-timed-stock')
             ->everyMinute();       
         $schedule->command('distribute-birthday-rewards')
-            ->monthly();
+            ->monthly(); // Runs on the 1st of every month at midnight
         $schedule->command('reset-hol')
             ->daily()->at('01:20');
         $schedule->command('update-timed-daily')
