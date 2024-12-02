@@ -33,7 +33,7 @@
                     <br><a href="https://kukuri-arpg.deviantart.com/journal/Excavating-629806452">Traveling</a>
                     <br>
                     <br><a href="https://kukuri-arpg.w3spaces.com/activities/breeding.html">Breeding</a>
-                    <br><a href="https://drive.google.com/drive/folders/1o2QmuzkdqtrNTaLEq6AgMP8r53E1nL1J">Breeding Slots (Sheet)</a>
+                    <br><a href="https://docs.google.com/spreadsheets/d/1Re928vXBmaullAY_1SZSEQXEs3G48GfTl6LX3kdc1p4/edit?gid=1710681872#gid=1710681872">Breeding Slots (Sheet)</a>
                     <br><a href="https://kukuri-arpg.w3spaces.com/training/home.html">Training</a>
                     <br><a href="https://www.deviantart.com/momma-kuku/journal/Training-Completion-Mar-2021-872871365">Training Completion</a>
                     <br>
