@@ -77,8 +77,8 @@
                     <button class="btn" style="width: 95px; height: 40px; margin: 5px; font-size: 16px" onclick="addValue('Collab', 1)">Collab</button>
                     <button class="btn" style="width: 110px; height: 40px; margin: 5px; font-size: 16px" onclick="addValue('Other_arpg', 1)">Other arpg</button>
                     <button class="btn" style="width: 80px; height: 40px; margin: 5px; font-size: 16px" onclick="addValue('Comic', 1)">Comic</button>
-                    <button class="btn" style="width: 147px; height: 40px; margin: 5px; font-size: 16px" onclick="addValue('Elemental Armor', 1)">Elemental Armor</button>
-                    <button class="btn" style="width: 147px; height: 40px; margin: 5px; font-size: 16px" onclick="addValue('Armor/Tack', 1)">Armor/Tack</button>
+                    <button class="btn" style="width: 147px; height: 40px; margin: 5px; font-size: 16px" onclick="addValue('Elemental_Armor', 1)">Elemental Armor</button>
+                    <button class="btn" style="width: 147px; height: 40px; margin: 5px; font-size: 16px" onclick="addValue('Armor_or_Tack', 1)">Armor/Tack</button>
                 <br>
             </div>
 
@@ -145,6 +145,8 @@
       Comic: 0,
       Elemental_Armor: 0,
       Armor_or_Tack: 0,
+      Coliseum: 0,
+      FoD: 0,
       Quest: 0,
       CoL: 0,
       FoD: 0,
