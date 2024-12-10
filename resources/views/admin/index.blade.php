@@ -42,7 +42,7 @@
                         </p>
                         <br>
                         <div class="text-center">
-                            <a href="{{ url('admin/submissions/pending?prompt_category_id=1&sort=oldest') }}" class="card-link">View Queue <span class="fas fa-caret-right ml-1"></span></a>
+                            <a href="{{ url('admin/submissions/pending?prompt_category_id=3&sort=oldest') }}" class="card-link">View Queue <span class="fas fa-caret-right ml-1"></span></a>
                         </div>
                     </div>
                 </div>
