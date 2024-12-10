@@ -149,7 +149,11 @@
                             </p>
                         </div>
                         <div class="col-md-4" style="text-align: center">
-                            test test
+                            All queues have an expected wait time of <b>2 weeks</b>.
+                            <br><br>
+                            These times might be longer or shorter depending on admin IRL, 
+                            group events, or other things that may delay our work. Please
+                            remain patient with us if the queues go a little over 2 weeks!
                         </div>
                     </div>
                     </div>
