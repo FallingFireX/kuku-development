@@ -9,6 +9,7 @@ use App\Models\News;
 use App\Models\SitePage;
 use App\Services\LinkService;
 use App\Services\UserService;
+use App\Models\Submission\Submission;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -23,6 +24,7 @@ class HomeController extends Controller {
     | Displays the homepage and handles redirection for linking a user's social media account.
     |
     */
+
 
     /**
      * Shows the homepage.
@@ -44,6 +46,10 @@ class HomeController extends Controller {
         }
 
         return view('welcome', [
+            'submissionCount'        => Submission::where('status', 'Pending')->whereNotNull('prompt_id')->count(),
+            'miscCount'              => Submission::where('status', 'Pending')->where('prompt_id', 1)->count(),
+            'fpCount'                => Submission::where('status', 'Pending')->where('prompt_id', 2)->count(),
+            'claimCount'             => Submission::where('status', 'Pending')->whereNull('prompt_id')->count(),
             'about'               => SitePage::where('key', 'about')->first(),
             'featured'            => $character,
             'newses'   => News::visible()->orderBy('updated_at', 'DESC')->take(2)->get(),

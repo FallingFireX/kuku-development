@@ -52,6 +52,7 @@ class PromptsController extends Controller {
     public function getPrompts(Request $request) {
         $query = Prompt::active()->staffOnly(Auth::check() ? Auth::user() : null)->with('category');
         $data = $request->only(['prompt_category_id', 'name', 'sort', 'open_prompts']);
+        $submissionsByCategory = $submissions->groupBy('prompt_category_id');
         if (isset($data['prompt_category_id']) && $data['prompt_category_id'] != 'none') {
             if ($data['prompt_category_id'] == 'withoutOption') {
                 $query->whereNull('prompt_category_id');

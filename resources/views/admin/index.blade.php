@@ -11,26 +11,62 @@
         Admin Dashboard</h1>
     <div class="row">
         @if (Auth::user()->hasPower('manage_submissions'))
-            <div class="col-sm-6">
+            <div class="col-sm-4">
                 <div class="card mb-3">
-                    <div class="card-body">
-                        <h5 class="card-title">Prompt Submissions @if ($submissionCount)
-                                <span class="badge badge-primary">{{ $submissionCount }}</span>
-                            @endif
-                        </h5>
+                    <div class="card-body" style="text-align: center">
+                    <h3><i class="fas fa-calculator"></i></h3><h5 class="card-title">Status Updates </h5>
                         <p class="card-text">
-                            @if ($submissionCount)
-                                {{ $submissionCount }} submission{{ $submissionCount == 1 ? '' : 's' }} awaiting processing.
+                            @if ($fpCount)
+                            <h5><span class="badge badge-primary">{{ $fpCount }}</span></h5>
                             @else
-                                The submission queue is clear. Hooray!
+                                Status Updates queue is clear. Hooray!
                             @endif
                         </p>
-                        <div class="text-right">
-                            <a href="{{ url('admin/submissions/pending') }}" class="card-link">View Queue <span class="fas fa-caret-right ml-1"></span></a>
+                        <br>
+                        <div class="text-center">
+                            <a href="{{ url('admin/submissions/pending?prompt_category_id=2&sort=oldest') }}" class="card-link">View Queue <span class="fas fa-caret-right ml-1"></span></a>
                         </div>
                     </div>
                 </div>
             </div>
+            <div class="col-sm-4">
+                <div class="card mb-3">
+                    <div class="card-body" style="text-align: center">
+                    <h3><i class="fas fa-gavel"></i></h3><h5 class="card-title">Misc </h5>
+                        <p class="card-text">
+                            @if ($miscCount)
+                            <h5><span class="badge badge-primary">{{ $miscCount }}</span></h5>
+                            @else
+                            <h5><span class="badge badge-success">Clear</span></h5>
+                            @endif
+                        </p>
+                        <br>
+                        <div class="text-center">
+                            <a href="{{ url('admin/submissions/pending?prompt_category_id=1&sort=oldest') }}" class="card-link">View Queue <span class="fas fa-caret-right ml-1"></span></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @if (Auth::user()->hasPower('manage_reports'))
+            <div class="col-sm-4">
+                <div class="card mb-3">
+                    <div class="card-body" style="text-align: center">
+                        <h3><i class="fas fa-exclamation"></i></h3><h5 class="card-title">Reports</h5>
+                        <p class="card-text">
+                            @if ($reportCount || $assignedReportCount)
+                                <h5><span class="badge badge-primary">{{ $reportCount + $assignedReportCount }}</span></h5>
+                            @else
+                                <span class="badge badge-success">Clear</span>
+                            @endif
+                        </p>
+                        <br>
+                        <div class="text-center">
+                            <a href="{{ url('admin/reports/pending') }}" class="card-link">View Queue <span class="fas fa-caret-right ml-1"></span></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        @endif
             <div class="col-sm-6">
                 <div class="card mb-3">
                     <div class="card-body">
@@ -116,34 +152,7 @@
                 </div>
             @endif
         @endif
-        @if (Auth::user()->hasPower('manage_reports'))
-            <div class="col-sm-6">
-                <div class="card mb-3">
-                    <div class="card-body">
-                        <h5 class="card-title">Reports @if ($reportCount || $assignedReportCount)
-                                <span class="badge badge-primary">{{ $reportCount + $assignedReportCount }}</span>
-                            @endif
-                        </h5>
-                        <p class="card-text">
-                            @if ($reportCount || $assignedReportCount)
-                                @if ($reportCount)
-                                    {{ $reportCount }} report{{ $reportCount == 1 ? '' : 's' }} awaiting assignment.
-                                @endif
-                                {!! $reportCount && $assignedReportCount ? '<br/>' : '' !!}
-                                @if ($assignedReportCount)
-                                    {{ $assignedReportCount }} report{{ $assignedReportCount == 1 ? '' : 's' }} awaiting processing.
-                                @endif
-                            @else
-                                The report queue is clear. Hooray!
-                            @endif
-                        </p>
-                        <div class="text-right">
-                            <a href="{{ url('admin/reports/pending') }}" class="card-link">View Queue <span class="fas fa-caret-right ml-1"></span></a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        @endif
+        
         @if (!Auth::user()->hasPower('manage_submissions') && !Auth::user()->hasPower('manage_characters') && !Auth::user()->hasPower('manage_reports'))
             <div class="card p-4 col-12">
                 <h5 class="card-title">You do not have a rank that allows you to access any queues.</h5>
