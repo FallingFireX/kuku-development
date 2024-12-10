@@ -135,8 +135,8 @@
                                 Empty!
                             @endif
                             <br>
-                            @if ($miscCount)
-                                {{ $miscCount }}
+                            @if ($misc2Count)
+                                {{ $misc2Count }}
                             @else
                                 Empty!
                             @endif

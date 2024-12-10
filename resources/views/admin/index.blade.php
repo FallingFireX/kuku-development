@@ -32,10 +32,28 @@
             <div class="col-sm-4">
                 <div class="card mb-3">
                     <div class="card-body" style="text-align: center">
+                    <h3><i class="fas fa-calculator"></i></h3><h5 class="card-title">Status Updates </h5>
+                        <p class="card-text">
+                            @if ($misc2Count)
+                            <h5><span class="badge badge-primary">{{ $misc2Count }}</span></h5>
+                            @else
+                                Status Updates queue is clear. Hooray!
+                            @endif
+                        </p>
+                        <br>
+                        <div class="text-center">
+                            <a href="{{ url('admin/submissions/pending?prompt_category_id=2&sort=oldest') }}" class="card-link">View Queue <span class="fas fa-caret-right ml-1"></span></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="card mb-3">
+                    <div class="card-body" style="text-align: center">
                     <h3><i class="fas fa-gavel"></i></h3><h5 class="card-title">Misc </h5>
                         <p class="card-text">
-                            @if ($miscCount)
-                            <h5><span class="badge badge-primary">{{ $miscCount }}</span></h5>
+                            @if ($misc2Count)
+                            <h5><span class="badge badge-primary">{{ $misc2Count }}</span></h5>
                             @else
                             <h5><span class="badge badge-success">Clear</span></h5>
                             @endif
