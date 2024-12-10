@@ -30,7 +30,7 @@ class HomeController extends Controller {
 
         return view('admin.index', [
             'submissionCount'        => Submission::where('status', 'Pending')->whereNotNull('prompt_id')->count(),
-            'miscCount'              => Submission::where('status', 'Pending')->where('prompt_id', 1)->count(),
+            'miscCount'              => Submission::where('status', 'Pending')->where('prompt_id', 3)->count(),
             'fpCount'                => Submission::where('status', 'Pending')->where('prompt_id', 2)->count(),
             'claimCount'             => Submission::where('status', 'Pending')->whereNull('prompt_id')->count(),
             'designCount'            => CharacterDesignUpdate::characters()->where('status', 'Pending')->count(),
