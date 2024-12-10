@@ -121,9 +121,9 @@
                         <div class="col-md-4">
                         <p class="card-text" style="font-size: 16px">
                             <b>Status Updates</b>: 
-                            <br>
+                            <br><br>
                             <b>Misc Queues</b>:
-                            <br>
+                            <br><br>
                             <b>Claims</b>:
                             </p>
                         </div>
@@ -134,13 +134,13 @@
                             @else
                                 Empty!
                             @endif
-                            <br>
+                            <br><br>
                             @if ($misc2Count)
                                 {{ $misc2Count }}
                             @else
                                 Empty!
                             @endif
-                            <br>
+                            <br><br>
                             @if ($claimCount)
                                 {{ $claimCount }}
                             @else
