@@ -7,6 +7,7 @@ use App\Models\Award\Award;
 use App\Models\Currency\Currency;
 use App\Models\Item\Item;
 use App\Models\Loot\LootTable;
+use App\Models\Criteria\Criterion;
 use App\Models\Prompt\Prompt;
 use App\Models\Prompt\PromptCategory;
 use App\Models\Raffle\Raffle;
@@ -192,6 +193,7 @@ class PromptController extends Controller {
             'recipes'    => Recipe::orderBy('name')->pluck('name', 'id'),
             'skills'     => Skill::pluck('name', 'id')->toArray(),
             'limit_periods' => [null => 'None', 'Hour' => 'Hour', 'Day' => 'Day', 'Week' => 'Week', 'Month' => 'Month', 'Year' => 'Year'],
+            'criteria'   => Criterion::active()->orderBy('name')->pluck('name', 'id'),
         ]);
     }
 
@@ -219,6 +221,7 @@ class PromptController extends Controller {
             'recipes'    => Recipe::orderBy('name')->pluck('name', 'id'),
             'skills'     => Skill::pluck('name', 'id')->toArray(),
             'limit_periods' => [null => 'None', 'Hour' => 'Hour', 'Day' => 'Day', 'Week' => 'Week', 'Month' => 'Month', 'Year' => 'Year'],
+            'criteria'   => Criterion::active()->orderBy('name')->pluck('name', 'id'),
         ]);
     }
 
@@ -236,6 +239,7 @@ class PromptController extends Controller {
             'name', 'prompt_category_id', 'summary', 'description', 'start_at', 'end_at', 'hide_before_start', 'hide_after_end', 'is_active', 'rewardable_type', 'rewardable_id', 'quantity', 'image', 'remove_image', 'prefix', 'hide_submissions', 'staff_only', 'form',
             'level_req', 'level_check', 'skill_id', 'skill_quantity',
             'limit', 'limit_period', 'limit_character',
+            'criterion_id', 'criterion', 'criterion_currency_id', 'default_criteria',
         ]);
         if ($id && $service->updatePrompt(Prompt::find($id), $data, Auth::user())) {
             flash('Prompt updated successfully.')->success();

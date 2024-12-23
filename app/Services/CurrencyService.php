@@ -23,7 +23,7 @@ class CurrencyService extends Service {
      * @param array                 $data
      * @param \App\Models\User\User $user
      *
-     * @return \App\Models\Currency\Currency|bool
+     * @return bool|Currency
      */
     public function createCurrency($data, $user) {
         DB::beginTransaction();
@@ -82,7 +82,7 @@ class CurrencyService extends Service {
      * @param array                 $data
      * @param \App\Models\User\User $user
      *
-     * @return \App\Models\Currency\Currency|bool
+     * @return bool|Currency
      */
     public function updateCurrency($currency, $data, $user) {
         DB::beginTransaction();
@@ -116,6 +116,8 @@ class CurrencyService extends Service {
             }
 
             $currency->update($data);
+
+            $this->populateConversions($currency, $data);
 
             if (!$this->logAdminAction($user, 'Updated Currency', 'Updated '.$currency->displayName)) {
                 throw new \Exception('Failed to log admin action.');
@@ -274,5 +276,27 @@ class CurrencyService extends Service {
         }
 
         return $data;
+    }
+
+    /**
+     * Processes user input for creating/updating a currency's conversions.
+     *
+     * @param Currency $currency
+     * @param array    $data
+     */
+    private function populateConversions($currency, $data) {
+        $currency->conversions()->delete();
+        if (isset($data['conversion_id']) && $data['conversion_id']) {
+            foreach ($data['conversion_id'] as $key => $conversion_id) {
+                $conversion = Currency::find($conversion_id);
+                if (!$conversion) {
+                    continue;
+                }
+                $currency->conversions()->create([
+                    'conversion_id' => $conversion_id,
+                    'rate'          => $data['rate'][$key] ?? 1.00,
+                ]);
+            }
+        }
     }
 }

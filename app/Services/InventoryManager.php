@@ -154,11 +154,11 @@ class InventoryManager extends Service {
     /**
      * Transfers items between a user and character.
      *
-     * @param \App\Models\Character\Character|\App\Models\User\User         $sender
-     * @param \App\Models\Character\Character|\App\Models\User\User         $recipient
-     * @param \App\Models\Character\CharacterItem|\App\Models\User\UserItem $stacks
-     * @param int                                                           $quantities
-     * @param mixed                                                         $user
+     * @param \App\Models\Character\Character|User $sender
+     * @param \App\Models\Character\Character|User $recipient
+     * @param CharacterItem|UserItem               $stacks
+     * @param int                                  $quantities
+     * @param mixed                                $user
      *
      * @return bool
      */
@@ -311,10 +311,10 @@ class InventoryManager extends Service {
     /**
      * Deletes items from stack.
      *
-     * @param \App\Models\Character\Character|\App\Models\User\User         $owner
-     * @param \App\Models\Character\CharacterItem|\App\Models\User\UserItem $stacks
-     * @param int                                                           $quantities
-     * @param mixed                                                         $user
+     * @param \App\Models\Character\Character|User $owner
+     * @param CharacterItem|UserItem               $stacks
+     * @param int                                  $quantities
+     * @param mixed                                $user
      *
      * @return bool
      */
@@ -588,12 +588,12 @@ class InventoryManager extends Service {
     /**
      * Moves items from one user or character stack to another.
      *
-     * @param \App\Models\Character\Character|\App\Models\User\User $sender
-     * @param \App\Models\Character\Character|\App\Models\User\User $recipient
-     * @param string                                                $type
-     * @param array                                                 $data
-     * @param mixed                                                 $stack
-     * @param mixed                                                 $quantity
+     * @param \App\Models\Character\Character|User $sender
+     * @param \App\Models\Character\Character|User $recipient
+     * @param string                               $type
+     * @param array                                $data
+     * @param mixed                                $stack
+     * @param mixed                                $quantity
      *
      * @return bool
      */
@@ -631,11 +631,11 @@ class InventoryManager extends Service {
     /**
      * Debits an item from a user or character.
      *
-     * @param \App\Models\Character\Character|\App\Models\User\User $owner
-     * @param string                                                $type
-     * @param array                                                 $data
-     * @param \App\Models\Item\UserItem                             $stack
-     * @param mixed                                                 $quantity
+     * @param \App\Models\Character\Character|User $owner
+     * @param string                               $type
+     * @param array                                $data
+     * @param \App\Models\Item\UserItem            $stack
+     * @param mixed                                $quantity
      *
      * @return bool
      */
@@ -661,10 +661,10 @@ class InventoryManager extends Service {
     /**
      * Names an item stack.
      *
-     * @param \App\Models\Character\Character|\App\Models\User\User         $owner
-     * @param \App\Models\Character\CharacterItem|\App\Models\User\UserItem $stacks
-     * @param mixed                                                         $name
-     * @param mixed                                                         $user
+     * @param \App\Models\Character\Character|User $owner
+     * @param CharacterItem|UserItem               $stacks
+     * @param mixed                                $name
+     * @param mixed                                $user
      *
      * @return bool
      */

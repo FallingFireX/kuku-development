@@ -60,6 +60,7 @@
                 </div>
                 <div class="col-md-10 col-8"><a href="{{ $submission->url }}">{{ $submission->url }}</a></div>
             </div>
+            
             <div class="row">
                 <div class="col-md-2 col-4">
                     <h5>Submitted</h5>
@@ -84,10 +85,31 @@
             </div>
         @endif
 
-        {!! Form::open(['url' => url()->current(), 'id' => 'submissionForm']) !!}
+        {!! Form::open(['url' => url()->current(), 'id' => 'submissionForm', 'onsubmit' => "$(this).find('input').prop('disabled', false)"]) !!}
 
-        <h2>Rewards</h2>
-        @include('widgets._loot_select', ['loots' => $submission->rewards, 'showLootTables' => true, 'showRaffles' => true, 'showRecipes' => true])
+        @if (isset($submission->data['criterion']))
+            <h2 class="mt-5">Criteria Rewards</h2>
+            @foreach ($submission->data['criterion'] as $key => $criterionData)
+                <div class="card p-3 mb-2">
+                    @php $criterion = \App\Models\Criteria\Criterion::where('id', $criterionData['id'])->first() @endphp
+                    <h3>{!! $criterion->displayName !!}</h3>
+                    {!! Form::hidden('criterion[' . $key . '][id]', $criterionData['id']) !!}
+                    @include('criteria._minimum_requirements', [
+                        'criterion' => $criterion,
+                        'values' => $criterionData,
+                        'minRequirements' => $submission->prompt->criteria->where('criterion_id', $criterionData['id'])->first()->minRequirements ?? null,
+                        'title' => 'Selections',
+                        'limitByMinReq' => true,
+                        'id' => $key,
+                        'criterion_currency' => isset($criterionData['criterion_currency_id']) ? $criterionData['criterion_currency_id'] : $criterion->currency_id,
+                    ])
+                </div>
+            @endforeach
+        @endif
+
+
+        <h2 class="mt-4">Rewards</h2>
+        @include('widgets._loot_select', ['loots' => $submission->rewards, 'showLootTables' => true, 'showRaffles' => true])
         @if ($submission->prompt_id)
             <div class="mb-3">
                 <h2>Skill Rewards</h2>
@@ -115,8 +137,7 @@
         <h2>Characters</h2>
         <p>Only focus characters will receive skill rewards. Exp and stat point rewards are on a per-character basis.</p>
         <div id="characters" class="mb-3">
-            @if (count(
-                    $submission->characters()->whereRelation('character', 'deleted_at', null)->get()) != count($submission->characters()->get()))
+            @if (count($submission->characters()->whereRelation('character', 'deleted_at', null)->get()) != count($submission->characters()->get()))
                 <div class="alert alert-warning">
                     Some characters have been deleted since this submission was created.
                 </div>

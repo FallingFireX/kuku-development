@@ -319,7 +319,10 @@ return [
                 'name' => 'Elements',
                 'url'  => 'admin/data/elements',
             ],
-            
+            [            
+                'name' => 'Criteria Rewards',
+                'url'  => 'admin/data/criteria',
+            ],
         ],
     ],
     'Raffles'    => [

@@ -61,6 +61,8 @@ Route::get('/deactivated-list', 'BrowseController@getDeactivated');
 // PROFILES
 Route::group(['prefix' => 'user', 'namespace' => 'Users'], function () {
     Route::get('{name}/gallery', 'UserController@getUserGallery');
+    Route::get('{name}/character-designs', 'UserController@getUserCharacterDesigns');
+    Route::get('{name}/character-art', 'UserController@getUserCharacterArt');
     Route::get('{name}/favorites', 'UserController@getUserFavorites');
     Route::get('{name}/favorites/own-characters', 'UserController@getUserOwnCharacterFavorites');
 
@@ -169,6 +171,8 @@ Route::group(['prefix' => 'world'], function () {
     Route::get('species/{id}/traits', 'WorldController@getSpeciesFeatures');
     Route::get('status-effects', 'WorldController@getStatusEffects');
     Route::get('species/{speciesId}/trait/{id}', 'WorldController@getSpeciesFeatureDetail')->where(['id' => '[0-9]+', 'speciesId' => '[0-9]+']);
+    Route::get('subtypes/{id}/traits', 'WorldController@getSubtypeFeatures');
+    Route::get('universaltraits', 'WorldController@getUniversalFeatures');
     Route::get('item-categories', 'WorldController@getItemCategories');
     Route::get('items', 'WorldController@getItems');
     Route::get(__('awards.award').'-categories', 'WorldController@getAwardCategories');
@@ -183,6 +187,7 @@ Route::group(['prefix' => 'world'], function () {
     Route::get('pets/{id}', 'WorldController@getPet');
     Route::get('prompt-categories', 'WorldController@getPromptCategories');
     Route::get('prompts', 'WorldController@getPrompts');
+    Route::get('traits/modal/{id}', 'WorldController@getFeatureDetail')->where(['id' => '[0-9]+']);
     Route::get('character-categories', 'WorldController@getCharacterCategories');
     Route::get(__('transformations.transformations'), 'WorldController@getTransformations');
 

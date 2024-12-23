@@ -7,7 +7,7 @@
             </h5>
         </a>
             
-        <div class="card-body inventory-body">
+        <div class="card-body inventory-body"> 
             <div class="row mb-2">
                 @foreach ($group as $character)
                     <div class="col-md-3 col-6 text-center mb-2">

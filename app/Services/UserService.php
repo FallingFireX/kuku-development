@@ -383,8 +383,10 @@ class UserService extends Service {
     /**
      * Updates or creates a user's staff profile.
      *
-     * @param mixed $data
-     * @param mixed $user
+     * @param string $username
+     * @param User   $user
+     *
+     * @return bool
      */
     public function updateStaffProfile($data, $user) {
         DB::beginTransaction();

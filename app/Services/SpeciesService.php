@@ -24,7 +24,7 @@ class SpeciesService extends Service {
      * @param array                 $data
      * @param \App\Models\User\User $user
      *
-     * @return \App\Models\Species\Species|bool
+     * @return bool|Species
      */
     public function createSpecies($data, $user) {
         DB::beginTransaction();
@@ -64,7 +64,7 @@ class SpeciesService extends Service {
      * @param array                 $data
      * @param \App\Models\User\User $user
      *
-     * @return \App\Models\Species\Species|bool
+     * @return bool|Species
      */
     public function updateSpecies($species, $data, $user) {
         DB::beginTransaction();
@@ -163,7 +163,7 @@ class SpeciesService extends Service {
      * @param array                 $data
      * @param \App\Models\User\User $user
      *
-     * @return \App\Models\Species\Subtype|bool
+     * @return bool|Subtype
      */
     public function createSubtype($data, $user) {
         DB::beginTransaction();
@@ -204,7 +204,7 @@ class SpeciesService extends Service {
      * @param array                 $data
      * @param \App\Models\User\User $user
      *
-     * @return \App\Models\Species\Subtype|bool
+     * @return bool|Subtype
      */
     public function updateSubtype($subtype, $data, $user) {
         DB::beginTransaction();

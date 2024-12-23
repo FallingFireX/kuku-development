@@ -15,8 +15,5 @@ class Controller extends BaseController {
     /**
      * Creates a new controller instance.
      */
-    public function __construct() {
-        $this->defaultTheme = Theme::where('is_default', true)->first();
-        View::share('defaultTheme', $this->defaultTheme);
-    }
+    public function __construct() {}
 }

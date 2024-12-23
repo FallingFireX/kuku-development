@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Prompt\Prompt;
 use App\Models\Prompt\PromptCategory;
+use App\Models\Prompt\PromptCriterion;
 use App\Models\Prompt\PromptReward;
 use App\Models\Prompt\PromptSkill;
 use App\Models\Submission\Submission;
@@ -32,7 +33,7 @@ class PromptService extends Service {
      * @param array                 $data
      * @param \App\Models\User\User $user
      *
-     * @return \App\Models\Prompt\PromptCategory|bool
+     * @return bool|PromptCategory
      */
     public function createPromptCategory($data, $user) {
         DB::beginTransaction();
@@ -71,7 +72,7 @@ class PromptService extends Service {
      * @param array                 $data
      * @param \App\Models\User\User $user
      *
-     * @return \App\Models\Prompt\PromptCategory|bool
+     * @return bool|PromptCategory
      */
     public function updatePromptCategory($category, $data, $user) {
         DB::beginTransaction();
@@ -173,7 +174,7 @@ class PromptService extends Service {
      * @param array                 $data
      * @param \App\Models\User\User $user
      *
-     * @return \App\Models\Prompt\Prompt|bool
+     * @return bool|Prompt
      */
     public function createPrompt($data, $user) {
         DB::beginTransaction();
@@ -211,6 +212,7 @@ class PromptService extends Service {
             }
 
             $this->populateRewards(Arr::only($data, ['rewardable_type', 'rewardable_id', 'quantity']), $prompt);
+            (new CriterionService)->populateCriteria(Arr::only($data, ['criterion_id', 'criterion', 'criterion_currency_id', 'default_criteria']), $prompt, PromptCriterion::class);
 
             $this->populateSkills(Arr::only($data, ['skill_id', 'skill_quantity']), $prompt);
 
@@ -229,7 +231,7 @@ class PromptService extends Service {
      * @param array                 $data
      * @param \App\Models\User\User $user
      *
-     * @return \App\Models\Prompt\Prompt|bool
+     * @return bool|Prompt
      */
     public function updatePrompt($prompt, $data, $user) {
         DB::beginTransaction();
@@ -272,6 +274,7 @@ class PromptService extends Service {
             }
 
             $this->populateRewards(Arr::only($data, ['rewardable_type', 'rewardable_id', 'quantity']), $prompt);
+            (new CriterionService)->populateCriteria(Arr::only($data, ['criterion_id', 'criterion', 'criterion_currency_id', 'default_criteria']), $prompt, PromptCriterion::class);
 
             $this->populateSkills(Arr::only($data, ['skill_id', 'skill_quantity']), $prompt);
 
@@ -316,8 +319,8 @@ class PromptService extends Service {
     /**
      * Handle category data.
      *
-     * @param array                                  $data
-     * @param \App\Models\Prompt\PromptCategory|null $category
+     * @param array               $data
+     * @param PromptCategory|null $category
      *
      * @return array
      */
