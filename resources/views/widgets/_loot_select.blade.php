@@ -22,6 +22,11 @@
     if ($showRaffles) {
         $raffles = \App\Models\Raffle\Raffle::where('rolled_at', null)->where('is_active', 1)->orderBy('name')->pluck('name', 'id');
     }
+    if (isset($showThemes) && $showThemes) {
+        $themes = \App\Models\Theme\Theme::orderBy('name')
+            ->where('is_user_selectable', 0)
+            ->pluck('displayName', 'id');
+    }
 @endphp
 
 <div class="text-right mb-3">
@@ -45,7 +50,8 @@
                         ['Item' => 'Item', 'Currency' => 'Currency', 'Pet' => 'Pet', 'Gear' => 'Gear', 'Weapon' => 'Weapon', 'Exp' => 'Exp', 'Points' => 'Stat Points'] +
                             ($showLootTables ? ['LootTable' => 'Loot Table'] : []) +
                             ($showRaffles ? ['Raffle' => 'Raffle Ticket'] : []) +
-                            (isset($showBorders) && $showBorders ? ['Border' => 'Border'] : []),
+                            (isset($showBorders) && $showBorders ? ['Border' => 'Border'] : []) +
+                            (isset($showThemes) && $showThemes ? ['Theme' => 'Theme']: []),
                         $loot->rewardable_type,
                         ['class' => 'form-control reward-type', 'placeholder' => 'Select Reward Type'],
                     ) !!}</td>
