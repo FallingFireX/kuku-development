@@ -7,7 +7,6 @@ use App\Models\Character\BreedingPermission;
 use App\Models\Border\Border;
 use App\Models\Notification;
 use App\Models\Theme;
-use App\Models\ThemeEditor;
 use App\Models\User\StaffProfile;
 use App\Models\User\User;
 use App\Models\User\UserAlias;
