@@ -281,7 +281,7 @@
                         <label class="col-md-2 col-form-label">Border Variant</label>
                         <div class="col-md-10">
                         
-                        {!! Form::select('border_variant_id', $border_variants, Auth::user()->border_variant_id ? Auth::user()->border_variant_id : ($defaultTheme ? $defaultTheme->id : 0) , ['class' => 'form-control']) !!}
+                        {!! Form::select('border_variant_id', $border_variants, Auth::user()->border_variant_id, ['class' => 'form-control', 'id' => 'bordervariant']) !!}
                         </div>
                     </div>
                     <div id="layers">
