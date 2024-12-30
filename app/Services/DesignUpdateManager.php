@@ -161,7 +161,13 @@ class DesignUpdateManager extends Service {
                     $imageData['use_cropper'] = isset($data['use_cropper']);
                 }
                 if (!$isAdmin && isset($data['image'])) {
-                    $imageData['extension'] = (config('lorekeeper.settings.masterlist_image_format') ? config('lorekeeper.settings.masterlist_image_format') : ($data['extension'] ?? $data['image']->getClientOriginalExtension()));
+                    if (config('lorekeeper.settings.store_masterlist_fullsizes') != null) {
+                        $imageData['extension'] = config('lorekeeper.settings.masterlist_fullsizes_format');
+                    } elseif (config('lorekeeper.settings.masterlist_image_format') != null) {
+                        $imageData['extension'] = config('lorekeeper.settings.masterlist_image_format');
+                    } else {
+                        $imageData['extension'] = $data['image']->getClientOriginalExtension();
+                    }
                     $imageData['has_image'] = true;
                 }
                 $request->update($imageData);
@@ -571,8 +577,6 @@ class DesignUpdateManager extends Service {
                 }
             }
 
-            $extension = config('lorekeeper.settings.masterlist_image_format') != null ? config('lorekeeper.settings.masterlist_image_format') : $request->extension;
-
             // Create a new image with the request data
             $image = CharacterImage::create([
                 'character_id'               => $request->character_id,
@@ -580,6 +584,7 @@ class DesignUpdateManager extends Service {
                 'hash'                       => $request->hash,
                 'fullsize_hash'              => $request->fullsize_hash ? $request->fullsize_hash : randomString(15),
                 'extension'                  => $extension,
+                'fullsize_extension' => config('lorekeeper.settings.masterlist_fullsizes_format') != null ? config('lorekeeper.settings.masterlist_fullsizes_format') : $request->extension,
                 'use_cropper'                => $request->use_cropper,
                 'x0'                         => $request->x0,
                 'x1'                         => $request->x1,
