@@ -15,8 +15,8 @@
     @include('galleries._queue_submission', ['key' => 0])
 
     <div class="row">
-        <div class="col-md">
-            @if ($submission->gallery->criteria)
+        <div class="col col-md">
+            @if (Settings::get('gallery_submissions_reward_currency') && $submission->gallery->currency_enabled)
                 <div class="card mb-4">
                     <div class="card-header">
                         <h5> Award Info <a class="small inventory-collapse-toggle collapse-toggle {{ $submission->status == 'Accepted' ? '' : 'collapsed' }}" href="#currencyForm" data-toggle="collapse">Show</a></h5>
@@ -115,10 +115,35 @@
                         @else
                             <p>This submission is not eligible for currency awards{{ $submission->status == 'Pending' ? ' yet-- it must be accepted first' : '' }}.</p>
                         @endif
+<<<<<<< HEAD
                         @if (isset($totals) && count($totals) > 0)
                             <hr />
                             <div id="totals">
                                 @include('galleries._submission_totals', ['totals' => $totals, 'collaboratorsCount' => $collaboratorsCount])
+=======
+                        <hr />
+                        @if (isset($submission->data['total']))
+                            <h6>Form Responses:</h6>
+                            <div class="row mb-2">
+                                @foreach ($submission->data['currencyData'] as $key => $data)
+                                    <div class="col-md-3 text-center">
+                                        @if (isset($data) && isset(config('lorekeeper.group_currency_form')[$key]))
+                                            <strong>{{ config('lorekeeper.group_currency_form')[$key]['name'] }}:</strong><br />
+                                            @if (config('lorekeeper.group_currency_form')[$key]['type'] == 'choice')
+                                                @if (isset(config('lorekeeper.group_currency_form')[$key]['multiple']) && config('lorekeeper.group_currency_form')[$key]['multiple'] == 'true')
+                                                    @foreach ($data as $answer)
+                                                        {{ config('lorekeeper.group_currency_form')[$key]['choices'][$answer] }}<br />
+                                                    @endforeach
+                                                @else
+                                                    {{ config('lorekeeper.group_currency_form')[$key]['choices'][$data] }}
+                                                @endif
+                                            @else
+                                                {{ config('lorekeeper.group_currency_form')[$key]['type'] == 'checkbox' ? (config('lorekeeper.group_currency_form')[$key]['value'] == $data ? 'True' : 'False') : $data }}
+                                            @endif
+                                        @endif
+                                    </div>
+                                @endforeach
+>>>>>>> 8b6233ab90ea1589fb1c8eabece2136fde119222
                             </div>
                         @endif
                     </div>
@@ -142,7 +167,7 @@
             </div>
         </div>
         @if (Auth::user()->hasPower('manage_submissions') && $submission->collaboratorApproved)
-            <div class="col-md-5">
+            <div class="col-12 col-md-5">
                 <div class="card mb-4">
                     <div class="card-header">
                         <h5>[Admin] Vote Info</h5>
