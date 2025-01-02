@@ -18,7 +18,8 @@
         ]) !!}
 @endif
 
-@if(Auth::check() && (Auth::user()->settings->warning_visibility < 2) && isset($character->character_warning) || isset($character->character_warning) && !Auth::check())
+@if(Auth::check() && (Auth::user()->settings->warning_visibility < 2) && isset($character->character_warning) && 
+strlen($character->character_warning) > 1 || isset($character->character_warning) && !Auth::check())
 <div id="warning" class="alert alert-danger" style="text-align:center;">
     <span style="float:right;"><a href="#" data-id="{{ $character->character_warning }}" onclick="changeStyle()"><i class="fas fa-times" aria-hidden="true"></i></a></span>
         <h1><i class="fa fa-exclamation-triangle mr-2"></i>Character Warning<i class="fa fa-exclamation-triangle ml-2"></i></h1>
