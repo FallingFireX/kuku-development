@@ -28,8 +28,8 @@
             <div class="mt-1">
                 <h5>Current Quest</h5>
                 <br><a href="https://www.deviantart.com/momma-kuku/art/Present-717910237"><img src="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/074ff87a-9880-4019-abec-2fc71c1f2a2b/dbvfb31-71db40c0-59f6-4f80-84a0-5f681e71acf8.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcLzA3NGZmODdhLTk4ODAtNDAxOS1hYmVjLTJmYzcxYzFmMmEyYlwvZGJ2ZmIzMS03MWRiNDBjMC01OWY2LTRmODAtODRhMC01ZjY4MWU3MWFjZjgucG5nIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.dow4nw-YOxZ5utjdnGHh1CvJA2Uy00wBYiwVavIu4H8"></a>
-                <p><b><u>Giving Gifts</u></b></p>
-                <i>Its that time of year again, time to give gifts to those you care about and share the holiday cheer with everyone!</i>
+                <p><b><u>Search and Rescue</u></b></p>
+                <i>The ice and snow have left many stranded out in the mountains; gather your gear and your wits, its time to join the search and rescue team!</i>
                 <br><b><a href="https://kukuri-arpg.w3spaces.com/activities/quests.html">Read more here </a></b>
             </div>
             
@@ -38,8 +38,8 @@
     <li class="sidebar-section p-2">
             <div class="mt-1">
             <h5>Beauty Contest Theme</h5>
-            <p style="font-size:16px"><b>Ghosts</b></p>
-                <i>This contest ends December 15th!</i>
+            <p style="font-size:16px"><b>Christmas lights</b></p>
+                <i>This contest ends January 15th!</i>
             </div>
             
     </li>
