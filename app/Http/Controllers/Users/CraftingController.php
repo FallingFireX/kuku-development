@@ -93,26 +93,23 @@ class CraftingController extends Controller {
     }
 
     /**
-     * Crafts a recipe.
+     * Crafts a recipe
      *
-     * @param int $id
-     *
+     * @param  integer  $id
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function postCraftRecipe(Request $request, RecipeManager $service, $id) {
+    public function postCraftRecipe(Request $request, RecipeManager $service, $id)
+    {
         $recipe = Recipe::find($id);
-        if (!$recipe) {
-            abort(404);
-        }
+        if(!$recipe) abort(404);
 
-        if ($service->craftRecipe($request->only(['stack_id', 'stack_quantity']), $recipe, Auth::user())) {
+        if($service->craftRecipe($request->only(['stack_id', 'stack_quantity']), $recipe, Auth::user())) {
             flash('Recipe crafted successfully.')->success();
-        } else {
-            foreach ($service->errors()->getMessages()['error'] as $error) {
-                flash($error)->error();
-            }
         }
-
+        else {
+            foreach($service->errors()->getMessages()['error'] as $error) flash($error)->error();
+        }
         return redirect()->back();
     }
+
 }
