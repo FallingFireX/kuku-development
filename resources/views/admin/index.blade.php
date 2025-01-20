@@ -11,22 +11,69 @@
         Admin Dashboard</h1>
     <div class="row">
         @if (Auth::user()->hasPower('manage_submissions'))
-            <div class="col-sm-4">
+        <!-- big box -->
+            <div class="col-sm-12">
                 <div class="card mb-3">
-                    <div class="card-body" style="text-align: center">
-                    <h3><i class="fas fa-calculator"></i></h3><h5 class="card-title">Status Updates </h5>
-                        <p class="card-text">
-                            @if ($fpCount)
-                            <h5><span class="badge badge-primary">{{ $fpCount }}</span></h5>
-                            @else
-                            <h5><span class="badge badge-success">Clear</span></h5>
-                            @endif
-                        </p>
-                        <br>
-                        <div class="text-center">
-                            <a href="{{ url('admin/submissions/pending?prompt_category_id=2&sort=oldest') }}" class="card-link">View Queue <span class="fas fa-caret-right ml-1"></span></a>
+                    <!-- small box-->
+                    <div class="row">
+                    <div class="col-sm-3">
+                            <div class="card-body" style="text-align: center">
+                                <br><br><br>
+                            <h3 class="card-title">Status Updates</h3>
+                                <br>
+                            </div>
                         </div>
-                    </div>
+                        <div class="col-sm-3">
+                            <div class="card-body" style="text-align: center;">
+                            <h3><i class="fas fa-calculator"></i></h3><h5 class="card-title">Rank Updates</h5>
+                                <p class="card-text">
+                                    @if ($fpCount)
+                                    <h5><span class="badge badge-primary">{{ $fpCount }}</span></h5>
+                                    @else
+                                    <h5><span class="badge badge-success">Clear</span></h5>
+                                    @endif
+                                </p>
+                                <br>
+                                <div class="text-center">
+                                    <a href="{{ url('admin/submissions/pending?prompt_category_id=2&sort=oldest') }}" class="card-link">View Queue <span class="fas fa-caret-right ml-1"></span></a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="card-body" style="text-align: center;">
+                            <h3><i class="fas fa-upload"></i></h3><h5 class="card-title">Bulk Uploads</h5>
+                                <p class="card-text">
+                                    @if ($fpCount)
+                                    <h5><span class="badge badge-primary">{{ $fpCount }}</span></h5>
+                                    @else
+                                    <h5><span class="badge badge-success">Clear</span></h5>
+                                    @endif
+                                </p>
+                                <br>
+                                <div class="text-center">
+                                    <a href="{{ url('admin/submissions/pending?prompt_category_id=2&sort=oldest') }}" class="card-link">View Queue <span class="fas fa-caret-right ml-1"></span></a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="card-body" style="text-align: center;">
+                            <h3><i class="fas fa-dumbbell"></i></h3><h5 class="card-title">Statpoint updates</h5>
+                                <p class="card-text">
+                                    @if ($fpCount)
+                                    <h5><span class="badge badge-primary">{{ $fpCount }}</span></h5>
+                                    @else
+                                    <h5><span class="badge badge-success">Clear</span></h5>
+                                    @endif
+                                </p>
+                                <br>
+                                <div class="text-center">
+                                    <a href="{{ url('admin/submissions/pending?prompt_category_id=2&sort=oldest') }}" class="card-link">View Queue <span class="fas fa-caret-right ml-1"></span></a>
+                                </div>
+                            </div>
+                        </div>
+                        
+</div>
+                            
                 </div>
             </div>
             <div class="col-sm-4">

@@ -34,6 +34,9 @@
             <div class="form-group ml-3 mb-3">
                 {!! Form::select('prompt_category_id', $categories, Request::get('prompt_category_id'), ['class' => 'form-control']) !!}
             </div>
+            <div class="form-group ml-3 mb-3">
+                {!! Form::select('prompt_id', $prompts, Request::get('prompt_id'), ['class' => 'form-control']) !!}
+            </div>
         @endif
     </div>
     <div class="form-inline justify-content-end">

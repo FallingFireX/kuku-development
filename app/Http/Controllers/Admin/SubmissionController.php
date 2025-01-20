@@ -13,6 +13,7 @@ use App\Models\Element\Element;
 use App\Models\Item\Item;
 use App\Models\Loot\LootTable;
 use App\Models\Prompt\PromptCategory;
+use App\Models\Prompt\Prompt;
 use App\Models\Raffle\Raffle;
 use App\Models\Recipe\Recipe;
 use App\Models\Skill\Skill;
@@ -31,13 +32,25 @@ class SubmissionController extends Controller {
      * @return \Illuminate\Contracts\Support\Renderable
      */
     public function getSubmissionIndex(Request $request, $status = null) {
-        $submissions = Submission::with('prompt')->where('status', $status ? ucfirst($status) : 'Pending')->whereNotNull('prompt_id');
-        $data = $request->only(['prompt_category_id', 'sort']);
+        $submissions = Submission::with('prompt')
+            ->where('status', $status ? ucfirst($status) : 'Pending')
+            ->whereNotNull('prompt_id');
+    
+        $data = $request->only(['prompt_category_id', 'prompt_id', 'sort']);
+    
+        // Filter by prompt category
         if (isset($data['prompt_category_id']) && $data['prompt_category_id'] != 'none') {
             $submissions->whereHas('prompt', function ($query) use ($data) {
                 $query->where('prompt_category_id', $data['prompt_category_id']);
             });
         }
+    
+        // Filter by specific prompt ID
+        if (isset($data['prompt_id']) && $data['prompt_id'] != 'none') {
+            $submissions->where('prompt_id', $data['prompt_id']);
+        }
+    
+        // Sorting
         if (isset($data['sort'])) {
             switch ($data['sort']) {
                 case 'newest':
@@ -50,10 +63,11 @@ class SubmissionController extends Controller {
         } else {
             $submissions->sortOldest();
         }
-
+    
         return view('admin.submissions.index', [
             'submissions' => $submissions->paginate(30)->appends($request->query()),
             'categories'  => ['none' => 'Any Category'] + PromptCategory::orderBy('sort', 'DESC')->pluck('name', 'id')->toArray(),
+            'prompts'     => ['none' => 'Any Prompt'] + Prompt::orderBy('id')->pluck('name', 'id')->toArray(),
             'isClaims'    => false,
         ]);
     }
