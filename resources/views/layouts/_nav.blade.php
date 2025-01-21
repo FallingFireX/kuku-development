@@ -1,4 +1,4 @@
-<div class="mx-auto test-center d-flex justify-content-center" style="margin-right: 16.66666% !important">
+<div class="mx-auto test-center d-flex justify-content-center" style="margin-right: 16.67% !important">
             
                     <a class="currency-nav bg-dark" href="{{ url('/bank') }}">
                     @if(Auth::check())
@@ -61,9 +61,9 @@
                             <!-- <a class="dropdown-item" href="{{ url('characters/myos') }}">
                                 My MYO Slots
                             </a> -->
-                            <a class="dropdown-item" href="{{ url('breeding-permissions') }}">
+                            <!-- <a class="dropdown-item" href="{{ url('breeding-permissions') }}">
                                 My Breeding Slots
-                                </a>
+                                </a> -->
                             <a class="dropdown-item" href="{{ url('pets') }}">
                                 My Familiars
                             </a>
@@ -74,9 +74,9 @@
                             <a class="dropdown-item" href="{{ url('bank') }}">
                                 My Wallet
                             </a>
-                            <a class="dropdown-item" href="{{ Auth::user()->url . '/awardcase' }}">
+                            <!-- <a class="dropdown-item" href="{{ Auth::user()->url . '/awardcase' }}">
                                 {{ ucfirst(__('awards.awards')) }}
-                                </a>
+                                </a> -->
                             <!-- <a class="dropdown-item" href="{{ url('stats') }}">
                                 Stat Information
                             </a> -->

@@ -109,6 +109,8 @@
         <br>
         <a href="https://www.kukuri-arpg.com/info/games"><b>Partake in Daily activites here!</b></a>
     </div>
+    <br><br><br>
+    @include('widgets._affiliates', ['affiliates' => $affiliates, 'featured' => $featured_affiliates, 'open' => $open])
 </div>
     <div class="col-md-5">
         @include('widgets._news', ['textPreview' => true])
@@ -160,6 +162,7 @@
                 </div>
                 <a href="{{ url('users') }}">@include('widgets._online_count')</a>
                 @include('widgets._recent_gallery_submissions', ['gallerySubmissions' => $gallerySubmissions])
+                
     </div>
 
 

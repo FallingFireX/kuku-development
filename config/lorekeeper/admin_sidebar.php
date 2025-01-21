@@ -31,18 +31,13 @@ return [
             ],
         ],
     ],
-    'Reports'    => [
+    'Site'    => [
         'power' => 'manage_reports',
         'links' => [
             [
                 'name' => 'Report Queue',
                 'url'  => 'admin/reports/pending',
             ],
-        ],
-    ],
-    'News' => [
-        'power' => 'manage_news',
-        'links' => [
             [
                 'name' => 'News',
                 'url'  => 'admin/news',
@@ -51,17 +46,13 @@ return [
                 'name' => 'Dev Logs',
                 'url'  => 'admin/devlogs',
             ],
-        ],
-    ],
-    'Sales' => [
-        'power' => 'manage_sales',
-        'links' => [
             [
-                'name' => 'Sales',
-                'url'  => 'admin/sales',
+                'name' => 'Approved Affiliates',
+                'url' => 'admin/affiliates/current'
             ],
         ],
     ],
+    
     'Pages'       => [
         'power' => 'edit_pages',
         'links' => [
@@ -76,6 +67,14 @@ return [
             [
                 'name' => 'Carousel',
                 'url'  => 'admin/data/carousel',
+            ],
+            [
+                'name' => 'Sales',
+                'url'  => 'admin/sales',
+            ],
+            [
+                'name' => 'Raffles',
+                'url'  => 'admin/raffles',
             ],
         ],
     ],
@@ -136,26 +135,26 @@ return [
                 'name' => 'EXP Grants',
                 'url'  => 'admin/grants/exp',
             ],
-            [
-                'name' => 'Stat Point Grants',
-                'url'  => 'admin/grants/points',
-            ],
+            // [
+            //     'name' => 'Stat Point Grants',
+            //     'url'  => 'admin/grants/points',
+            // ],
             [
                 'name' => 'Pet Grants',
                 'url'  => 'admin/grants/pets',
             ],
-            [
-                'name' => 'Gear Grants',
-                'url'  => 'admin/grants/gear',
-            ],
-            [
-                'name' => 'Weapon Grants',
-                'url'  => 'admin/grants/weapons',
-            ],
-            [
-                'name' => 'Skill Grants',
-                'url'  => 'admin/grants/skills',
-            ],
+            // [
+            //     'name' => 'Gear Grants',
+            //     'url'  => 'admin/grants/gear',
+            // ],
+            // [
+            //     'name' => 'Weapon Grants',
+            //     'url'  => 'admin/grants/weapons',
+            // ],
+            // [
+            //     'name' => 'Skill Grants',
+            //     'url'  => 'admin/grants/skills',
+            //],
             [
                 'name' => 'Border Grants',
                 'url' => 'admin/grants/borders'
@@ -169,10 +168,10 @@ return [
                 'name' => 'Create Character',
                 'url'  => 'admin/masterlist/create-character',
             ],
-            [
-                'name' => 'Create MYO Slot',
-                'url'  => 'admin/masterlist/create-myo',
-            ],
+            // [
+            //     'name' => 'Create MYO Slot',
+            //     'url'  => 'admin/masterlist/create-myo',
+            // ],
             [
                 'name' => 'Character Transfers',
                 'url'  => 'admin/masterlist/transfers/incoming',
@@ -191,32 +190,12 @@ return [
             ],
         ],
     ],
-    'Data'       => [
+    'Genetics'       => [
         'power' => 'edit_data',
         'links' => [
             [
-                'name' => 'Galleries',
-                'url'  => 'admin/data/galleries',
-            ],
-            [
-                'name' => 'Award Categories',
-                'url'  => 'admin/data/award-categories',
-            ],
-            [
-                'name' => 'Awards',
-                'url'  => 'admin/data/awards',
-            ],
-            [
                 'name' => 'Character Categories',
                 'url'  => 'admin/data/character-categories',
-            ],
-            [
-                'name' => 'Sub Masterlists',
-                'url'  => 'admin/data/sublists',
-            ],
-            [
-                'name' => 'Rarities',
-                'url'  => 'admin/data/rarities',
             ],
             [
                 'name' => 'Species',
@@ -234,6 +213,38 @@ return [
                 'name' => 'Status Effects',
                 'url'  => 'admin/data/status-effects',
             ],
+            [
+                'name' => 'Alt Images',
+                'url'  => 'admin/data/transformations',
+            ],
+        ],
+    ],
+
+    'Activities'       => [
+        'power' => 'edit_data',
+        'links' => [
+            [
+                'name' => 'Galleries',
+                'url'  => 'admin/data/galleries',
+            ],
+            [
+                'name' => 'Award Categories',
+                'url'  => 'admin/data/award-categories',
+            ],
+            [
+                'name' => 'Awards',
+                'url'  => 'admin/data/awards',
+            ],
+            
+            [
+                'name' => 'Sub Masterlists',
+                'url'  => 'admin/data/sublists',
+            ],
+            [
+                'name' => 'Rarities',
+                'url'  => 'admin/data/rarities',
+            ],
+            
             [
                 'name' => 'Shops',
                 'url'  => 'admin/data/shops',
@@ -258,10 +269,7 @@ return [
                 'name' => 'Items',
                 'url'  => 'admin/data/items',
             ],
-            [
-                'name' => 'Transformations',
-                'url'  => 'admin/data/transformations',
-            ],
+            
             [
                 'name' => 'Library',
                 'url'  => 'admin/data/volumes',
@@ -271,7 +279,7 @@ return [
                 'url'  => 'admin/data/recipes',
             ],
             [
-                'name' => 'Pets',
+                'name' => 'Familiars',
                 'url'  => 'admin/data/pets',
             ],
             [
@@ -283,38 +291,38 @@ return [
     'Claymores' => [
         'power' => 'edit_claymores',
         'links' => [
-            [
-                'name' => 'Gear',
-                'url'  => 'admin/gear',
-            ],
-            [
-                'name' => 'Weapons',
-                'url'  => 'admin/weapons',
-            ],
+            // [
+            //     'name' => 'Gear',
+            //     'url'  => 'admin/gear',
+            // ],
+            // [
+            //     'name' => 'Weapons',
+            //     'url'  => 'admin/weapons',
+            // ],
             // [
             //     'name' => 'Attacks',
             //     'url'  => 'admin/attacks',
             // ],
-            [
-                'name' => 'Character Classes',
-                'url'  => 'admin/character-classes',
-            ],
-            [
-                'name' => 'Character Skills',
-                'url'  => 'admin/data/skills',
-            ],
-            [
-                'name' => 'Stats',
-                'url'  => 'admin/stats',
-            ],
+            // [
+            //     'name' => 'Character Classes',
+            //     'url'  => 'admin/character-classes',
+            // ],
+            // [
+            //     'name' => 'Character Skills',
+            //     'url'  => 'admin/data/skills',
+            // ],
+            // [
+            //     'name' => 'Stats',
+            //     'url'  => 'admin/stats',
+            // ],
             [
                 'name' => 'Character Levels',
                 'url'  => 'admin/levels/character',
             ],
-            [
-                'name' => 'User Levels',
-                'url'  => 'admin/levels/user',
-            ],
+            // [
+            //     'name' => 'User Levels',
+            //     'url'  => 'admin/levels/user',
+            // ],
             [
                 'name' => 'Elements',
                 'url'  => 'admin/data/elements',
@@ -325,15 +333,7 @@ return [
             ],
         ],
     ],
-    'Raffles'    => [
-        'power' => 'manage_raffles',
-        'links' => [
-            [
-                'name' => 'Raffles',
-                'url'  => 'admin/raffles',
-            ],
-        ],
-    ],
+    
     'Settings'   => [
         'power' => 'edit_site_settings',
         'links' => [

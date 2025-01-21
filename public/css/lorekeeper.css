@@ -986,3 +986,5 @@ tr.accountbound {
       pointer-events: none;
       bottom:100%;
   }
+  
+.overflow-auto {overflow:auto;}

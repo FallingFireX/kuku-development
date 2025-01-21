@@ -10,6 +10,10 @@ use App\Models\SitePage;
 use App\Services\LinkService;
 use App\Services\UserService;
 use App\Models\Submission\Submission;
+use App\Models\Affiliate;
+use Config;
+use Carbon\Carbon;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -54,6 +58,9 @@ class HomeController extends Controller {
             'featured'            => $character,
             'newses'   => News::visible()->orderBy('updated_at', 'DESC')->take(2)->get(),
             'gallerySubmissions'  => $gallerySubmissions,
+            'open' => intval(Settings::get('affiliates_open')),
+            'affiliates' => Affiliate::where('status','Accepted')->featured(0)->inRandomOrder()->limit(10)->get(),
+            'featured_affiliates' => Affiliate::where('status','Accepted')->featured(1)->get(),
         ]);
     }
 
