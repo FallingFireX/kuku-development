@@ -120,44 +120,79 @@
                     <div class="card-body">
                     <h5 class="card-title"  style="text-align: center">Queues <i class="fas fa-book"></i></h5>
                     <div class="row">
-                        <div class="col-md-4">
-                        <p class="card-text" style="font-size: 16px">
+                        <div class="col-md-5">
+                        <p class="card-text" style="font-size: 14px">
                             <b>Status Updates</b>: 
+                                @if ($fpCount)
+                                    {{ $fpCount }}
+                                @else
+                                    Empty!
+                                @endif
                             <br><br>
                             <b>Misc Queues</b>:
+                                @if ($misc2Count)
+                                    {{ $misc2Count }}
+                                @else
+                                    Empty!
+                                @endif
                             <br><br>
                             <b>Claims</b>:
+                                @if ($claimCount)
+                                    {{ $claimCount }}
+                                @else
+                                    Empty!
+                                @endif
+                                <br><br>
+                            <b>Trainings</b>:
+                                @if ($trainingCount)
+                                    {{ $trainingCount }}
+                                @else
+                                    Empty!
+                                @endif
+                            
                             </p>
                         </div>
-                        <div class="col-md-3">
-                        <p class="card-text" style="font-size: 16px">
-                            @if ($fpCount)
-                                {{ $fpCount }}
-                            @else
-                                Empty!
-                            @endif
+                        <div class="col-md-5">
+                        <p class="card-text" style="font-size: 14px">
+                        <b>Activity Rolls</b>: 
+                                @if ($arCount)
+                                    {{ $arCount }}
+                                @else
+                                    Empty!
+                                @endif
                             <br><br>
-                            @if ($misc2Count)
-                                {{ $misc2Count }}
-                            @else
-                                Empty!
-                            @endif
+                            <b>Letters</b>:
+                                @if ($letterCount)
+                                    {{ $letterCount }}
+                                @else
+                                    Empty!
+                                @endif
                             <br><br>
-                            @if ($claimCount)
-                                {{ $claimCount }}
-                            @else
-                                Empty!
-                            @endif
+                            <b>Coliseum</b>:
+                                @if ($coliCount)
+                                    {{ $coliCount }}
+                                @else
+                                    Empty!
+                                @endif
+                                <br><br>
+                            <b>Adoptions</b>:
+                                @if ($adoptCount)
+                                    {{ $adoptCount }}
+                                @else
+                                    Empty!
+                                @endif
                             </p>
                         </div>
-                        <div class="col-md-4" style="text-align: center">
+                    </div>
+                        <div style="text-align: center">
+                            <br>
                             All queues have an expected wait time of <b>2 weeks</b>.
                             <br><br>
                             These times might be longer or shorter depending on admin IRL, 
                             group events, or other things that may delay our work. Please
                             remain patient with us if the queues go a little over 2 weeks!
                         </div>
-                    </div>
+                    
                     </div>
                 </div>
                 <a href="{{ url('users') }}">@include('widgets._online_count')</a>
