@@ -126,7 +126,7 @@
                         </div>
                         <div class="col-sm-2">
                             <div class="card-body" style="text-align: center;">
-                            <h3><i class="fas fa-calculator"></i></h3><h5 class="card-title">Quests</h5>
+                            <h3><i class="fas fa-map"></i></h3><h5 class="card-title">Quests</h5>
                                 <p class="card-text">
                                     @if ($designCount)
                                     <h5><span class="badge badge-primary">{{ $designCount }}</span></h5>
@@ -142,7 +142,7 @@
                         </div>
                         <div class="col-sm-2">
                             <div class="card-body" style="text-align: center;">
-                            <h3><i class="fas fa-upload"></i></h3><h5 class="card-title">Coliseum</h5>
+                            <h3><i class="fas fa-flag"></i></h3><h5 class="card-title">Coliseum</h5>
                                 <p class="card-text">
                                     @if ($coliCount)
                                     <h5><span class="badge badge-primary">{{ $coliCount }}</span></h5>
@@ -158,7 +158,7 @@
                         </div>
                         <div class="col-sm-2">
                             <div class="card-body" style="text-align: center;">
-                            <h3><i class="fas fa-dumbbell"></i></h3><h5 class="card-title">Letters</h5>
+                            <h3><i class="fas fa-envelope"></i></h3><h5 class="card-title">Letters</h5>
                                 <p class="card-text">
                                     @if ($letterCount)
                                     <h5><span class="badge badge-primary">{{ $letterCount }}</span></h5>
@@ -174,7 +174,7 @@
                         </div>           
                         <div class="col-sm-2">
                             <div class="card-body" style="text-align: center;">
-                            <h3><i class="fas fa-dumbbell"></i></h3><h5 class="card-title">Trainings</h5>
+                            <h3><i class="fas fa-stamp"></i></h3><h5 class="card-title">Trainings</h5>
                                 <p class="card-text">
                                     @if ($trainingCount)
                                     <h5><span class="badge badge-primary">{{ $trainingCount }}</span></h5>
