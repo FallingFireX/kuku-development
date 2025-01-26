@@ -22,11 +22,7 @@
     if ($showRaffles) {
         $raffles = \App\Models\Raffle\Raffle::where('rolled_at', null)->where('is_active', 1)->orderBy('name')->pluck('name', 'id');
     }
-    if (isset($showThemes) && $showThemes) {
-        $themes = \App\Models\Theme\Theme::orderBy('name')
-            ->where('is_user_selectable', 0)
-            ->pluck('displayName', 'id');
-    }
+    
 @endphp
 
 <div class="text-right mb-3">
