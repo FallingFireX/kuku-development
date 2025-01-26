@@ -459,7 +459,7 @@ class Character extends Model {
         if ($this->is_myo_slot) {
             return $this->name;
         } else {
-            return ($this->name ? $this->name . ' ' : '') . preg_replace('/^KUKU-/', '', $this->slug);
+            return ($this->name ? $this->name . ' ' : '') . preg_replace('/^Kuku-/', '', $this->slug);
         }
     }
   
