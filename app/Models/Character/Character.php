@@ -459,10 +459,10 @@ class Character extends Model {
         if ($this->is_myo_slot) {
             return $this->name;
         } else {
-            return $this->slug.($this->name ? ': '.$this->name : '');
+            return ($this->name ? $this->name . ' ' : '') . preg_replace('/^KUKU-/', '', $this->slug);
         }
     }
-
+  
     /**
      * Gets the character's page's URL.
      *
