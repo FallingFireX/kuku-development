@@ -1,26 +1,15 @@
+
 <script>
 $( document ).ready(function() {    
     var $lootTable  = $('#lootTableBody');
     var $lootRow = $('#lootRow').find('.loot-row');
     var $itemSelect = $('#lootRowData').find('.item-select');
-    var $PetSelect = $('#lootRowData').find('.pet-select');
-    var $petVariantSelect = $('#lootRowData').find('.pet-variant-select');
-    var $WeaponSelect = $('#lootRowData').find('.weapon-select');
-    var $GearSelect = $('#lootRowData').find('.gear-select');
     var $currencySelect = $('#lootRowData').find('.currency-select');
-    var $statSelect = $('#lootRowData').find('.stat-select');
-    var $claymoreSelect = $('#lootRowData').find('.claymore-select');
     @if($showLootTables)
         var $tableSelect = $('#lootRowData').find('.table-select');
     @endif
     @if($showRaffles)
         var $raffleSelect = $('#lootRowData').find('.raffle-select');
-    @endif
-    @if(isset($showThemes) && $showThemes)
-        var $themeSelect = $('#lootRowData').find('.theme-select');
-    @endif
-    @if(isset($showBorders) && $showBorders)
-        var $borderSelect = $('#lootRowData').find('.border-select');
     @endif
 
     $('#lootTableBody .selectize').selectize();
@@ -41,20 +30,11 @@ $( document ).ready(function() {
         var $clone = null;
         if(val == 'Item') $clone = $itemSelect.clone();
         else if (val == 'Currency') $clone = $currencySelect.clone();
-        else if (val == 'Pet') $clone = $petSelect.clone();
-        else if (val == 'Pet Variant') $clone = $petVariantSelect.clone();
         @if($showLootTables)
             else if (val == 'LootTable') $clone = $tableSelect.clone();
         @endif
-        @if ($showRaffles)
+        @if($showRaffles)
             else if (val == 'Raffle') $clone = $raffleSelect.clone();
-        @endif
-        @if (isset($showThemes) && $showThemes)
-            var $themeSelect = $('#lootRowData').find('.theme-select');
-        @endif
-        
-        @if(isset($showBorders) && $showBorders)
-            else if (val == 'Border') $clone = $borderSelect.clone();
         @endif
 
         $cell.html('');
@@ -67,25 +47,13 @@ $( document ).ready(function() {
             var $cell = $(this).parent().parent().find('.loot-row-select');
 
             var $clone = null;
-            if (val == 'Item') $clone = $itemSelect.clone();
+            if(val == 'Item') $clone = $itemSelect.clone();
             else if (val == 'Currency') $clone = $currencySelect.clone();
-            else if (val == 'Pet') $clone = $petSelect.clone();
-            else if (val == 'Pet Variant') $clone = $petVariantSelect.clone();
-            else if (val == 'Weapon') $clone = $WeaponSelect.clone();
-            else if (val == 'Gear') $clone = $GearSelect.clone();
-            else if (val == 'Points') $clone = $statSelect.clone();
-            else if (val == 'Exp') $clone = $claymoreSelect.clone();
-            @if ($showLootTables)
+            @if($showLootTables)
                 else if (val == 'LootTable') $clone = $tableSelect.clone();
             @endif
-            @if ($showRaffles)
+            @if($showRaffles)
                 else if (val == 'Raffle') $clone = $raffleSelect.clone();
-            @endif
-            @if (isset($showThemes) && $showThemes)
-                else if (val == 'Theme') $clone = $themeSelect.clone();
-            @endif
-            @if(isset($showBorders) && $showBorders)
-                else if (val == 'Border') $clone = $borderSelect.clone();
             @endif
 
             $cell.html('');
@@ -100,42 +68,7 @@ $( document ).ready(function() {
             $(this).parent().parent().remove();
         });
     }
-    function attachRewardTypeListener(node) {
-            node.on('change', function(e) {
-                var val = $(this).val();
-                var $cell = $(this).parent().parent().find('.loot-row-select');
 
-                var $clone = null;
-                if (val == 'Item') $clone = $itemSelect.clone();
-                else if (val == 'Pet') $clone = $PetSelect.clone();
-                else if (val == 'Currency') $clone = $currencySelect.clone();
-                else if (val == 'Pet') $clone = $PetSelect.clone();
-                else if (val == 'Weapon') $clone = $WeaponSelect.clone();
-                else if (val == 'Gear') $clone = $GearSelect.clone();
-                else if (val == 'Points') $clone = $statSelect.clone();
-                else if (val == 'Exp') $clone = $claymoreSelect.clone();
-                @if ($showLootTables)
-                    else if (val == 'LootTable') $clone = $tableSelect.clone();
-                @endif
-                @if ($showRaffles)
-                    else if (val == 'Raffle') $clone = $raffleSelect.clone();
-                @endif
-                @if (isset($showThemes) && $showThemes)
-                    else if (val == 'Theme') $clone = $themeSelect.clone();
-                @endif
-
-                $cell.html('');
-                $cell.append($clone);
-                $clone.selectize();
-            });
-        }
-
-        function attachRemoveListener(node) {
-            node.on('click', function(e) {
-                e.preventDefault();
-                $(this).parent().parent().remove();
-            });
-        }
-
-    });
+});
+    
 </script>
