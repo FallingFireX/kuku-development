@@ -1,6 +1,12 @@
 @extends('worldexpansion.layout')
 
-@section('title') {{ $faction->name }} @endsection
+<style>
+    h1,h2,h3,h4,h5,h6,p{
+        text-align:center;
+    }
+    </style>
+
+@section('title'){{ $faction->name }} @endsection
 
 @section('content')
 @if(Auth::check() && Auth::user()->hasPower('manage_world'))
@@ -8,22 +14,22 @@
 @endif
 {!! breadcrumbs(['World' => 'world', 'Factions' => 'world/factions', $faction->style => 'world/factions/'.$faction->id]) !!}
 <h1 style="clear:both;"><img src="{{$faction->thumbUrl}}" style="max-height:25px;vertical-align:inherit;"/>{!! $faction->style !!}</h1>
-<h5 class="mb-0">{!! ucfirst($faction->type->displayName) !!} {!! $faction->parent ? 'inside '.$faction->parent->displayName : '' !!}</h5>
-
 @if(($user_enabled && $faction->is_user_faction) || ($ch_enabled && $faction->is_character_faction))
     <p class="mb-0"><strong>
-    Can be joined by
     {!! $faction->is_character_faction && $faction->is_user_faction ? 'both' : '' !!}
     {!! $user_enabled && $faction->is_user_faction ? 'users' : '' !!}{!! $faction->is_character_faction && $faction->is_user_faction ? ' and' : '' !!}{!! !$faction->is_character_faction && $faction->is_user_faction ? '.' : '' !!}
-    {!! $ch_enabled && $faction->is_character_faction ? 'characters.' : '' !!}
+    {!! $ch_enabled && $faction->is_character_faction ? 'This is a player owned Tribe/Guild.' : '' !!}
     </strong></p>
 @endif
-
-
+<br>
 @if($faction->image_extension)
     <div class="text-center"><img src="{{$faction->imageUrl}}" class="mw-100"/></div>
 @endif
 
+
+
+
+<br>
 @isset($faction->summary)
 <div class="world-entry-text px-3 text-center">{!! $faction->summary !!}</div>
 @endisset
@@ -33,6 +39,8 @@
     {!! $faction->parsed_description !!}
 </div>
 @endisset
+<br><br>
+<center><a href="{{ url('world/factions/' .$faction->id. '/members') }}" class="btn btn-outline-info btn-sm edit-features mb-3" ><i class="fas fa-paw"></i> Members</a></center>
 
 <div class="row mx-0 px-0 mt-3">
     @if(count($faction->children))
@@ -66,7 +74,7 @@
     <div class="text-center col-md mb-3 fb-md-50"><div class="card h-100 py-3">
      <h5 class="mb-0">Member Figure{{ count($faction->members) == 1 ? '' : 's'}}</h5>
 
-        <!-- <hr>
+        <hr>
         <p class="mb-0">
             @foreach($faction->members as $key => $member)
                 @if($member->thumb_extension)
@@ -75,7 +83,7 @@
                     {!! $member->displayName !!}
                 @endif
             @endforeach
-        </p> -->
+        </p>
 
         <hr>
         @foreach($faction->members->groupBy('category_id') as $key => $members)

@@ -126,6 +126,9 @@
                             <a class="dropdown-item" href="{{ url('generators') }}">
                                 Random Generators
                             </a>
+                            <a class="dropdown-item" href="{{ url('world/info') }}">
+                                World Expanded
+                            </a>
                            
                             <div class="dropdown-divider"></div>
 

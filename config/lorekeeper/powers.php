@@ -76,6 +76,15 @@ return [
         'name' => 'Manage Affiliates',
         'description' => 'Allow rank to view affiliate request queue, manage them, or even create new affiliates.'
     ],
+    
+    'manage_world' => [
+        'name' => 'Manage World',
+        'description' => 'Allow rank to edit world information related to the World Expansion extension.'
+    ],
+    'manage_reports' => [
+        'name' => 'Manage Reports',
+        'description' => 'Allow rank to view the reports queue.'
+    ]
 
 
 ];

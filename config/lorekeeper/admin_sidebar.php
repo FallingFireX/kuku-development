@@ -269,8 +269,7 @@ return [
                 'name' => 'Items',
                 'url'  => 'admin/data/items',
             ],
-            
-            [
+        [
                 'name' => 'Library',
                 'url'  => 'admin/data/volumes',
             ],
@@ -288,6 +287,46 @@ return [
             ],
         ]
     ],
+    
+    'World_Expanded' => [
+        'power' => 'manage_world',
+        'links' => [
+            [
+                'name' => 'Glossary',
+                'url' => 'admin/world/glossary'
+            ],
+            [
+                'name' => 'Locations',
+                'url' => 'admin/world/locations'
+            ],
+            [
+                'name' => 'Fauna',
+                'url' => 'admin/world/faunas'
+            ],
+            [
+                'name' => 'Flora',
+                'url' => 'admin/world/floras'
+            ],
+            [
+                'name' => ' Events',
+                'url' => 'admin/world/events'
+            ],
+            [
+                'name' => ' Figures',
+                'url' => 'admin/world/figures'
+            ],
+            [
+                'name' => 'Factions',
+                'url' => 'admin/world/factions'
+            ],
+            [
+                'name' => 'Concepts',
+                'url' => 'admin/world/concepts'
+            ],
+        ]
+    ],
+    
+            
     'Claymores' => [
         'power' => 'edit_claymores',
         'links' => [

@@ -54,6 +54,12 @@
                         <div class="col-lg-8 col-7 pl-1">{!! $image->subtype_id ? $image->subtype->displayName : 'None' !!}</div>
                     </div>
                 @endif
+                @if($image->character->homeSetting)
+                    <div class="row">
+                        <div class="col-lg-4 col-md-6 col-4"><h5>Home</h5></div>
+                        <div class="col-lg-8 col-md-6 col-8">{!! $image->character->location ? $image->character->location : 'None' !!}</div>
+                    </div>
+                @endif
                 <div class="row">
                     <div class="col-lg-4 col-md-6 col-4"><strong>Gender</strong></div>
                     <div class="col-lg-8 col-md-6 col-8">
@@ -162,18 +168,16 @@
                         <div class="col-lg-4 col-md-6 col-4">
                             <b>Magic:</b>  {!! $type?->displayElements ? $type?->displayElements : 'None' !!}
                         </div>
-                        <div class="col-lg-8 col-md-6 col-8 row">
-                            <!-- <b>{!! $type?->displayElements !!}</b> -->
-                            @if (Auth::check() && Auth::user()->hasPower('manage_characters'))
-                                {!! add_help('Typing is assigned on an image basis') !!}
-                                <div class="ml-auto">
-                                    <a href="#" class="btn btn-outline-info btn-sm edit-typing" data-id="{{ $image->id }}">
-                                        <i class="fas fa-cog"></i> {{ $type ? 'Edit' : 'Create' }}
-                                    </a>
-                                </div>
-                            @endif
-                        </div>
                     </div>
+                @endif
+
+                @if($image->character->factionSetting)
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6 col-4">
+                            <b>Tribe/Guild:</b> {!! $image->character->faction ? $image->character->currentFaction : 'None' !!}{!! $character->factionRank ? ' ('.$character->factionRank->name.')' : null !!}
+                        </div>
+                    </div> 
+                    
                 @endif
                     <br>
                 <div>
@@ -186,35 +190,13 @@
                 @if (Auth::check() && Auth::user()->hasPower('manage_characters'))
                     <div class="mt-3">
                         <a href="#" class="btn btn-outline-info btn-sm edit-features mb-3" data-id="{{ $image->id }}"><i class="fas fa-cog"></i> Edit</a>
+                        <a href="#" class="btn btn-outline-info btn-sm edit-typing mb-3" data-id="{{ $image->id }}"><i class="fas fa-cog"></i> {{ $type ? 'Edit' : 'Add Magic' }}</a>
                     </div>
                 @endif
                 <div class="text-right mb-1">
                     <div class="badge badge-primary">Image #{{ $image->id }}</div>
                 </div>
                 
-                @if (count($image->character->equipment()))
-                    <div class="mb-1 mt-4">
-                        <div class="mb-0">
-                            <h5>Equipment</h5>
-                        </div>
-                        <div class="text-center row">
-                            @foreach ($image->character->equipment()->take(5) as $equipment)
-                                <div class="col-md-2">
-                                    @if ($equipment->has_image)
-                                        <img class="rounded" src="{{ $equipment->imageUrl }}" data-toggle="tooltip" title="{{ $equipment->equipment->name }}" style="max-width: 75px;" />
-                                    @elseif($equipment->equipment->imageurl)
-                                        <img class="rounded" src="{{ $equipment->equipment->imageUrl }}" data-toggle="tooltip" title="{{ $equipment->equipment->name }}" style="max-width: 75px;" />
-                                    @else
-                                        {!! $equipment->equipment->displayName !!}
-                                    @endif
-                                </div>
-                            @endforeach
-                        </div>
-                        <div class="float-right">
-                            <a href="{{ $character->url . '/stats' }}">View All...</a>
-                        </div>
-                    </div>
-                @endif
             </div>
 
             {{-- Image notes --}}
