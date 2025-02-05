@@ -61,6 +61,10 @@ return [
                 'url'  => 'admin/pages',
             ],
             [
+                'name' => 'Sidebar',
+                'url'  => 'admin/sidebar',
+            ],
+            [
                 'name' => 'Random Generators',
                 'url'  => 'admin/data/random',
             ],

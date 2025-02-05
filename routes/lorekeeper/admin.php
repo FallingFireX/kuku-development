@@ -558,7 +558,14 @@ Route::group(['prefix' => 'pages', 'middleware' => 'power:edit_pages'], function
     Route::post('create', 'PageController@postCreateEditPage');
     Route::post('edit/{id?}', 'PageController@postCreateEditPage');
     Route::post('delete/{id}', 'PageController@postDeletePage');
+
 });
+
+Route::group(['prefix' => 'sidebar', 'middleware' => 'power:edit_pages'], function () {
+    Route::get('/', 'SidebarController@getIndex');
+    Route::post('/', 'SidebarController@update');
+});
+
 
 // NEWS
 Route::group(['prefix' => 'news', 'middleware' => 'power:manage_news'], function () {

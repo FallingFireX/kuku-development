@@ -7,6 +7,7 @@ use App\Models\Character\Character;
 use App\Models\Gallery\GallerySubmission;
 use App\Models\News;
 use App\Models\SitePage;
+use App\Models\Sidebar;
 use App\Services\LinkService;
 use App\Services\UserService;
 use App\Models\Submission\Submission;
@@ -49,6 +50,8 @@ class HomeController extends Controller {
             $gallerySubmissions = [];
         }
 
+        $sidebar = Sidebar::first();
+
         return view('welcome', [
             'submissionCount'        => Submission::where('status', 'Pending')->whereNotNull('prompt_id')->count(),
             'fpCount'                => Submission::where('status', 'Pending')->whereIn('prompt_id', [2, 4, 8])->count(),
@@ -69,6 +72,9 @@ class HomeController extends Controller {
             'open' => intval(Settings::get('affiliates_open')),
             'affiliates' => Affiliate::where('status','Accepted')->featured(0)->inRandomOrder()->limit(10)->get(),
             'featured_affiliates' => Affiliate::where('status','Accepted')->featured(1)->get(),
+            'sidebar' => $sidebar,
+
+        
         ]);
     }
 

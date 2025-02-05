@@ -57,4 +57,27 @@
         <div class="text-center mt-4 small text-muted">{{ $pages->total() }} result{{ $pages->total() == 1 ? '' : 's' }} found.</div>
     @endif
 
+    <h3>Edit Side Bar</h3>
+    <i>This edits the side bar on the main home page</i>
+    <br><br>
+    {!! Form::open(['method' => 'GET']) !!}
+        <div class="form-group">
+            {!! Form::label('mqdesc', 'MQ Description: ') !!} {!! add_help('This updates the text area of the MQ side bar') !!}
+            {!! Form::textarea('mqdesc', Request::get('mqdesc'), ['class' => 'form-control wysiwyg', 'style' => 'width: 500px', 'placeholder' => 'MQ preview goes here']) !!}
+        </div>
+    {!! Form::close() !!}
+
+    @if(session('success'))
+        <div class="alert alert-success">{{ session('success') }}</div>
+    @endif
+    {!! Form::open(['method' => 'POST', 'route' => 'admin.sidebar.update']) !!}  <!-- Changed to POST for updates -->
+
+    <div class="form-group">
+        {!! Form::label('box1content', 'Box 1 Content: ') !!} {!! add_help('This updates the Box 1 area of the sidebar') !!}
+        {!! Form::textarea('box1content', $sidebar->box1content ?? '', ['class' => 'form-control wysiwyg', 'style' => 'width: 100%', 'placeholder' => 'Enter box 1 content']) !!}
+    </div>
+
+    {!! Form::submit('Save Changes', ['class' => 'btn btn-primary']) !!}
+{!! Form::close() !!}
+
 @endsection
