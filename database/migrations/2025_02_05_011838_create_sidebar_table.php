@@ -13,11 +13,20 @@ return new class extends Migration
     {
         Schema::create('sidebar', function (Blueprint $table) {
             $table->id();
-            $table->text('box1content');
-            $table->text('box2content');
-            $table->text('box3content');
+            $table->text('box1content')->nullable();
+            $table->text('box2content')->nullable();
+            $table->text('box3content')->nullable();
             $table->timestamps();
         });
+
+        // Insert the first row with NULL values for box1content, box2content, and box3content
+        DB::table('sidebar')->insert([
+            'box1content' => null,
+            'box2content' => null,
+            'box3content' => null,
+            'created_at'  => now(),
+            'updated_at'  => now(),
+        ]);
     }
 
     /**

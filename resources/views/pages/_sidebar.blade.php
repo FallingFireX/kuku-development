@@ -29,8 +29,8 @@
                 <h5>Current Quest</h5>
                 <br>
                 {!! $sidebar->box2content !!}
-                <br>
-                <br><b><a href="https://kukuri-arpg.w3spaces.com/activities/quests.html">Read more here </a></b>
+                
+                <b><a href="https://kukuri-arpg.w3spaces.com/activities/quests.html">Read more here </a></b>
             </div>
             
     </li>
