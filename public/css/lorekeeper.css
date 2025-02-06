@@ -987,9 +987,11 @@ tr.accountbound {
     z-index: -2;
 }
 
+
 .dropdown:hover>.dropdown-menu {
     
     display: block;
+    margin-top:-10px;
   }
   
   .dropdown>.dropdown-toggle:active {
