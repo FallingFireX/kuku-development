@@ -97,7 +97,7 @@
                             <div class="card-body" style="text-align: center;">
                             <h3><i class="fas fa-gem"></i></h3><h5 class="card-title">Excavating</h5>
                                 <div class="text-center">
-                                    <a href="{{ url('https://www.kukuri-arpg.com/admin/submissions/pending?prompt_id=14&sort=oldest') }}" class="card-link">View Queue <span class="fas fa-caret-right ml-1"></span></a>
+                                    <a href="{{ url('https://www.kukuri-arpg.com/admin/submissions/pending?prompt_id=15&sort=oldest') }}" class="card-link">View Queue <span class="fas fa-caret-right ml-1"></span></a>
                                 </div>
                             </div>
                         </div>
@@ -105,7 +105,7 @@
                             <div class="card-body" style="text-align: center;">
                             <h3><i class="fas fa-compass"></i></h3><h5 class="card-title">Traveling</h5>
                                 <div class="text-center">
-                                    <a href="{{ url('https://www.kukuri-arpg.com/admin/submissions/pending?prompt_id=15&sort=oldest') }}" class="card-link">View Queue <span class="fas fa-caret-right ml-1"></span></a>
+                                    <a href="{{ url('https://www.kukuri-arpg.com/admin/submissions/pending?prompt_id=14&sort=oldest') }}" class="card-link">View Queue <span class="fas fa-caret-right ml-1"></span></a>
                                 </div>
                             </div>
                         </div>                                       
@@ -128,15 +128,15 @@
                             <div class="card-body" style="text-align: center;">
                             <h3><i class="fas fa-map"></i></h3><h5 class="card-title">Quests</h5>
                                 <p class="card-text">
-                                    @if ($designCount)
-                                    <h5><span class="badge badge-primary">{{ $designCount }}</span></h5>
+                                    @if ($questCount)
+                                    <h5><span class="badge badge-primary">{{ $questCount }}</span></h5>
                                     @else
                                     <h5><span class="badge badge-success">Clear</span></h5>
                                     @endif
                                 </p>
                                 <br>
                                 <div class="text-center">
-                                    <a href="{{ url('#') }}" class="card-link">View Queue <span class="fas fa-caret-right ml-1"></span></a>
+                                    <a href="{{ url('https://www.kukuri-arpg.com/admin/submissions/pending?prompt_category_id=10&prompt_id=none&sort=oldest') }}" class="card-link">View Queue <span class="fas fa-caret-right ml-1"></span></a>
                                 </div>
                             </div>
                         </div>
@@ -336,7 +336,7 @@
                             <div class="card-body" style="text-align: center;">
                             <h3><i class="fas fa-gavel"></i></h3><h5 class="card-title">Misc</h5>
                                 <div class="text-center">
-                                    <a href="{{ url('admin/submissions/pending?prompt_category_id=2&sort=oldest') }}" class="card-link">View Queue <span class="fas fa-caret-right ml-1"></span></a>
+                                    <a href="{{ url('https://www.kukuri-arpg.com/admin/submissions/pending?prompt_category_id=3&prompt_id=none&sort=oldest') }}" class="card-link">View Queue <span class="fas fa-caret-right ml-1"></span></a>
                                 </div>
                             </div>
                         </div>

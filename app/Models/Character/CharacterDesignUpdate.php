@@ -199,7 +199,7 @@ class CharacterDesignUpdate extends Model {
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeSortOldest($query) {
-        return $query->orderBy('id');
+        return $query->orderBy('updated_at');
     }
 
     /**
@@ -210,7 +210,7 @@ class CharacterDesignUpdate extends Model {
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeSortNewest($query) {
-        return $query->orderBy('id', 'DESC');
+        return $query->orderBy('updated_at', 'DESC');
     }
 
     /**********************************************************************************************
