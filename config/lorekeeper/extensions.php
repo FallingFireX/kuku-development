@@ -20,33 +20,25 @@ return [
     */
 
     // Navbar News Notif - Juni
-    'navbar_news_notif'                    => 1,
+    'navbar_news_notif' => 1,
 
-    /*  Visual Trait Indexes
-     *
-     *  Species Trait Index - Mercury
-     *  Subtype Trait Index - Speedy
-     *  Universal Trait Index - CHERVB
-     *  Trait Modals addition - Moif
-     */
-    'visual_trait_index'                  => [
-        'enable_species_index'   => 1, // Enables the Species Trait Index
-        'enable_subtype_index'   => 0, // Enables the Subtype Trait Index
-        'enable_universal_index' => 0, // Enables the Universal Trait Index
-        'trait_modals'           => 0, // Enables modals when you click on a trait for more info instead of linking to the traits page
+    // Species Trait Index - Mercury
+    'species_trait_index' => [
+        'enable'       => 1,
+        'trait_modals' => 0, // Enables modals when you click on a trait for more info instead of linking to the traits page - Moif
     ],
 
     // Character Status Badges - Juni
-    'character_status_badges'              => 1,
+    'character_status_badges' => 1,
 
     // Character TH Profile Link - Juni
-    'character_TH_profile_link'            => 1,
+    'character_TH_profile_link' => 1,
 
     // Design Update Voting - Mercury
-    'design_update_voting'                 => 0,
+    'design_update_voting' => 0,
 
     // Item Entry Expansion - Mercury
-    'item_entry_expansion'                 => [
+    'item_entry_expansion' => [
         'extra_fields'    => 0,
         'resale_function' => 1,
         'loot_tables'     => [
@@ -57,13 +49,13 @@ return [
     ],
 
     // Group Traits By Category - Uri
-    'traits_by_category'                   => 1,
+    'traits_by_category' => 1,
 
     // Scroll To Top - Uri
-    'scroll_to_top'                        => 1, // 1 - On, 0 - off
+    'scroll_to_top' => 1, // 1 - On, 0 - off
 
     // Character Reward Expansion - Uri
-    'character_reward_expansion'           => [
+    'character_reward_expansion' => [
         'expanded'          => 1,
         'default_recipient' => 0, // 0 to default to the character's owner (if a user), 1 to default to the submission user.
     ],
@@ -76,20 +68,20 @@ return [
 
     // MYO Image Hide/Remove - Mercury
     // Adds an option when approving MYO submissions to hide or delete the MYO placeholder image
-    'remove_myo_image'                     => 0,
+    'remove_myo_image' => 0,
 
     // Auto-populate New Image Traits - Mercury
     // Automatically adds the traits present on a character's active image to the list when uploading a new image for an extant character.
-    'autopopulate_image_features'          => 0,
+    'autopopulate_image_features' => 0,
 
     // Staff Rewards - Mercury
-    'staff_rewards'                        => [
+    'staff_rewards' => [
         'enabled'     => 1,
         'currency_id' => 4,
     ],
 
     // Organised Traits Dropdown - Draginraptor
-    'organised_traits_dropdown'            => 1,
+    'organised_traits_dropdown' => 1,
 
     // Previous & Next buttons on Character pages - Speedy
     // Adds buttons linking to the previous character as well as the next character on all character pages.

@@ -23,6 +23,15 @@ class GalleryCollaborator extends Model {
      */
     protected $table = 'gallery_submission_collaborators';
 
+    /**
+     * The relationships that should always be loaded.
+     *
+     * @var array
+     */
+    protected $with = [
+        'user',
+    ];
+
     /**********************************************************************************************
 
         RELATIONS
