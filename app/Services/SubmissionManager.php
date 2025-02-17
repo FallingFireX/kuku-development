@@ -9,6 +9,7 @@ use App\Models\Character\Character;
 use App\Models\Criteria\Criterion;
 use App\Models\Currency\Currency;
 use App\Models\Element\Element;
+use App\Models\Pet\Pet;
 use App\Models\Item\Item;
 use App\Models\Loot\LootTable;
 use App\Models\Prompt\Prompt;
