@@ -32,6 +32,19 @@
                     <br>
                     
                 @endif
+
+                <div class="position-relative">
+                    @if($character->adoption != null)
+                        <span class="btn badge-info position-absolute" style="top: 0; right: 0; z-index: 10;" data-toggle="tooltip" title="This kukuri was adopted on {{ $character->adoption }}">
+                            <i class="fas fa-heart"></i>
+                        </span>
+                    @endif
+                    @if($character->donation != null)
+                        <span class="btn badge-info position-absolute" style="top: 0; right: 0; z-index: 10;" data-toggle="tooltip" title="This kukuri was donated to the adoption center on {{ $character->donation }}">
+                            <i class="fas fa-hand-holding-heart"></i>
+                        </span>
+                    @endif
+                </div>
             @if (!$image->character->is_myo_slot && !$image->is_valid)
                 <div class="alert alert-danger">
                     This version of this {{ __('lorekeeper.character') }} is outdated, and only noted here for recordkeeping purposes. Do not use as an official reference.
@@ -44,14 +57,14 @@
                     <div class="col-lg-4 col-md-6 col-4">
                         <b>Species</b>
                     </div>
-                    <div class="col-lg-8 col-7 pl-1">{!! $image->species_id ? $image->species->displayName : 'None' !!}</div>
+                    <div class="col-lg-8 col-md-6 col-8">{!! $image->species_id ? $image->species->displayName : 'None' !!}</div>
                 </div>
                 @if ($image->subtype_id)
                     <div class="row">
                         <div class="col-lg-4 col-md-6 col-4">
                             <b>Breed</b>
                         </div>
-                        <div class="col-lg-8 col-7 pl-1">{!! $image->subtype_id ? $image->subtype->displayName : 'None' !!}</div>
+                        <div class="col-lg-8 col-md-6 col-8">{!! $image->subtype_id ? $image->subtype->displayName : 'None' !!}</div>
                     </div>
                 @endif
                 @if($image->character->homeSetting)

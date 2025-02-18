@@ -137,17 +137,32 @@
     @if (Auth::check() && Auth::user()->hasPower('manage_characters'))
     This labels a kuku as being currently or formerly a Kukuri of the month. Only turn on if theyve won!
     <br>
-    <div class="form-group">
-        {!! Form::checkbox('kotm', 1, $character->kotm, ['class' => 'form-check-input', 'data-toggle' => 'toggle']) !!}
-        {!! Form::label('kotm', 'Kukuri of the Month', ['class' => 'form-check-label ml-3']) !!}
-    </div>
+                <div class="col-md form-group">
+                    {!! Form::label('kotm', 'kotm', ['class' => 'form-check-label mb-3']) !!} 
+                    {!! Form::checkbox('kotm', 1, $character->kotm, ['class' => 'form-check-input', 'data-toggle' => 'toggle']) !!}
+                </div>
+                <div class="row">
+                <div class="col-md form-group">
+                {!! Form::label('Date of character adoption') !!}
+                {!! Form::text('adoption', $character->adoption, ['class' => 'form-control datepicker']) !!}
+                </div>
+            
+            <div class="col-md form-group">
+            {!! Form::label('Date of character donation') !!}
+            {!! Form::text('donation', $character->donation, ['class' => 'form-control datepicker']) !!}
+            </div>
+        </div>
     @endif
 
     <div class="text-right">
         {!! Form::submit('Edit Profile', ['class' => 'btn btn-primary']) !!}
     </div>
     {!! Form::close() !!}
-
     
+@endsection
+
+@section('scripts')
+    
+    @include('widgets._datetimepicker_js')
     
 @endsection

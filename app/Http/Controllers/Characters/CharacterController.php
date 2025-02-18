@@ -214,8 +214,8 @@ class CharacterController extends Controller {
         }
 
         $request->validate(CharacterProfile::$rules);
-
-        if ($service->updateCharacterProfile($request->only(['name', 'link', 'text', 'is_gift_art_allowed', 'is_gift_writing_allowed', 'is_trading', 'character_warning', 'custom_values_group', 'custom_values_name', 'custom_values_data', 'genotype', 'phenotype', 'eyecolor', 'gender', 'diet', 'bio', 'alert_user', 'is_links_open', 'kotm', 'location', 'faction']), $this->character, Auth::user(), !$isOwner)) {
+        
+        if ($service->updateCharacterProfile($request->only(['name', 'link', 'text', 'is_gift_art_allowed', 'is_gift_writing_allowed', 'is_trading', 'character_warning', 'custom_values_group', 'custom_values_name', 'custom_values_data', 'alert_user', 'is_links_open', 'kotm', 'location', 'faction', 'adoption', 'donation']), $this->character, Auth::user(), !$isOwner)) {
             flash('Profile edited successfully.')->success();
         } else {
             foreach ($service->errors()->getMessages()['error'] as $error) {

@@ -35,8 +35,10 @@ use Settings;
 use App\Models\WorldExpansion\FactionRank;
 use App\Models\WorldExpansion\FactionRankMember;
 
+
 class Character extends Model
 {
+    
     use SoftDeletes;
 
     /**
@@ -48,7 +50,7 @@ class Character extends Model
         'character_image_id', 'character_category_id', 'rarity_id', 'user_id',
         'owner_alias', 'number', 'slug', 'description', 'parsed_description',
         'is_sellable', 'is_tradeable', 'is_giftable',
-        'sale_value','kotm', 'transferrable_at', 'is_visible',
+        'sale_value','kotm', 'adoption', 'donation', 'transferrable_at', 'is_visible',
         'is_gift_art_allowed', 'is_gift_writing_allowed', 'is_trading', 'sort',
         'is_myo_slot', 'name', 'trade_id', 'is_links_open', 'owner_url', 'home_id', 'home_changed', 'faction_id', 'faction_changed', 'character_warning', 'folder_id' , 'class_id', 'genotype', 'phenotype', 'gender', 'eyecolor', 'spd', 'def', 'atk',
         'diet', 'bio',
@@ -78,8 +80,6 @@ class Character extends Model
     public $timestamps = true;
 
     /**
-<<<<<<< HEAD
-=======
      * Dates on the model to convert to Carbon instances.
      *
      * @var array
@@ -87,7 +87,6 @@ class Character extends Model
     protected $dates = ['transferrable_at','home_changed', 'faction_changed'];
 
     /**
->>>>>>> 90ee47a924d14d74c05b147b9a5946aba3fc433b
      * Accessors to append to the model.
      *
      * @var array
@@ -185,6 +184,7 @@ class Character extends Model
      */
     public function profile() {
         return $this->hasOne(CharacterProfile::class, 'character_id');
+        
     }
 
     /**

@@ -1630,15 +1630,19 @@ class CharacterManager extends Service {
                 if (!isset($data['is_links_open'])) {
                     $data['is_links_open'] = 0;
                 }
+                if (!isset($data['kotm'])) {
+                    $data['kotm'] = 0;
+                }
                 
 
                 $character->is_gift_art_allowed = isset($data['is_gift_art_allowed']) && $data['is_gift_art_allowed'] <= 2 ? $data['is_gift_art_allowed'] : 0;
                 $character->is_gift_writing_allowed = isset($data['is_gift_writing_allowed']) && $data['is_gift_writing_allowed'] <= 2 ? $data['is_gift_writing_allowed'] : 0;
                 $character->is_trading = isset($data['is_trading']);
                 $character->is_links_open = $data['is_links_open'];
+                $character->kotm = $data['kotm'];
                 $character->save();
             } else {
-                $character->kotm = isset($data['kotm']);
+                
                 if (!$this->logAdminAction($user, 'Updated Character Profile', 'Updated character profile on '.$character->displayname)) {
                     throw new \Exception('Failed to log admin action.');
                 }
@@ -1647,6 +1651,8 @@ class CharacterManager extends Service {
             // Update the character's profile
             if (!$character->is_myo_slot) {
                 $character->name = $data['name'];
+                $character->adoption = $data['adoption'];
+                $character->donation = $data['donation'];
             }
             $character->save();
 
