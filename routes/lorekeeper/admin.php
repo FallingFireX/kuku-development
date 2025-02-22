@@ -562,7 +562,7 @@ Route::group(['prefix' => 'pages', 'middleware' => 'power:edit_pages'], function
 });
 
 Route::group(['prefix' => 'sidebar', 'middleware' => 'power:edit_pages'], function () {
-    Route::get('/', 'SidebarController@getIndex');
+    Route::get('/', 'SidebarController@getIndex')->name('admin.sidebar.update');
     Route::post('/', 'SidebarController@update');
 });
 
