@@ -43,6 +43,8 @@ use App\Models\User\UserBorderLog;
 use App\Models\User\UserCharacterLog;
 use App\Models\WorldExpansion\FactionRank;
 use App\Models\WorldExpansion\FactionRankMember;
+use App\Models\UniqueItem;
+use App\Models\UniqueItemCategory;
 use App\Traits\Commenter;
 use Auth;
 use Cache;
@@ -368,6 +370,13 @@ class User extends Authenticatable implements MustVerifyEmail {
     {
         return $this->belongsTo('App\Models\Border\Border', 'bottom_border_id');
     }
+    public function uniqueItems()
+    {
+        return $this->hasMany(UniqueItem::class, 'owner_id', 'id')
+                    ->where('deleted', false);  // Assuming 'is_deleted' is the field
+    }
+
+
 
     /**********************************************************************************************
 

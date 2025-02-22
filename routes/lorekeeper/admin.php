@@ -160,6 +160,22 @@ Route::group(['prefix' => 'data', 'namespace' => 'Data', 'middleware' => 'power:
     Route::post('pet-drops/create', 'PetController@postCreateEditDrop');
     Route::post('pet-drops/edit/{id?}', 'PetController@postCreateEditDrop');
     Route::post('pet-drops/delete/{id}', 'PetController@postDeleteDrop');
+    
+//unique items
+    Route::get('adoption-center', 'UniqueItemController@getItemIndex')->name('admin.uniqueitems.items');
+    Route::get('adoption-center/create', 'UniqueItemController@getCreateItem');
+    Route::get('adoption-center/edit/{id}', 'UniqueItemController@getEditItem');
+    Route::post('adoption-center/create', 'UniqueItemController@postCreateEditItem');
+    Route::post('adoption-center/edit/{id?}', 'UniqueItemController@postCreateEditItem');
+    Route::get('adoption-categories', 'UniqueItemController@getIndex')->name('admin.uniqueitems.categories');
+    Route::get('adoption-categories/create', 'UniqueItemController@getCreateItemCategory');
+    Route::post('adoption-categories/create', 'UniqueItemController@postCreateEditItemCategory');
+    Route::get('adoption-categories/edit/{id}', 'UniqueItemController@getEditItemCategory')->name('admin.uniqueitems.categories.edit');
+    Route::post('adoption-categories/edit/{id}', 'UniqueItemController@postCreateEditItemCategory')->name('admin.uniqueitems.categories.post');
+    Route::delete('adoption-center/delete/{id}', 'UniqueItemController@deleteUniqueItem')->name('admin.uniqueitems.delete');
+
+    
+   
 
     // ITEMS
     Route::get('item-categories', 'ItemController@getIndex');

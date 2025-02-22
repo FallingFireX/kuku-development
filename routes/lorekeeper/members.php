@@ -389,3 +389,15 @@ Route::group(['prefix' => 'criteria'], function () {
 
     Route::get('guide/{id}', 'CriterionController@getCriterionGuide');
 });
+
+//unique items
+Route::get('adoption-center', 'uniqueitemsController@getItemIndex');
+// Define the route for showing a unique item
+Route::get('/uniqueitems/{id}', 'uniqueitemsController@show')->name('uniqueitems.adoption-center');
+Route::delete('/uniqueitems/{id}', 'uniqueitemsController@destroy')->name('uniqueitems.destroy');
+
+
+Route::get('adoption-center/create', 'UniqueItemController@getCreateItem');
+Route::get('adoption-center/edit/{id}', 'UniqueItemController@getEditItem');
+Route::post('adoption-center/create', 'UniqueItemController@postCreateEditItem');
+Route::post('adoption-center/edit/{id?}', 'UniqueItemController@postCreateEditItem');
