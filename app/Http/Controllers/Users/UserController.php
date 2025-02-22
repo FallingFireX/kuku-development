@@ -292,11 +292,6 @@ class UserController extends Controller
      * @return \Illuminate\Contracts\Support\Renderable
      */
     public function getUserInventory($name) {
-<<<<<<< HEAD
-        $categories = ItemCategory::visible(Auth::user() ?? null)->orderBy('sort', 'DESC')->get();
-        $items = count($categories) ?
-            $this->user->items()
-=======
         // Retrieve user by name (ensure the 'name' field exists and is unique)
         $user = User::where('name', $name)->firstOrFail();
     
@@ -306,7 +301,6 @@ class UserController extends Controller
     
         $items = count($categories) ? 
             $user->items()
->>>>>>> f985872f93893c2c2f381a39f13d42815accad7b
                 ->where('count', '>', 0)
                 ->orderByRaw('FIELD(item_category_id,'.implode(',', $categories->pluck('id')->toArray()).')')
                 ->orderBy('name')

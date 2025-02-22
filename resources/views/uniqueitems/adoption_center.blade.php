@@ -15,8 +15,8 @@
 
     <!-- Filter Form -->
     <form method="GET" action="{{ url('adoption-center') }}">
-        <div class="row" style="float:right";>
-            <div class="col-4">
+        <div class="row" style="float:left";>
+            <div class="col-5">
             <select name="category_1" class="form-control">
                 <option value="">Select Filter</option>
                 @foreach($categories as $category)
@@ -24,7 +24,7 @@
                 @endforeach
             </select>
             </div>
-            <div class="col-4">
+            <div class="col-5">
             <select name="category_2" class="form-control">
                 <option value="">Select Filter</option>
                 @foreach($categories as $category)
@@ -54,30 +54,36 @@
             </div>
         </div>
         <div class="logs-table-body">
-            @foreach ($items as $item)
-                <div class="logs-table-row">
-                    <div class="row flex-wrap">
-                        <div class="col-2 col-md-2">
-                            <div class="logs-table-cell">
-                                @if ($item->is_over_a_year)
-                                    <b style="font-size: medium";><span class="badge badge-info">Monthly</span></b>
-                                @else
-                                    <b style="font-size: medium";><span class="badge badge-success">Newbie</span></b>
-                                @endif
-                                {{ $item->item_slug }}
-                            </div>
-                        </div>
-                        <div class="col-3 col-md-3">
-                            <div class="logs-table-cell"><a href="{{ $item->link }}" target="_blank">{{ $item->link }}</a></div>
-                        </div>
-                        <div class="col-2 col-md-4">
-                            <div class="logs-table-cell">
-                                <a href="{{ $item->link }}" target="_blank">{!! $item->description !!}</a>
-                            </div>
-                        </div>
+    @foreach ($items as $item)
+        @if ($item->owner) <!-- Skip the item if it has an owner -->
+            @continue
+        @endif
+        <div class="logs-table-row">
+            <div class="row flex-wrap">
+                <div class="col-2 col-md-2">
+                    <div class="logs-table-cell">
+                        @if ($item->is_over_a_year)
+                            <b style="font-size: medium";><span class="badge badge-info">Monthly</span></b>
+                        @else
+                            <b style="font-size: medium";><span class="badge badge-success">Newbie</span></b>
+                        @endif
+                        {{ $item->item_slug }}  <!-- No <a> tag here -->
                     </div>
                 </div>
-            @endforeach
+                <div class="col-3 col-md-3">
+                    <div class="logs-table-cell">
+                        <a href="{{ $item->link }}" target="_blank">{{ $item->link }}</a>  <!-- Only the link text should be clickable -->
+                    </div>
+                </div>
+                <div class="col-2 col-md-4">
+                    <div class="logs-table-cell">
+                        {!! $item->description !!}  <!-- Only the description text should be clickable -->
+                    </div>
+                </div>
+            </div>
         </div>
+    @endforeach
+</div>
+
     </div>
 @endsection

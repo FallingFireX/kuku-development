@@ -216,6 +216,9 @@
                         <a class="dropdown-item" href="{{ url('masterlist') }}">
                             Kukuri Masterlist
                         </a>
+                        <a class="dropdown-item" href="{{ url('adoption-center') }}">
+                            Adoption Center
+                        </a>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="{{ url('https://kukuri-arpg.w3spaces.com/genetics/genes-and-mutations.html') }}">
                             Genetics
