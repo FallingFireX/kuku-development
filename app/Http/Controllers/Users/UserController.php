@@ -12,6 +12,7 @@ use App\Models\Gallery\GalleryCharacter;
 use App\Models\Gallery\GallerySubmission;
 use App\Models\Item\Item;
 use App\Models\Item\ItemCategory;
+use App\Models\UniqueItem;
 use App\Models\User\User;
 use App\Models\User\UserCurrency;
 use App\Models\User\UserUpdateLog;
@@ -198,31 +199,41 @@ class UserController extends Controller {
      * @return \Illuminate\Contracts\Support\Renderable
      */
     public function getUserInventory($name) {
-        $categories = ItemCategory::visible(Auth::check() ? Auth::user() : null)->orderBy('sort', 'DESC')->get();
-        $items = count($categories) ?
-            $this->user->items()
+        // Retrieve user by name (ensure the 'name' field exists and is unique)
+        $user = User::where('name', $name)->firstOrFail();
+    
+        $categories = ItemCategory::visible(Auth::check() ? Auth::user() : null)
+                    ->orderBy('sort', 'DESC')
+                    ->get();
+    
+        $items = count($categories) ? 
+            $user->items()
                 ->where('count', '>', 0)
                 ->orderByRaw('FIELD(item_category_id,'.implode(',', $categories->pluck('id')->toArray()).')')
                 ->orderBy('name')
                 ->orderBy('updated_at')
                 ->get()
                 ->groupBy(['item_category_id', 'id']) :
-            $this->user->items()
+            $user->items()
                 ->where('count', '>', 0)
                 ->orderBy('name')
                 ->orderBy('updated_at')
                 ->get()
                 ->groupBy(['item_category_id', 'id']);
-
+    
+        // Fetch unique items for the retrieved user
+        $uniqueItems = $user->UniqueItems()->orderBy('id')->get();
+    
         return view('user.inventory', [
-            'user'        => $this->user,
+            'user'        => $user,
             'categories'  => $categories->keyBy('id'),
             'items'       => $items,
-            'userOptions' => User::where('id', '!=', $this->user->id)->orderBy('name')->pluck('name', 'id')->toArray(),
-            'user'        => $this->user,
-            'logs'        => $this->user->getItemLogs(),
+            'uniqueItems' => $uniqueItems,
+            'userOptions' => User::where('id', '!=', $user->id)->orderBy('name')->pluck('name', 'id')->toArray(),
+            'logs'        => $user->getItemLogs(),
         ]);
     }
+    
 
     /**
      * Shows a user's Bank.

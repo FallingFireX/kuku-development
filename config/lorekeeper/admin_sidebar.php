@@ -147,6 +147,10 @@ return [
         'power' => 'edit_data',
         'links' => [
             [
+                'name' => 'Adoption Center',
+                'url'  => 'admin/data/adoption-center',
+            ],
+            [
                 'name' => 'Galleries',
                 'url'  => 'admin/data/galleries',
             ],

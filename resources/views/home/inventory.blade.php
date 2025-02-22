@@ -18,6 +18,7 @@
 
     <p>This is your inventory. Click on an item to view more details and actions you can perform on it.</p>
 
+
     <div class="text-right mb-3">
         <div class="btn-group">
             <button type="button" class="btn btn-secondary active def-view-button" data-toggle="tooltip" title="Default View" alt="Default View"><i class="fas fa-th"></i></button>
@@ -83,6 +84,26 @@
             </div>
         @endforeach
     </div>
+
+    <h3>Adopted Genos</h3>
+    <i>These are your adopted genos. Click the proof link to see details. Make sure to state your Adoption's geno's name when submitting a design so our design admins can find it!</i>
+
+@if($uniqueItems->isNotEmpty())
+    <div class="row">
+        @foreach ($uniqueItems as $uniqueItem)
+            <div class="card col-3 col-md-3 mb-3 mx-2">  <!-- Add mb-3 for margin-bottom spacing between cards -->
+                <div class="card-body text-center">
+                    @if(!$uniqueItem->deleted)  <!-- Check if the item is not deleted -->
+                        <b>{{ $uniqueItem->item_slug }}</b>
+                        <br><a href="{{ $uniqueItem->link}}">Link to Proof</a>
+                        <br>
+                        <br>{!! $uniqueItem->description !!}
+                    @endif
+                </div>
+            </div>
+        @endforeach
+    </div>
+    @endif
 
     <div class="text-right mb-4">
         <a href="{{ url(Auth::user()->url . '/item-logs') }}">View logs...</a>

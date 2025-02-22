@@ -12,6 +12,8 @@ use App\Models\Submission\Submission;
 use App\Models\Trade;
 use App\Models\User\User;
 use App\Models\User\UserItem;
+use App\Models\UniqueItem;
+use App\Models\UniqueItemCategory;
 use App\Services\InventoryManager;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -32,29 +34,44 @@ class InventoryController extends Controller {
      * @return \Illuminate\Contracts\Support\Renderable
      */
     public function getIndex() {
-        $categories = ItemCategory::visible(Auth::check() ? Auth::user() : null)->orderBy('sort', 'DESC')->get();
+        $user = Auth::user();
+        
+        if (!$user) {
+            abort(403, 'Unauthorized access.');
+        }
+        
+        $categories = ItemCategory::visible($user)->orderBy('sort', 'DESC')->get();
+    
         $items = count($categories) ?
-            Auth::user()->items()
+            $user->items()
                 ->where('count', '>', 0)
                 ->orderByRaw('FIELD(item_category_id,'.implode(',', $categories->pluck('id')->toArray()).')')
                 ->orderBy('name')
                 ->orderBy('updated_at')
                 ->get()
                 ->groupBy(['item_category_id', 'id']) :
-            Auth::user()->items()
+            $user->items()
                 ->where('count', '>', 0)
                 ->orderBy('name')
                 ->orderBy('updated_at')
                 ->get()
                 ->groupBy(['item_category_id', 'id']);
-
+    
+        // Fetch Unique Items using the corrected relationship in User model
+        $uniqueItems = $user->uniqueItems()->orderBy('id')->get();
+    
         return view('home.inventory', [
-            'categories'  => $categories->keyBy('id'),
-            'items'       => $items,
-            'userOptions' => User::visible()->where('id', '!=', Auth::user()->id)->orderBy('name')->pluck('name', 'id')->toArray(),
-            'user'        => Auth::user(),
+            'categories'   => $categories->keyBy('id'),
+            'items'        => $items,
+            'uniqueItems'  => $uniqueItems, // Now correctly defined
+            'userOptions'  => User::visible()->where('id', '!=', $user->id)->orderBy('name')->pluck('name', 'id')->toArray(),
+            'user'         => $user,
         ]);
     }
+    
+    
+    
+
 
     /**
      * Shows the inventory stack modal.

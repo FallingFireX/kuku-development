@@ -18,6 +18,8 @@ use App\Models\Rank\Rank;
 use App\Models\Rank\RankPower;
 use App\Models\Shop\ShopLog;
 use App\Models\Submission\Submission;
+use App\Models\UniqueItem;
+use App\Models\UniqueItemCategory;
 use App\Traits\Commenter;
 use Carbon\Carbon;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -204,6 +206,14 @@ class User extends Authenticatable implements MustVerifyEmail {
     public function commentLikes() {
         return $this->hasMany(CommentLike::class);
     }
+
+    public function uniqueItems()
+    {
+        return $this->hasMany(UniqueItem::class, 'owner_id', 'id')
+                    ->where('deleted', false);  // Assuming 'is_deleted' is the field
+    }
+
+
 
     /**********************************************************************************************
 
