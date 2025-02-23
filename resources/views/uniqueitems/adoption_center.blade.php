@@ -75,7 +75,7 @@
                         <a href="{{ $item->link }}" target="_blank">{{ $item->link }}</a>  <!-- Only the link text should be clickable -->
                     </div>
                 </div>
-                <div class="col-2 col-md-4">
+                <div class="col-5 col-md-5">
                     <div class="logs-table-cell">
                         {!! $item->description !!}  <!-- Only the description text should be clickable -->
                     </div>
@@ -83,7 +83,11 @@
             </div>
         </div>
     @endforeach
+
+<div class="pagination">
+    {{ $items->links() }}
 </div>
 
-    </div>
+
+
 @endsection

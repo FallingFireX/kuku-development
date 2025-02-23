@@ -27,17 +27,18 @@ class uniqueitemsController extends Controller
     $itemsQuery = UniqueItem::with(['category1', 'category2', 'owner'])
         ->orderBy('id', $sortOrder);
 
-    // Apply category filter if selected
-    if ($sortByCategory1) {
-        $itemsQuery->where('category_1', $sortByCategory1);
-    }
+    $query = UniqueItem::query()->whereNull('owner_id');
 
-    if ($sortByCategory2) {
-        $itemsQuery->where('category_2', $sortByCategory2);
+    if ($request->has('category_1')) {
+        $query->where('category_1', $request->category_1);
     }
-
-    // Paginate the results
-    $items = $itemsQuery->paginate(20);
+    
+    if ($request->has('category_2')) {
+        $query->where('category_2', $request->category_2);
+    }
+    
+    $items = $query->paginate(20);
+    
 
     // Calculate if the item has existed for over a year
     $items->each(function ($item) {
