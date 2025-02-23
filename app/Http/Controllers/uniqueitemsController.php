@@ -16,29 +16,27 @@ class uniqueitemsController extends Controller
 {
     public function getItemIndex(Request $request)
 {
-    $sortByCategory1 = $request->get('category_1');  // Category 1 filter
-    $sortByCategory2 = $request->get('category_2');  // Category 2 filter
-    $sortOrder = $request->get('sort_order', 'asc');  // Default sort order
+    $sortByCategory1 = $request->get('category_1');  
+    $sortByCategory2 = $request->get('category_2');  
+    $sortOrder = $request->get('sort_order', 'asc');  
 
-    // Fetch categories for dropdown (assuming Category model)
     $categories = UniqueItemCategory::all();
 
-    // Start building the query
-    $itemsQuery = UniqueItem::with(['category1', 'category2', 'owner'])
+    // Build the main query
+    $query = UniqueItem::with(['category1', 'category2', 'owner'])
+        ->whereNull('owner_id')
         ->orderBy('id', $sortOrder);
 
-    $query = UniqueItem::query()->whereNull('owner_id');
+    if ($sortByCategory1) {
+        $query->where('category_1', $sortByCategory1);
+    }
+    
+    if ($sortByCategory2) {
+        $query->where('category_2', $sortByCategory2);
+    }
 
-    if ($request->has('category_1')) {
-        $query->where('category_1', $request->category_1);
-    }
-    
-    if ($request->has('category_2')) {
-        $query->where('category_2', $request->category_2);
-    }
-    
+    // Apply pagination
     $items = $query->paginate(20);
-    
 
     // Calculate if the item has existed for over a year
     $items->each(function ($item) {
@@ -47,6 +45,7 @@ class uniqueitemsController extends Controller
 
     return view('uniqueitems.adoption_center', compact('items', 'categories', 'sortByCategory1', 'sortByCategory2', 'sortOrder'));
 }
+
 
 
     public function destroy($id)

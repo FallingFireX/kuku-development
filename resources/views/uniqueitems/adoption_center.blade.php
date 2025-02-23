@@ -85,8 +85,9 @@
     @endforeach
 
 <div class="pagination">
-    {{ $items->links() }}
+    {{ $items->appends(request()->query())->links() }}
 </div>
+
 
 
 
