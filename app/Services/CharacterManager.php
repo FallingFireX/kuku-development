@@ -140,6 +140,7 @@ class CharacterManager extends Service {
             }
             elseif(isset($data['user_id']) && $data['user_id']) $recipient = User::find($data['user_id']);
             elseif(isset($data['owner_alias']) && $data['owner_alias']) $recipient = User::where('alias', $data['owner_alias'])->first();
+            elseif (isset($data['owner_url']) && $data['owner_url']) $recipient = checkAlias($data['owner_url']);
 
             if (is_object($recipient)) {
                 $recipientId = $recipient->id;
