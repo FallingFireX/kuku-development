@@ -39,6 +39,8 @@
                 {!! Form::text('owner_url', old('owner_url'), ['class' => 'form-control']) !!}
             </div>
         </div>
+    
+   
 
         @if (!$isMyo)
             <div class="row">
@@ -94,29 +96,32 @@
                 <li>If a transfer cooldown is set, the {{ $isMyo ? 'MYO slot' : 'character' }} also cannot be transferred by the user (directly or through trades) until the cooldown is up.</li>
             </ul>
         </div>
-        <div class="form-group">
-            {!! Form::checkbox('is_giftable', 1, old('is_giftable'), ['class' => 'form-check-input', 'data-toggle' => 'toggle']) !!}
-            {!! Form::label('is_giftable', 'Is Giftable', ['class' => 'form-check-label ml-3']) !!}
-        </div>
-        <div class="form-group">
-            {!! Form::checkbox('is_tradeable', 1, old('is_tradeable'), ['class' => 'form-check-input', 'data-toggle' => 'toggle']) !!}
-            {!! Form::label('is_tradeable', 'Is Tradeable', ['class' => 'form-check-label ml-3']) !!}
-        </div>
-        <div class="form-group">
-            {!! Form::checkbox('is_sellable', 1, old('is_sellable'), ['class' => 'form-check-input', 'data-toggle' => 'toggle', 'id' => 'resellable']) !!}
-            {!! Form::label('is_sellable', 'Is Resellable', ['class' => 'form-check-label ml-3']) !!}
-        </div>
-        <div class="card mb-3" id="resellOptions">
-            <div class="card-body">
-                {!! Form::label('Resale Value') !!} {!! add_help('This value is publicly displayed on the ' . ($isMyo ? 'MYO slot' : 'character') . '\'s page.') !!}
-                {!! Form::text('sale_value', old('sale_value'), ['class' => 'form-control']) !!}
+        <div class="row">
+            <div class="col-md-2 form-group">
+                {!! Form::checkbox('is_giftable', 1, old('is_giftable'), ['class' => 'form-check-input', 'data-toggle' => 'toggle']) !!}
+                {!! Form::label('is_giftable', 'Is Giftable', ['class' => 'form-check-label ml-3']) !!}
+            </div>
+            <div class="col-md-2 form-group">
+                {!! Form::checkbox('is_tradeable', 1, old('is_tradeable'), ['class' => 'form-check-input', 'data-toggle' => 'toggle']) !!}
+                {!! Form::label('is_tradeable', 'Is Tradeable', ['class' => 'form-check-label ml-3']) !!}
+            </div>
+            <div class="col-md-2 form-group">
+                {!! Form::checkbox('is_sellable', 1, old('is_sellable'), ['class' => 'form-check-input', 'data-toggle' => 'toggle', 'id' => 'resellable']) !!}
+                {!! Form::label('is_sellable', 'Is Resellable', ['class' => 'form-check-label ml-3']) !!}
             </div>
         </div>
-        <div class="form-group">
-            {!! Form::label('On Transfer Cooldown Until (Optional)') !!}
-            {!! Form::text('transferrable_at', old('transferrable_at'), ['class' => 'form-control datepicker']) !!}
-        </div>
-
+            <div class="card mb-3" id="resellOptions">
+                <div class="card-body">
+                    {!! Form::label('Resale Value') !!} {!! add_help('This value is publicly displayed on the ' . ($isMyo ? 'MYO slot' : 'character') . '\'s page.') !!}
+                    {!! Form::text('sale_value', old('sale_value'), ['class' => 'form-control']) !!}
+                </div>
+            </div>
+            <div class="col-md-4 form-group">
+                {!! Form::label('On Transfer Cooldown Until (Optional)') !!}
+                {!! Form::text('transferrable_at', old('transferrable_at'), ['class' => 'form-control datepicker']) !!}
+            </div>
+        
+                <hr>
         <h3>Image Upload</h3>
 
         <div class="form-group">
@@ -252,47 +257,53 @@
         </div>
         <hr>
 
-        <div class="form-group" id='gender'>
-            {!! Form::label('gender') !!}{!! add_help('This is text that will show alongside the ' . __('transformations.transformation') . ' name on the image info area. Explains why the character takes this form, how, etc. Should be pretty short.') !!}
-            {!! Form::select('gender', ['Rook' => 'Rook', 'Dove' => 'Dove'], null, ['class' => 'form-control']) !!}
-        </div>
+        <div class="row">
+            <div class="col-md-4 form-group" id='gender'>
+                {!! Form::label('gender') !!}{!! add_help('Male or Female (rook or dove)') !!}
+                {!! Form::select('gender', ['Rook' => 'Rook', 'Dove' => 'Dove'], null, ['class' => 'form-control']) !!}
+            </div>
 
-        <div class="form-group" id='genotype'>
-            {!! Form::label('genotype') !!}{!! add_help('This is text that will show alongside the ' . __('transformations.transformation') . ' name on the image info area. Explains why the character takes this form, how, etc. Should be pretty short.') !!}
-            {!! Form::text('genotype', old('genotype'), ['class' => 'form-control', 'genotype']) !!}
+            <div class="col-md-4 form-group" id='biorhythm'>
+                {!! Form::label('biorhythm') !!}
+                {!! Form::select('bio', ['Diurnal' => 'Diurnal', 'Crepuscular' => 'Crepuscular', 'Nocturnal' => 'Nocturnal'], null, ['class' => 'form-control']) !!}
+            </div>
+            <div class="col-md-4 form-group" id='diet'>
+                {!! Form::label('diet') !!}
+                {!! Form::select('diet',['Carnivore' => 'Carnivore', 'Omnivore' => 'Omnivore', 'Herbivore' => 'Herbivore'], null, ['class' => 'form-control']) !!}
+            </div>
         </div>
+        <div class="row">
+            <div class="col-md-6 form-group" id='genotype'>
+                {!! Form::label('genotype') !!}{!! add_help('Copy paste the geno from DA') !!}
+                {!! Form::text('genotype', old('genotype'), ['class' => 'form-control', 'genotype']) !!}
+            </div>
 
-        <div class="form-group" id='phenotype'>
-            {!! Form::label('phenotype') !!}{!! add_help('This is text that will show alongside the ' . __('transformations.transformation') . ' name on the image info area. Explains why the character takes this form, how, etc. Should be pretty short.') !!}
-            {!! Form::text('phenotype', old('phenotype'), ['class' => 'form-control', 'phenotype']) !!}
+            <div class="col-md-6 form-group" id='phenotype'>
+                {!! Form::label('phenotype') !!}{!! add_help('Copy paste the pheno from DA') !!}
+                {!! Form::text('phenotype', old('phenotype'), ['class' => 'form-control', 'phenotype']) !!}
+            </div>
         </div>
-
-        <div class="form-group" id='eyecolor'>
-            {!! Form::label('eyecolor') !!}{!! add_help('This is text that will show alongside the ' . __('transformations.transformation') . ' name on the image info area. Explains why the character takes this form, how, etc. Should be pretty short.') !!}
-            {!! Form::text('eyecolor', old('eyecolor'), ['class' => 'form-control', 'eyecolor']) !!}
+        <div class="row">
+            <div class="col-md-4 form-group" id='eyecolor'>
+                {!! Form::label('eyecolor') !!}{!! add_help('Eyecolor exactly as its said on DA. This includes Black Sclera') !!}
+                {!! Form::text('eyecolor', old('eyecolor'), ['class' => 'form-control', 'eyecolor']) !!}
+            </div>
         </div>
-
-        <div class="form-group" id='atk'>
-            {!! Form::label('atk') !!}{!! add_help('This is text that will show alongside the ' . __('transformations.transformation') . ' name on the image info area. Explains why the character takes this form, how, etc. Should be pretty short.') !!}
-            {!! Form::text('atk', old('atk'), ['class' => 'form-control', 'atk']) !!}
+        <div class="row">
+            <div class="col-md-4 form-group" id='atk'>
+                {!! Form::label('atk') !!}{!! add_help('This is a Kukuris stats') !!}
+                {!! Form::text('atk', old('atk'), ['class' => 'form-control', 'atk']) !!}
+            </div>
+            <div class="col-md-4 form-group" id='def'>
+                {!! Form::label('def') !!}
+                {!! Form::text('def', old('def'), ['class' => 'form-control', 'def']) !!}
+            </div>
+            <div class="col-md-4 form-group" id='spd'>
+                {!! Form::label('spd') !!}
+                {!! Form::text('spd', old('spd'), ['class' => 'form-control', 'spd']) !!}
+            </div>
         </div>
-        <div class="form-group" id='def'>
-            {!! Form::label('def') !!}
-            {!! Form::text('def', old('def'), ['class' => 'form-control', 'def']) !!}
-        </div>
-        <div class="form-group" id='spd'>
-            {!! Form::label('spd') !!}
-            {!! Form::text('spd', old('spd'), ['class' => 'form-control', 'spd']) !!}
-        </div>
-
-        <div class="form-group" id='biorhythm'>
-            {!! Form::label('biorhythm') !!}
-            {!! Form::select('bio', ['Diurnal' => 'Diurnal', 'Crepuscular' => 'Crepuscular', 'Nocturnal' => 'Nocturnal'], null, ['class' => 'form-control']) !!}
-        </div>
-        <div class="form-group" id='diet'>
-            {!! Form::label('diet') !!}
-            {!! Form::select('diet',['Carnivore' => 'Carnivore', 'Omnivore' => 'Omnivore', 'Herbivore' => 'Herbivore'], null, ['class' => 'form-control']) !!}
-        </div>
+            
 <!-- 
         <div class="form-group" id='stats'>
             {!! Form::label('Stats (atk/def/spd)') !!}

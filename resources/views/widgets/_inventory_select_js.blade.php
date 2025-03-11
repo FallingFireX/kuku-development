@@ -8,6 +8,7 @@
                 item: customItemSelectizeRender
             }
         });
+
         $itemIdFilter.on('change', function(e) {
             refreshFilter();
         });
@@ -75,5 +76,10 @@
             option_render += '<span>' + escape(item['name']) + '</span></div>';
             return option_render;
         }
+
+        if ($userItemCategory.val() === 'selected' || '{{ $page ?? '' }}' === 'specificPage') {
+    $userItemCategory.val('selected'); // Ensure "Selected Items" is selected
+    refreshFilter(); // Trigger filtering logic
+}
     });
 </script>

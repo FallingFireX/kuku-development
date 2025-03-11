@@ -6,6 +6,7 @@ use App\Facades\Settings;
 use App\Http\Controllers\Controller;
 use App\Models\Character\BreedingPermission;
 use App\Models\Character\Character;
+use App\Models\Character\CharacterLink;
 use App\Models\Character\CharacterCategory;
 use App\Models\Character\CharacterLineageBlacklist;
 use App\Models\Character\CharacterTransfer;
@@ -168,7 +169,7 @@ class CharacterController extends Controller {
             'generate_ancestors',
 
             'species_id', 'subtype_id', 'rarity_id', 'feature_id', 'feature_data',
-            'image', 'thumbnail', 'image_description', 'transformation_id', 'transformation_info', 'transformation_description', 'stats', 'genotype', 'phenotype', 'gender', 'eyecolor', 'spd', 'def', 'atk',
+            'image', 'thumbnail', 'image_description', 'parent_id', 'transformation_id', 'transformation_info', 'transformation_description', 'stats', 'genotype', 'phenotype', 'gender', 'eyecolor', 'spd', 'def', 'atk',
             'diet', 'bio',
         ]);
         if ($character = $service->createCharacter($data, Auth::user())) {
@@ -219,7 +220,7 @@ class CharacterController extends Controller {
             'generate_ancestors',
 
             'species_id', 'subtype_id', 'rarity_id', 'feature_id', 'feature_data',
-            'image', 'thumbnail', 'transformation_id', 'transformation_info', 'transformation_description', 'stats', 'genotype', 'phenotype', 'gender', 'eyecolor', 'spd', 'def', 'atk',
+            'image', 'thumbnail', 'parent_id', 'transformation_id', 'transformation_info', 'transformation_description', 'stats', 'genotype', 'phenotype', 'gender', 'eyecolor', 'spd', 'def', 'atk',
             'diet', 'bio',
         ]);
         if ($character = $service->createCharacter($data, Auth::user(), true)) {
@@ -645,16 +646,18 @@ class CharacterController extends Controller {
      */
     public function postTransfer(Request $request, CharacterManager $service, $slug) {
         $this->character = Character::where('slug', $slug)->first();
-        if (!$this->character) {
-            abort(404);
+        if(!$this->character) abort(404);
+        
+        $parent = CharacterLink::where('child_id', $this->character->id)->first();
+        $child = CharacterLink::where('parent_id', $this->character->id)->first();
+        if($parent && $child) $mutual = CharacterLink::where('child_id', $parent->parent->id)->where('parent_id', $this->character->id)->first();
+        if($parent && !isset($mutual)) {
+            flash('This character is bound and cannot be transfered. You must transfer the character it is bound to.')->error();
+            return redirect()->back();
         }
-
-        if ($service->adminTransfer($request->only(['recipient_id', 'recipient_url', 'cooldown', 'reason']), $this->character, Auth::user())) {
+        if($service->adminTransfer($request->only(['recipient_id', 'recipient_alias', 'cooldown', 'reason']), $this->character, Auth::user())) {
             flash('Character transferred successfully.')->success();
-        } else {
-            foreach ($service->errors()->getMessages()['error'] as $error) {
-                flash($error)->error();
-            }
+            if($child) flash("This character's attachments have been transferred with it.")->warning();
         }
 
         return redirect()->back();
@@ -670,11 +673,16 @@ class CharacterController extends Controller {
      */
     public function postMyoTransfer(Request $request, CharacterManager $service, $id) {
         $this->character = Character::where('is_myo_slot', 1)->where('id', $id)->first();
-        if (!$this->character) {
-            abort(404);
+        if(!$this->character) abort(404);
+        
+        $parent = CharacterLink::where('child_id', $this->character->id)->first();
+        $child = CharacterLink::where('parent_id', $this->character->id)->first();
+        if($parent && $child) $mutual = CharacterLink::where('child_id', $parent->parent->id)->where('parent_id', $this->character->id)->first();
+        if($parent && !isset($mutual)) {
+            flash('This character is bound and cannot be transfered. You must transfer the character it is bound to.')->error();
+            return redirect()->back();
         }
-
-        if ($service->adminTransfer($request->only(['recipient_id', 'recipient_url', 'cooldown', 'reason']), $this->character, Auth::user())) {
+        if($service->adminTransfer($request->only(['recipient_id', 'cooldown', 'reason']), $this->character, Auth::user())) {
             flash('Character transferred successfully.')->success();
         } else {
             foreach ($service->errors()->getMessages()['error'] as $error) {
@@ -682,6 +690,50 @@ class CharacterController extends Controller {
             }
         }
 
+        return redirect()->back();
+    }
+
+    /**
+     * Binds a character.
+     *
+     * @param  \Illuminate\Http\Request       $request
+     * @param  App\Services\CharacterManager  $service
+     * @param  string                         $slug
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function postBind(Request $request, CharacterManager $service, $slug)
+    {
+        $this->character = Character::where('slug', $slug)->first();
+        if(!$this->character) abort(404);
+        
+        if($service->boundTransfer($request->only(['parent_id']), $this->character, Auth::user())) {
+            flash('Character binding updated.')->success();
+        }
+        else {
+            foreach($service->errors()->getMessages()['error'] as $error) flash($error)->error();
+        }
+        return redirect()->back();
+    }
+    
+    /**
+     * Binds an MYO slot.
+     *
+     * @param  \Illuminate\Http\Request       $request
+     * @param  App\Services\CharacterManager  $service
+     * @param  int                            $id
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function postMyoBind(Request $request, CharacterManager $service, $id)
+    {
+        $this->character = Character::where('is_myo_slot', 1)->where('id', $id)->first();
+        if(!$this->character) abort(404);
+        
+        if($service->boundTransfer($request->only(['parent_id']), $this->character, Auth::user())) {
+            flash('Character binding updated.')->success();
+        }
+        else {
+            foreach($service->errors()->getMessages()['error'] as $error) flash($error)->error();
+        }
         return redirect()->back();
     }
 

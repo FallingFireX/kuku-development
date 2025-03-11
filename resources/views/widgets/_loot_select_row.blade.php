@@ -4,30 +4,17 @@
     // doing so this way enables better compatibility across disparate extensions
     $characterCurrencies = \App\Models\Currency\Currency::where('is_character_owned', 1)->orderBy('sort_character', 'DESC')->pluck('name', 'id');
     $items = \App\Models\Item\Item::orderBy('name')->pluck('name', 'id');
-    $pets = \App\Models\Pet\Pet::orderBy('name')->pluck('name', 'id');
-    $variants = \App\Models\Pet\PetVariant::orderBy('variant_name')->pluck('variant_name', 'id')
-    ->map(function ($variant, $key) {
-        $pet = \App\Models\Pet\PetVariant::find($key)->pet;
-        return $variant . ' (' . $pet->name . ' variant)';
-    });
-    $currencies = \App\Models\Currency\Currency::where('is_user_owned', 1)
-        ->orderBy('name')
-        ->pluck('name', 'id');
     $gears = \App\Models\Claymore\Gear::orderBy('name')->pluck('name', 'id');
     $weapons = \App\Models\Claymore\Weapon::orderBy('name')->pluck('name', 'id');
-    $pets = \App\Models\Pet\Pet::orderBy('name')->pluck('name', 'id');
-    $stats =
-        ['none' => 'General Point'] +
-        \App\Models\Stat\Stat::orderBy('name')
-            ->pluck('name', 'id')
-            ->toArray();
+    $stats = ['none' => 'General Point'] + \App\Models\Stat\Stat::orderBy('name')->pluck('name', 'id')->toArray();
+    $pets = \App\Models\Pet\Pet::orderBy('name')->get()->pluck('fullName', 'id');
+    $currencies = \App\Models\Currency\Currency::where('is_user_owned', 1)->orderBy('name')->pluck('name', 'id');
     if ($showLootTables) {
         $tables = \App\Models\Loot\LootTable::orderBy('name')->pluck('name', 'id');
     }
     if ($showRaffles) {
         $raffles = \App\Models\Raffle\Raffle::where('rolled_at', null)->where('is_active', 1)->orderBy('name')->pluck('name', 'id');
     }
-   
 @endphp
 
 <div id="lootRowData" class="hide">
@@ -36,11 +23,9 @@
             <tr class="loot-row">
                 <td>{!! Form::select(
                     'rewardable_type[]',
-                    ['Item' => 'Item', 'Currency' => 'Currency', 'Pet' => 'Pet', 'Exp' => 'Exp'] +
+                    ['Item' => 'Item', 'Currency' => 'Currency', 'Pet' => 'Pet', 'Gear' => 'Gear', 'Weapon' => 'Weapon', 'Exp' => 'Exp', 'Points' => 'Stat Points'] +
                         ($showLootTables ? ['LootTable' => 'Loot Table'] : []) +
-                        ($showRaffles ? ['Raffle' => 'Raffle Ticket'] : []) +
-                        (isset($showBorders) && $showBorders ? ['Border' => 'Border'] : []) +
-                        (isset($showThemes) && $showThemes ? ['Theme' => 'Theme'] : []),
+                        ($showRaffles ? ['Raffle' => 'Raffle Ticket'] : []),
                     null,
                     ['class' => 'form-control reward-type', 'placeholder' => 'Select Reward Type'],
                 ) !!}</td>
@@ -53,14 +38,14 @@
     {!! Form::select('rewardable_id[]', $items, null, ['class' => 'form-control item-select', 'placeholder' => 'Select Item']) !!}
     {!! Form::select('rewardable_id[]', $currencies, null, ['class' => 'form-control currency-select', 'placeholder' => 'Select Currency']) !!}
     {!! Form::select('rewardable_id[]', $pets, null, ['class' => 'form-control pet-select', 'placeholder' => 'Select Pet']) !!}
+    {!! Form::select('rewardable_id[]', $weapons, null, ['class' => 'form-control weapon-select', 'placeholder' => 'Select Weapon']) !!}
+    {!! Form::select('rewardable_id[]', $gears, null, ['class' => 'form-control gear-select', 'placeholder' => 'Select Gear']) !!}
+    {!! Form::select('rewardable_id[]', $stats, null, ['class' => 'form-control stat-select', 'placeholder' => 'Select Stat']) !!}
     {!! Form::select('rewardable_id[]', [0 => 1], 0, ['class' => 'form-control claymore-select hide', 'placeholder' => 'Enter Reward']) !!}
     @if ($showLootTables)
         {!! Form::select('rewardable_id[]', $tables, null, ['class' => 'form-control table-select', 'placeholder' => 'Select Loot Table']) !!}
     @endif
     @if ($showRaffles)
         {!! Form::select('rewardable_id[]', $raffles, null, ['class' => 'form-control raffle-select', 'placeholder' => 'Select Raffle']) !!}
-    @endif
-    @if(isset($showBorders) && $showBorders)
-        {!! Form::select('rewardable_id[]', $borders, null, ['class' => 'form-control border-select', 'placeholder' => 'Select Border']) !!}
     @endif
 </div>

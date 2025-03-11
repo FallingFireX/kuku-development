@@ -22,16 +22,21 @@
                     @php
                         $increment = $stat->stat->increment ?? 1;
                         $multiplier = $stat->stat->multiplier ?? 1;
-                        if ($increment || $multiplier) {
-                            // Calculate the new stat value
-                            $newStat = ($stat->stat->base + $increment) * $multiplier;
+                        $baseStat = $stat->stat->base ?? 0;
 
-                            // Calculate the percentage increase
-                            $percentageIncrease = (($newStat - $stat->stat->base) / $stat->stat->base) * 100 . '%';
+                        if ($increment || $multiplier) {
+                            $newStat = ($baseStat + $increment) * $multiplier;
+
+                            if ($baseStat == 0) {
+                                $percentageIncrease = 'N/A';
+                            } else {
+                                $percentageIncrease = (($newStat - $baseStat) / $baseStat) * 100 . '%';
+                            }
                         } else {
                             $percentageIncrease = '1';
                         }
                     @endphp
+
                     This stat increases by <b>{{ $percentageIncrease }}</b> per level up.
                     ({{ '(' . $stat->stat->base . ' + ' . $increment . ') * ' . $multiplier . ' = ' . $newStat }})
                 </p>
@@ -136,6 +141,24 @@
 
                     {!! Form::close() !!}
                 </div>
+
+
+                <div class="col-md-6">
+                    <h5>Edit Stat Level</h5>
+                    <p>This will edit the character's current stat level.</p>
+                    {!! Form::open(['url' => 'character/' . $character->slug . '/stats/' . $stat->stat->id . '/level-edit', 'method' => 'POST']) !!}
+                        <div class="form-group">
+                            {!! Form::label('stat_level', 'Stat Level') !!}
+                            {!! Form::number('stat_level', $stat->stat_level, ['class' => 'form-control']) !!}
+                        </div>
+
+                        <div class="text-right">
+                            {!! Form::submit('Update Level', ['class' => 'btn btn-primary']) !!}
+                        </div>
+                    {!! Form::close() !!}
+
+                </div>
+
             </div>
         @endif
     </div>

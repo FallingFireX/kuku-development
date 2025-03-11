@@ -27,40 +27,34 @@
                 </div>
                 <div class="col-md-10 col-8">{!! $submission->user->displayName !!}</div>
             </div>
-        @if($submission->prompt_id)
-            <div class="row">
-                <div class="col-md-2 col-4"><h5>Prompt</h5></div>
-                <div class="col-md-10 col-8">{!! $submission->prompt->displayName !!}</div>
-            </div>
-            <div class="row">
-                <div class="col-md-2 col-4"><h5>Previous Submissions{!! add_help('This is the number of times the user has submitted this prompt before, pending or approved.') !!}</h5></div>
-                <div class="col-md-10 col-8">
-                    <div class="row text-center">
-                        <div class="col"><strong>All Time</strong></div>
-                        <div class="col"><strong>Past Hour</strong></div>
-                        <div class="col"><strong>Past Day</strong></div>
-                        <div class="col"><strong>Past Week</strong></div>
-                        <div class="col"><strong>Past Month</strong></div>
-                        <div class="col"><strong>Past Year</strong></div>
+            @if ($submission->prompt_id)
+                <div class="row">
+                    <div class="col-md-2 col-4">
+                        <h5>Prompt</h5>
                     </div>
-                    <div class="row text-center">
-                        <div class="col">{{ $count['all'] }}</div>
-                        <div class="col">{{ $count['Hour'] }}</div>
-                        <div class="col">{{ $count['Day'] }}</div>
-                        <div class="col">{{ $count['Week'] }}</div>
-                        <div class="col">{{ $count['Month'] }}</div>
-                        <div class="col">{{ $count['Year'] }}</div>
-                    </div>
+                    <div class="col-md-10 col-8">{!! $submission->prompt->displayName !!}</div>
                 </div>
-            </div>
-        @endif
+                <div class="row">
+                    <div class="col-md-2 col-4">
+                        <h5>Previous Submissions</h5>
+                    </div>
+                    <div class="col-md-10 col-8">{{ $count }} {!! add_help('This is the number of times the user has submitted this prompt before and had their submission approved.') !!}</div>
+                </div>
+            @endif
             <div class="row">
                 <div class="col-md-2 col-4">
                     <h5>URL</h5>
                 </div>
                 <div class="col-md-10 col-8"><a href="{{ $submission->url }}">{{ $submission->url }}</a></div>
             </div>
-            
+            @if (config('lorekeeper.settings.allow_gallery_submissions_on_prompts') && $submission->data['gallery_submission_id'])
+                <div class="row mb-2 no-gutters">
+                    <div class="col-md-2">
+                        <h5 class="mb-0">Gallery Submission</h5>
+                    </div>
+                    <div class="col-md-10"><a href="{{ $submission->gallerySubmission->url }}">{{ $submission->gallerySubmission->title }}</a></div>
+                </div>
+            @endif
             <div class="row">
                 <div class="col-md-2 col-4">
                     <h5>Submitted</h5>
@@ -70,7 +64,7 @@
         </div>
         <h2>Comments</h2>
         <div class="card mb-3">
-            <div class="card-body">{!! nl2br($submission->comments) !!}</div>
+            <div class="card-body">{!! nl2br(htmlentities($submission->comments)) !!}</div>
         </div>
         @if (Auth::check() && $submission->staff_comments && ($submission->user_id == Auth::user()->id || Auth::user()->hasPower('manage_submissions')))
             <h2>Staff Comments ({!! $submission->staff->displayName !!})</h2>
@@ -85,54 +79,10 @@
             </div>
         @endif
 
-        {!! Form::open(['url' => url()->current(), 'id' => 'submissionForm', 'onsubmit' => "$(this).find('input').prop('disabled', false)"]) !!}
+        {!! Form::open(['url' => url()->current(), 'id' => 'submissionForm']) !!}
 
-        @if (isset($submission->data['criterion']))
-            <h2 class="mt-5">Criteria Rewards</h2>
-            @foreach ($submission->data['criterion'] as $key => $criterionData)
-                <div class="card p-3 mb-2">
-                    @php $criterion = \App\Models\Criteria\Criterion::where('id', $criterionData['id'])->first() @endphp
-                    <h3>{!! $criterion->displayName !!}</h3>
-                    {!! Form::hidden('criterion[' . $key . '][id]', $criterionData['id']) !!}
-                    @include('criteria._minimum_requirements', [
-                        'criterion' => $criterion,
-                        'values' => $criterionData,
-                        'minRequirements' => $submission->prompt->criteria->where('criterion_id', $criterionData['id'])->first()->minRequirements ?? null,
-                        'title' => 'Selections',
-                        'limitByMinReq' => true,
-                        'id' => $key,
-                        'criterion_currency' => isset($criterionData['criterion_currency_id']) ? $criterionData['criterion_currency_id'] : $criterion->currency_id,
-                    ])
-                </div>
-            @endforeach
-        @endif
-
-
-        <h2 class="mt-4">Rewards</h2>
+        <h2>Rewards</h2>
         @include('widgets._loot_select', ['loots' => $submission->rewards, 'showLootTables' => true, 'showRaffles' => true])
-        @if ($submission->prompt_id)
-            <div class="mb-3">
-                <h2>Skill Rewards</h2>
-                <div class="form-group">
-                    <div id="skillList">
-                        @foreach ($submission->prompt->skills as $skill)
-                            <div class="d-flex mb-2">
-                                {!! Form::select('skill_id[]', $skills, $skill->skill_id, ['class' => 'form-control mr-2 skill-select original', 'placeholder' => 'Select Skill']) !!}
-                                {!! Form::text('skill_quantity[]', $skill->quantity, ['class' => 'form-control mr-2', 'placeholder' => 'Amount of level']) !!}
-                                <a href="#" class="remove-skill btn btn-danger mb-2">×</a>
-                            </div>
-                        @endforeach
-                    </div>
-                    <div><a href="#" class="btn btn-primary" id="add-skill">Add Skill Reward</a></div>
-                </div>
-
-                <hr />
-            </div>
-
-            <div class="mb-3">
-                @include('home._prompt', ['prompt' => $submission->prompt, 'staffView' => true])
-            </div>
-        @endif
 
         <h2>Characters</h2>
         <p>Only focus characters will receive skill rewards. Exp and stat point rewards are on a per-character basis.</p>
@@ -143,15 +93,7 @@
                 </div>
             @endif
             @foreach ($submission->characters()->whereRelation('character', 'deleted_at', null)->get() as $character)
-                @include('widgets._character_select_entry', [
-                    'characterCurrencies' => $characterCurrencies,
-                    'items' => $items,
-                    'tables' => $tables,
-                    'character' => $character,
-                    'characterAwards' => $characterAwards,
-                    'expanded_rewards' => $expanded_rewards,
-                    'elements' => $elements,
-                ])
+                @include('widgets._character_select_entry', ['character' => $character, 'expanded_rewards' => $expanded_rewards])
             @endforeach
         </div>
         <div class="text-right mb-3">
@@ -219,12 +161,6 @@
 
         {!! Form::close() !!}
 
-        <div class="skill-row hide mb-2">
-            {!! Form::select('skill_id[]', $skills, null, ['class' => 'form-control mr-2 skill-select', 'placeholder' => 'Select Skill']) !!}
-            {!! Form::text('skill_quantity[]', null, ['class' => 'form-control mr-2', 'placeholder' => 'Amount of level']) !!}
-            <a href="#" class="remove-skill btn btn-danger mb-2">×</a>
-        </div>
-
         <div id="characterComponents" class="hide">
             <div class="submission-character mb-3 card">
                 <div class="card-body">
@@ -274,18 +210,24 @@
                 <tr class="character-reward-row">
                     @if ($expanded_rewards)
                         <td>
-                            {!! Form::select('character_rewardable_type[]', ['Item' => 'Item', 'Currency' => 'Currency', 'LootTable' => 'Loot Table', 'Award' => ucfirst(__('awards.award')), 'StatusEffect' => 'Status Effect', 'Exp' => 'Exp', 'Points' => 'Stat Points', 'Element' => 'Element'], null, [
-                                'class' => 'form-control character-rewardable-type',
-                                'placeholder' => 'Select Reward Type',
-                            ]) !!}
+                            {!! Form::select(
+                                'character_rewardable_type[]',
+                                ['Item' => 'Item', 'Currency' => 'Currency', 'LootTable' => 'Loot Table', 'Exp' => 'Exp', 'Points' => 'Stat Points', 'Element' => 'Element', 'StatusEffect' => 'Status Effect', 'Skill' => 'Skill'],
+                                null,
+                                [
+                                    'class' => 'form-control character-rewardable-type',
+                                    'placeholder' => 'Select Reward Type',
+                                ],
+                            ) !!}
                         </td>
                         <td class="lootDivs">
                             <div class="character-currencies hide">{!! Form::select('character_rewardable_id[]', $characterCurrencies, 0, ['class' => 'form-control character-currency-id', 'placeholder' => 'Select Currency']) !!}</div>
                             <div class="character-items hide">{!! Form::select('character_rewardable_id[]', $items, 0, ['class' => 'form-control character-item-id', 'placeholder' => 'Select Item']) !!}</div>
-                            <div class="character-awards hide">{!! Form::select('character_rewardable_id[]', $characterAwards, 0, ['class' => 'form-control character-award-id', 'placeholder' => 'Select '.ucfirst(__('awards.award'))]) !!}</div>
                             <div class="character-tables hide">{!! Form::select('character_rewardable_id[]', $tables, 0, ['class' => 'form-control character-table-id', 'placeholder' => 'Select Loot Table']) !!}</div>
-                            <div class="character-statuses hide">{!! Form::select('character_rewardable_id[]', $statuses, 0, ['class' => 'form-control character-status-id', 'placeholder' => 'Select Status Effect']) !!}</div>
+                            <div class="character-claymores hide">{!! Form::number('character_claymores_id[]', 1, ['class' => 'form-control character-claymores-id']) !!}</div>
                             <div class="character-elements hide">{!! Form::select('character_rewardable_id[]', $elements, 0, ['class' => 'form-control character-element-id', 'placeholder' => 'Select Element']) !!}</div>
+                            <div class="character-statuses hide">{!! Form::select('character_rewardable_id[]', $statuses, 0, ['class' => 'form-control character-status-id', 'placeholder' => 'Select Status Effect']) !!}</div>
+                            <div class="character-skills hide">{!! Form::select('character_rewardable_id[]', $skills, 0, ['class' => 'form-control character-skill-id', 'placeholder' => 'Select Skill']) !!}</div>
                         </td>
                     @else
                         <td class="lootDivs">
@@ -301,7 +243,7 @@
                 </tr>
             </table>
         </div>
-        @include('widgets._loot_select_row', ['showLootTables' => true, 'showRaffles' => true, 'showRecipes' => true])
+        @include('widgets._loot_select_row', ['showLootTables' => true, 'showRaffles' => true])
 
         <div class="modal fade" id="confirmationModal" tabindex="-1" role="dialog">
             <div class="modal-dialog" role="document">
@@ -353,7 +295,7 @@
 @section('scripts')
     @parent
     @if ($submission->status == 'Pending')
-        @include('js._loot_js', ['showLootTables' => true, 'showRaffles' => true, 'showRecipes' => true])
+        @include('js._loot_js', ['showLootTables' => true, 'showRaffles' => true])
         @include('js._character_select_js')
 
         <script>

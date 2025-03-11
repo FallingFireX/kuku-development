@@ -754,6 +754,9 @@ Route::group(['prefix' => 'character', 'namespace' => 'Characters', 'middleware'
     // CHARACTER
     Route::get('{slug}/stats', 'CharacterController@getEditCharacterStats');
     Route::post('{slug}/stats', 'CharacterController@postEditCharacterStats');
+    Route::post('{slug}/stats', 'CharacterStatController@updateLevel');
+    
+
 
     Route::get('{slug}/description', 'CharacterController@getEditCharacterDescription');
     Route::post('{slug}/description', 'CharacterController@postEditCharacterDescription');
@@ -774,6 +777,7 @@ Route::group(['prefix' => 'character', 'namespace' => 'Characters', 'middleware'
     // LINEAGE
     Route::get('{slug}/lineage', 'CharacterLineageController@getEditCharacterLineage');
     Route::post('{slug}/lineage', 'CharacterLineageController@postEditCharacterLineage');
+    Route::post('{slug}/bind', 'CharacterController@postBind');
 });
 // Might rewrite these parts eventually so there's less code duplication...
 Route::group(['prefix' => 'myo', 'namespace' => 'Characters', 'middleware' => 'power:manage_characters'], function () {
@@ -797,6 +801,7 @@ Route::group(['prefix' => 'myo', 'namespace' => 'Characters', 'middleware' => 'p
     // LINEAGE
     Route::get('{id}/lineage', 'CharacterLineageController@getEditMyoLineage');
     Route::post('{id}/lineage', 'CharacterLineageController@postEditMyoLineage');
+    Route::post('{slug}/bind', 'CharacterController@postMyoBind');
 });
 
 // RAFFLES

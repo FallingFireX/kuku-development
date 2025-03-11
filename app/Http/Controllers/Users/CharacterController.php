@@ -91,18 +91,20 @@ class CharacterController extends Controller {
      * @return \Illuminate\Http\RedirectResponse
      */
     public function postSelectCharacter(Request $request, CharacterManager $service) {
-        if ($service->selectCharacter($request->only(['character_id']), Auth::user())) {
+        $characterId = $request->input('character_id') ?: null; // Convert empty string to null
+    
+        if ($service->selectCharacter(['character_id' => $characterId], Auth::user())) {
             flash('Character selected successfully.')->success();
-
             return redirect()->back();
         } else {
             foreach ($service->errors()->getMessages()['error'] as $error) {
                 flash($error)->error();
             }
         }
-
+    
         return redirect()->back();
     }
+    
 
     /**
      * Sorts the characters pets.

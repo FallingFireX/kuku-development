@@ -35,6 +35,8 @@ use App\Models\User\UserCurrency;
 use App\Models\User\UserItem;
 use App\Services\AwardCaseManager;
 use App\Services\CharacterLinkService;
+use App\Models\Character\CharacterLink;
+
 use App\Services\CharacterManager;
 use App\Services\CurrencyManager;
 use App\Services\DesignUpdateManager;
@@ -148,6 +150,8 @@ class CharacterController extends Controller {
             'skills'                => Skill::where('parent_id', null)->orderBy('name', 'ASC')->get(),
             'showMention'           => true,
             'extPrevAndNextBtnsUrl' => '',
+            'parent' => CharacterLink::where('child_id', $this->character->id)->orderBy('parent_id', 'ASC')->first(),
+            'children' => CharacterLink::where('parent_id', $this->character->id)->orderBy('child_id', 'ASC')->get()
         ]);
     }
 
@@ -805,12 +809,17 @@ class CharacterController extends Controller {
             abort(404);
         }
 
+        $parent = CharacterLink::where('child_id', $this->character->id)->orderBy('parent_id', 'DESC')->first();
+        if($parent) $parent = $parent->parent->id;
+
         return view('character.transfer', [
             'character'      => $this->character,
             'transfer'       => CharacterTransfer::active()->where('character_id', $this->character->id)->first(),
             'cooldown'       => Settings::get('transfer_cooldown'),
             'transfersQueue' => Settings::get('open_transfers_queue'),
-            'userOptions'    => User::visible()->orderBy('name')->pluck('name', 'id')->toArray(),
+            'userOptions' => User::visible()->orderBy('name')->pluck('name', 'id')->toArray(),
+            'parent' => $parent,
+            'characterOptions' => [null => 'Unbound'] + Character::visible()->myo(0)->orderBy('slug','ASC')->get()->pluck('fullName','id')->toArray()
         ]);
     }
 
@@ -822,17 +831,20 @@ class CharacterController extends Controller {
      *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function postTransfer(Request $request, CharacterManager $service, $slug) {
-        if (!Auth::check()) {
-            abort(404);
+    public function postTransfer(Request $request, CharacterManager $service, $slug)
+    {
+        if(!Auth::check()) abort(404);
+        
+        $parent = CharacterLink::where('child_id', $this->character->id)->first();
+        $child = CharacterLink::where('parent_id', $this->character->id)->first();
+        if($parent && $child) $mutual = CharacterLink::where('child_id', $parent->parent->id)->where('parent_id', $this->character->id)->first();
+        if($parent && !isset($mutual)) {
+            flash('This character is bound and cannot be transfered. You must transfer the character it is bound to.')->error();
+            return redirect()->back();
         }
-
-        if ($service->createTransfer($request->only(['recipient_id', 'user_reason']), $this->character, Auth::user())) {
-            flash('Transfer created successfully.')->success();
-        } else {
-            foreach ($service->errors()->getMessages()['error'] as $error) {
-                flash($error)->error();
-            }
+        if($service->createTransfer($request->only(['recipient_id']), $this->character, Auth::user())) {
+            flash('Transfer request created successfully.')->success();
+            if($child) flash('This character has attachments that will be transferred with it.')->warning();
         }
 
         return redirect()->back();

@@ -212,6 +212,7 @@ Route::group(['prefix' => 'character', 'namespace' => 'Characters'], function ()
     Route::post('{slug}/stats/{id}/level', 'CharacterStatController@postLevelStat'); // stat level up
     Route::post('{slug}/stats/{id}/count', 'CharacterStatController@postEditStatCurrentCount');
     Route::post('{slug}/stats/{id}/base', 'CharacterStatController@postEditBaseStat');
+    Route::post('{slug}/stats/{id}/level-edit', 'CharacterStatController@postEditStatLevel');
 
     Route::get('{slug}/stats/logs', 'CharacterStatController@getStatLogs');
     Route::post('{slug}/stats/level', 'CharacterStatController@postLevel'); // level up

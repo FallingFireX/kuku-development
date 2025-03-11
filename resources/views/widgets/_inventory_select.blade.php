@@ -20,8 +20,8 @@
                 <div class="d-inline-block mb-3">
                     {!! Form::label('item_category_id', 'Filter:', ['class' => 'mr-2']) !!}
                     <select class="form-control d-inline-block w-auto" id="userItemCategory">
-                        <option value="all">All Categories</option>
-                        <option value="selected">Selected Items</option>
+                        <option value="all" {{ isset($page) && $page === 'specificPage' ? '' : 'selected' }}>All Categories</option>
+                        <option value="selected" {{ isset($page) && $page === 'crafting' ? 'selected' : '' }}>Selected Items</option>
                         <option disabled>&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;</option>
                         <option value="0">Miscellaneous</option>
                         @foreach ($categories as $category)
