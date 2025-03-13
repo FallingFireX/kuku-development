@@ -9,18 +9,13 @@ use App\Models\Character\CharacterDesignUpdate;
 use App\Models\Character\CharacterItem;
 use App\Models\Item\Item;
 use App\Models\Item\ItemCategory;
-use App\Models\User\UserStorage;
-use App\Models\Item\UserItemLog;
-use App\Services\StorageManager;
 use App\Models\Submission\Submission;
 use App\Models\Trade;
 use App\Models\User\User;
 use App\Models\User\UserItem;
-use App\Models\UniqueItem;
-use App\Models\UniqueItemCategory;
 use App\Services\InventoryManager;
+use App\Services\StorageManager;
 use Illuminate\Http\Request;
-use DB;
 use Illuminate\Support\Facades\Auth;
 
 class InventoryController extends Controller {
@@ -40,13 +35,13 @@ class InventoryController extends Controller {
      */
     public function getIndex() {
         $user = Auth::user();
-        
+
         if (!$user) {
             abort(403, 'Unauthorized access.');
         }
-        
+
         $categories = ItemCategory::visible(Auth::user() ?? null)->orderBy('sort', 'DESC')->get();
-    
+
         $items = count($categories) ?
             $user->items()
                 ->where('count', '>', 0)
@@ -61,10 +56,10 @@ class InventoryController extends Controller {
                 ->orderBy('updated_at')
                 ->get()
                 ->groupBy(['item_category_id', 'id']);
-    
+
         // Fetch Unique Items using the corrected relationship in User model
         $uniqueItems = $user->uniqueItems()->orderBy('id')->get();
-    
+
         return view('home.inventory', [
             'categories'   => $categories->keyBy('id'),
             'items'        => $items,
@@ -73,10 +68,6 @@ class InventoryController extends Controller {
             'user'         => $user,
         ]);
     }
-    
-    
-    
-
 
     /**
      * Shows the inventory stack modal.
@@ -176,25 +167,6 @@ class InventoryController extends Controller {
             }
         }
 
-        return redirect()->back();
-    }
-
-    /**
-     * Deposits an inventory stack.
-     *
-     * @param  \Illuminate\Http\Request       $request
-     * @param  App\Services\StorageManager    $service
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    private function postDeposit(Request $request, StorageManager $service)
-    {
-        $stacks = UserItem::find($request->get('ids'));
-        if($service->depositStack(User::find($stacks->first()->user_id), $stacks, $request->get('quantities'))) {
-            flash('Item deposited successfully.')->success();
-        }
-        else {
-            foreach($service->errors()->getMessages()['error'] as $error) flash($error)->error();
-        }
         return redirect()->back();
     }
 
@@ -325,6 +297,26 @@ class InventoryController extends Controller {
     public function postConsolidateInventory(Request $request, InventoryManager $service) {
         if ($service->consolidateInventory(Auth::user())) {
             flash('Inventory consolidated.')->success();
+        } else {
+            foreach ($service->errors()->getMessages()['error'] as $error) {
+                flash($error)->error();
+            }
+        }
+
+        return redirect()->back();
+    }
+
+    /**
+     * Deposits an inventory stack.
+     *
+     * @param App\Services\StorageManager $service
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    private function postDeposit(Request $request, StorageManager $service) {
+        $stacks = UserItem::find($request->get('ids'));
+        if ($service->depositStack(User::find($stacks->first()->user_id), $stacks, $request->get('quantities'))) {
+            flash('Item deposited successfully.')->success();
         } else {
             foreach ($service->errors()->getMessages()['error'] as $error) {
                 flash($error)->error();

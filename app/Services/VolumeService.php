@@ -28,10 +28,10 @@ class VolumeService extends Service {
     /**
      * Creates a new volume.
      *
-     * @param array                 $data
-     * @param \App\Models\User\User $user
+     * @param array $data
+     * @param User  $user
      *
-     * @return \App\Models\Volume\Volume|bool
+     * @return bool|Volume
      */
     public function createVolume($data, $user) {
         DB::beginTransaction();
@@ -74,11 +74,11 @@ class VolumeService extends Service {
     /**
      * Updates an volume.
      *
-     * @param \App\Models\Volume\Volume $volume
-     * @param array                     $data
-     * @param \App\Models\User\User     $user
+     * @param Volume $volume
+     * @param array  $data
+     * @param User   $user
      *
-     * @return \App\Models\Volume\Volume|bool
+     * @return bool|Volume
      */
     public function updateVolume($volume, $data, $user) {
         DB::beginTransaction();
@@ -124,7 +124,7 @@ class VolumeService extends Service {
     /**
      * Deletes an volume.
      *
-     * @param \App\Models\Volume\Volume $volume
+     * @param Volume $volume
      *
      * @return bool
      */
@@ -160,10 +160,10 @@ class VolumeService extends Service {
     /**
      * Create a book.
      *
-     * @param array                 $data
-     * @param \App\Models\User\User $user
+     * @param array $data
+     * @param User  $user
      *
-     * @return \App\Models\Volume\Book|bool
+     * @return Book|bool
      */
     public function createBook($data, $user) {
         DB::beginTransaction();
@@ -212,11 +212,11 @@ class VolumeService extends Service {
     /**
      * Update a book.
      *
-     * @param \App\Models\Volume\Book $book
-     * @param array                   $data
-     * @param \App\Models\User\User   $user
+     * @param Book  $book
+     * @param array $data
+     * @param User  $user
      *
-     * @return \App\Models\Volume\Book|bool
+     * @return Book|bool
      */
     public function updateBook($book, $data, $user) {
         DB::beginTransaction();
@@ -266,7 +266,7 @@ class VolumeService extends Service {
     /**
      * Delete a book.
      *
-     * @param \App\Models\Volume\Book $book
+     * @param Book $book
      *
      * @return bool
      */
@@ -395,10 +395,10 @@ class VolumeService extends Service {
     /**
      * Creates a new Bookshelf.
      *
-     * @param array                 $data
-     * @param \App\Models\User\User $user
+     * @param array $data
+     * @param User  $user
      *
-     * @return \App\Models\Volume\Bookshelf|bool
+     * @return Bookshelf|bool
      */
     public function createBookshelf($data, $user) {
         DB::beginTransaction();
@@ -433,11 +433,11 @@ class VolumeService extends Service {
     /**
      * Updates a bookshelf.
      *
-     * @param \App\Models\Volume\Bookshelf $bookshelf
-     * @param array                        $data
-     * @param \App\Models\User\User        $user
+     * @param Bookshelf $bookshelf
+     * @param array     $data
+     * @param User      $user
      *
-     * @return \App\Models\Volume\Bookshelf|bool
+     * @return Bookshelf|bool
      */
     public function updateBookshelf($bookshelf, $data, $user) {
         DB::beginTransaction();
@@ -479,7 +479,7 @@ class VolumeService extends Service {
     /**
      * Deletes an bookshelf.
      *
-     * @param \App\Models\Volume\Bookshelf $bookshelf
+     * @param Bookshelf $bookshelf
      *
      * @return bool
      */
@@ -557,8 +557,8 @@ class VolumeService extends Service {
     /**
      * Processes user input for creating/updating an volume.
      *
-     * @param array                     $data
-     * @param \App\Models\Volume\Volume $volume
+     * @param array  $data
+     * @param Volume $volume
      *
      * @return array
      */
@@ -589,8 +589,8 @@ class VolumeService extends Service {
     /**
      * Handle book data.
      *
-     * @param array                        $data
-     * @param \App\Models\Volume\Book|null $book
+     * @param array     $data
+     * @param Book|null $book
      *
      * @return array
      */
@@ -641,8 +641,8 @@ class VolumeService extends Service {
     /**
      * Processes user input for creating/updating a bookshelf.
      *
-     * @param array                        $data
-     * @param \App\Models\Volume\Bookshelf $bookshelf
+     * @param array     $data
+     * @param Bookshelf $bookshelf
      *
      * @return array
      */

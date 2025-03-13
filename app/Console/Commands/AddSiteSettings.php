@@ -104,9 +104,9 @@ class AddSiteSettings extends Command {
         $this->addSiteSetting('coupon_settings', 0, '0: Percentage is taken from total (e.g 20% from 2 items costing a total of 100 = 80), 1: Percentage is taken from item (e.g 20% from 2 items costing a total of 100 = 90)');
 
         $this->addSiteSetting('limited_stock_coupon_settings', 0, '0: Does not allow coupons to be used on limited stock items, 1: Allows coupons to be used on limited stock items');
-        
+
         $this->addSiteSetting('carousel_speed', 10000, 'Speed of the carousel in milliseconds.');
-        
+
         $this->addSiteSetting('can_transfer_currency_directly', 1, 'Whether or not users can directly transfer currency to other users without trading. 0: Users cannot directly transfer currency. 1: Direct currency transfers are allowed.');
 
         $this->addSiteSetting('can_transfer_items_directly', 1, 'Whether or not users can directly transfer items to other users without trading. 0: Users cannot directly transfer items. 1: Direct item transfers are allowed.');
@@ -137,25 +137,24 @@ class AddSiteSettings extends Command {
         } else {
             $this->line('Skipped: '.$key);
         }
-    
-        /**
-        * AFFILIATES
-        * Setting determines whether affiliates are open or closed.
-        */
-        if(!DB::table('site_settings')->where('key', 'affiliates_open')->exists()) {
+
+        /*
+         * AFFILIATES
+         * Setting determines whether affiliates are open or closed.
+         */
+        if (!DB::table('site_settings')->where('key', 'affiliates_open')->exists()) {
             DB::table('site_settings')->insert([
                 [
-                    'key' => 'affiliates_open',
-                    'value' => 0,
-                    'description' => 'Are you open for affiliates? 0: Disabled, 1: Enabled.'
-                ]
+                    'key'         => 'affiliates_open',
+                    'value'       => 0,
+                    'description' => 'Are you open for affiliates? 0: Disabled, 1: Enabled.',
+                ],
             ]);
-            $this->info("Added:   affiliates_open / Default: 1");
+            $this->info('Added:   affiliates_open / Default: 1');
+        } else {
+            $this->line('Skipped: affiliates_open');
         }
-        else $this->line("Skipped: affiliates_open");
-
 
         $this->line("\nSite settings up to date!");
     }
 }
-

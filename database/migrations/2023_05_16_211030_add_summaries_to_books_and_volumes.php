@@ -9,8 +9,8 @@ class AddSummariesToBooksAndVolumes extends Migration {
      * Run the migrations.
      */
     public function up() {
-        //deciding to add summaries to them to have a quick glance of what the book ro volume contains
-        //users can click to view the full book/volume so admins can put much longer info without swamping the index pages for the books and volumes
+        // deciding to add summaries to them to have a quick glance of what the book ro volume contains
+        // users can click to view the full book/volume so admins can put much longer info without swamping the index pages for the books and volumes
         Schema::table('volumes', function (Blueprint $table) {
             $table->string('summary', 256)->nullable()->default(null);
         });
@@ -23,6 +23,5 @@ class AddSummariesToBooksAndVolumes extends Migration {
     /**
      * Reverse the migrations.
      */
-    public function down() {
-    }
+    public function down() {}
 }

@@ -2,9 +2,8 @@
 
 namespace App\Services;
 
-use App\Models\Recipe\RecipeCategory;
-
 use App\Models\Recipe\Recipe;
+use App\Models\Recipe\RecipeCategory;
 use App\Models\Recipe\RecipeIngredient;
 use App\Models\Recipe\RecipeLimit;
 use App\Models\User\User;
@@ -32,57 +31,62 @@ class RecipeService extends Service {
     /**
      * Create a category.
      *
-     * @param  array                 $data
-     * @param  \App\Models\User\User $user
-     * @return \App\Models\Recipe\RecipeCategory|bool
+     * @param array $data
+     * @param User  $user
+     *
+     * @return bool|RecipeCategory
      */
-    public function createRecipeCategory($data, $user)
-    {
+    public function createRecipeCategory($data, $user) {
         DB::beginTransaction();
 
         try {
-
             $data = $this->populateCategoryData($data);
 
             $image = null;
-            if(isset($data['image']) && $data['image']) {
+            if (isset($data['image']) && $data['image']) {
                 $data['has_image'] = 1;
                 $image = $data['image'];
                 unset($data['image']);
+            } else {
+                $data['has_image'] = 0;
             }
-            else $data['has_image'] = 0;
 
             $category = RecipeCategory::create($data);
 
-            if ($image) $this->handleImage($image, $category->categoryImagePath, $category->categoryImageFileName);
+            if ($image) {
+                $this->handleImage($image, $category->categoryImagePath, $category->categoryImageFileName);
+            }
 
             return $this->commitReturn($category);
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             $this->setError('error', $e->getMessage());
         }
+
         return $this->rollbackReturn(false);
     }
 
-        /**
+    /**
      * Update a category.
      *
-     * @param  \App\Models\Recipe\RecipeCategory  $category
-     * @param  array                          $data
-     * @param  \App\Models\User\User          $user
-     * @return \App\Models\Recipe\RecipeCategory|bool
+     * @param RecipeCategory $category
+     * @param array          $data
+     * @param User           $user
+     *
+     * @return bool|RecipeCategory
      */
-    public function updateRecipeCategory($category, $data, $user)
-    {
+    public function updateRecipeCategory($category, $data, $user) {
         DB::beginTransaction();
 
         try {
             // More specific validation
-            if(RecipeCategory::where('name', $data['name'])->where('id', '!=', $category->id)->exists()) throw new \Exception("The name has already been taken.");
+            if (RecipeCategory::where('name', $data['name'])->where('id', '!=', $category->id)->exists()) {
+                throw new \Exception('The name has already been taken.');
+            }
 
             $data = $this->populateCategoryData($data, $category);
 
             $image = null;
-            if(isset($data['image']) && $data['image']) {
+            if (isset($data['image']) && $data['image']) {
                 $data['has_image'] = 1;
                 $image = $data['image'];
                 unset($data['image']);
@@ -90,95 +94,80 @@ class RecipeService extends Service {
 
             $category->update($data);
 
-            if ($category) $this->handleImage($image, $category->categoryImagePath, $category->categoryImageFileName);
+            if ($category) {
+                $this->handleImage($image, $category->categoryImagePath, $category->categoryImageFileName);
+            }
 
             return $this->commitReturn($category);
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             $this->setError('error', $e->getMessage());
         }
+
         return $this->rollbackReturn(false);
-    }
-
-    /**
-     * Handle category data.
-     *
-     * @param  array                               $data
-     * @param  \App\Models\Recipe\RecipeCategory|null  $category
-     * @return array
-     */
-    private function populateCategoryData($data, $category = null)
-    {
-        if(isset($data['description']) && $data['description']) $data['parsed_description'] = parse($data['description']);
-
-        if(isset($data['remove_image']))
-        {
-            if($category && $category->has_image && $data['remove_image'])
-            {
-                $data['has_image'] = 0;
-                $this->deleteImage($category->categoryImagePath, $category->categoryImageFileName);
-            }
-            unset($data['remove_image']);
-        }
-
-        return $data;
     }
 
     /**
      * Delete a category.
      *
-     * @param  \App\Models\Recipe\RecipeCategory  $category
+     * @param RecipeCategory $category
+     *
      * @return bool
      */
-    public function deleteRecipeCategory($category)
-    {
+    public function deleteRecipeCategory($category) {
         DB::beginTransaction();
 
         try {
             // Check first if the category is currently in use
-            if(Recipe::where('recipe_category_id', $category->id)->exists()) throw new \Exception("A recipe with this category exists. Please change its category first.");
+            if (Recipe::where('recipe_category_id', $category->id)->exists()) {
+                throw new \Exception('A recipe with this category exists. Please change its category first.');
+            }
 
-            if($category->has_image) $this->deleteImage($category->categoryImagePath, $category->categoryImageFileName);
+            if ($category->has_image) {
+                $this->deleteImage($category->categoryImagePath, $category->categoryImageFileName);
+            }
             $category->delete();
 
             return $this->commitReturn(true);
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             $this->setError('error', $e->getMessage());
         }
+
         return $this->rollbackReturn(false);
     }
 
     /**
      * Sorts category order.
      *
-     * @param  array  $data
+     * @param array $data
+     *
      * @return bool
      */
-    public function sortRecipeCategory($data)
-    {
+    public function sortRecipeCategory($data) {
         DB::beginTransaction();
 
         try {
             // explode the sort array and reverse it since the order is inverted
             $sort = array_reverse(explode(',', $data));
 
-            foreach($sort as $key => $s) {
+            foreach ($sort as $key => $s) {
                 RecipeCategory::where('id', $s)->update(['sort' => $key]);
             }
 
             return $this->commitReturn(true);
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             $this->setError('error', $e->getMessage());
         }
+
         return $this->rollbackReturn(false);
     }
 
     /**
      * Creates a new recipe.
      *
-     * @param array                 $data
-     * @param \App\Models\User\User $user
+     * @param array $data
+     * @param User  $user
      *
-     * @return \App\Models\Recipe\Recipe|bool
+     * @return bool|Recipe
      */
     public function createRecipe($data, $user) {
         DB::beginTransaction();
@@ -187,11 +176,19 @@ class RecipeService extends Service {
             // if(isset($data['recipe_category_id']) && $data['recipe_category_id'] == 'none') $data['recipe_category_id'] = null;
 
             // if((isset($data['recipe_category_id']) && $data['recipe_category_id']) && !RecipeCategory::where('id', $data['recipe_category_id'])->exists()) throw new \Exception("The selected recipe category is invalid.");
-            if(isset($data['recipe_category_id']) && $data['recipe_category_id'] == 'none') $data['recipe_category_id'] = null;
+            if (isset($data['recipe_category_id']) && $data['recipe_category_id'] == 'none') {
+                $data['recipe_category_id'] = null;
+            }
 
-            if((isset($data['recipe_category_id']) && $data['recipe_category_id']) && !RecipeCategory::where('id', $data['recipe_category_id'])->exists()) throw new \Exception("The selected recipe category is invalid.");
-            if(!isset($data['ingredient_type'])) throw new \Exception('Please add at least one ingredient.');
-            if(!isset($data['rewardable_type'])) throw new \Exception('Please add at least one reward to the recipe.');
+            if ((isset($data['recipe_category_id']) && $data['recipe_category_id']) && !RecipeCategory::where('id', $data['recipe_category_id'])->exists()) {
+                throw new \Exception('The selected recipe category is invalid.');
+            }
+            if (!isset($data['ingredient_type'])) {
+                throw new \Exception('Please add at least one ingredient.');
+            }
+            if (!isset($data['rewardable_type'])) {
+                throw new \Exception('Please add at least one reward to the recipe.');
+            }
 
             $data = $this->populateData($data);
 
@@ -230,7 +227,7 @@ class RecipeService extends Service {
 
             $recipe = Recipe::create($data);
             $this->populateIngredients($recipe, $data);
-            //limits
+            // limits
             $this->populateLimits($recipe, $data);
 
             $recipe->output = $this->populateRewards($data);
@@ -251,11 +248,11 @@ class RecipeService extends Service {
     /**
      * Updates an recipe.
      *
-     * @param \App\Models\Recipe\Recipe $recipe
-     * @param array                     $data
-     * @param \App\Models\User\User     $user
+     * @param Recipe $recipe
+     * @param array  $data
+     * @param User   $user
      *
-     * @return \App\Models\Recipe\Recipe|bool
+     * @return bool|Recipe
      */
     public function updateRecipe($recipe, $data, $user) {
         DB::beginTransaction();
@@ -311,7 +308,7 @@ class RecipeService extends Service {
     /**
      * Deletes an recipe.
      *
-     * @param \App\Models\Recipe\Recipe $recipe
+     * @param Recipe $recipe
      *
      * @return bool
      */
@@ -356,8 +353,8 @@ class RecipeService extends Service {
     /**
      * Admin function for granting recipes to multiple users.
      *
-     * @param array                 $data
-     * @param \App\Models\User\User $staff
+     * @param array $data
+     * @param User  $staff
      *
      * @return bool
      */
@@ -402,12 +399,12 @@ class RecipeService extends Service {
     /**
      * Credits recipe to a user or character.
      *
-     * @param \App\Models\User\User           $sender
-     * @param \App\Models\User\User           $recipient
+     * @param User                            $sender
+     * @param User                            $recipient
      * @param \App\Models\Character\Character $character
      * @param string                          $type
      * @param string                          $data
-     * @param \App\Models\Recipe\Recipe       $recipe
+     * @param Recipe                          $recipe
      *
      * @return bool
      */
@@ -482,10 +479,34 @@ class RecipeService extends Service {
     }
 
     /**
+     * Handle category data.
+     *
+     * @param array               $data
+     * @param RecipeCategory|null $category
+     *
+     * @return array
+     */
+    private function populateCategoryData($data, $category = null) {
+        if (isset($data['description']) && $data['description']) {
+            $data['parsed_description'] = parse($data['description']);
+        }
+
+        if (isset($data['remove_image'])) {
+            if ($category && $category->has_image && $data['remove_image']) {
+                $data['has_image'] = 0;
+                $this->deleteImage($category->categoryImagePath, $category->categoryImageFileName);
+            }
+            unset($data['remove_image']);
+        }
+
+        return $data;
+    }
+
+    /**
      * Processes user input for creating/updating an recipe.
      *
-     * @param array                     $data
-     * @param \App\Models\Recipe\Recipe $recipe
+     * @param array  $data
+     * @param Recipe $recipe
      *
      * @return array
      */
@@ -514,8 +535,8 @@ class RecipeService extends Service {
     /**
      * Manages ingredients attached to the recipe.
      *
-     * @param \App\Models\Recipe\Recipe $recipe
-     * @param array                     $data
+     * @param Recipe $recipe
+     * @param array  $data
      */
     private function populateIngredients($recipe, $data) {
         $recipe->ingredients()->delete();
@@ -571,8 +592,8 @@ class RecipeService extends Service {
     /**
      * Adds limits to the recipe.
      *
-     * @param \App\Models\Recipe\Recipe $recipe
-     * @param array                     $data
+     * @param Recipe $recipe
+     * @param array  $data
      */
     private function populateLimits($recipe, $data) {
         if (!isset($data['is_limited'])) {

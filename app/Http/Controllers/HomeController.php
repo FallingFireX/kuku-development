@@ -3,18 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Facades\Settings;
+use App\Models\Affiliate;
 use App\Models\Character\Character;
 use App\Models\Gallery\GallerySubmission;
 use App\Models\News;
-use App\Models\SitePage;
 use App\Models\Sidebar;
+use App\Models\SitePage;
+use App\Models\Submission\Submission;
 use App\Services\LinkService;
 use App\Services\UserService;
-use App\Models\Submission\Submission;
-use App\Models\Affiliate;
-use Config;
-use Carbon\Carbon;
-
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -29,7 +26,6 @@ class HomeController extends Controller {
     | Displays the homepage and handles redirection for linking a user's social media account.
     |
     */
-
 
     /**
      * Shows the homepage.
@@ -62,19 +58,18 @@ class HomeController extends Controller {
             'trainingCount'          => Submission::where('status', 'Pending')->whereIn('prompt_id', [19])->count(),
             'letterCount'            => Submission::where('status', 'Pending')->whereIn('prompt_id', [20, 21])->count(),
             'trainingCount'          => Submission::where('status', 'Pending')->whereIn('prompt_id', [19])->count(),
-            'breedCount'            => Submission::where('status', 'Pending')->whereIn('prompt_id', [25, 26])->count(),
-            'designCount'          => Submission::where('status', 'Pending')->whereIn('prompt_id', [22, 23, 24])->count(),
+            'breedCount'             => Submission::where('status', 'Pending')->whereIn('prompt_id', [25, 26])->count(),
+            'designCount'            => Submission::where('status', 'Pending')->whereIn('prompt_id', [22, 23, 24])->count(),
             'claimCount'             => Submission::where('status', 'Pending')->whereNull('prompt_id')->count(),
-            'about'               => SitePage::where('key', 'about')->first(),
-            'featured'            => $character,
-            'newses'   => News::visible()->orderBy('updated_at', 'DESC')->take(2)->get(),
-            'gallerySubmissions'  => $gallerySubmissions,
-            'open' => intval(Settings::get('affiliates_open')),
-            'affiliates' => Affiliate::where('status','Accepted')->featured(0)->inRandomOrder()->limit(10)->get(),
-            'featured_affiliates' => Affiliate::where('status','Accepted')->featured(1)->get(),
-            'sidebar' => $sidebar,
+            'about'                  => SitePage::where('key', 'about')->first(),
+            'featured'               => $character,
+            'newses'                 => News::visible()->orderBy('updated_at', 'DESC')->take(2)->get(),
+            'gallerySubmissions'     => $gallerySubmissions,
+            'open'                   => intval(Settings::get('affiliates_open')),
+            'affiliates'             => Affiliate::where('status', 'Accepted')->featured(0)->inRandomOrder()->limit(10)->get(),
+            'featured_affiliates'    => Affiliate::where('status', 'Accepted')->featured(1)->get(),
+            'sidebar'                => $sidebar,
 
-        
         ]);
     }
 
@@ -106,7 +101,7 @@ class HomeController extends Controller {
         }
 
         // Redirect to the provider's authentication page
-        return $service->getAuthRedirect($provider); //Socialite::driver($provider)->redirect();
+        return $service->getAuthRedirect($provider); // Socialite::driver($provider)->redirect();
     }
 
     /**
@@ -223,10 +218,10 @@ class HomeController extends Controller {
         // I think there's no harm in linking multiple of the same site as people may want their activity separated into an ARPG account.
         // Uncomment the following to restrict to one account per site, however.
         // Check if the user already has a username associated with their account
-        //if(DB::table('user_aliases')->where('site', $provider)->where('user_id', $user->id)->exists()) {
+        // if(DB::table('user_aliases')->where('site', $provider)->where('user_id', $user->id)->exists()) {
         //    $this->error = 'You already have a username associated with this website linked to your account.';
         //    return false;
-        //}
+        // }
 
         return true;
     }

@@ -9,8 +9,8 @@ class AddVolumeTables extends Migration {
      * Run the migrations.
      */
     public function up() {
-        //books are what hold the volumes
-        //think of it like a category
+        // books are what hold the volumes
+        // think of it like a category
         Schema::create('books', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->increments('id');
@@ -21,10 +21,10 @@ class AddVolumeTables extends Migration {
             $table->boolean('is_visible')->default(1);
         });
 
-        //volumes are what can be collected by the users
-        //volumes have fun data like lore and whatnot
-        //we will make its own model and table because it's easier to access and edit
-        //also i am lazy
+        // volumes are what can be collected by the users
+        // volumes have fun data like lore and whatnot
+        // we will make its own model and table because it's easier to access and edit
+        // also i am lazy
         Schema::create('volumes', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->increments('id');
@@ -36,7 +36,7 @@ class AddVolumeTables extends Migration {
             $table->boolean('is_visible')->default(1);
         });
 
-        //we will be making a table to keep track of what volumes a user owns
+        // we will be making a table to keep track of what volumes a user owns
         Schema::create('user_volumes', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->increments('id');
@@ -45,7 +45,7 @@ class AddVolumeTables extends Migration {
             $table->timestamps();
         });
 
-        //log? not sure if this is needed due to the nature of the ext but we will keep it just in case to prevent having to make a lot more migrations if things change along the way
+        // log? not sure if this is needed due to the nature of the ext but we will keep it just in case to prevent having to make a lot more migrations if things change along the way
         Schema::create('user_volumes_log', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->increments('id');

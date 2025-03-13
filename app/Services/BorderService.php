@@ -1,16 +1,16 @@
-<?php namespace App\Services;
+<?php
+
+namespace App\Services;
 
 use App\Models\Border\Border;
 use App\Models\Border\BorderCategory;
 use App\Models\User\User;
 use App\Models\User\UserBorder;
-use App\Services\Service;
 use Carbon\Carbon;
 use DB;
 use Notifications;
 
-class BorderService extends Service
-{
+class BorderService extends Service {
     /*
     |--------------------------------------------------------------------------
     | Border Service
@@ -29,16 +29,15 @@ class BorderService extends Service
     /**
      * Create a category.
      *
-     * @param  array                 $data
-     * @param  \App\Models\User\User $user
-     * @return \App\Models\Border\BorderCategory|bool
+     * @param array $data
+     * @param User  $user
+     *
+     * @return bool|BorderCategory
      */
-    public function createBorderCategory($data, $user)
-    {
+    public function createBorderCategory($data, $user) {
         DB::beginTransaction();
 
         try {
-
             $data = $this->populateCategoryData($data);
 
             $image = null;
@@ -60,25 +59,26 @@ class BorderService extends Service
         } catch (\Exception $e) {
             $this->setError('error', $e->getMessage());
         }
+
         return $this->rollbackReturn(false);
     }
 
     /**
      * Update a category.
      *
-     * @param  \App\Models\Border\BorderCategory  $category
-     * @param  array                          $data
-     * @param  \App\Models\User\User          $user
-     * @return \App\Models\Border\BorderCategory|bool
+     * @param BorderCategory $category
+     * @param array          $data
+     * @param User           $user
+     *
+     * @return bool|BorderCategory
      */
-    public function updateBorderCategory($category, $data, $user)
-    {
+    public function updateBorderCategory($category, $data, $user) {
         DB::beginTransaction();
 
         try {
             // More specific validation
             if (BorderCategory::where('name', $data['name'])->where('id', '!=', $category->id)->exists()) {
-                throw new \Exception("The name has already been taken.");
+                throw new \Exception('The name has already been taken.');
             }
 
             $data = $this->populateCategoryData($data, $category);
@@ -100,49 +100,24 @@ class BorderService extends Service
         } catch (\Exception $e) {
             $this->setError('error', $e->getMessage());
         }
+
         return $this->rollbackReturn(false);
-    }
-
-    /**
-     * Handle category data.
-     *
-     * @param  array                               $data
-     * @param  \App\Models\Border\BorderCategory|null  $category
-     * @return array
-     */
-    private function populateCategoryData($data, $category = null)
-    {
-        if (isset($data['description']) && $data['description']) {
-            $data['parsed_description'] = parse($data['description']);
-        } else {
-            $data['parsed_description'] = null;
-        }
-
-        if (isset($data['remove_image'])) {
-            if ($category && $category->has_image && $data['remove_image']) {
-                $data['has_image'] = 0;
-                $this->deleteImage($category->categoryImagePath, $category->categoryImageFileName);
-            }
-            unset($data['remove_image']);
-        }
-
-        return $data;
     }
 
     /**
      * Delete a category.
      *
-     * @param  \App\Models\Border\BorderCategory  $category
+     * @param BorderCategory $category
+     *
      * @return bool
      */
-    public function deleteBorderCategory($category)
-    {
+    public function deleteBorderCategory($category) {
         DB::beginTransaction();
 
         try {
             // Check first if the category is currently in use
             if (Border::where('border_category_id', $category->id)->exists()) {
-                throw new \Exception("An border with this category exists. Please change its category first.");
+                throw new \Exception('An border with this category exists. Please change its category first.');
             }
 
             if ($category->has_image) {
@@ -155,17 +130,18 @@ class BorderService extends Service
         } catch (\Exception $e) {
             $this->setError('error', $e->getMessage());
         }
+
         return $this->rollbackReturn(false);
     }
 
     /**
      * Sorts category order.
      *
-     * @param  array  $data
+     * @param array $data
+     *
      * @return bool
      */
-    public function sortBorderCategory($data)
-    {
+    public function sortBorderCategory($data) {
         DB::beginTransaction();
 
         try {
@@ -180,6 +156,7 @@ class BorderService extends Service
         } catch (\Exception $e) {
             $this->setError('error', $e->getMessage());
         }
+
         return $this->rollbackReturn(false);
     }
 
@@ -192,12 +169,12 @@ class BorderService extends Service
     /**
      * Creates a new border.
      *
-     * @param  array                  $data
-     * @param  \App\Models\User\User  $user
-     * @return bool|\App\Models\Border\Border
+     * @param array $data
+     * @param User  $user
+     *
+     * @return bool|Border
      */
-    public function createBorder($data, $user)
-    {
+    public function createBorder($data, $user) {
         DB::beginTransaction();
 
         try {
@@ -206,7 +183,7 @@ class BorderService extends Service
             }
 
             if ((isset($data['border_category_id']) && $data['border_category_id']) && !BorderCategory::where('id', $data['border_category_id'])->exists()) {
-                throw new \Exception("The selected border category is invalid.");
+                throw new \Exception('The selected border category is invalid.');
             }
 
             $image = null;
@@ -215,9 +192,8 @@ class BorderService extends Service
                 unset($data['image']);
             }
 
-
             $data = $this->populateData($data);
-            
+
             $border = Border::create($data);
 
             if ($image) {
@@ -228,19 +204,20 @@ class BorderService extends Service
         } catch (\Exception $e) {
             $this->setError('error', $e->getMessage());
         }
+
         return $this->rollbackReturn(false);
     }
 
     /**
      * Updates a border.
      *
-     * @param  \App\Models\Border\Border  $border
-     * @param  array                  $data
-     * @param  \App\Models\User\User  $user
-     * @return bool|\App\Models\Border\Border
+     * @param Border $border
+     * @param array  $data
+     * @param User   $user
+     *
+     * @return bool|Border
      */
-    public function updateBorder($border, $data, $user)
-    {
+    public function updateBorder($border, $data, $user) {
         DB::beginTransaction();
 
         try {
@@ -250,11 +227,11 @@ class BorderService extends Service
 
             // More specific validation
             if (Border::where('name', $data['name'])->where('id', '!=', $border->id)->where('border_type', 'Default')->exists()) {
-                throw new \Exception("The name has already been taken.");
+                throw new \Exception('The name has already been taken.');
             }
 
             if ((isset($data['border_category_id']) && $data['border_category_id']) && !BorderCategory::where('id', $data['border_category_id'])->exists()) {
-                throw new \Exception("The selected border category is invalid.");
+                throw new \Exception('The selected border category is invalid.');
             }
 
             $image = null;
@@ -278,54 +255,24 @@ class BorderService extends Service
         } catch (\Exception $e) {
             $this->setError('error', $e->getMessage());
         }
+
         return $this->rollbackReturn(false);
-    }
-
-    /**
-     * Processes user input for creating/updating a border.
-     *
-     * @param  array                   $data
-     * @param  \App\Models\Border\Border $border
-     * @return array
-     */
-    private function populateData($data, $border = null)
-    {
-        if (isset($data['description']) && $data['description']) {
-            $data['parsed_description'] = parse($data['description']);
-        } else {
-            $data['parsed_description'] = null;
-        }
-
-        // Check toggle
-        if (!isset($data['is_default'])) {
-            $data['is_default'] = 0;
-        }
-
-        if (!isset($data['is_active'])) {
-            $data['is_active'] = 0;
-        }
-
-        if (!isset($data['admin_only'])) {
-            $data['admin_only'] = 0;
-        }
-
-        return $data;
     }
 
     /**
      * Deletes a border.
      *
-     * @param  \App\Models\Border\Border  $border
+     * @param Border $border
+     *
      * @return bool
      */
-    public function deleteBorder($border)
-    {
+    public function deleteBorder($border) {
         DB::beginTransaction();
 
         try {
             // Check first if the border is currently owned or if some other site feature uses it
             if (UserBorder::where('border_id', $border->id)->exists()) {
-                throw new \Exception("At least one user currently owns this border. Please remove the border(s) before deleting it.");
+                throw new \Exception('At least one user currently owns this border. Please remove the border(s) before deleting it.');
             }
 
             DB::table('user_borders')->where('border_id', $border->id)->delete();
@@ -343,6 +290,7 @@ class BorderService extends Service
         } catch (\Exception $e) {
             $this->setError('error', $e->getMessage());
         }
+
         return $this->rollbackReturn(false);
     }
 
@@ -355,62 +303,63 @@ class BorderService extends Service
     /**
      * Admin function for granting borders to multiple users.
      *
-     * @param  array                  $data
-     * @param  \App\Models\User\User  $staff
-     * @return  bool
+     * @param array $data
+     * @param User  $staff
+     *
+     * @return bool
      */
-    public function grantBorders($data, $staff)
-    {
+    public function grantBorders($data, $staff) {
         DB::beginTransaction();
 
         try {
             // Process names
             $users = User::find($data['names']);
             if (count($users) != count($data['names'])) {
-                throw new \Exception("An invalid user was selected.");
+                throw new \Exception('An invalid user was selected.');
             }
 
             // Process borders
             $borders = Border::find($data['border_ids']);
             if (!$borders) {
-                throw new \Exception("Invalid borders selected.");
+                throw new \Exception('Invalid borders selected.');
             }
 
             foreach ($users as $user) {
                 foreach ($borders as $border) {
                     if ($this->creditBorder($staff, $user, null, 'Staff Grant', array_only($data, ['data']), $border)) {
                         Notifications::create('BORDER_GRANT', $user, [
-                            'border_name' => $border->name,
-                            'sender_url' => $staff->url,
-                            'sender_name' => $staff->name,
+                            'border_name'    => $border->name,
+                            'sender_url'     => $staff->url,
+                            'sender_name'    => $staff->name,
                             'recipient_name' => $user->name,
                         ]);
                     } else {
-                        throw new \Exception("Failed to credit borders to " . $user->name . ".");
+                        throw new \Exception('Failed to credit borders to '.$user->name.'.');
                     }
                 }
             }
+
             return $this->commitReturn(true);
         } catch (\Exception $e) {
             $this->setError('error', $e->getMessage());
         }
+
         return $this->rollbackReturn(false);
     }
 
     /**
      * Credits border to a user or character.
      *
-     * @param  \App\Models\User\User                        $sender
-     * @param  \App\Models\User\User                        $recipient
-     * @param  \App\Models\Character\Character              $character
-     * @param  string                                       $type
-     * @param  string                                       $data
-     * @param  \App\Models\Border\Border                    $border
-     * @param  int                                          $quantity
-     * @return  bool
+     * @param User                            $sender
+     * @param User                            $recipient
+     * @param \App\Models\Character\Character $character
+     * @param string                          $type
+     * @param string                          $data
+     * @param Border                          $border
+     *
+     * @return bool
      */
-    public function creditBorder($sender, $recipient, $character, $type, $data, $border)
-    {
+    public function creditBorder($sender, $recipient, $character, $type, $data, $border) {
         DB::beginTransaction();
 
         try {
@@ -420,7 +369,8 @@ class BorderService extends Service
 
             // if($recipient->borders->contains($border)) throw new \Exception($recipient->name." already has the border ".$border->displayName);
             if ($recipient->borders->contains($border)) {
-                flash($recipient->name . " already has the border " . $border->displayName, 'warning');
+                flash($recipient->name.' already has the border '.$border->displayName, 'warning');
+
                 return $this->commitReturn(false);
             }
 
@@ -432,44 +382,49 @@ class BorderService extends Service
                 $record = UserBorder::create(['user_id' => $recipient->id, 'border_id' => $border->id]);
             }
 
-            if ($type && !$this->createLog($sender ? $sender->id : null, $recipient ? $recipient->id : null,
-                $character ? $character->id : null, $type, $data['data'], $border->id)) {
-                throw new \Exception("Failed to create log.");
+            if ($type && !$this->createLog(
+                $sender ? $sender->id : null,
+                $recipient ? $recipient->id : null,
+                $character ? $character->id : null,
+                $type,
+                $data['data'],
+                $border->id
+            )) {
+                throw new \Exception('Failed to create log.');
             }
 
             return $this->commitReturn(true);
         } catch (\Exception $e) {
             $this->setError('error', $e->getMessage());
         }
+
         return $this->rollbackReturn(false);
     }
 
     /**
      * Creates an border log.
      *
-     * @param  int     $senderId
-     * @param  string  $senderType
-     * @param  int     $recipientId
-     * @param  string  $recipientType
-     * @param  int     $userBorderId
-     * @param  string  $type
-     * @param  string  $data
-     * @param  int     $borderId
-     * @return  int
+     * @param int    $senderId
+     * @param int    $recipientId
+     * @param string $type
+     * @param string $data
+     * @param int    $borderId
+     * @param mixed  $characterId
+     *
+     * @return int
      */
-    public function createLog($senderId, $recipientId, $characterId, $type, $data, $borderId)
-    {
+    public function createLog($senderId, $recipientId, $characterId, $type, $data, $borderId) {
         return DB::table('user_borders_log')->insert(
             [
-                'sender_id' => $senderId,
+                'sender_id'    => $senderId,
                 'recipient_id' => $recipientId,
                 'character_id' => $characterId,
-                'border_id' => $borderId,
-                'log' => $type . ($data ? ' (' . $data . ')' : ''),
-                'log_type' => $type,
-                'data' => $data, // this should be just a string
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now(),
+                'border_id'    => $borderId,
+                'log'          => $type.($data ? ' ('.$data.')' : ''),
+                'log_type'     => $type,
+                'data'         => $data, // this should be just a string
+                'created_at'   => Carbon::now(),
+                'updated_at'   => Carbon::now(),
             ]
         );
     }
@@ -485,9 +440,9 @@ class BorderService extends Service
      *
      * @param mixed $border
      * @param mixed $data
+     * @param mixed $type
      */
-    public function createVariant($border, $data, $type)
-    {
+    public function createVariant($border, $data, $type) {
         DB::beginTransaction();
 
         try {
@@ -526,9 +481,9 @@ class BorderService extends Service
      *
      * @param mixed $variant
      * @param mixed $data
+     * @param mixed $type
      */
-    public function editVariant($variant, $data, $type)
-    {
+    public function editVariant($variant, $data, $type) {
         DB::beginTransaction();
 
         try {
@@ -553,19 +508,18 @@ class BorderService extends Service
 
             $variant->update($data);
 
-            if($type == 'top'){
+            if ($type == 'top') {
                 $check = 'top_border_id';
                 $name = 'Top Layer';
-            }elseif($type == 'bottom'){
+            } elseif ($type == 'bottom') {
                 $check = 'bottom_border_id';
                 $name = 'Bottom Layer';
-            }else{
+            } else {
                 $check = 'border_variant_id';
                 $name = 'Variant';
             }
 
             if (isset($data['delete']) && $data['delete']) {
-
                 // check that no user borders exist with this variant before deleting
 
                 if (User::where($type, $variant->id)->exists()) {
@@ -587,4 +541,60 @@ class BorderService extends Service
         return $this->rollbackReturn(false);
     }
 
+    /**
+     * Handle category data.
+     *
+     * @param array               $data
+     * @param BorderCategory|null $category
+     *
+     * @return array
+     */
+    private function populateCategoryData($data, $category = null) {
+        if (isset($data['description']) && $data['description']) {
+            $data['parsed_description'] = parse($data['description']);
+        } else {
+            $data['parsed_description'] = null;
+        }
+
+        if (isset($data['remove_image'])) {
+            if ($category && $category->has_image && $data['remove_image']) {
+                $data['has_image'] = 0;
+                $this->deleteImage($category->categoryImagePath, $category->categoryImageFileName);
+            }
+            unset($data['remove_image']);
+        }
+
+        return $data;
+    }
+
+    /**
+     * Processes user input for creating/updating a border.
+     *
+     * @param array  $data
+     * @param Border $border
+     *
+     * @return array
+     */
+    private function populateData($data, $border = null) {
+        if (isset($data['description']) && $data['description']) {
+            $data['parsed_description'] = parse($data['description']);
+        } else {
+            $data['parsed_description'] = null;
+        }
+
+        // Check toggle
+        if (!isset($data['is_default'])) {
+            $data['is_default'] = 0;
+        }
+
+        if (!isset($data['is_active'])) {
+            $data['is_active'] = 0;
+        }
+
+        if (!isset($data['admin_only'])) {
+            $data['admin_only'] = 0;
+        }
+
+        return $data;
+    }
 }

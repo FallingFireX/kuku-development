@@ -339,27 +339,26 @@ return [
     // A user-submitted affiliate was accepted
     // AFFILIATE_ACCEPTION
     105 => [
-        'name' => 'Affiliate Request Accepted',
+        'name'    => 'Affiliate Request Accepted',
         'message' => 'The affiliate request for {affiliate_name} has been accepted by {admin_name}. (<a href="{url}/{affiliate_slug}">View Status</a>)',
-        'url' => 'affiliates/status/'
+        'url'     => 'affiliates/status/',
     ],
 
     // A user-submitted affiliate was rejected
     // AFFILIATE_REJECTION
     106 => [
-        'name' => 'Affiliate Request Rejected',
+        'name'    => 'Affiliate Request Rejected',
         'message' => 'The affiliate request for {affiliate_name} has been rejected by {admin_name}. (<a href="{url}/{affiliate_slug}">View Status</a>)',
-        'url' => 'affiliates/status/'
+        'url'     => 'affiliates/status/',
     ],
 
     // A user-submitted affiliate is now pending
     // AFFILIATE_PENDING
     107 => [
-        'name' => 'Affiliate Request Pending',
+        'name'    => 'Affiliate Request Pending',
         'message' => 'The affiliate request for {affiliate_name} is pending. (<a href="{url}/{affiliate_slug}">View Status</a>)',
-        'url' => 'affiliates/status/'
+        'url'     => 'affiliates/status/',
     ],
-
 
     // REPORT_ASSIGNED
     220 => [
@@ -675,18 +674,17 @@ return [
         'url'     => 'crafting',
     ],
 
-    
     // BORDER_GRANT
     1106 => [
-        'name' => 'Border Grant',
+        'name'    => 'Border Grant',
         'message' => 'You have received a staff grant of the user border {border_name} from <a href="{sender_url}">{sender_name}</a>. (<a href="{url}">View Borders</a>)',
-        'url' => 'user/{recipient_name}/borders'
+        'url'     => 'user/{recipient_name}/borders',
     ],
 
-        // BIRTHDAY_REWARDED
-        1105 => [
-            'name' => 'Happy Birthday to You',
-            'message' => 'It\'s your birthday this month, {user_name}! A gift has been left in your inventory. (<a href="{url}">View Inventory</a>)',
-            'url' => 'inventory'
-        ],
+    // BIRTHDAY_REWARDED
+    1105 => [
+        'name'    => 'Happy Birthday to You',
+        'message' => 'It\'s your birthday this month, {user_name}! A gift has been left in your inventory. (<a href="{url}">View Inventory</a>)',
+        'url'     => 'inventory',
+    ],
 ];

@@ -5,8 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class UniqueItemCategory extends Model
-{
+class UniqueItemCategory extends Model {
     use HasFactory;
 
     protected $table = 'unique_item_categories';
@@ -14,12 +13,6 @@ class UniqueItemCategory extends Model
     protected $fillable = [
         'category_name',
     ];
-
-    // Define relationship with UniqueItem
-    public function uniqueItems()
-    {
-        return $this->hasMany(UniqueItem::class, 'category_1');
-    }
 
     /**
      * Validation rules for creation.
@@ -29,4 +22,9 @@ class UniqueItemCategory extends Model
     public static $createRules = [
         'category_name'        => 'required|unique:unique_item_categories|between:3,100',
     ];
+
+    // Define relationship with UniqueItem
+    public function uniqueItems() {
+        return $this->hasMany(UniqueItem::class, 'category_1');
+    }
 }

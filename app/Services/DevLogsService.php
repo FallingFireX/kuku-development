@@ -19,10 +19,10 @@ class DevLogsService extends Service {
     /**
      * Creates a dev log post.
      *
-     * @param array                 $data
-     * @param \App\Models\User\User $user
+     * @param array $data
+     * @param User  $user
      *
-     * @return \App\Models\DevLogs|bool
+     * @return bool|DevLogs
      */
     public function createdevLogs($data, $user) {
         DB::beginTransaction();
@@ -51,11 +51,11 @@ class DevLogsService extends Service {
     /**
      * Updates a dev log post.
      *
-     * @param \App\Models\DevLogs   $devLogs
-     * @param array                 $data
-     * @param \App\Models\User\User $user
+     * @param DevLogs $devLogs
+     * @param array   $data
+     * @param User    $user
      *
-     * @return \App\Models\DevLogs|bool
+     * @return bool|DevLogs
      */
     public function updateDevLogs($devLogs, $data, $user) {
         DB::beginTransaction();
@@ -83,7 +83,7 @@ class DevLogsService extends Service {
     /**
      * Deletes a dev log post.
      *
-     * @param \App\Models\DevLogs $devLogs
+     * @param DevLogs $devLogs
      *
      * @return bool
      */

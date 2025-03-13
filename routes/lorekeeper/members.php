@@ -114,12 +114,12 @@ Route::group(['prefix' => 'armoury', 'namespace' => 'Users'], function () {
     Route::get('{type}/selector', 'ArmouryController@getSelector');
 });
 
-Route::group(['prefix' => __('safetydeposit.url'), 'namespace' => 'Users'], function() {
+Route::group(['prefix' => __('safetydeposit.url'), 'namespace' => 'Users'], function () {
     Route::get('/', 'StorageController@getIndex');
     Route::post('withdraw', 'StorageController@postWithdraw');
 });
 
-Route::group(['prefix' => 'characters', 'namespace' => 'Users'], function() {
+Route::group(['prefix' => 'characters', 'namespace' => 'Users'], function () {
     Route::get('/', 'CharacterController@getIndex');
     Route::post('sort', 'CharacterController@postSortCharacters');
     Route::post('select-character', 'CharacterController@postSelectCharacter');
@@ -217,7 +217,6 @@ Route::group(['prefix' => 'character', 'namespace' => 'Characters'], function ()
     Route::get('{slug}/stats/logs', 'CharacterStatController@getStatLogs');
     Route::post('{slug}/stats/level', 'CharacterStatController@postLevel'); // level up
 
-
     // LINKS
     Route::get('{slug}/links/edit', 'CharacterController@getCreateEditCharacterLinks');
     Route::post('{slug}/links/edit', 'CharacterController@postCreateEditCharacterLinks');
@@ -239,7 +238,7 @@ Route::group(['prefix' => 'myo', 'namespace' => 'Characters'], function () {
 
     Route::post('{id}/approval', 'MyoController@postCharacterApproval');
     Route::get('{id}/approval', 'MyoController@getCharacterApproval');
-    //this is useless but im not sure if we dont include it things will get weird or not
+    // this is useless but im not sure if we dont include it things will get weird or not
     Route::post('{slug}/approval/{id}', 'CharacterController@postCharacterApprovalSpecificImage');
 });
 Route::group(['prefix' => 'breeding-permissions', 'namespace' => 'Users'], function () {
@@ -345,18 +344,16 @@ Route::group(['prefix' => 'shops'], function () {
     Route::get('history', 'ShopController@getPurchaseHistory');
 });
 
-
 /**************************************************************************************************
     Dailies
 **************************************************************************************************/
 
-Route::group(['prefix' => __('dailies.dailies')], function() {
+Route::group(['prefix' => __('dailies.dailies')], function () {
     // throttle requests to 1 per ~10 seconds
     Route::middleware('throttle:1,0.16')->group(function () {
         Route::post('{id}', 'DailyController@postRoll');
     });
 });
-
 
 /**************************************************************************************************
     Comments
@@ -375,7 +372,7 @@ Route::group(['prefix' => 'comments', 'namespace' => 'Comments'], function () {
     Higher or Lower
 **************************************************************************************************/
 
-Route::group(['prefix' => 'higher-or-lower'], function() {
+Route::group(['prefix' => 'higher-or-lower'], function () {
     Route::get('/', 'HolController@getIndex');
 
     Route::get('play', 'HolController@playHol');
@@ -391,12 +388,11 @@ Route::group(['prefix' => 'criteria'], function () {
     Route::get('guide/{id}', 'CriterionController@getCriterionGuide');
 });
 
-//unique items
+// unique items
 Route::get('adoption-center', 'uniqueitemsController@getItemIndex');
 // Define the route for showing a unique item
 Route::get('/uniqueitems/{id}', 'uniqueitemsController@show')->name('uniqueitems.adoption-center');
 Route::delete('/uniqueitems/{id}', 'uniqueitemsController@destroy')->name('uniqueitems.destroy');
-
 
 Route::get('adoption-center/create', 'UniqueItemController@getCreateItem');
 Route::get('adoption-center/edit/{id}', 'UniqueItemController@getEditItem');

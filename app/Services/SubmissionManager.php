@@ -9,9 +9,9 @@ use App\Models\Character\Character;
 use App\Models\Criteria\Criterion;
 use App\Models\Currency\Currency;
 use App\Models\Element\Element;
-use App\Models\Pet\Pet;
 use App\Models\Item\Item;
 use App\Models\Loot\LootTable;
+use App\Models\Pet\Pet;
 use App\Models\Prompt\Prompt;
 use App\Models\Raffle\Raffle;
 use App\Models\Recipe\Recipe;
@@ -68,11 +68,11 @@ class SubmissionManager extends Service {
                 if ($prompt->staff_only && !$user->isStaff) {
                     throw new \Exception('This prompt may only be submitted to by staff members.');
                 }
-                    
-                //check that the prompt limit hasn't been hit
-                if($prompt->limit) {
-                    //check that the user hasn't hit the prompt submission limit
-                    //filter the submissions by hour/day/week/etc and count
+
+                // check that the prompt limit hasn't been hit
+                if ($prompt->limit) {
+                    // check that the user hasn't hit the prompt submission limit
+                    // filter the submissions by hour/day/week/etc and count
                     $count['all'] = Submission::submitted($prompt->id, $user->id)->count();
                     $count['Hour'] = Submission::submitted($prompt->id, $user->id)->where('created_at', '>=', now()->startOfHour())->count();
                     $count['Day'] = Submission::submitted($prompt->id, $user->id)->where('created_at', '>=', now()->startOfDay())->count();
@@ -80,35 +80,42 @@ class SubmissionManager extends Service {
                     $count['Month'] = Submission::submitted($prompt->id, $user->id)->where('created_at', '>=', now()->startOfMonth())->count();
                     $count['Year'] = Submission::submitted($prompt->id, $user->id)->where('created_at', '>=', now()->startOfYear())->count();
 
-                    //if limit by character is on... multiply by # of chars. otherwise, don't
-                    if($prompt->limit_character) {
+                    // if limit by character is on... multiply by # of chars. otherwise, don't
+                    if ($prompt->limit_character) {
                         $limit = $prompt->limit * Character::visible()->where('is_myo_slot', 0)->where('user_id', $user->id)->count();
-                    } else { $limit = $prompt->limit; }
-                    //if limit by time period is on
-                    if($prompt->limit_period) {
-                        if($count[$prompt->limit_period] >= $limit) throw new \Exception("You have already submitted to this prompt the maximum number of times.");
-                    } else if($count['all'] >= $limit) throw new \Exception("You have already submitted to this prompt the maximum number of times.");
+                    } else {
+                        $limit = $prompt->limit;
+                    }
+                    // if limit by time period is on
+                    if ($prompt->limit_period) {
+                        if ($count[$prompt->limit_period] >= $limit) {
+                            throw new \Exception('You have already submitted to this prompt the maximum number of times.');
+                        }
+                    } elseif ($count['all'] >= $limit) {
+                        throw new \Exception('You have already submitted to this prompt the maximum number of times.');
+                    }
                 }
             } else {
                 $prompt = null;
             }
 
             // The character identification comes in both the slug field and as character IDs
-            // that key the reward ID/quantity arrays. 
+            // that key the reward ID/quantity arrays.
             // We'll need to match characters to the rewards for them.
             // First, check if the characters are accessible to begin with.
-            if(isset($data['slug'])) {
+            if (isset($data['slug'])) {
                 $characters = Character::myo(0)->visible()->whereIn('slug', $data['slug'])->get();
-                if(count($characters) != count($data['slug'])) throw new \Exception("One or more of the selected characters do not exist.");
+                if (count($characters) != count($data['slug'])) {
+                    throw new \Exception('One or more of the selected characters do not exist.');
+                }
+            } else {
+                $characters = [];
             }
-            else $characters = [];
 
             // Get a list of rewards, then create the submission itself
             $promptRewards = createAssetsArray();
-            if(!$isClaim) 
-            {
-                foreach($prompt->rewards as $reward) 
-                {
+            if (!$isClaim) {
+                foreach ($prompt->rewards as $reward) {
                     addAsset($promptRewards, $reward->reward, $reward->quantity);
                 }
 
@@ -116,7 +123,7 @@ class SubmissionManager extends Service {
                     throw new \Exception('This prompt may only be submitted to by staff members.');
                 }
 
-                //level req
+                // level req
                 if ($prompt->level_req) {
                     if (!$user->level || $user->level->current_level < $prompt->level_req) {
                         throw new \Exception('You are not high enough level to enter this prompt');
@@ -169,6 +176,7 @@ class SubmissionManager extends Service {
 
         return $this->rollbackReturn(false);
     }
+
     /**
      * Edits an existing submission.
      *
@@ -966,25 +974,25 @@ class SubmissionManager extends Service {
                 foreach ($c as $key => $id) {
                     switch ($data['character_rewardable_type'][$ckey][$key]) {
                         case 'Currency': $currencyIds[] = $id;
-                                break;
-                            case 'Item': $itemIds[] = $id;
-                                break;
-                            case 'StatusEffect': $statusIds[] = $id;
-                                break;
-                            case 'LootTable': $tableIds[] = $id;
-                                break;
+                            break;
+                        case 'Item': $itemIds[] = $id;
+                            break;
+                        case 'StatusEffect': $statusIds[] = $id;
+                            break;
+                        case 'LootTable': $tableIds[] = $id;
+                            break;
                     }
                 }
             } // Expanded character rewards
         }
-            array_unique($currencyIds);
-            array_unique($itemIds);
-            array_unique($tableIds);
-            array_unique($statusIds);
-            $currencies = Currency::whereIn('id', $currencyIds)->where('is_character_owned', 1)->get()->keyBy('id');
-            $items = Item::whereIn('id', $itemIds)->get()->keyBy('id');
-            $tables = LootTable::whereIn('id', $tableIds)->get()->keyBy('id');
-            $statuses = StatusEffect::whereIn('id', $statusIds)->get()->keyBy('id');
+        array_unique($currencyIds);
+        array_unique($itemIds);
+        array_unique($tableIds);
+        array_unique($statusIds);
+        $currencies = Currency::whereIn('id', $currencyIds)->where('is_character_owned', 1)->get()->keyBy('id');
+        $items = Item::whereIn('id', $itemIds)->get()->keyBy('id');
+        $tables = LootTable::whereIn('id', $tableIds)->get()->keyBy('id');
+        $statuses = StatusEffect::whereIn('id', $statusIds)->get()->keyBy('id');
 
         // Attach characters
         foreach ($characters as $key => $c) {

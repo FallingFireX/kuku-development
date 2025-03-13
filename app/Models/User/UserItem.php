@@ -4,7 +4,6 @@ namespace App\Models\User;
 
 use App\Models\Item\Item;
 use App\Models\Model;
-use App\Models\UniqueItem;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class UserItem extends Model {

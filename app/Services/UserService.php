@@ -2,29 +2,23 @@
 
 namespace App\Services;
 
-use App\Models\Border\Border;
 use App\Facades\Notifications;
 use App\Facades\Settings;
-use App\Models\WorldExpansion\Location;
-use App\Models\WorldExpansion\Faction;
-use App\Models\WorldExpansion\FactionRankMember;
+use App\Models\Border\Border;
 use App\Models\Character\CharacterDesignUpdate;
 use App\Models\Character\CharacterTransfer;
 use App\Models\Gallery\GallerySubmission;
 use App\Models\Invitation;
 use App\Models\Rank\Rank;
 use App\Models\Submission\Submission;
-use Illuminate\Support\Facades\Storage;
-use App\Services\CurrencyManager;
 use App\Models\Trade;
 use App\Models\User\StaffProfile;
 use App\Models\User\User;
 use App\Models\User\UsernameLog;
 use App\Models\User\UserUpdateLog;
-use App\Services\CharacterManager;
-use App\Services\GalleryManager;
-use App\Services\Service;
-use App\Services\SubmissionManager;
+use App\Models\WorldExpansion\Faction;
+use App\Models\WorldExpansion\FactionRankMember;
+use App\Models\WorldExpansion\Location;
 use Auth;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -144,78 +138,102 @@ class UserService extends Service {
     /**
      * Updates a user. Used in modifying the admin user on the command line.
      *
-     * @param  array  $data
-     * @return \App\Models\User\User
+     * @param mixed $id
+     * @param mixed $user
+     *
+     * @return User
      */
-    public function updateLocation($id, $user)
-    {
+    public function updateLocation($id, $user) {
         DB::beginTransaction();
 
         try {
             $location = Location::find($id);
-            if(!$location) throw new \Exception("Not a valid location.");
-            if(!$location->is_user_home) throw new \Exception("Not a location a user can have as their home.");
+            if (!$location) {
+                throw new \Exception('Not a valid location.');
+            }
+            if (!$location->is_user_home) {
+                throw new \Exception('Not a location a user can have as their home.');
+            }
 
             $limit = Settings::get('WE_change_timelimit');
 
-            if($user->canChangeLocation) {
+            if ($user->canChangeLocation) {
                 $user->home_id = $id;
                 $user->home_changed = Carbon::now();
                 $user->save();
+            } else {
+                throw new \Exception("You can't change your location yet!");
             }
-            else throw new \Exception("You can't change your location yet!");
 
             return $this->commitReturn(true);
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             $this->setError('error', $e->getMessage());
         }
+
         return $this->rollbackReturn(false);
     }
 
     /**
      * Updates a user. Used in modifying the admin user on the command line.
      *
-     * @param  array  $data
-     * @return \App\Models\User\User
+     * @param mixed $id
+     * @param mixed $user
+     *
+     * @return User
      */
-    public function updateFaction($id, $user)
-    {
+    public function updateFaction($id, $user) {
         DB::beginTransaction();
 
         try {
-            if($user->faction) $old = $user->faction;
+            if ($user->faction) {
+                $old = $user->faction;
+            }
             $faction = Faction::find($id);
-            if($id == 0) $id = null;
-            elseif(!$faction) throw new \Exception("Not a valid faction.");
-            else if(!$faction->is_user_faction) throw new \Exception("Not a faction a user can join.");
+            if ($id == 0) {
+                $id = null;
+            } elseif (!$faction) {
+                throw new \Exception('Not a valid faction.');
+            } elseif (!$faction->is_user_faction) {
+                throw new \Exception('Not a faction a user can join.');
+            }
 
             $limit = Settings::get('WE_change_timelimit');
 
-            if($user->canChangeFaction) {
+            if ($user->canChangeFaction) {
                 $user->faction_id = $id;
                 $user->faction_changed = Carbon::now();
                 $user->save();
+            } else {
+                throw new \Exception("You can't change your faction yet!");
             }
-            else throw new \Exception("You can't change your faction yet!");
 
             // Reset standing/remove from closed rank
-            if(($id == null) || (isset($old) && $faction->id != $old->id)) {
+            if (($id == null) || (isset($old) && $faction->id != $old->id)) {
                 $standing = $user->getCurrencies(true)->where('id', Settings::get('WE_faction_currency'))->first();
-                if($standing && $standing->quantity > 0) if(!$debit = (new CurrencyManager)->debitCurrency($user, null, 'Changed Factions', null, $standing, $standing->quantity))
-                    throw new \Exception('Failed to reset standing.');
+                if ($standing && $standing->quantity > 0) {
+                    if (!$debit = (new CurrencyManager)->debitCurrency($user, null, 'Changed Factions', null, $standing, $standing->quantity)) {
+                        throw new \Exception('Failed to reset standing.');
+                    }
+                }
 
-                if(FactionRankMember::where('member_type', 'user')->where('member_id', $user->id)->first()) FactionRankMember::where('member_type', 'user')->where('member_id', $user->id)->first()->delete();
+                if (FactionRankMember::where('member_type', 'user')->where('member_id', $user->id)->first()) {
+                    FactionRankMember::where('member_type', 'user')->where('member_id', $user->id)->first()->delete();
+                }
             }
 
             return $this->commitReturn(true);
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             $this->setError('error', $e->getMessage());
         }
+
         return $this->rollbackReturn(false);
     }
 
     /**
      * Updates the user's password.
+     *
+     * @param mixed $data
+     * @param mixed $user
      *
      * @return bool
      */
@@ -262,8 +280,8 @@ class UserService extends Service {
     /**
      * Updates the user's theme.
      *
-     * @param array                 $data
-     * @param \App\Models\User\User $user
+     * @param array $data
+     * @param User  $user
      *
      * @return bool
      */
@@ -333,13 +351,11 @@ class UserService extends Service {
     /**
      * Confirms a user's two-factor auth.
      *
-     * @param string           $code
      * @param array            $data
      * @param \App\Models\User $user
-     * Updates user's warning visibility setting
+     *                               Updates user's warning visibility setting
      */
-    public function updateWarningVisibility($data, $user)
-    {
+    public function updateWarningVisibility($data, $user) {
         $user->settings->warning_visibility = $data;
         $user->settings->save();
 
@@ -347,11 +363,11 @@ class UserService extends Service {
     }
 
     /**
-    * Confirms a user's two-factor auth.
+     * Confirms a user's two-factor auth.
      *
      * @param string           $code
      * @param array            $data
-     * @param \App\Models\User $user 
+     * @param \App\Models\User $user
      *
      * @return bool
      */
@@ -424,7 +440,7 @@ class UserService extends Service {
 
             if ($user->avatar != 'default.jpg') {
                 $file = 'images/avatars/'.$user->avatar;
-                //$destinationPath = 'uploads/' . $id . '/';
+                // $destinationPath = 'uploads/' . $id . '/';
 
                 if (File::exists($file)) {
                     if (!unlink($file)) {
@@ -458,8 +474,8 @@ class UserService extends Service {
     /**
      * Updates or creates a user's staff profile.
      *
-     * @param string $username
-     * @param User   $user
+     * @param User  $user
+     * @param mixed $data
      *
      * @return bool
      */
@@ -532,49 +548,55 @@ class UserService extends Service {
         return $this->rollbackReturn(false);
     }
 
-    public function updateUsername($data, $user)
-    {
-
+    public function updateUsername($data, $user) {
         DB::beginTransaction();
 
         try {
-            if(!Hash::check($data['password'], $user->password)) throw new \Exception("Please make sure you've entered your password correctly.");
-
-            $lastUsernameChange = UsernameLog::where('user_id', $user->id)->where('is_staff_edit', 0)->orderBy('updated_at', 'DESC')->first();
-            if($lastUsernameChange) {
-                $daysSinceNameChange = Carbon::now()->diffInDays($lastUsernameChange->updated_at);
-                if($daysSinceNameChange < Settings::get('username_change_cooldown')) throw new \Exception("You must wait for your cooldown to end before changing your username again.");
+            if (!Hash::check($data['password'], $user->password)) {
+                throw new \Exception("Please make sure you've entered your password correctly.");
             }
 
-            if(!$this->createUsernameLog($user->id, $user->name, $data['username'], 0)) throw new \Exception("Failed to create log.");
+            $lastUsernameChange = UsernameLog::where('user_id', $user->id)->where('is_staff_edit', 0)->orderBy('updated_at', 'DESC')->first();
+            if ($lastUsernameChange) {
+                $daysSinceNameChange = Carbon::now()->diffInDays($lastUsernameChange->updated_at);
+                if ($daysSinceNameChange < Settings::get('username_change_cooldown')) {
+                    throw new \Exception('You must wait for your cooldown to end before changing your username again.');
+                }
+            }
+
+            if (!$this->createUsernameLog($user->id, $user->name, $data['username'], 0)) {
+                throw new \Exception('Failed to create log.');
+            }
 
             $user->name = $data['username'];
             $user->save();
 
             return $this->commitReturn(true);
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             $this->setError('error', $e->getMessage());
         }
+
         return $this->rollbackReturn(false);
     }
 
     /**
      * Creates a username log.
      *
-     * @param  int     $userId
-     * @param  string  $oldUsername
-     * @param  string  $newUsername
-     * @return  int
+     * @param int    $userId
+     * @param string $oldUsername
+     * @param mixed  $NewUsername
+     * @param mixed  $staffEdit
+     *
+     * @return int
      */
-    public function createUsernameLog($userId, $oldUsername, $NewUsername, $staffEdit)
-    {
+    public function createUsernameLog($userId, $oldUsername, $NewUsername, $staffEdit) {
         return DB::table('username_log')->insert(
             [
-                'user_id' => $userId,
-                'old_username' => $oldUsername,
-                'new_username' => $NewUsername,
-                'updated_at' => Carbon::now(),
-                'is_staff_edit' => $staffEdit
+                'user_id'       => $userId,
+                'old_username'  => $oldUsername,
+                'new_username'  => $NewUsername,
+                'updated_at'    => Carbon::now(),
+                'is_staff_edit' => $staffEdit,
             ]
         );
     }
@@ -793,6 +815,7 @@ class UserService extends Service {
         } catch (\Exception $e) {
             $this->setError('error', $e->getMessage());
         }
+
         return $this->rollbackReturn(false);
     }
 
@@ -803,28 +826,27 @@ class UserService extends Service {
      * @param  \App\Models\User\User  $user
      * @return bool
      */
-    public function updateBorder($data, $user)
-    {
+    public function updateBorder($data, $user) {
         DB::beginTransaction();
 
         try {
             $border = Border::find($data['border']);
 
-            //do some validation...
+            // do some validation...
             if (!Auth::user()->isStaff && $border) {
                 if ($border->parent_id) {
                     abort(404);
                 }
                 if (!$border->is_default) {
                     if (!Auth::user()->hasBorder($border->id)) {
-                        throw new \Exception("You do not own this border.");
+                        throw new \Exception('You do not own this border.');
                     }
                 }
                 if (!$border->is_active) {
-                    throw new \Exception("This border is not active.");
+                    throw new \Exception('This border is not active.');
                 }
                 if ($border->admin_only) {
-                    throw new \Exception("You cannot select a staff border.");
+                    throw new \Exception('You cannot select a staff border.');
                 }
             }
 
@@ -833,50 +855,49 @@ class UserService extends Service {
                 if (!$variant) {
                     abort(404);
                 }
-                //do some validation...
+                // do some validation...
                 if (!Auth::user()->isStaff) {
                     if (!$variant->parent->is_default) {
                         if (!Auth::user()->hasBorder($variant->parent->id)) {
-                            throw new \Exception("You do not own this border.");
+                            throw new \Exception('You do not own this border.');
                         }
                     }
                     if (!$variant->is_active) {
-                        throw new \Exception("This border variant is not active.");
+                        throw new \Exception('This border variant is not active.');
                     }
                     if ($variant->parent->admin_only) {
-                        throw new \Exception("You cannot select a staff border.");
+                        throw new \Exception('You cannot select a staff border.');
                     }
                 }
             }
             if (!$data['bottom_border_id'] && $data['top_border_id'] || $data['bottom_border_id'] && !$data['top_border_id']) {
-                throw new \Exception("You must select both a top border and a bottom border.");
+                throw new \Exception('You must select both a top border and a bottom border.');
             }
             if ($data['bottom_border_id'] > 0) {
                 $layer = Border::where('id', $data['bottom_border_id'])->whereNotNull('parent_id')->where('border_type', 'bottom')->first();
                 if (!$layer) {
-                    throw new \Exception("That bottom border does not exist.");
+                    throw new \Exception('That bottom border does not exist.');
                 }
                 $toplayer = Border::where('id', $data['top_border_id'])->whereNotNull('parent_id')->where('border_type', 'top')->first();
                 if (!$toplayer) {
-                    throw new \Exception("That top border does not exist.");
+                    throw new \Exception('That top border does not exist.');
                 }
-                //do some validation...
+                // do some validation...
                 if (!Auth::user()->isStaff) {
                     if (!$layer->parent->is_default || !$toplayer->parent->is_default) {
                         if (!Auth::user()->hasBorder($layer->parent->id) || !Auth::user()->hasBorder($toplayer->parent->id)) {
-                            throw new \Exception("You do not own this border.");
+                            throw new \Exception('You do not own this border.');
                         }
                     }
                     if (!$layer->is_active) {
-                        throw new \Exception("This bottom border is not active.");
+                        throw new \Exception('This bottom border is not active.');
                     }
                     if (!$toplayer->is_active) {
-                        throw new \Exception("This top border is not active.");
+                        throw new \Exception('This top border is not active.');
                     }
                     if ($layer->parent->admin_only || $toplayer->parent->admin_only) {
-                        throw new \Exception("You cannot select a staff border.");
+                        throw new \Exception('You cannot select a staff border.');
                     }
-
                 }
             }
 

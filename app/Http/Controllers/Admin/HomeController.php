@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Facades\Settings;
 use App\Http\Controllers\Controller;
 use App\Models\AdminLog;
+use App\Models\Affiliate;
 use App\Models\Character\CharacterDesignUpdate;
 use App\Models\Character\CharacterTransfer;
 use App\Models\Currency\Currency;
@@ -17,7 +18,6 @@ use App\Models\User\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use App\Models\Affiliate;
 
 class HomeController extends Controller {
     /**
@@ -38,9 +38,9 @@ class HomeController extends Controller {
             'coliCount'              => Submission::where('status', 'Pending')->whereIn('prompt_id', [16, 17, 18])->count(),
             'trainingCount'          => Submission::where('status', 'Pending')->whereIn('prompt_id', [19])->count(),
             'letterCount'            => Submission::where('status', 'Pending')->whereIn('prompt_id', [20, 21])->count(),
-            'breedCount'            => Submission::where('status', 'Pending')->whereIn('prompt_id', [25, 26])->count(),
-            'designCount'          => Submission::where('status', 'Pending')->whereIn('prompt_id', [22, 23, 24])->count(),
-            'questCount'          => Submission::where('status', 'Pending')->whereIn('prompt_id', [27])->count(),
+            'breedCount'             => Submission::where('status', 'Pending')->whereIn('prompt_id', [25, 26])->count(),
+            'designCount'            => Submission::where('status', 'Pending')->whereIn('prompt_id', [22, 23, 24])->count(),
+            'questCount'             => Submission::where('status', 'Pending')->whereIn('prompt_id', [27])->count(),
             'claimCount'             => Submission::where('status', 'Pending')->whereNull('prompt_id')->count(),
             'myoCount'               => CharacterDesignUpdate::myos()->where('status', 'Pending')->count(),
             'reportCount'            => Report::where('status', 'Pending')->count(),

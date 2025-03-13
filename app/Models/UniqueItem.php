@@ -2,13 +2,11 @@
 
 namespace App\Models;
 
+use App\Models\User\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\User\User;
-use App\Models\User\UserItem;
 
-class UniqueItem extends Model
-{
+class UniqueItem extends Model {
     use HasFactory;
 
     protected $table = 'unique_items';
@@ -23,28 +21,6 @@ class UniqueItem extends Model
         'owner_id',
         'deleted',
     ];
-
-    /**
-     * Relationship: Fetch the main category
-     */
-    public function category1()
-    {
-        return $this->belongsTo(UniqueItemCategory::class, 'category_1');
-    }
-
-    // Define relationship with UniqueItemCategory (Secondary Category)
-    public function category2()
-    {
-        return $this->belongsTo(UniqueItemCategory::class, 'category_2');  // assuming 'category_2' is the foreign key in UniqueItem
-    }
-    
-
-    public function owner()
-    {
-        return $this->belongsTo(User::class, 'owner_id', 'id');
-    }
-
-
 
     public static $createRules = [
         'category_2'        => 'nullable',
@@ -66,4 +42,20 @@ class UniqueItem extends Model
         'description'       => 'required|string',
         'owner_id'          => 'nullable',
     ];
+
+    /**
+     * Relationship: Fetch the main category.
+     */
+    public function category1() {
+        return $this->belongsTo(UniqueItemCategory::class, 'category_1');
+    }
+
+    // Define relationship with UniqueItemCategory (Secondary Category)
+    public function category2() {
+        return $this->belongsTo(UniqueItemCategory::class, 'category_2');  // assuming 'category_2' is the foreign key in UniqueItem
+    }
+
+    public function owner() {
+        return $this->belongsTo(User::class, 'owner_id', 'id');
+    }
 }

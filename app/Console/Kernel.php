@@ -38,14 +38,13 @@ class Kernel extends ConsoleKernel {
         $schedule->command('restock-shops')
             ->daily()->at('01:15');
         $schedule->command('update-timed-stock')
-            ->everyMinute();       
+            ->everyMinute();
         $schedule->command('distribute-birthday-rewards')
             ->monthly();
         $schedule->command('reset-hol')
             ->daily()->at('01:20');
         $schedule->command('update-timed-daily')
-            ->everyMinute();          
-
+            ->everyMinute();
     }
 
     /**

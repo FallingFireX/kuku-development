@@ -174,8 +174,11 @@ function getAssetModelString($type, $namespaced = true) {
             break;
 
         case 'borders':
-            if($namespaced) return '\App\Models\Border\Border';
-            else return 'Border';
+            if ($namespaced) {
+                return '\App\Models\Border\Border';
+            } else {
+                return 'Border';
+            }
             break;
     }
 
@@ -437,7 +440,7 @@ function fillUserAssets($assets, $sender, $recipient, $logType, $data) {
                 }
             }
         } elseif ($key == 'awards' && count($contents)) {
-            $service = new \App\Services\AwardCaseManager;
+            $service = new App\Services\AwardCaseManager;
             foreach ($contents as $asset) {
                 if (!$service->creditAward($sender, $recipient, $logType, $data, $asset['asset'], $asset['quantity'])) {
                     return false;
@@ -493,7 +496,7 @@ function fillUserAssets($assets, $sender, $recipient, $logType, $data) {
                 }
             }
         } elseif ($key == 'themes' && count($contents)) {
-            $service = new \App\Services\ThemeManager;
+            $service = new App\Services\ThemeManager;
             foreach ($contents as $asset) {
                 if (!$service->creditTheme($recipient, $asset['asset'])) {
                     return false;
@@ -501,7 +504,7 @@ function fillUserAssets($assets, $sender, $recipient, $logType, $data) {
             }
         }
         if ($key == 'recipes' && count($contents)) {
-            $service = new \App\Services\RecipeService;
+            $service = new App\Services\RecipeService;
             foreach ($contents as $asset) {
                 if (!$service->creditRecipe($sender, $recipient, null, $logType, $data, $asset['asset'])) {
                     return false;
@@ -518,12 +521,13 @@ function fillUserAssets($assets, $sender, $recipient, $logType, $data) {
             if (!$service->creditStat($sender, $recipient, $logType, $data['data'], 'none', $contents['quantity'])) {
                 return false;
             }
-        }
-        elseif($key == 'borders' && count($contents))
-        {
-            $service = new \App\Services\BorderService;
-            foreach($contents as $asset)
-                if(!$service->creditBorder($sender, $recipient, null, $logType, $data, $asset['asset'])) return false;
+        } elseif ($key == 'borders' && count($contents)) {
+            $service = new App\Services\BorderService;
+            foreach ($contents as $asset) {
+                if (!$service->creditBorder($sender, $recipient, null, $logType, $data, $asset['asset'])) {
+                    return false;
+                }
+            }
         }
     }
 
@@ -574,7 +578,7 @@ function fillCharacterAssets($assets, $sender, $recipient, $logType, $data, $sub
                 }
             }
         } elseif ($key == 'elements' && count($contents)) {
-            $service = new \App\Services\TypingManager;
+            $service = new App\Services\TypingManager;
             foreach ($contents as $asset) {
                 if (!$service->creditTyping($recipient, $asset['asset'], $sender, $logType)) {
                     return false;
@@ -591,14 +595,14 @@ function fillCharacterAssets($assets, $sender, $recipient, $logType, $data, $sub
                 return false;
             }
         } elseif ($key == 'awards' && count($contents)) {
-            $service = new \App\Services\AwardCaseManager;
+            $service = new App\Services\AwardCaseManager;
             foreach ($contents as $asset) {
                 if (!$service->creditAward($sender, ($asset['asset']->is_character_owned ? $recipient : $item_recipient), $logType, $data, $asset['asset'], $asset['quantity'])) {
                     return false;
                 }
             }
         } elseif ($key == 'statuses' && count($contents)) {
-            $service = new \App\Services\StatusEffectManager;
+            $service = new App\Services\StatusEffectManager;
             foreach ($contents as $asset) {
                 if (!$service->creditStatusEffect($sender, $recipient, $logType, $data['data'], $asset['asset'], $asset['quantity'])) {
                     return false;
@@ -646,22 +650,22 @@ function findReward($type, $id, $isCharacter = false) {
     $reward = null;
     switch ($type) {
         case 'Item':
-            $reward = \App\Models\Item\Item::find($id);
+            $reward = App\Models\Item\Item::find($id);
             break;
         case 'Currency':
-            $reward = \App\Models\Currency\Currency::find($id);
+            $reward = App\Models\Currency\Currency::find($id);
             if (!$isCharacter && !$reward->is_user_owned) {
-                throw new \Exception('Invalid currency selected.');
+                throw new Exception('Invalid currency selected.');
             }
             break;
         case 'Pet':
-            $reward = \App\Models\Pet\Pet::find($id);
+            $reward = App\Models\Pet\Pet::find($id);
             break;
         case 'LootTable':
-            $reward = \App\Models\Loot\LootTable::find($id);
+            $reward = App\Models\Loot\LootTable::find($id);
             break;
         case 'Raffle':
-            $reward = \App\Models\Raffle\Raffle::find($id);
+            $reward = App\Models\Raffle\Raffle::find($id);
             break;
     }
 

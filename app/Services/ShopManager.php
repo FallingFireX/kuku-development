@@ -10,9 +10,9 @@ use App\Models\Shop\ShopLog;
 use App\Models\Shop\ShopStock;
 use App\Models\Shop\UserItemDonation;
 use App\Models\User\UserItem;
+use Config;
 use Illuminate\Support\Facades\DB;
 use Settings;
-use Config;
 
 class ShopManager extends Service {
     /*

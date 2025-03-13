@@ -16,7 +16,7 @@ class AddTimedShop extends Migration {
             $table->timestamp('end_at')->nullable()->default(null);
         });
     }
- 
+
     /**
      * Reverse the migrations.
      */

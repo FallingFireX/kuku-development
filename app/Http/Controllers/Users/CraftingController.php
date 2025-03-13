@@ -6,12 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Models\Item\Item;
 use App\Models\Item\ItemCategory;
 use App\Models\Recipe\Recipe;
+use App\Models\Recipe\RecipeCategory;
 use App\Models\User\User;
 use App\Models\User\UserItem;
-use App\Models\Currency\Currency;
-use App\Models\Recipe\RecipeCategory;
-
-use App\Services\RecipeService;
 use App\Services\RecipeManager;
 use Auth;
 use Illuminate\Http\Request;
@@ -26,15 +23,12 @@ class CraftingController extends Controller {
     |
     */
 
-    
-
     /**
      * Shows the user's trades.
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function getIndex(Request $request)
-    {
+    public function getIndex(Request $request) {
         $categories = RecipeCategory::orderBy('sort', 'DESC')->get();
         // $userRecipes = count($categories) ?
         //     Auth::user()->recipes()
@@ -50,14 +44,14 @@ class CraftingController extends Controller {
         //         ->get()
         //         ->groupBy(['recipe_category_id', 'id']);
 
-                $userRecipes = count($categories) ? Auth::user()->recipes()->orderByRaw('FIELD(recipe_category_id,'.implode(',', $categories->pluck('id')->toArray()).')')->orderBy('name')->get()->groupBy('recipe_category_id') :
-                Auth::user()->recipes()->orderBy('name')->get()->groupBy('collection_category_id');
-                $default = count($categories) ? Recipe::where('needs_unlocking','0')->orderByRaw('FIELD(recipe_category_id,'.implode(',', $categories->pluck('id')->toArray()).')')->orderBy('name')->get()->groupBy('recipe_category_id') : Recipe::where('needs_unlocking','0')->orderBy('name')->get()->groupBy('recipe_category_id');
+        $userRecipes = count($categories) ? Auth::user()->recipes()->orderByRaw('FIELD(recipe_category_id,'.implode(',', $categories->pluck('id')->toArray()).')')->orderBy('name')->get()->groupBy('recipe_category_id') :
+        Auth::user()->recipes()->orderBy('name')->get()->groupBy('collection_category_id');
+        $default = count($categories) ? Recipe::where('needs_unlocking', '0')->orderByRaw('FIELD(recipe_category_id,'.implode(',', $categories->pluck('id')->toArray()).')')->orderBy('name')->get()->groupBy('recipe_category_id') : Recipe::where('needs_unlocking', '0')->orderBy('name')->get()->groupBy('recipe_category_id');
 
         return view('home.crafting.index', [
-            'default' => $default,
+            'default'     => $default,
             'userRecipes' => $userRecipes,
-            'categories' => $categories->keyBy('id'),
+            'categories'  => $categories->keyBy('id'),
         ]);
     }
 
@@ -93,23 +87,26 @@ class CraftingController extends Controller {
     }
 
     /**
-     * Crafts a recipe
+     * Crafts a recipe.
      *
-     * @param  integer  $id
+     * @param int $id
+     *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function postCraftRecipe(Request $request, RecipeManager $service, $id)
-    {
+    public function postCraftRecipe(Request $request, RecipeManager $service, $id) {
         $recipe = Recipe::find($id);
-        if(!$recipe) abort(404);
+        if (!$recipe) {
+            abort(404);
+        }
 
-        if($service->craftRecipe($request->only(['stack_id', 'stack_quantity']), $recipe, Auth::user())) {
+        if ($service->craftRecipe($request->only(['stack_id', 'stack_quantity']), $recipe, Auth::user())) {
             flash('Recipe crafted successfully.')->success();
+        } else {
+            foreach ($service->errors()->getMessages()['error'] as $error) {
+                flash($error)->error();
+            }
         }
-        else {
-            foreach($service->errors()->getMessages()['error'] as $error) flash($error)->error();
-        }
+
         return redirect()->back();
     }
-
 }

@@ -20,10 +20,10 @@ class ThemeManager extends Service {
     /**
      * Creates a new theme.
      *
-     * @param array                 $data
-     * @param \App\Models\User\User $user
+     * @param array $data
+     * @param User  $user
      *
-     * @return \App\Models\Theme\Theme|bool
+     * @return bool|Theme\Theme
      */
     public function createTheme($data, $user) {
         DB::beginTransaction();
@@ -92,11 +92,11 @@ class ThemeManager extends Service {
     /**
      * Updates an theme.
      *
-     * @param \App\Models\Theme\Theme $theme
-     * @param array                   $data
-     * @param \App\Models\User\User   $user
+     * @param Theme\Theme $theme
+     * @param array       $data
+     * @param User        $user
      *
-     * @return \App\Models\Theme\Theme|bool
+     * @return bool|Theme\Theme
      */
     public function updateTheme($theme, $data, $user) {
         DB::beginTransaction();
@@ -176,7 +176,7 @@ class ThemeManager extends Service {
     /**
      * Deletes an theme.
      *
-     * @param \App\Models\Theme\Theme $theme
+     * @param Theme\Theme $theme
      *
      * @return bool
      */
@@ -211,8 +211,8 @@ class ThemeManager extends Service {
     /**
      * Credits theme to a user or character.
      *
-     * @param \App\Models\User\User $recipient
-     * @param \App\Models\Theme     $theme
+     * @param User  $recipient
+     * @param Theme $theme
      *
      * @return bool
      */
@@ -249,8 +249,8 @@ class ThemeManager extends Service {
     /**
      * Processes user input for creating/updating an theme.
      *
-     * @param array                   $data
-     * @param \App\Models\Theme\Theme $theme
+     * @param array       $data
+     * @param Theme\Theme $theme
      *
      * @return array
      */

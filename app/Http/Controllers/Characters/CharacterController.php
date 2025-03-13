@@ -7,18 +7,12 @@ use App\Http\Controllers\Controller;
 use App\Models\Award\Award;
 use App\Models\Award\AwardCategory;
 use App\Models\Character\BreedingPermission;
-use App\Models\Character\BreedingPermissionLog;
 use App\Models\Character\Character;
 use App\Models\Character\CharacterAward;
-use App\Models\Species\Species;
-use App\Models\Rarity;
-use App\Models\WorldExpansion\Location;
-use App\Models\WorldExpansion\Faction;
-use App\Models\Feature\Feature;
-use App\Models\Currency\CurrencyLog;
 use App\Models\Character\CharacterCurrency;
 use App\Models\Character\CharacterImage;
 use App\Models\Character\CharacterItem;
+use App\Models\Character\CharacterLink;
 use App\Models\Character\CharacterProfile;
 use App\Models\Character\CharacterRelation;
 use App\Models\Character\CharacterTransfer;
@@ -33,10 +27,10 @@ use App\Models\User\User;
 use App\Models\User\UserAward;
 use App\Models\User\UserCurrency;
 use App\Models\User\UserItem;
+use App\Models\WorldExpansion\Faction;
+use App\Models\WorldExpansion\Location;
 use App\Services\AwardCaseManager;
 use App\Services\CharacterLinkService;
-use App\Models\Character\CharacterLink;
-
 use App\Services\CharacterManager;
 use App\Services\CurrencyManager;
 use App\Services\DesignUpdateManager;
@@ -150,8 +144,8 @@ class CharacterController extends Controller {
             'skills'                => Skill::where('parent_id', null)->orderBy('name', 'ASC')->get(),
             'showMention'           => true,
             'extPrevAndNextBtnsUrl' => '',
-            'parent' => CharacterLink::where('child_id', $this->character->id)->orderBy('parent_id', 'ASC')->first(),
-            'children' => CharacterLink::where('parent_id', $this->character->id)->orderBy('child_id', 'ASC')->get()
+            'parent'                => CharacterLink::where('child_id', $this->character->id)->orderBy('parent_id', 'ASC')->first(),
+            'children'              => CharacterLink::where('parent_id', $this->character->id)->orderBy('child_id', 'ASC')->get(),
         ]);
     }
 
@@ -188,13 +182,13 @@ class CharacterController extends Controller {
         }
 
         return view('character.edit_profile', [
-            'character' => $this->character,
-            'locations' => Location::all()->where('is_character_home')->pluck('style','id')->toArray(),
-            'factions' => Faction::all()->where('is_character_faction')->pluck('style','id')->toArray(),
-            'user_enabled' => Settings::get('WE_user_locations'),
+            'character'            => $this->character,
+            'locations'            => Location::all()->where('is_character_home')->pluck('style', 'id')->toArray(),
+            'factions'             => Faction::all()->where('is_character_faction')->pluck('style', 'id')->toArray(),
+            'user_enabled'         => Settings::get('WE_user_locations'),
             'user_faction_enabled' => Settings::get('WE_user_factions'),
-            'char_enabled' => Settings::get('WE_character_locations'),
-            'char_faction_enabled' => Settings::get('WE_character_factions')
+            'char_enabled'         => Settings::get('WE_character_locations'),
+            'char_faction_enabled' => Settings::get('WE_character_factions'),
         ]);
     }
 
@@ -218,7 +212,7 @@ class CharacterController extends Controller {
         }
 
         $request->validate(CharacterProfile::$rules);
-        
+
         if ($service->updateCharacterProfile($request->only(['name', 'link', 'text', 'is_gift_art_allowed', 'is_gift_writing_allowed', 'is_trading', 'character_warning', 'custom_values_group', 'custom_values_name', 'custom_values_data', 'alert_user', 'is_links_open', 'kotm', 'location', 'faction', 'adoption', 'donation']), $this->character, Auth::user(), !$isOwner)) {
             flash('Profile edited successfully.')->success();
         } else {
@@ -542,23 +536,26 @@ class CharacterController extends Controller {
     /**
      * Creates a new breeding permission for a character.
      *
-     * @param  \Illuminate\Http\Request       $request
-     * @param  App\Services\CharacterManager  $service
-     * @param  string                         $slug
+     * @param App\Services\CharacterManager $service
+     * @param string                        $slug
+     *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function postNewBreedingPermission(Request $request, CharacterManager $service, $slug)
-    {
-        if(!Auth::check()) abort(404);
+    public function postNewBreedingPermission(Request $request, CharacterManager $service, $slug) {
+        if (!Auth::check()) {
+            abort(404);
+        }
 
         $request->validate(BreedingPermission::$createRules);
 
-        if($service->createBreedingPermission($request->only(['recipient_id', 'type', 'description']), $this->character, Auth::user())) {
+        if ($service->createBreedingPermission($request->only(['recipient_id', 'type', 'description']), $this->character, Auth::user())) {
             flash('Breeding permission created successfully.')->success();
+        } else {
+            foreach ($service->errors()->getMessages()['error'] as $error) {
+                flash($error)->error();
+            }
         }
-        else {
-            foreach($service->errors()->getMessages()['error'] as $error) flash($error)->error();
-        }
+
         return redirect()->back();
     }
 
@@ -727,7 +724,6 @@ class CharacterController extends Controller {
             'logs'                  => $this->character->getLevelLogs(0),
         ]);
     }
-    
 
     /**
      * Shows a user's count logs.
@@ -810,16 +806,18 @@ class CharacterController extends Controller {
         }
 
         $parent = CharacterLink::where('child_id', $this->character->id)->orderBy('parent_id', 'DESC')->first();
-        if($parent) $parent = $parent->parent->id;
+        if ($parent) {
+            $parent = $parent->parent->id;
+        }
 
         return view('character.transfer', [
-            'character'      => $this->character,
-            'transfer'       => CharacterTransfer::active()->where('character_id', $this->character->id)->first(),
-            'cooldown'       => Settings::get('transfer_cooldown'),
-            'transfersQueue' => Settings::get('open_transfers_queue'),
-            'userOptions' => User::visible()->orderBy('name')->pluck('name', 'id')->toArray(),
-            'parent' => $parent,
-            'characterOptions' => [null => 'Unbound'] + Character::visible()->myo(0)->orderBy('slug','ASC')->get()->pluck('fullName','id')->toArray()
+            'character'        => $this->character,
+            'transfer'         => CharacterTransfer::active()->where('character_id', $this->character->id)->first(),
+            'cooldown'         => Settings::get('transfer_cooldown'),
+            'transfersQueue'   => Settings::get('open_transfers_queue'),
+            'userOptions'      => User::visible()->orderBy('name')->pluck('name', 'id')->toArray(),
+            'parent'           => $parent,
+            'characterOptions' => [null => 'Unbound'] + Character::visible()->myo(0)->orderBy('slug', 'ASC')->get()->pluck('fullName', 'id')->toArray(),
         ]);
     }
 
@@ -831,20 +829,26 @@ class CharacterController extends Controller {
      *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function postTransfer(Request $request, CharacterManager $service, $slug)
-    {
-        if(!Auth::check()) abort(404);
-        
+    public function postTransfer(Request $request, CharacterManager $service, $slug) {
+        if (!Auth::check()) {
+            abort(404);
+        }
+
         $parent = CharacterLink::where('child_id', $this->character->id)->first();
         $child = CharacterLink::where('parent_id', $this->character->id)->first();
-        if($parent && $child) $mutual = CharacterLink::where('child_id', $parent->parent->id)->where('parent_id', $this->character->id)->first();
-        if($parent && !isset($mutual)) {
+        if ($parent && $child) {
+            $mutual = CharacterLink::where('child_id', $parent->parent->id)->where('parent_id', $this->character->id)->first();
+        }
+        if ($parent && !isset($mutual)) {
             flash('This character is bound and cannot be transfered. You must transfer the character it is bound to.')->error();
+
             return redirect()->back();
         }
-        if($service->createTransfer($request->only(['recipient_id']), $this->character, Auth::user())) {
+        if ($service->createTransfer($request->only(['recipient_id']), $this->character, Auth::user())) {
             flash('Transfer request created successfully.')->success();
-            if($child) flash('This character has attachments that will be transferred with it.')->warning();
+            if ($child) {
+                flash('This character has attachments that will be transferred with it.')->warning();
+            }
         }
 
         return redirect()->back();
@@ -1132,18 +1136,19 @@ class CharacterController extends Controller {
     /**
      * Deletes an award stack.
      *
-     * @param  \Illuminate\Http\Request       $request
-     * @param  App\Services\CharacterManager  $service
+     * @param App\Services\CharacterManager $service
+     *
      * @return \Illuminate\Http\RedirectResponse
      */
-    private function postDeleteAward(Request $request, AwardCaseManager $service)
-    {
-        if($service->deleteStack($this->character, CharacterAward::find($request->get('ids')), $request->get('quantities'))) {
+    private function postDeleteAward(Request $request, AwardCaseManager $service) {
+        if ($service->deleteStack($this->character, CharacterAward::find($request->get('ids')), $request->get('quantities'))) {
             flash(ucfirst(__('awards.award')).' deleted successfully.')->success();
+        } else {
+            foreach ($service->errors()->getMessages()['error'] as $error) {
+                flash($error)->error();
+            }
         }
-        else {
-            foreach($service->errors()->getMessages()['error'] as $error) flash($error)->error();
-        }
+
         return redirect()->back();
     }
 

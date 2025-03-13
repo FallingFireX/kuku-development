@@ -60,7 +60,7 @@ class ThemeController extends Controller {
      * @return \Illuminate\Contracts\Support\Renderable
      */
     public function getCreateTheme() {
-        $conditions = new stdClass();
+        $conditions = new stdClass;
         if (class_exists('\App\Models\Weather\WeatherSeason')) {
             $conditions->seasons = \App\Models\Weather\WeatherSeason::get()->pluck('name', 'id');
             $conditions->weathers = \App\Models\Weather\Weather::get()->pluck('name', 'id');
@@ -80,7 +80,7 @@ class ThemeController extends Controller {
      * @return \Illuminate\Contracts\Support\Renderable
      */
     public function getEditTheme($id) {
-        $conditions = new stdClass();
+        $conditions = new stdClass;
         if (class_exists('\App\Models\Weather\WeatherSeason')) {
             $conditions->seasons = \App\Models\Weather\WeatherSeason::get()->pluck('name', 'id');
             $conditions->weathers = \App\Models\Weather\Weather::get()->pluck('name', 'id');

@@ -209,7 +209,7 @@ class InventoryManager extends Service {
                     throw new \Exception('Quantity to transfer exceeds item count.');
                 }
 
-                //Check that hold count isn't being exceeded
+                // Check that hold count isn't being exceeded
                 if ($stack->item->category->character_limit > 0) {
                     $limit = $stack->item->category->character_limit;
                 }
@@ -459,9 +459,9 @@ class InventoryManager extends Service {
     /**
      * Donates items from stack.
      *
-     * @param \App\Models\User\User     $user
-     * @param \App\Models\User\UserItem $stacks
-     * @param int                       $quantities
+     * @param User     $user
+     * @param UserItem $stacks
+     * @param int      $quantities
      *
      * @return bool
      */
@@ -526,12 +526,12 @@ class InventoryManager extends Service {
     /**
      * Credits an item to a user or character.
      *
-     * @param \App\Models\Character\Character|\App\Models\User\User $sender
-     * @param \App\Models\Character\Character|\App\Models\User\User $recipient
-     * @param string                                                $type
-     * @param array                                                 $data
-     * @param Item                                                  $item
-     * @param int                                                   $quantity
+     * @param \App\Models\Character\Character|User $sender
+     * @param \App\Models\Character\Character|User $recipient
+     * @param string                               $type
+     * @param array                                $data
+     * @param Item                                 $item
+     * @param int                                  $quantity
      *
      * @return bool
      */

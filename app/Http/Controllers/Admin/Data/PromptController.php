@@ -4,10 +4,10 @@ namespace App\Http\Controllers\Admin\Data;
 
 use App\Http\Controllers\Controller;
 use App\Models\Award\Award;
+use App\Models\Criteria\Criterion;
 use App\Models\Currency\Currency;
 use App\Models\Item\Item;
 use App\Models\Loot\LootTable;
-use App\Models\Criteria\Criterion;
 use App\Models\Prompt\Prompt;
 use App\Models\Prompt\PromptCategory;
 use App\Models\Raffle\Raffle;
@@ -183,17 +183,17 @@ class PromptController extends Controller {
      */
     public function getCreatePrompt() {
         return view('admin.prompts.create_edit_prompt', [
-            'prompt'     => new Prompt,
-            'categories' => ['none' => 'No category'] + PromptCategory::orderBy('sort', 'DESC')->pluck('name', 'id')->toArray(),
-            'items'      => Item::orderBy('name')->pluck('name', 'id'),
-            'awards'     => Award::orderBy('name')->pluck('name', 'id'),
-            'currencies' => Currency::where('is_user_owned', 1)->orderBy('name')->pluck('name', 'id'),
-            'tables'     => LootTable::orderBy('name')->pluck('name', 'id'),
-            'raffles'    => Raffle::where('rolled_at', null)->where('is_active', 1)->orderBy('name')->pluck('name', 'id'),
-            'recipes'    => Recipe::orderBy('name')->pluck('name', 'id'),
-            'skills'     => Skill::pluck('name', 'id')->toArray(),
+            'prompt'        => new Prompt,
+            'categories'    => ['none' => 'No category'] + PromptCategory::orderBy('sort', 'DESC')->pluck('name', 'id')->toArray(),
+            'items'         => Item::orderBy('name')->pluck('name', 'id'),
+            'awards'        => Award::orderBy('name')->pluck('name', 'id'),
+            'currencies'    => Currency::where('is_user_owned', 1)->orderBy('name')->pluck('name', 'id'),
+            'tables'        => LootTable::orderBy('name')->pluck('name', 'id'),
+            'raffles'       => Raffle::where('rolled_at', null)->where('is_active', 1)->orderBy('name')->pluck('name', 'id'),
+            'recipes'       => Recipe::orderBy('name')->pluck('name', 'id'),
+            'skills'        => Skill::pluck('name', 'id')->toArray(),
             'limit_periods' => [null => 'None', 'Hour' => 'Hour', 'Day' => 'Day', 'Week' => 'Week', 'Month' => 'Month', 'Year' => 'Year'],
-            'criteria'   => Criterion::active()->orderBy('name')->pluck('name', 'id'),
+            'criteria'      => Criterion::active()->orderBy('name')->pluck('name', 'id'),
         ]);
     }
 
@@ -211,17 +211,17 @@ class PromptController extends Controller {
         }
 
         return view('admin.prompts.create_edit_prompt', [
-            'prompt'     => $prompt,
-            'categories' => ['none' => 'No category'] + PromptCategory::orderBy('sort', 'DESC')->pluck('name', 'id')->toArray(),
-            'items'      => Item::orderBy('name')->pluck('name', 'id'),
-            'awards'     => Award::orderBy('name')->pluck('name', 'id'),
-            'currencies' => Currency::where('is_user_owned', 1)->orderBy('name')->pluck('name', 'id'),
-            'tables'     => LootTable::orderBy('name')->pluck('name', 'id'),
-            'raffles'    => Raffle::where('rolled_at', null)->where('is_active', 1)->orderBy('name')->pluck('name', 'id'),
-            'recipes'    => Recipe::orderBy('name')->pluck('name', 'id'),
-            'skills'     => Skill::pluck('name', 'id')->toArray(),
+            'prompt'        => $prompt,
+            'categories'    => ['none' => 'No category'] + PromptCategory::orderBy('sort', 'DESC')->pluck('name', 'id')->toArray(),
+            'items'         => Item::orderBy('name')->pluck('name', 'id'),
+            'awards'        => Award::orderBy('name')->pluck('name', 'id'),
+            'currencies'    => Currency::where('is_user_owned', 1)->orderBy('name')->pluck('name', 'id'),
+            'tables'        => LootTable::orderBy('name')->pluck('name', 'id'),
+            'raffles'       => Raffle::where('rolled_at', null)->where('is_active', 1)->orderBy('name')->pluck('name', 'id'),
+            'recipes'       => Recipe::orderBy('name')->pluck('name', 'id'),
+            'skills'        => Skill::pluck('name', 'id')->toArray(),
             'limit_periods' => [null => 'None', 'Hour' => 'Hour', 'Day' => 'Day', 'Week' => 'Week', 'Month' => 'Month', 'Year' => 'Year'],
-            'criteria'   => Criterion::active()->orderBy('name')->pluck('name', 'id'),
+            'criteria'      => Criterion::active()->orderBy('name')->pluck('name', 'id'),
         ]);
     }
 

@@ -174,37 +174,37 @@ class CharacterStatController extends Controller {
         if (!Auth::check() || (!Auth::user()->hasPower('manage_characters'))) {
             abort(404);
         }
-    
+
         // Validate the stat_level input
         $request->validate([
             'stat_level' => 'required|integer|min:0',
         ]);
-    
+
         // Find the Stat object and the CharacterStat (for this character)
         $stat = Stat::find($id);
         $characterStat = $character->stats()->where('stat_id', $stat->id)->first();
-    
+
         if (!$stat || !$characterStat) {
             flash('Stat or CharacterStat not found')->error();
+
             return redirect()->back();
         }
-    
+
         // Set the new stat level
         $newLevel = $request->input('stat_level');
-        
+
         // Update the stat_level
         $characterStat->stat_level = $newLevel;
-    
+
         // Save the updated stat_level to the database
         if ($characterStat->save()) {
             flash('Character stat level updated successfully!')->success();
         } else {
             flash('Failed to update character stat level')->error();
         }
-    
+
         return redirect()->back();
     }
-    
 
     /**
      * edits the base stat value.
@@ -230,5 +230,4 @@ class CharacterStatController extends Controller {
 
         return redirect()->back();
     }
-
 }

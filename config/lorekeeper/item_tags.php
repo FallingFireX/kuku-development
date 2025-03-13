@@ -101,14 +101,14 @@ return [
     ],
 
     'choicebox' => [
-        'name' => 'Choice Box',
-        'text_color' => '#ffffff',
-        'background_color' => '#56639E'
+        'name'             => 'Choice Box',
+        'text_color'       => '#ffffff',
+        'background_color' => '#56639E',
     ],
 
     'border' => [
-        'name' => 'Border',
-        'text_color' => '#ffffff',
-        'background_color' => '#bb6e7d'
+        'name'             => 'Border',
+        'text_color'       => '#ffffff',
+        'background_color' => '#bb6e7d',
     ],
 ];

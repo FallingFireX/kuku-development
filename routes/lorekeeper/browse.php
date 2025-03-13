@@ -80,7 +80,7 @@ Route::group(['prefix' => 'user', 'namespace' => 'Users'], function () {
     Route::get('{name}/'.__('awards.awardcase'), 'UserController@getUserAwardCase');
 
     Route::get('{name}/borders', 'UserController@getUserBorders');
-    
+
     Route::get('{name}/currency-logs', 'UserController@getUserCurrencyLogs');
     Route::get('{name}/item-logs', 'UserController@getUserItemLogs');
     Route::get('{name}/'.__('awards.award').'-logs', 'UserController@getUserAwardLogs');
@@ -236,11 +236,10 @@ Route::group(['prefix' => 'shops'], function () {
     Route::get('donation-shop/{id}', 'ShopController@getDonationShopStock')->where(['id' => '[0-9]+']);
 });
 
-Route::group(['prefix' => __('dailies.dailies')], function() {
+Route::group(['prefix' => __('dailies.dailies')], function () {
     Route::get('/', 'DailyController@getIndex');
     Route::get('{id}', 'DailyController@getDaily')->where(['id' => '[0-9]+']);
 });
-
 
 /**************************************************************************************************
     Pet Drops
@@ -296,19 +295,19 @@ Route::group(['prefix' => 'reports', 'namespace' => 'Users'], function () {
 
 Route::get('time', function () {
     return date('Y-m-d H:i:s');
-    });
-    
+});
+
 /**************************************************************************************************
     Generators
 **************************************************************************************************/
 Route::group(['prefix' => 'generators'], function () {
     Route::get('/', 'GeneratorController@getGenerators');
     Route::get('{id}', 'GeneratorController@getGenerator');
-    });
+});
 /**************************************************************************************************
     Affiliates
 **************************************************************************************************/
-Route::group(['prefix' => 'affiliates'], function() {
+Route::group(['prefix' => 'affiliates'], function () {
     Route::get('/', 'AffiliateController@getIndex')->name('affiliates');
     Route::get('apply', 'AffiliateController@getApply')->name('apply_affiliate');
     Route::get('status/{slug}', 'AffiliateController@getStatus')->name('affiliate_status');
@@ -319,11 +318,10 @@ Route::group(['prefix' => 'affiliates'], function() {
     World Expansion
 **************************************************************************************************/
 
-Route::group(['prefix' => 'world', 'namespace' => 'WorldExpansion'], function() {
-
+Route::group(['prefix' => 'world', 'namespace' => 'WorldExpansion'], function () {
     Route::get('info', 'WorldExpansionController@getIndex');
     Route::get('glossary', 'WorldExpansionController@getGlossary');
-    
+
     Route::get('locations', 'LocationController@getLocations');
     Route::get('locations/{id}', 'LocationController@getLocation');
     Route::get('locations/{id}/submissions', 'LocationController@getLocationSubmissions');
@@ -361,7 +359,6 @@ Route::group(['prefix' => 'world', 'namespace' => 'WorldExpansion'], function() 
     Route::get('concept-categories', 'ConceptController@getConceptCategories');
     Route::get('concept-categories/{id}', 'ConceptController@getConceptCategory');
 });
-
 
 /**************************************************************************************************
     Custom

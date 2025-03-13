@@ -291,7 +291,7 @@ class Volume extends Model {
         }
 
         if (!is_null($numeric) && $this->book->text_prefix) {
-            //just getting a space between the prefices
+            // just getting a space between the prefices
             return $this->book->text_prefix.' '.$numeric.': ';
         }
 

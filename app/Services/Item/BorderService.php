@@ -1,19 +1,14 @@
-<?php namespace App\Services\Item;
+<?php
 
+namespace App\Services\Item;
+
+use App\Models\Border\Border;
+use App\Models\Item\Item;
+use App\Services\InventoryManager;
 use App\Services\Service;
-
 use DB;
 
-use App\Services\InventoryManager;
-
-use App\Models\Item\Item;
-use App\Models\Currency\Currency;
-use App\Models\Loot\LootTable;
-use App\Models\Raffle\Raffle;
-use App\Models\Border\Border;
-
-class BorderService extends Service
-{
+class BorderService extends Service {
     /*
     |--------------------------------------------------------------------------
     | Border Service
@@ -28,8 +23,7 @@ class BorderService extends Service
      *
      * @return array
      */
-    public function getEditData()
-    {
+    public function getEditData() {
         return [
             'borders' => Border::base()->orderBy('name')
                 ->where('is_default', 0)->where('admin_only', 0)
@@ -40,11 +34,11 @@ class BorderService extends Service
     /**
      * Processes the data attribute of the tag and returns it in the preferred format.
      *
-     * @param  string  $tag
+     * @param string $tag
+     *
      * @return mixed
      */
-    public function getTagData($tag)
-    {
+    public function getTagData($tag) {
         if (isset($tag->data['all_borders'])) {
             return 'All';
         }
@@ -57,24 +51,25 @@ class BorderService extends Service
                 foreach ($a as $id => $asset) {
                     $rewards[] = (object) [
                         'rewardable_type' => $class,
-                        'rewardable_id' => $id,
-                        'quantity' => $asset['quantity'],
+                        'rewardable_id'   => $id,
+                        'quantity'        => $asset['quantity'],
                     ];
                 }
             }
         }
+
         return $rewards;
     }
 
     /**
      * Processes the data attribute of the tag and returns it in the preferred format.
      *
-     * @param  string  $tag
-     * @param  array   $data
+     * @param string $tag
+     * @param array  $data
+     *
      * @return bool
      */
-    public function updateData($tag, $data)
-    {
+    public function updateData($tag, $data) {
         DB::beginTransaction();
 
         try {
@@ -104,19 +99,20 @@ class BorderService extends Service
         } catch (\Exception $e) {
             $this->setError('error', $e->getMessage());
         }
+
         return $this->rollbackReturn(false);
     }
 
     /**
      * Acts upon the item when used from the inventory.
      *
-     * @param  \App\Models\User\UserItem  $stacks
-     * @param  \App\Models\User\User      $user
-     * @param  array                      $data
+     * @param \App\Models\User\UserItem $stacks
+     * @param \App\Models\User\User     $user
+     * @param array                     $data
+     *
      * @return bool
      */
-    public function act($stacks, $user, $data)
-    {
+    public function act($stacks, $user, $data) {
         DB::beginTransaction();
 
         try {
@@ -147,7 +143,7 @@ class BorderService extends Service
                 }
 
                 // Next, try to delete the box item. If successful, we can start distributing rewards.
-                if ((new InventoryManager())->debitStack($stack->user, 'Border Redeemed', ['data' => ''], $stack, $data['quantities'][$key])) {
+                if ((new InventoryManager)->debitStack($stack->user, 'Border Redeemed', ['data' => ''], $stack, $data['quantities'][$key])) {
                     for ($q = 0; $q < $data['quantities'][$key]; $q++) {
                         $random = array_rand($options);
                         $thisBorder['borders'] = [$options[$random] => 1];
@@ -155,7 +151,7 @@ class BorderService extends Service
                         // Distribute user rewards
                         if (
                             !($rewards = fillUserAssets(parseAssetData($thisBorder), $user, $user, 'Border Redemption', [
-                                'data' => 'Redeemed from ' . $stack->item->name,
+                                'data' => 'Redeemed from '.$stack->item->name,
                             ]))
                         ) {
                             throw new \Exception('Failed to open border redemption item.');
@@ -164,21 +160,23 @@ class BorderService extends Service
                     }
                 }
             }
+
             return $this->commitReturn(true);
         } catch (\Exception $e) {
             $this->setError('error', $e->getMessage());
         }
+
         return $this->rollbackReturn(false);
     }
 
     /**
      * Acts upon the item when used from the inventory.
      *
-     * @param  array                  $rewards
+     * @param array $rewards
+     *
      * @return string
      */
-    private function getBorderRewardsString($rewards)
-    {
+    private function getBorderRewardsString($rewards) {
         $results = 'You have unlocked the following border: ';
         $result_elements = [];
         foreach ($rewards as $assetType) {
@@ -188,6 +186,7 @@ class BorderService extends Service
                 }
             }
         }
-        return $results . implode(', ', $result_elements);
+
+        return $results.implode(', ', $result_elements);
     }
 }

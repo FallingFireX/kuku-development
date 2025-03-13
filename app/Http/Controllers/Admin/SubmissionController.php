@@ -2,9 +2,6 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Config;
-use Carbon\Carbon;
-
 use App\Http\Controllers\Controller;
 use App\Models\Award\Award;
 use App\Models\Character\Character;
@@ -12,8 +9,8 @@ use App\Models\Currency\Currency;
 use App\Models\Element\Element;
 use App\Models\Item\Item;
 use App\Models\Loot\LootTable;
-use App\Models\Prompt\PromptCategory;
 use App\Models\Prompt\Prompt;
+use App\Models\Prompt\PromptCategory;
 use App\Models\Raffle\Raffle;
 use App\Models\Recipe\Recipe;
 use App\Models\Skill\Skill;
@@ -35,21 +32,21 @@ class SubmissionController extends Controller {
         $submissions = Submission::with('prompt')
             ->where('status', $status ? ucfirst($status) : 'Pending')
             ->whereNotNull('prompt_id');
-    
+
         $data = $request->only(['prompt_category_id', 'prompt_id', 'sort']);
-    
+
         // Filter by prompt category
         if (isset($data['prompt_category_id']) && $data['prompt_category_id'] != 'none') {
             $submissions->whereHas('prompt', function ($query) use ($data) {
                 $query->where('prompt_category_id', $data['prompt_category_id']);
             });
         }
-    
+
         // Filter by specific prompt ID
         if (isset($data['prompt_id']) && $data['prompt_id'] != 'none') {
             $submissions->where('prompt_id', $data['prompt_id']);
         }
-    
+
         // Sorting
         if (isset($data['sort'])) {
             switch ($data['sort']) {
@@ -63,7 +60,7 @@ class SubmissionController extends Controller {
         } else {
             $submissions->sortOldest();
         }
-    
+
         return view('admin.submissions.index', [
             'submissions' => $submissions->paginate(30)->appends($request->query()),
             'categories'  => ['none' => 'Any Category'] + PromptCategory::orderBy('sort', 'DESC')->pluck('name', 'id')->toArray(),
@@ -93,7 +90,7 @@ class SubmissionController extends Controller {
         $count['Month'] = Submission::submitted($submission->prompt->id, $submission->user_id)->where('created_at', '>=', now()->startOfMonth())->count();
         $count['Year'] = Submission::submitted($submission->prompt->id, $submission->user_id)->where('created_at', '>=', now()->startOfYear())->count();
 
-        if($submission->prompt->limit_character) {
+        if ($submission->prompt->limit_character) {
             $limit = $submission->prompt->limit * Character::visible()->where('is_myo_slot', 0)->where('user_id', $submission->user_id)->count();
         } else {
             $limit = $submission->prompt->limit;
@@ -120,12 +117,11 @@ class SubmissionController extends Controller {
             'raffles'             => Raffle::where('rolled_at', null)->where('is_active', 1)->orderBy('name')->pluck('name', 'id'),
             'recipes'             => Recipe::orderBy('name')->pluck('name', 'id'),
             'elements'            => Element::orderBy('name')->pluck('name', 'id'),
-            'count' => $count,
-            'prompt' => $submission->prompt,
-            'limit' => $limit,
+            'count'               => $count,
+            'prompt'              => $submission->prompt,
+            'limit'               => $limit,
         ] : []));
     }
-
 
     /**
      * Shows the claim index page.

@@ -4,15 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Facades\Settings;
 use App\Models\Character\Character;
-use App\Models\Comment\Comment;
 use App\Models\Criteria\Criterion;
-use App\Models\WorldExpansion\Location;
 use App\Models\Currency\Currency;
 use App\Models\Gallery\Gallery;
 use App\Models\Gallery\GalleryCriterion;
 use App\Models\Gallery\GallerySubmission;
 use App\Models\Prompt\Prompt;
 use App\Models\User\User;
+use App\Models\WorldExpansion\Location;
 use App\Services\GalleryManager;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -76,7 +75,7 @@ class GalleryController extends Controller {
         if ($request->get('prompt_id')) {
             $query->where('prompt_id', $request->get('prompt_id'));
         }
-        if($request->get('location_id')) {
+        if ($request->get('location_id')) {
             $query->where('location_id', $request->get('location_id'));
         }
 
@@ -339,8 +338,8 @@ class GalleryController extends Controller {
             'submission'  => new GallerySubmission,
             'prompts'     => Prompt::active()->sortAlphabetical()->pluck('name', 'id')->toArray(),
             'users'       => User::visible()->orderBy('name')->pluck('name', 'id')->toArray(),
-            'locations' => Location::visible()->sortAlphabetical()->get()->sortBy('parent_id')->pluck('styleParent', 'id')->toArray(),
-            'currency' => Currency::find(Settings::get('group_currency')),
+            'locations'   => Location::visible()->sortAlphabetical()->get()->sortBy('parent_id')->pluck('styleParent', 'id')->toArray(),
+            'currency'    => Currency::find(Settings::get('group_currency')),
             'galleryPage' => true,
             'sideGallery' => $gallery,
             'criteria'    => Criterion::active()->whereIn('id', $galleryCriteria)->orderBy('name')->pluck('name', 'id'),
@@ -377,7 +376,7 @@ class GalleryController extends Controller {
             'gallery'        => $submission->gallery,
             'galleryOptions' => Gallery::orderBy('name')->pluck('name', 'id')->toArray(),
             'prompts'        => $prompts->sortAlphabetical()->pluck('name', 'id')->toArray(),
-            'locations' => Location::visible()->sortAlphabetical()->get()->sortBy('parent_id')->pluck('styleParent', 'id')->toArray(),
+            'locations'      => Location::visible()->sortAlphabetical()->get()->sortBy('parent_id')->pluck('styleParent', 'id')->toArray(),
             'submission'     => $submission,
             'users'          => User::visible()->orderBy('name')->pluck('name', 'id')->toArray(),
             // 'currency'       => Currency::find(Settings::get('group_currency')),

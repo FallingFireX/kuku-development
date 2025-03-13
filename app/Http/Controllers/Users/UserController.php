@@ -5,16 +5,14 @@ namespace App\Http\Controllers\Users;
 use App\Http\Controllers\Controller;
 use App\Models\Award\Award;
 use App\Models\Award\AwardCategory;
+use App\Models\Border\Border;
 use App\Models\Character\BreedingPermission;
 use App\Models\Character\Character;
+use App\Models\Character\CharacterFolder;
 use App\Models\Character\CharacterImage;
 use App\Models\Character\Sublist;
 use App\Models\Claymore\GearCategory;
 use App\Models\Claymore\WeaponCategory;
-
-use DB;
-use Settings;
-
 use App\Models\Currency\Currency;
 use App\Models\Gallery\Gallery;
 use App\Models\Gallery\GalleryCharacter;
@@ -23,7 +21,6 @@ use App\Models\Item\Item;
 use App\Models\Item\ItemCategory;
 use App\Models\Pet\Pet;
 use App\Models\Pet\PetCategory;
-use App\Models\UniqueItem;
 use App\Models\User\User;
 use App\Models\User\UserCurrency;
 use App\Models\User\UserPet;
@@ -32,13 +29,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\View;
 use Route;
+use Settings;
 
-use App\Models\Character\CharacterCategory;
-use App\Models\Border\Border;
-use App\Models\Character\CharacterFolder;
-
-class UserController extends Controller
-{
+class UserController extends Controller {
     /*
     |--------------------------------------------------------------------------
     | User Controller
@@ -100,16 +93,16 @@ class UserController extends Controller
         }
 
         return view('user.profile', [
-            'user'       => $this->user,
-            'name'       => $name,
-            'awards'     => $this->user->awards()->orderBy('user_awards.updated_at', 'DESC')->whereNull('deleted_at')->where('count', '>', 0)->take(4)->get(),
-            'items'      => $this->user->items()->where('count', '>', 0)->orderBy('user_items.updated_at', 'DESC')->take(4)->get(),
-            'characters' => $characters,
-            'aliases'    => $aliases->orderBy('is_primary_alias', 'DESC')->orderBy('site')->get(),
-            'armours'    => $armours,
-            'pets'       => $this->user->pets()->orderBy('user_pets.updated_at', 'DESC')->take(5)->get(),
-            'user_enabled' => Settings::get('WE_user_locations'),
-            'user_factions_enabled' => Settings::get('WE_user_factions')
+            'user'                  => $this->user,
+            'name'                  => $name,
+            'awards'                => $this->user->awards()->orderBy('user_awards.updated_at', 'DESC')->whereNull('deleted_at')->where('count', '>', 0)->take(4)->get(),
+            'items'                 => $this->user->items()->where('count', '>', 0)->orderBy('user_items.updated_at', 'DESC')->take(4)->get(),
+            'characters'            => $characters,
+            'aliases'               => $aliases->orderBy('is_primary_alias', 'DESC')->orderBy('site')->get(),
+            'armours'               => $armours,
+            'pets'                  => $this->user->pets()->orderBy('user_pets.updated_at', 'DESC')->take(5)->get(),
+            'user_enabled'          => Settings::get('WE_user_locations'),
+            'user_factions_enabled' => Settings::get('WE_user_factions'),
         ]);
     }
 
@@ -157,38 +150,41 @@ class UserController extends Controller
 
         $query->whereIn('id', $imageQuery->pluck('character_id'));
 
-        if(!Auth::check() || !(Auth::check() && Auth::user()->hasPower('manage_characters'))) $query->visible();
+        if (!Auth::check() || !(Auth::check() && Auth::user()->hasPower('manage_characters'))) {
+            $query->visible();
+        }
         $query = $query->orderBy('sort', 'DESC')->get()
         // group query folder, getting the name from the id
-        ->groupBy(function($item) {
-            return $item->folder ? $item->folder->name : 'Unsorted';
-        });
+            ->groupBy(function ($item) {
+                return $item->folder ? $item->folder->name : 'Unsorted';
+            });
+
         return view('user.characters', [
-            'user' => $this->user,
+            'user'       => $this->user,
             'characters' => $query,
-            'sublists' => Sublist::orderBy('sort', 'DESC')->get()
+            'sublists'   => Sublist::orderBy('sort', 'DESC')->get(),
         ]);
     }
 
-        /**
+    /**
      * Shows a user's characters.
      *
-     * @param  string  $name
+     * @param string $name
+     * @param mixed  $folder
+     *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function getUserCharacterFolder($name, $folder)
-    {
+    public function getUserCharacterFolder($name, $folder) {
         $folder = CharacterFolder::where('name', $folder)->where('user_id', $this->user->id)->first();
         $query = Character::myo(0)->where('user_id', $this->user->id)->where('folder_id', $folder->id);
         $imageQuery = CharacterImage::images(Auth::check() ? Auth::user() : null)->with('features')->with('rarity')->with('species')->with('features');
 
-        if($sublists = Sublist::where('show_main', 0)->get())
-        $subCategories = []; $subSpecies = [];
-        {   foreach($sublists as $sublist)
-            {
-                $subCategories = array_merge($subCategories, $sublist->categories->pluck('id')->toArray());
-                $subSpecies = array_merge($subSpecies, $sublist->species->pluck('id')->toArray());
-            }
+        if ($sublists = Sublist::where('show_main', 0)->get()) {
+            $subCategories = [];
+        } $subSpecies = [];
+        foreach ($sublists as $sublist) {
+            $subCategories = array_merge($subCategories, $sublist->categories->pluck('id')->toArray());
+            $subSpecies = array_merge($subSpecies, $sublist->species->pluck('id')->toArray());
         }
 
         $query->whereNotIn('character_category_id', $subCategories);
@@ -196,11 +192,13 @@ class UserController extends Controller
 
         $query->whereIn('id', $imageQuery->pluck('character_id'));
 
-        if(!Auth::check() || !(Auth::check() && Auth::user()->hasPower('manage_characters'))) $query->visible();
+        if (!Auth::check() || !(Auth::check() && Auth::user()->hasPower('manage_characters'))) {
+            $query->visible();
+        }
 
         return view('user.character_folder', [
-            'user' => $this->user,
-            'folder' => $folder,
+            'user'       => $this->user,
+            'folder'     => $folder,
             'characters' => $query->orderBy('sort', 'DESC')->get(),
         ]);
     }
@@ -294,12 +292,12 @@ class UserController extends Controller
     public function getUserInventory($name) {
         // Retrieve user by name (ensure the 'name' field exists and is unique)
         $user = User::where('name', $name)->firstOrFail();
-    
+
         $categories = ItemCategory::visible(Auth::check() ? Auth::user() : null)
-                    ->orderBy('sort', 'DESC')
-                    ->get();
-    
-        $items = count($categories) ? 
+            ->orderBy('sort', 'DESC')
+            ->get();
+
+        $items = count($categories) ?
             $user->items()
                 ->where('count', '>', 0)
                 ->orderByRaw('FIELD(item_category_id,'.implode(',', $categories->pluck('id')->toArray()).')')
@@ -313,10 +311,10 @@ class UserController extends Controller
                 ->orderBy('updated_at')
                 ->get()
                 ->groupBy(['item_category_id', 'id']);
-    
+
         // Fetch unique items for the retrieved user
         $uniqueItems = $user->UniqueItems()->orderBy('id')->get();
-    
+
         return view('user.inventory', [
             'user'        => $user,
             'categories'  => $categories->keyBy('id'),
@@ -326,7 +324,6 @@ class UserController extends Controller
             'logs'        => $user->getItemLogs(),
         ]);
     }
-    
 
     /**
      * Shows a user's awardcase.
@@ -770,36 +767,36 @@ class UserController extends Controller
     /**
      * Shows a user's borders.
      *
-     * @param  string  $name
+     * @param string $name
+     *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function getUserBorders($name)
-    {
-        $default =  Border::base()->active(Auth::user() ?? null)->where('is_default', 1)->get();
+    public function getUserBorders($name) {
+        $default = Border::base()->active(Auth::user() ?? null)->where('is_default', 1)->get();
         $admin = Border::base()->where('admin_only', 1)->get();
-        
+
         return view('user.borders', [
-            'user' => $this->user,
+            'user'    => $this->user,
             'default' => $default,
-            'admin' => $admin,
-            'logs' => $this->user->getBorderLogs(),
+            'admin'   => $admin,
+            'logs'    => $this->user->getBorderLogs(),
         ]);
     }
 
     /**
      * Shows a user's border logs.
      *
-     * @param  string  $name
+     * @param string $name
+     *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function getUserBorderLogs($name)
-    {
+    public function getUserBorderLogs($name) {
         $user = $this->user;
 
         return view('user.border_logs', [
-            'user' => $this->user,
-            'logs' => $this->user->getBorderLogs(0),
-            'sublists' => Sublist::orderBy('sort', 'DESC')->get()
+            'user'     => $this->user,
+            'logs'     => $this->user->getBorderLogs(0),
+            'sublists' => Sublist::orderBy('sort', 'DESC')->get(),
         ]);
     }
 }

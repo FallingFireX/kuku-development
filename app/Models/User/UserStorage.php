@@ -4,9 +4,7 @@ namespace App\Models\User;
 
 use App\Models\Model;
 
-class UserStorage extends Model
-{
-
+class UserStorage extends Model {
     /**
      * The attributes that are mass assignable.
      *
@@ -17,18 +15,18 @@ class UserStorage extends Model
     ];
 
     /**
-     * Whether the model contains timestamps to be saved and updated.
-     *
-     * @var string
-     */
-    public $timestamps = true;
-
-    /**
      * The table associated with the model.
      *
      * @var string
      */
     protected $table = 'user_storage';
+
+    /**
+     * Whether the model contains timestamps to be saved and updated.
+     *
+     * @var string
+     */
+    public $timestamps = true;
 
     /**********************************************************************************************
 
@@ -39,28 +37,25 @@ class UserStorage extends Model
     /**
      * Get the user who owns the stack.
      */
-    public function user()
-    {
+    public function user() {
         return $this->belongsTo('App\Models\User\User');
     }
+
     /**
      * Get the item associated with this item stack.
-     * Specifically vague to allow for extensions. eg. Pet or Currency
+     * Specifically vague to allow for extensions. eg. Pet or Currency.
      */
-    public function storable()
-    {
+    public function storable() {
         return $this->belongsTo($this->storable_type, 'storable_id');  // Should return null if nonexisting
     }
 
     /**
      * Get the inventory spot who owns the stack.
-     * Specifically vague to allow for extensions. eg. UserPet or UserCurrency
+     * Specifically vague to allow for extensions. eg. UserPet or UserCurrency.
      */
-    public function storer()
-    {
+    public function storer() {
         return $this->belongsTo($this->storer_type, 'storer_type');  // Should return null if nonexisting
     }
-
 
     /**********************************************************************************************
 
@@ -73,8 +68,7 @@ class UserStorage extends Model
      *
      * @return array
      */
-    public function getDataAttribute()
-    {
+    public function getDataAttribute() {
         return json_decode($this->attributes['data'], true);
     }
 
@@ -83,42 +77,38 @@ class UserStorage extends Model
      *
      * @return array
      */
-    public function getImageUrlAttribute()
-    {
-        switch($this->storable_type){
+    public function getImageUrlAttribute() {
+        switch ($this->storable_type) {
             default: case 'App\Models\Item\Item': return $this->storable->imageUrl;
         }
     }
 
     /**
-     * Get the name of the object
+     * Get the name of the object.
      *
      * @return array
      */
-    public function getNameAttribute()
-    {
-        switch($this->storable_type){
+    public function getNameAttribute() {
+        switch ($this->storable_type) {
             default: case 'App\Models\Item\Item': return $this->storable->name;
         }
     }
 
     /**
-     * Get the name of the object
+     * Get the name of the object.
      *
      * @return array
      */
-    public function getDisplayNameAttribute()
-    {
-        switch($this->storable_type){
+    public function getDisplayNameAttribute() {
+        switch ($this->storable_type) {
             default: case 'App\Models\Item\Item': return $this->storable->displayName;
         }
     }
 
-    public function storageDetails($storable){
-
+    public function storageDetails($storable) {
         $types = [
-            'UserItem'      => [    'App\Models\Item\Item',         'item_id'       ],
-            'UserCurrency'  => [    'App\Models\Currency\Currency', 'currency_id'   ],
+            'UserItem'      => ['App\Models\Item\Item',         'item_id'],
+            'UserCurrency'  => ['App\Models\Currency\Currency', 'currency_id'],
         ];
 
         $storage = $types[class_basename($storable)];
@@ -129,7 +119,7 @@ class UserStorage extends Model
 
         $id = $storable->$id_name;
 
-        return [ 'type' => $type, 'id' => $id];
+        return ['type' => $type, 'id' => $id];
     }
 
     /**
@@ -137,17 +127,15 @@ class UserStorage extends Model
      *
      * @return string
      */
-    public function getAssetTypeAttribute()
-    {
-        switch($this->storage_type) {
-            default: case "App/Models/User/UserItem":       return 'user_items';
-            case "App/Models/User/UserCurrency":            return 'user_currencies';
+    public function getAssetTypeAttribute() {
+        switch ($this->storage_type) {
+            default: case 'App/Models/User/UserItem':       return 'user_items';
+            case 'App/Models/User/UserCurrency':            return 'user_currencies';
 
-            // Claymores + Companions
-            case "App/Models/User/UserPet":                 return 'user_pets';
-            case "App/Models/User/UserGear":                return 'user_gears';
-            case "App/Models/User/UserWeapons":             return 'user_weapons';
+                // Claymores + Companions
+            case 'App/Models/User/UserPet':                 return 'user_pets';
+            case 'App/Models/User/UserGear':                return 'user_gears';
+            case 'App/Models/User/UserWeapons':             return 'user_weapons';
         }
-
     }
 }

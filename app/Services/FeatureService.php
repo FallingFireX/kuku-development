@@ -185,7 +185,7 @@ class FeatureService extends Service {
      * @param array                 $data
      * @param \App\Models\User\User $user
      *
-     * @return \App\Models\Feature\FeatureSubcategory|bool
+     * @return bool|FeatureSubcategory
      */
     public function createFeatureSubcategory($data, $user) {
         DB::beginTransaction();
@@ -219,11 +219,11 @@ class FeatureService extends Service {
     /**
      * Update a subcategory.
      *
-     * @param \App\Models\Feature\FeatureSubcategory $subcategory
-     * @param array                                  $data
-     * @param \App\Models\User\User                  $user
+     * @param FeatureSubcategory    $subcategory
+     * @param array                 $data
+     * @param \App\Models\User\User $user
      *
-     * @return \App\Models\Feature\FeatureSubcategory|bool
+     * @return bool|FeatureSubcategory
      */
     public function updateFeatureSubcategory($subcategory, $data, $user) {
         DB::beginTransaction();
@@ -260,7 +260,7 @@ class FeatureService extends Service {
     /**
      * Delete a subcategory.
      *
-     * @param \App\Models\Feature\FeatureSubcategory $subcategory
+     * @param FeatureSubcategory $subcategory
      *
      * @return bool
      */
@@ -435,6 +435,7 @@ class FeatureService extends Service {
      * @param Feature               $feature
      * @param array                 $data
      * @param \App\Models\User\User $user
+     * @param mixed|null            $parent
      *
      * @return bool|Feature
      */
@@ -583,7 +584,6 @@ class FeatureService extends Service {
      * Processes user input for creating/updating a feature.
      *
      * @param Feature $feature
-     * @param mixed   $user
      *
      * @return array
      */
@@ -612,8 +612,8 @@ class FeatureService extends Service {
     /**
      * Deletes a feature.
      *
-     * @param \App\Models\Feature\Feature $feature
-     * @param mixed                       $check
+     * @param Feature $feature
+     * @param mixed   $check
      *
      * @return bool
      */
@@ -677,8 +677,8 @@ class FeatureService extends Service {
     /**
      * Handle subcategory data.
      *
-     * @param array                                       $data
-     * @param \App\Models\Feature\FeatureSubcategory|null $subcategory
+     * @param array                   $data
+     * @param FeatureSubcategory|null $subcategory
      *
      * @return array
      */
@@ -701,9 +701,9 @@ class FeatureService extends Service {
     /**
      * Handle category data.
      *
-     * @param array                       $data
-     * @param array                       $data
-     * @param \App\Models\Feature\Feature $feature
+     * @param array   $data
+     * @param array   $data
+     * @param Feature $feature
      *
      * @return array
      */

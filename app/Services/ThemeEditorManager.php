@@ -21,7 +21,7 @@ class ThemeEditorManager extends Service {
      * @param array                 $data
      * @param \App\Models\User\User $user
      *
-     * @return \App\Models\ThemeEditor|bool
+     * @return bool|ThemeEditor
      */
     public function createTheme($data, $user) {
         DB::beginTransaction();

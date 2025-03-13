@@ -516,26 +516,30 @@ function parseLiveClock($text) {
 }
 
 // World Expansion attachments
-function allAttachments($model)
-{
+function allAttachments($model) {
     $attachments = $model->attachments;
     $attachers = $model->attachers;
     $totals = [];
-    if($attachments){
-        foreach($attachments as $attach){
+    if ($attachments) {
+        foreach ($attachments as $attach) {
             $class = class_basename($attach->attachment);
-            if(!isset($totals[$class])) $totals[$class] = [];
+            if (!isset($totals[$class])) {
+                $totals[$class] = [];
+            }
             $totals[$class][] = $attach->attachment;
             $totals[$class] = array_unique($totals[$class]);
         }
     }
-    if($attachers){
-        foreach($attachers as $attach){
+    if ($attachers) {
+        foreach ($attachers as $attach) {
             $class = class_basename($attach->attacher);
-            if(!isset($totals[$class])) $totals[$class] = [];
+            if (!isset($totals[$class])) {
+                $totals[$class] = [];
+            }
             $totals[$class][] = $attach->attacher;
             $totals[$class] = array_unique($totals[$class]);
         }
     }
+
     return $totals;
 }

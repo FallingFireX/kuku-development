@@ -4,9 +4,6 @@ namespace App\Models\User;
 
 use App\Models\Award\AwardLog;
 use App\Models\Border\Border;
-use App\Models\User\UsernameLog;
-use Settings;
-
 use App\Models\Character\Character;
 use App\Models\Character\CharacterBookmark;
 use App\Models\Character\CharacterDesignUpdate;
@@ -37,14 +34,9 @@ use App\Models\Stat\StatTransferLog;
 use App\Models\Submission\Submission;
 use App\Models\Theme;
 use App\Models\Trade;
-use App\Models\Volume\Volume;
-use App\Models\User\UserBorder;
-use App\Models\User\UserBorderLog;
-use App\Models\User\UserCharacterLog;
-use App\Models\WorldExpansion\FactionRank;
-use App\Models\WorldExpansion\FactionRankMember;
 use App\Models\UniqueItem;
-use App\Models\UniqueItemCategory;
+use App\Models\Volume\Volume;
+use App\Models\WorldExpansion\FactionRankMember;
 use App\Traits\Commenter;
 use Auth;
 use Cache;
@@ -54,6 +46,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
+use Settings;
 
 class User extends Authenticatable implements MustVerifyEmail {
     use Commenter, Notifiable, TwoFactorAuthenticatable;
@@ -83,9 +76,9 @@ class User extends Authenticatable implements MustVerifyEmail {
      * @var array
      */
     protected $casts = [
-        'email_verified_at' => 'datetime',
-        'birthday'          => 'datetime',
-        'home_changed'          => 'datetime',
+        'email_verified_at'        => 'datetime',
+        'birthday'                 => 'datetime',
+        'home_changed'             => 'datetime',
         'faction_changed'          => 'datetime',
     ];
 
@@ -113,7 +106,6 @@ class User extends Authenticatable implements MustVerifyEmail {
      * @var string
      */
     public $timestamps = true;
-
 
     /**********************************************************************************************
 
@@ -236,16 +228,14 @@ class User extends Authenticatable implements MustVerifyEmail {
     /**
      * Get the user's rank data.
      */
-    public function home()
-    {
+    public function home() {
         return $this->belongsTo('App\Models\WorldExpansion\Location', 'home_id');
     }
 
     /**
      * Get the user's rank data.
      */
-    public function faction()
-    {
+    public function faction() {
         return $this->belongsTo('App\Models\WorldExpansion\Faction', 'faction_id');
     }
 
@@ -324,59 +314,51 @@ class User extends Authenticatable implements MustVerifyEmail {
     }
 
     /**
-     * gets all the user's character folders
+     * gets all the user's character folders.
      */
-    public function folders()
-    {
+    public function folders() {
         return $this->hasMany('App\Models\Character\CharacterFolder');
     }
 
     /**
      * Get user's unlocked borders.
      */
-    public function borders()
-    {
+    public function borders() {
         return $this->belongsToMany('App\Models\Border\Border', 'user_borders')->withPivot('id');
     }
 
     /**
      * Get the border associated with this user.
      */
-    public function border()
-    {
+    public function border() {
         return $this->belongsTo('App\Models\Border\Border', 'border_id');
     }
 
     /**
      * Get the border associated with this user.
      */
-    public function borderVariant()
-    {
+    public function borderVariant() {
         return $this->belongsTo('App\Models\Border\Border', 'border_variant_id');
     }
 
     /**
      * Get the border associated with this user.
      */
-    public function borderTopLayer()
-    {
+    public function borderTopLayer() {
         return $this->belongsTo('App\Models\Border\Border', 'top_border_id');
     }
 
     /**
      * Get the border associated with this user.
      */
-    public function borderBottomLayer()
-    {
+    public function borderBottomLayer() {
         return $this->belongsTo('App\Models\Border\Border', 'bottom_border_id');
     }
-    public function uniqueItems()
-    {
+
+    public function uniqueItems() {
         return $this->hasMany(UniqueItem::class, 'owner_id', 'id')
-                    ->where('deleted', false);  // Assuming 'is_deleted' is the field
+            ->where('deleted', false);  // Assuming 'is_deleted' is the field
     }
-
-
 
     /**********************************************************************************************
 
@@ -589,7 +571,6 @@ class User extends Authenticatable implements MustVerifyEmail {
         return $this->avatar;
     }
 
-
     /**
      * Gets the user's log type for log creation.
      *
@@ -619,42 +600,68 @@ class User extends Authenticatable implements MustVerifyEmail {
      *
      * @return string
      */
-    public function getCanChangeLocationAttribute()
-    {
-        if(!isset($this->home_changed)) return true;
+    public function getCanChangeLocationAttribute() {
+        if (!isset($this->home_changed)) {
+            return true;
+        }
         $limit = Settings::get('WE_change_timelimit');
-        switch($limit){
+        switch ($limit) {
             case 0:
                 return true;
             case 1:
                 // Yearly
-                if(now()->year == $this->home_changed->year) return false;
-                else return true;
+                if (now()->year == $this->home_changed->year) {
+                    return false;
+                } else {
+                    return true;
+                }
 
             case 2:
                 // Quarterly
-                if(now()->year != $this->home_changed->year) return true;
-                if(now()->quarter != $this->home_changed->quarter) return true;
-                else return false;
+                if (now()->year != $this->home_changed->year) {
+                    return true;
+                }
+                if (now()->quarter != $this->home_changed->quarter) {
+                    return true;
+                } else {
+                    return false;
+                }
 
             case 3:
                 // Monthly
-                if(now()->year != $this->home_changed->year) return true;
-                if(now()->month != $this->home_changed->month) return true;
-                else return false;
+                if (now()->year != $this->home_changed->year) {
+                    return true;
+                }
+                if (now()->month != $this->home_changed->month) {
+                    return true;
+                } else {
+                    return false;
+                }
 
             case 4:
                 // Weekly
-                if(now()->year != $this->home_changed->year) return true;
-                if(now()->week != $this->home_changed->week) return true;
-                else return false;
+                if (now()->year != $this->home_changed->year) {
+                    return true;
+                }
+                if (now()->week != $this->home_changed->week) {
+                    return true;
+                } else {
+                    return false;
+                }
 
             case 5:
                 // Daily
-                if(now()->year != $this->home_changed->year) return true;
-                if(now()->month != $this->home_changed->month) return true;
-                if(now()->day != $this->home_changed->day) return true;
-                else return false;
+                if (now()->year != $this->home_changed->year) {
+                    return true;
+                }
+                if (now()->month != $this->home_changed->month) {
+                    return true;
+                }
+                if (now()->day != $this->home_changed->day) {
+                    return true;
+                } else {
+                    return false;
+                }
 
             default:
                 return true;
@@ -662,7 +669,7 @@ class User extends Authenticatable implements MustVerifyEmail {
     }
 
     /**
-     * Get's user birthday setting
+     * Get's user birthday setting.
      */
     public function getBirthdayDisplayAttribute() {
         //
@@ -744,42 +751,68 @@ class User extends Authenticatable implements MustVerifyEmail {
      *
      * @return string
      */
-    public function getCanChangeFactionAttribute()
-    {
-        if(!isset($this->faction_changed)) return true;
+    public function getCanChangeFactionAttribute() {
+        if (!isset($this->faction_changed)) {
+            return true;
+        }
         $limit = Settings::get('WE_change_timelimit');
-        switch($limit){
+        switch ($limit) {
             case 0:
                 return true;
             case 1:
                 // Yearly
-                if(now()->year == $this->faction_changed->year) return false;
-                else return true;
+                if (now()->year == $this->faction_changed->year) {
+                    return false;
+                } else {
+                    return true;
+                }
 
             case 2:
                 // Quarterly
-                if(now()->year != $this->faction_changed->year) return true;
-                if(now()->quarter != $this->faction_changed->quarter) return true;
-                else return false;
+                if (now()->year != $this->faction_changed->year) {
+                    return true;
+                }
+                if (now()->quarter != $this->faction_changed->quarter) {
+                    return true;
+                } else {
+                    return false;
+                }
 
             case 3:
                 // Monthly
-                if(now()->year != $this->faction_changed->year) return true;
-                if(now()->month != $this->faction_changed->month) return true;
-                else return false;
+                if (now()->year != $this->faction_changed->year) {
+                    return true;
+                }
+                if (now()->month != $this->faction_changed->month) {
+                    return true;
+                } else {
+                    return false;
+                }
 
             case 4:
                 // Weekly
-                if(now()->year != $this->faction_changed->year) return true;
-                if(now()->week != $this->faction_changed->week) return true;
-                else return false;
+                if (now()->year != $this->faction_changed->year) {
+                    return true;
+                }
+                if (now()->week != $this->faction_changed->week) {
+                    return true;
+                } else {
+                    return false;
+                }
 
             case 5:
                 // Daily
-                if(now()->year != $this->faction_changed->year) return true;
-                if(now()->month != $this->faction_changed->month) return true;
-                if(now()->day != $this->faction_changed->day) return true;
-                else return false;
+                if (now()->year != $this->faction_changed->year) {
+                    return true;
+                }
+                if (now()->month != $this->faction_changed->month) {
+                    return true;
+                }
+                if (now()->day != $this->faction_changed->day) {
+                    return true;
+                } else {
+                    return false;
+                }
 
             default:
                 return true;
@@ -789,13 +822,19 @@ class User extends Authenticatable implements MustVerifyEmail {
     /**
      * Get user's faction rank.
      */
-    public function getFactionRankAttribute()
-    {
-        if(!isset($this->faction_id) || !$this->faction->ranks()->count()) return null;
-        if(FactionRankMember::where('member_type', 'user')->where('member_id', $this->id)->first()) return FactionRankMember::where('member_type', 'user')->where('member_id', $this->id)->first()->rank;
-        if($this->faction->ranks()->where('is_open', 1)->count()) {
+    public function getFactionRankAttribute() {
+        if (!isset($this->faction_id) || !$this->faction->ranks()->count()) {
+            return null;
+        }
+        if (FactionRankMember::where('member_type', 'user')->where('member_id', $this->id)->first()) {
+            return FactionRankMember::where('member_type', 'user')->where('member_id', $this->id)->first()->rank;
+        }
+        if ($this->faction->ranks()->where('is_open', 1)->count()) {
             $standing = $this->getCurrencies(true)->where('id', Settings::get('WE_faction_currency'))->first();
-            if(!$standing) return $this->faction->ranks()->where('is_open', 1)->where('breakpoint', 0)->first();
+            if (!$standing) {
+                return $this->faction->ranks()->where('is_open', 1)->where('breakpoint', 0)->first();
+            }
+
             return $this->faction->ranks()->where('is_open', 1)->where('breakpoint', '<=', $standing->quantity)->orderBy('breakpoint', 'DESC')->first();
         }
     }
@@ -1207,16 +1246,16 @@ class User extends Authenticatable implements MustVerifyEmail {
      */
     public function hasAdminNotification($user) {
         $count = [];
-        $count[] = $this->hasPower('manage_submissions') ? Submission::where('status', 'Pending')->whereNotNull('prompt_id')->count() : 0; //submissionCount
-        $count[] = $this->hasPower('manage_submissions') ? Submission::where('status', 'Pending')->whereNull('prompt_id')->count() : 0; //claimCount
-        $count[] = $this->hasPower('manage_characters') ? CharacterDesignUpdate::characters()->where('status', 'Pending')->count() : 0; //designCount
-        $count[] = $this->hasPower('manage_characters') ? CharacterDesignUpdate::myos()->where('status', 'Pending')->count() : 0; //myoCount
-        $count[] = $this->hasPower('manage_characters') ? CharacterTransfer::active()->where('is_approved', 0)->count() : 0; //transferCount
-        $count[] = $this->hasPower('manage_characters') ? Trade::where('status', 'Pending')->count() : 0; //tradeCount
-        $count[] = $this->hasPower('manage_characters') ? Trade::where('status', 'Pending')->count() : 0; //tradeCount
-        $count[] = $this->hasPower('manage_submissions') ? GallerySubmission::pending()->collaboratorApproved()->count() : 0; //galleryCount
-        $count[] = $this->hasPower('manage_reports') ? Report::where('status', 'Pending')->count() : 0; //reportCount
-        $count[] = $this->hasPower('manage_reports') ? Report::assignedToMe($this)->count() : 0; //assignedReportCount
+        $count[] = $this->hasPower('manage_submissions') ? Submission::where('status', 'Pending')->whereNotNull('prompt_id')->count() : 0; // submissionCount
+        $count[] = $this->hasPower('manage_submissions') ? Submission::where('status', 'Pending')->whereNull('prompt_id')->count() : 0; // claimCount
+        $count[] = $this->hasPower('manage_characters') ? CharacterDesignUpdate::characters()->where('status', 'Pending')->count() : 0; // designCount
+        $count[] = $this->hasPower('manage_characters') ? CharacterDesignUpdate::myos()->where('status', 'Pending')->count() : 0; // myoCount
+        $count[] = $this->hasPower('manage_characters') ? CharacterTransfer::active()->where('is_approved', 0)->count() : 0; // transferCount
+        $count[] = $this->hasPower('manage_characters') ? Trade::where('status', 'Pending')->count() : 0; // tradeCount
+        $count[] = $this->hasPower('manage_characters') ? Trade::where('status', 'Pending')->count() : 0; // tradeCount
+        $count[] = $this->hasPower('manage_submissions') ? GallerySubmission::pending()->collaboratorApproved()->count() : 0; // galleryCount
+        $count[] = $this->hasPower('manage_reports') ? Report::where('status', 'Pending')->count() : 0; // reportCount
+        $count[] = $this->hasPower('manage_reports') ? Report::assignedToMe($this)->count() : 0; // assignedReportCount
 
         // If Adoption Center is installed:
         // $count[] = $this->hasPower('manage_submissions') && $this->hasPower('manage_characters') ? Surrender::where('status', 'Pending')->count() : 0; //surrenderCount
@@ -1244,7 +1283,7 @@ class User extends Authenticatable implements MustVerifyEmail {
     public function getVolumeLogs($limit = 10) {
         $user = $this;
         $query = UserVolumeLog::with('volume')->where(function ($query) use ($user) {
-        query->with('sender')->where('sender_id', $user->id)->whereNotIn('log_type', ['Staff Grant', 'Prompt Rewards', 'Claim Rewards']);
+            query->with('sender')->where('sender_id', $user->id)->whereNotIn('log_type', ['Staff Grant', 'Prompt Rewards', 'Claim Rewards']);
         })->orWhere(function ($query) use ($user) {
             $query->with('recipient')->where('recipient_id', $user->id)->where('log_type', '!=', 'Staff Removal');
         })->orderBy('id', 'DESC');
@@ -1261,8 +1300,7 @@ class User extends Authenticatable implements MustVerifyEmail {
      * @param  int  $limit
      * @return \Illuminate\Support\Collection|\Illuminate\Pagination\LengthAwarePaginator
      */
-    public function getBorderLogs($limit = 10)
-    {
+    public function getBorderLogs($limit = 10) {
         $user = $this;
         $query = UserBorderLog::with('border')->where(function ($query) use ($user) {
             $query->with('sender')->where('sender_id', $user->id)->whereNotIn('log_type', ['Staff Grant', 'Prompt Rewards', 'Claim Rewards']);
@@ -1301,20 +1339,20 @@ class User extends Authenticatable implements MustVerifyEmail {
         $recipe = Recipe::find($recipe_id);
         $user_has = $this->recipes->contains($recipe);
         $default = !$recipe->needs_unlocking;
-
-
     }
 
     /**
-     * Checks if the user has the named border
+     * Checks if the user has the named border.
+     *
+     * @param mixed $border_id
      *
      * @return bool
      */
-    public function hasBorder($border_id)
-    {
+    public function hasBorder($border_id) {
         $border = Border::find($border_id);
         $user_has = $this->borders->contains($border);
         $default = $border->is_default;
+
         return $default ? true : $user_has;
     }
 
@@ -1374,32 +1412,29 @@ class User extends Authenticatable implements MustVerifyEmail {
      *
      * @return url
      */
-    public function getAvatarUrlAttribute()
-    {
+    public function getAvatarUrlAttribute() {
         // Yoinking a bit of this from develop, just to future proof it a bit.
-        //and plus it simplifies the user icons which is good for this ext
-        //just replace this with the full bit when develop is the new main, it wont change anything
+        // and plus it simplifies the user icons which is good for this ext
+        // just replace this with the full bit when develop is the new main, it wont change anything
         if ($this->avatar == 'default.jpg') {
             return url('images/avatars/default.jpg');
         }
 
-        return url('images/avatars/' . $this->avatar);
+        return url('images/avatars/'.$this->avatar);
     }
 
     /**
-     * display the user's icon and border styling
-     *
+     * display the user's icon and border styling.
      */
-    public function UserBorder()
-    {
-        //basically just an ugly ass string of html for copypasting use
-        //would you want to keep posting this everywhere? yeah i thought so. me neither
-        //there's probably a less hellish way to do this but it beats having to paste this over everywhere... EVERY SINGLE TIME.
-        //especially with the checks
+    public function UserBorder() {
+        // basically just an ugly ass string of html for copypasting use
+        // would you want to keep posting this everywhere? yeah i thought so. me neither
+        // there's probably a less hellish way to do this but it beats having to paste this over everywhere... EVERY SINGLE TIME.
+        // especially with the checks
 
-        //get some fun variables for later
+        // get some fun variables for later
         $avatar = '<!-- avatar -->
-                <img class="avatar" src="' . $this->avatarUrl . '" alt="Avatar of ' . $this->name . '">';
+                <img class="avatar" src="'.$this->avatarUrl.'" alt="Avatar of '.$this->name.'">';
 
         // Check if variant border or regular border is under or over
         if (isset($this->borderVariant) && $this->borderVariant->border_style == 0) {
@@ -1412,46 +1447,47 @@ class User extends Authenticatable implements MustVerifyEmail {
 
         $styling = '<div class="user-avatar">';
 
-        //if the user has a border, we apply it
+        // if the user has a border, we apply it
         if (isset($this->border) || isset($this->borderBottomLayer) && isset($this->borderTopLayer) || isset($this->borderVariant)) {
-            //layers supersede variants
-            //variants supersede regular borders
+            // layers supersede variants
+            // variants supersede regular borders
             if (isset($this->borderBottomLayer) && isset($this->borderTopLayer)) {
                 if ($this->borderTopLayer->border_style == 0 && $this->borderBottomLayer->border_style == 0) {
                     // If both layers are UNDER layers
                     // top layer's image
-                    $mainframe = '<img src="' . $this->borderTopLayer->imageUrl . '" class="avatar-border under" alt="' . $this->borderTopLayer->name . ' Avatar Frame">';
+                    $mainframe = '<img src="'.$this->borderTopLayer->imageUrl.'" class="avatar-border under" alt="'.$this->borderTopLayer->name.' Avatar Frame">';
                     // bottom layer's image
-                    $secondframe = '<img src="' . $this->borderBottomLayer->imageUrl . '" class="avatar-border bottom" alt="' . $this->borderBottomLayer->name . ' Avatar Frame">';
+                    $secondframe = '<img src="'.$this->borderBottomLayer->imageUrl.'" class="avatar-border bottom" alt="'.$this->borderBottomLayer->name.' Avatar Frame">';
                 } elseif ($this->borderTopLayer->border_style == 1 && $this->borderBottomLayer->border_style == 1) {
                     // If both layers are OVER layers
                     // top layer's image
-                    $mainframe = '<img src="' . $this->borderTopLayer->imageUrl . '" class="avatar-border top" alt="' . $this->borderTopLayer->name . ' Avatar Frame">';
+                    $mainframe = '<img src="'.$this->borderTopLayer->imageUrl.'" class="avatar-border top" alt="'.$this->borderTopLayer->name.' Avatar Frame">';
                     // bottom layer's image
-                    $secondframe = '<img src="' . $this->borderBottomLayer->imageUrl . '" class="avatar-border" alt="' . $this->borderBottomLayer->name . ' Avatar Frame">';
+                    $secondframe = '<img src="'.$this->borderBottomLayer->imageUrl.'" class="avatar-border" alt="'.$this->borderBottomLayer->name.' Avatar Frame">';
                 } else {
                     // If one layer is UNDER and one is OVER
                     $mainlayer = ($this->borderTopLayer->border_style == 0 ? 'under' : ' ');
                     $secondlayer = ($this->borderBottomLayer->border_style == 0 ? 'under' : ' ');
 
                     // top layer's image
-                    $mainframe = '<img src="' . $this->borderTopLayer->imageUrl . '" class="avatar-border ' . $mainlayer . '" alt="' . $this->borderTopLayer->name . ' Avatar Frame">';
+                    $mainframe = '<img src="'.$this->borderTopLayer->imageUrl.'" class="avatar-border '.$mainlayer.'" alt="'.$this->borderTopLayer->name.' Avatar Frame">';
                     // bottom layer's image
-                    $secondframe = '<img src="' . $this->borderBottomLayer->imageUrl . '" class="avatar-border ' . $secondlayer . '" alt="' . $this->borderBottomLayer->name . ' Avatar Frame">';
+                    $secondframe = '<img src="'.$this->borderBottomLayer->imageUrl.'" class="avatar-border '.$secondlayer.'" alt="'.$this->borderBottomLayer->name.' Avatar Frame">';
                 }
-                return $styling . $avatar . $mainframe . $secondframe . '</div>';
+
+                return $styling.$avatar.$mainframe.$secondframe.'</div>';
             } elseif (isset($this->borderVariant)) {
-                $mainframe = '<img src="' . $this->borderVariant->imageUrl . '" class="avatar-border ' . $layer . '" alt="' . $this->borderVariant->name . ' ' . $this->border->name . ' Avatar Frame">';
+                $mainframe = '<img src="'.$this->borderVariant->imageUrl.'" class="avatar-border '.$layer.'" alt="'.$this->borderVariant->name.' '.$this->border->name.' Avatar Frame">';
             } else {
-                $mainframe = '<img src="' . $this->border->imageUrl . '" class="avatar-border '. $layer .'" alt="' . $this->border->name . ' Avatar Frame">';
+                $mainframe = '<img src="'.$this->border->imageUrl.'" class="avatar-border '.$layer.'" alt="'.$this->border->name.' Avatar Frame">';
             }
 
             if (!isset($this->borderBottomLayer) && !isset($this->borderTopLayer)) {
-                return $styling . $avatar . $mainframe . '</div>';
+                return $styling.$avatar.$mainframe.'</div>';
             }
         }
-        //if no border return standard avatar style
-        return $styling . $avatar . '</div>';
-    }
 
+        // if no border return standard avatar style
+        return $styling.$avatar.'</div>';
+    }
 }

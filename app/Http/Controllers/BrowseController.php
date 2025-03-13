@@ -4,8 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Facades\Settings;
 use App\Models\Award\Award;
-use App\Models\Award\AwardCategory;
-use App\Models\Character\CharacterAward;
 use App\Models\Character\Character;
 use App\Models\Character\CharacterCategory;
 use App\Models\Character\CharacterImage;
@@ -241,7 +239,6 @@ class BrowseController extends Controller {
             $imageQuery->whereIn('id', $query->pluck('character_image_id')->toArray());
         }
 
-
         // Searching on image properties
         if ($request->get('species_id')) {
             $imageQuery->where('species_id', $request->get('species_id'));
@@ -257,7 +254,6 @@ class BrowseController extends Controller {
                 });
             }
         }
-        
 
         if ($request->get('transformation_id')) {
             $imageQuery->where('transformation_id', $request->get('transformation_id'));
@@ -266,9 +262,9 @@ class BrowseController extends Controller {
             $imageQuery->whereNotNull('transformation_id');
         }
         if ($request->get('genotype')) {
-            $imageQuery->where('genotype', 'LIKE', '%' . $request->get('genotype') . '%');
+            $imageQuery->where('genotype', 'LIKE', '%'.$request->get('genotype').'%');
         }
-        
+
         if ($request->get('artist')) {
             $artist = User::find($request->get('artist'));
             $imageQuery->whereHas('artists', function ($query) use ($artist) {

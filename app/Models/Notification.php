@@ -138,9 +138,9 @@ class Notification extends Model {
     public const BOOKMARK_GIFT_WRITING = 39;
     public const USER_REACTIVATED = 103;
     public const USER_DEACTIVATED = 104;
-    const AFFILIATE_ACCEPTION               = 105; // URI - Affiliates
-    const AFFILIATE_REJECTION               = 106; // URI - Affiliates
-    const AFFILIATE_PENDING                 = 107; // URI - Affiliates
+    public const AFFILIATE_ACCEPTION = 105; // URI - Affiliates
+    public const AFFILIATE_REJECTION = 106; // URI - Affiliates
+    public const AFFILIATE_PENDING = 107; // URI - Affiliates
     public const SUBMISSION_CANCELLED = 108;
     public const CLAIM_CANCELLED = 109;
     public const LINK_REQUESTED = 200;
@@ -190,6 +190,6 @@ class Notification extends Model {
     public const CHARACTER_STATUS_GRANT = 521;
     public const CHARACTER_STATUS_REMOVAL = 522;
     public const RECIPE_GRANT = 600; // Draginraptor - Crafting
-    const BIRTHDAY_REWARDED    = 1105;
-    const BORDER_GRANT                      = 1106; 
+    public const BIRTHDAY_REWARDED = 1105;
+    public const BORDER_GRANT = 1106;
 }

@@ -10,8 +10,7 @@ use App\Services\BorderService;
 use Auth;
 use Illuminate\Http\Request;
 
-class BorderController extends Controller
-{
+class BorderController extends Controller {
     /*
     |--------------------------------------------------------------------------
     | Admin / Border Controller
@@ -30,8 +29,7 @@ class BorderController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function getIndex()
-    {
+    public function getIndex() {
         return view('admin.borders.border_categories', [
             'categories' => BorderCategory::orderBy('sort', 'DESC')->get(),
         ]);
@@ -42,8 +40,7 @@ class BorderController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function getCreateBorderCategory()
-    {
+    public function getCreateBorderCategory() {
         return view('admin.borders.create_edit_border_category', [
             'category' => new BorderCategory,
         ]);
@@ -52,11 +49,11 @@ class BorderController extends Controller
     /**
      * Shows the edit border category page.
      *
-     * @param  int  $id
+     * @param int $id
+     *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function getEditBorderCategory($id)
-    {
+    public function getEditBorderCategory($id) {
         $category = BorderCategory::find($id);
         if (!$category) {
             abort(404);
@@ -70,40 +67,41 @@ class BorderController extends Controller
     /**
      * Creates or edits an border category.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  App\Services\BorderService  $service
-     * @param  int|null                  $id
+     * @param App\Services\BorderService $service
+     * @param int|null                   $id
+     *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function postCreateEditBorderCategory(Request $request, BorderService $service, $id = null)
-    {
+    public function postCreateEditBorderCategory(Request $request, BorderService $service, $id = null) {
         $id ? $request->validate(BorderCategory::$updateRules) : $request->validate(BorderCategory::$createRules);
         $data = $request->only([
             'name', 'description', 'image', 'remove_image',
         ]);
         if ($id && $service->updateBorderCategory(BorderCategory::find($id), $data, Auth::user())) {
             flash('Category updated successfully.')->success();
-        } else if (!$id && $category = $service->createBorderCategory($data, Auth::user())) {
+        } elseif (!$id && $category = $service->createBorderCategory($data, Auth::user())) {
             flash('Category created successfully.')->success();
-            return redirect()->to('admin/data/border-categories/edit/' . $category->id);
+
+            return redirect()->to('admin/data/border-categories/edit/'.$category->id);
         } else {
             foreach ($service->errors()->getMessages()['error'] as $error) {
                 flash($error)->error();
             }
-
         }
+
         return redirect()->back();
     }
 
     /**
      * Gets the border category deletion modal.
      *
-     * @param  int  $id
+     * @param int $id
+     *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function getDeleteBorderCategory($id)
-    {
+    public function getDeleteBorderCategory($id) {
         $category = BorderCategory::find($id);
+
         return view('admin.borders._delete_border_category', [
             'category' => $category,
         ]);
@@ -112,41 +110,39 @@ class BorderController extends Controller
     /**
      * Deletes an border category.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  App\Services\BorderService  $service
-     * @param  int                       $id
+     * @param App\Services\BorderService $service
+     * @param int                        $id
+     *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function postDeleteBorderCategory(Request $request, BorderService $service, $id)
-    {
+    public function postDeleteBorderCategory(Request $request, BorderService $service, $id) {
         if ($id && $service->deleteBorderCategory(BorderCategory::find($id))) {
             flash('Category deleted successfully.')->success();
         } else {
             foreach ($service->errors()->getMessages()['error'] as $error) {
                 flash($error)->error();
             }
-
         }
+
         return redirect()->to('admin/data/border-categories');
     }
 
     /**
      * Sorts border categories.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  App\Services\BorderService  $service
+     * @param App\Services\BorderService $service
+     *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function postSortBorderCategory(Request $request, BorderService $service)
-    {
+    public function postSortBorderCategory(Request $request, BorderService $service) {
         if ($service->sortBorderCategory($request->get('sort'))) {
             flash('Category order updated successfully.')->success();
         } else {
             foreach ($service->errors()->getMessages()['error'] as $error) {
                 flash($error)->error();
             }
-
         }
+
         return redirect()->back();
     }
 
@@ -157,11 +153,9 @@ class BorderController extends Controller
     /**
      * Shows the border index.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function getBorderIndex(Request $request)
-    {
+    public function getBorderIndex(Request $request) {
         $query = Border::base();
         $data = $request->only(['name', 'border_category_id']);
         if (isset($data['border_category_id']) && $data['border_category_id'] != 'none') {
@@ -169,11 +163,11 @@ class BorderController extends Controller
         }
 
         if (isset($data['name'])) {
-            $query->where('name', 'LIKE', '%' . $data['name'] . '%');
+            $query->where('name', 'LIKE', '%'.$data['name'].'%');
         }
 
         return view('admin.borders.borders', [
-            'borders' => $query->paginate(20)->appends($request->query()),
+            'borders'    => $query->paginate(20)->appends($request->query()),
             'categories' => ['none' => 'Any Category'] + BorderCategory::orderBy('sort', 'DESC')->pluck('name', 'id')->toArray(),
         ]);
     }
@@ -183,72 +177,72 @@ class BorderController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function getCreateBorder()
-    {
+    public function getCreateBorder() {
         return view('admin.borders.create_edit_border', [
-            'border' => new Border,
-            'categories' => ['none' => 'No category'] + BorderCategory::orderBy('sort', 'DESC')->pluck('name', 'id')->toArray(),
-            'userOptions' => User::query()->orderBy('name')->pluck('name', 'id')->toArray()
+            'border'      => new Border,
+            'categories'  => ['none' => 'No category'] + BorderCategory::orderBy('sort', 'DESC')->pluck('name', 'id')->toArray(),
+            'userOptions' => User::query()->orderBy('name')->pluck('name', 'id')->toArray(),
         ]);
     }
 
     /**
      * Shows the edit border page.
      *
-     * @param  int  $id
+     * @param int $id
+     *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function getEditBorder($id)
-    {
+    public function getEditBorder($id) {
         $border = Border::find($id);
         if (!$border) {
             abort(404);
         }
 
         return view('admin.borders.create_edit_border', [
-            'border' => $border,
-            'categories' => ['none' => 'No category'] + BorderCategory::orderBy('sort', 'DESC')->pluck('name', 'id')->toArray(),
-            'userOptions' => User::query()->orderBy('name')->pluck('name', 'id')->toArray()
+            'border'      => $border,
+            'categories'  => ['none' => 'No category'] + BorderCategory::orderBy('sort', 'DESC')->pluck('name', 'id')->toArray(),
+            'userOptions' => User::query()->orderBy('name')->pluck('name', 'id')->toArray(),
         ]);
     }
 
     /**
      * Creates or edits an border.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  App\Services\BorderService  $service
-     * @param  int|null                  $id
+     * @param App\Services\BorderService $service
+     * @param int|null                   $id
+     *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function postCreateEditBorder(Request $request, BorderService $service, $id = null)
-    {
+    public function postCreateEditBorder(Request $request, BorderService $service, $id = null) {
         $id ? $request->validate(Border::$updateRules) : $request->validate(Border::$createRules);
         $data = $request->only([
-            'name', 'description', 'border_category_id', 'is_default', 'image', 'is_active', 'border_style', 'admin_only','artist_id','artist_url'
+            'name', 'description', 'border_category_id', 'is_default', 'image', 'is_active', 'border_style', 'admin_only', 'artist_id', 'artist_url',
         ]);
         if ($id && $service->updateBorder(Border::find($id), $data, Auth::user())) {
             flash('Border updated successfully.')->success();
-        } else if (!$id && $border = $service->createBorder($data, Auth::user())) {
+        } elseif (!$id && $border = $service->createBorder($data, Auth::user())) {
             flash('Border created successfully.')->success();
-            return redirect()->to('admin/data/borders/edit/' . $border->id);
+
+            return redirect()->to('admin/data/borders/edit/'.$border->id);
         } else {
             foreach ($service->errors()->getMessages()['error'] as $error) {
                 flash($error)->error();
             }
-
         }
+
         return redirect()->back();
     }
 
     /**
      * Gets the border deletion modal.
      *
-     * @param  int  $id
+     * @param int $id
+     *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function getDeleteBorder($id)
-    {
+    public function getDeleteBorder($id) {
         $border = Border::find($id);
+
         return view('admin.borders._delete_border', [
             'border' => $border,
         ]);
@@ -257,21 +251,20 @@ class BorderController extends Controller
     /**
      * Creates or edits an border.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  App\Services\BorderService  $service
-     * @param  int                       $id
+     * @param App\Services\BorderService $service
+     * @param int                        $id
+     *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function postDeleteBorder(Request $request, BorderService $service, $id)
-    {
+    public function postDeleteBorder(Request $request, BorderService $service, $id) {
         if ($id && $service->deleteBorder(Border::find($id))) {
             flash('Border deleted successfully.')->success();
         } else {
             foreach ($service->errors()->getMessages()['error'] as $error) {
                 flash($error)->error();
             }
-
         }
+
         return redirect()->to('admin/data/borders');
     }
 
@@ -286,14 +279,14 @@ class BorderController extends Controller
      *
      * @param mixed      $border_id
      * @param mixed|null $id
+     * @param mixed      $type
      */
-    public function getCreateEditVariant($border_id, $type, $id = null)
-    {
+    public function getCreateEditVariant($border_id, $type, $id = null) {
         return view('admin.borders._create_edit_border_variant', [
-            'border' => Border::find($border_id),
-            'variant' => $id ? Border::find($id) : new Border,
-            'type' => $type,
-            'userOptions' => User::query()->orderBy('name')->pluck('name', 'id')->toArray()
+            'border'      => Border::find($border_id),
+            'variant'     => $id ? Border::find($id) : new Border,
+            'type'        => $type,
+            'userOptions' => User::query()->orderBy('name')->pluck('name', 'id')->toArray(),
         ]);
     }
 
@@ -301,14 +294,14 @@ class BorderController extends Controller
      * Edits border variants.
      *
      * @param App\Services\BorderService $service
-     * @param int                     $id
-     * @param mixed                   $border_id
+     * @param int                        $id
+     * @param mixed                      $border_id
+     * @param mixed                      $type
      *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function postCreateEditVariant(Request $request, BorderService $service, $border_id, $type, $id = null)
-    {
-        $data = $request->only(['name', 'image', 'is_active', 'border_style','delete','artist_id','artist_url']);
+    public function postCreateEditVariant(Request $request, BorderService $service, $border_id, $type, $id = null) {
+        $data = $request->only(['name', 'image', 'is_active', 'border_style', 'delete', 'artist_id', 'artist_url']);
         if ($id && $service->editVariant(Border::findOrFail($id), $data, $type)) {
         } elseif (!$id && $service->createVariant(Border::find($border_id), $data, $type)) {
             flash($type.' created successfully.')->success();
@@ -320,5 +313,4 @@ class BorderController extends Controller
 
         return redirect()->back();
     }
-
 }

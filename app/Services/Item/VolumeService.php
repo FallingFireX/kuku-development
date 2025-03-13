@@ -101,8 +101,8 @@ class VolumeService extends Service {
                         if ($user->volumes->contains($volume)) {
                             throw new \Exception('You already have this '.__('volumes.volume').'.');
                         }
-                        //credit the volume
-                        //doing it here because we can just use the item tags instead of putting it in the asset helper or w/e
+                        // credit the volume
+                        // doing it here because we can just use the item tags instead of putting it in the asset helper or w/e
                         if (!UserVolume::create(['user_id' => $user->id, 'volume_id' => $volume->id])) {
                             throw new \Exception('Error crediting '.__('volumes.volume').'.');
                         }

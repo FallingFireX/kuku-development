@@ -45,7 +45,7 @@ class GalleryService extends Service {
             if (!isset($data['prompt_selection'])) {
                 $data['prompt_selection'] = 0;
             }
-            if(!isset($data['location_selection'])) {
+            if (!isset($data['location_selection'])) {
                 $data['location_selection'] = 0;
             }
 
@@ -98,7 +98,7 @@ class GalleryService extends Service {
             if (!isset($data['prompt_selection'])) {
                 $data['prompt_selection'] = 0;
             }
-            if(!isset($data['location_selection'])) {
+            if (!isset($data['location_selection'])) {
                 $data['location_selection'] = 0;
             }
 

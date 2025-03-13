@@ -3,22 +3,18 @@
 namespace App\Http\Controllers\Users;
 
 use App\Http\Controllers\Controller;
-use App\Models\Character\BreedingPermission;
 use App\Models\Border\Border;
+use App\Models\Character\BreedingPermission;
 use App\Models\Notification;
 use App\Models\Theme;
 use App\Models\User\StaffProfile;
 use App\Models\User\User;
 use App\Models\User\UserAlias;
 use App\Models\User\UsernameLog;
-use Image;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
-use App\Models\WorldExpansion\Location;
 use App\Models\WorldExpansion\Faction;
-
-use App\Services\UserService;
+use App\Models\WorldExpansion\Location;
 use App\Services\LinkService;
+use App\Services\UserService;
 use BaconQrCode\Renderer\Color\Rgb;
 use BaconQrCode\Renderer\Image\SvgImageBackEnd;
 use BaconQrCode\Renderer\ImageRenderer;
@@ -26,12 +22,12 @@ use BaconQrCode\Renderer\RendererStyle\Fill;
 use BaconQrCode\Renderer\RendererStyle\RendererStyle;
 use BaconQrCode\Writer;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Fortify\Contracts\TwoFactorAuthenticationProvider;
 use Laravel\Fortify\RecoveryCode;
 use Settings;
-use File;
 
 class AccountController extends Controller {
     /*
@@ -75,15 +71,14 @@ class AccountController extends Controller {
      * @return \Illuminate\Contracts\Support\Renderable
      */
     public function getSettings() {
-
-        $interval = array(
+        $interval = [
             0 => 'whenever',
             1 => 'yearly',
             2 => 'quarterly',
             3 => 'monthly',
             4 => 'weekly',
-            5 => 'daily'
-        );
+            5 => 'daily',
+        ];
 
         $user = Auth::user();
 
@@ -91,11 +86,10 @@ class AccountController extends Controller {
             // staff can see all active themes
             $themeOptions = ['0' => 'Select Theme'] + Theme::where('is_active', 1)->where('theme_type', 'base')->get()->pluck('displayName', 'id')->toArray();
             $borderOptions = ['0' => 'Select Border'] + Border::base()->active(Auth::user() ?? null)->where('is_default', 1)->get()->pluck('settingsName', 'id')->toArray() + Border::base()->where('admin_only', 1)->get()->pluck('settingsName', 'id')->toArray();
-
         } else {
             // members can only see active themes that are user selectable
             $themeOptions = ['0' => 'Select Theme'] + Theme::where('is_active', 1)->where('theme_type', 'base')->where('is_user_selectable', 1)->get()->pluck('displayName', 'id')->toArray();
-             $borderOptions = ['0' => 'Select Border'] + Border::base()->active(Auth::user() ?? null)->where('is_default', 1)->where('admin_only', 0)->get()->pluck('settingsName', 'id')->toArray();
+            $borderOptions = ['0' => 'Select Border'] + Border::base()->active(Auth::user() ?? null)->where('is_default', 1)->where('admin_only', 0)->get()->pluck('settingsName', 'id')->toArray();
         }
 
         $decoratorOptions = ['0' => 'Select Decorator Theme'] + Theme::where('is_active', 1)->where('theme_type', 'decorator')->where('is_user_selectable', 1)->get()->pluck('displayName', 'id')->toArray();
@@ -107,24 +101,24 @@ class AccountController extends Controller {
         $admin = Border::base()->where('admin_only', 1)->get();
 
         return view('account.settings', [
-            'themeOptions'      => $themeOptions + Auth::user()->themes()->where('theme_type', 'base')->get()->pluck('displayName', 'id')->toArray(),
-            'decoratorThemes'   => $decoratorOptions + Auth::user()->themes()->where('theme_type', 'decorator')->get()->pluck('displayName', 'id')->toArray(),
-            'links'             => $links ? $links : null,
-            'usernameCooldown'  => $usernameCooldown,
-            'canChangeName'     => $daysSinceNameChange >= $usernameCooldown,
-            'usernameCountdown' => $usernameCooldown - $daysSinceNameChange,
-            'borders' => $borderOptions + Auth::user()->borders()->get()->pluck('settingsName', 'id')->toArray(),
-            'default' => $default,
-            'admin' => $admin,
-            'border_variants' => ['0' => 'Pick a Border First'],
-            'bottom_layers' => ['0' => 'Pick a Border First'],
-            'locations' => Location::all()->where('is_user_home')->pluck('style','id')->toArray(),
-            'factions' => Faction::all()->where('is_user_faction')->pluck('style','id')->toArray(),
-            'user_enabled' => Settings::get('WE_user_locations'),
+            'themeOptions'         => $themeOptions + Auth::user()->themes()->where('theme_type', 'base')->get()->pluck('displayName', 'id')->toArray(),
+            'decoratorThemes'      => $decoratorOptions + Auth::user()->themes()->where('theme_type', 'decorator')->get()->pluck('displayName', 'id')->toArray(),
+            'links'                => $links ? $links : null,
+            'usernameCooldown'     => $usernameCooldown,
+            'canChangeName'        => $daysSinceNameChange >= $usernameCooldown,
+            'usernameCountdown'    => $usernameCooldown - $daysSinceNameChange,
+            'borders'              => $borderOptions + Auth::user()->borders()->get()->pluck('settingsName', 'id')->toArray(),
+            'default'              => $default,
+            'admin'                => $admin,
+            'border_variants'      => ['0' => 'Pick a Border First'],
+            'bottom_layers'        => ['0' => 'Pick a Border First'],
+            'locations'            => Location::all()->where('is_user_home')->pluck('style', 'id')->toArray(),
+            'factions'             => Faction::all()->where('is_user_faction')->pluck('style', 'id')->toArray(),
+            'user_enabled'         => Settings::get('WE_user_locations'),
             'user_faction_enabled' => Settings::get('WE_user_factions'),
-            'char_enabled' => Settings::get('WE_character_locations'),
+            'char_enabled'         => Settings::get('WE_character_locations'),
             'char_faction_enabled' => Settings::get('WE_character_factions'),
-            'location_interval' => $interval[Settings::get('WE_change_timelimit')],
+            'location_interval'    => $interval[Settings::get('WE_change_timelimit')],
 
         ]);
     }
@@ -151,7 +145,7 @@ class AccountController extends Controller {
      * @return \Illuminate\Http\RedirectResponse
      */
     public function postStaffProfile(Request $request, UserService $service) {
-        $request->validate(staffProfile::$createRules);
+        $request->validate(StaffProfile::$createRules);
         if ($service->updateStaffProfile($request->only(['text']), Auth::user())) {
             flash('Staff profile updated successfully.')->success();
         } else {
@@ -169,7 +163,7 @@ class AccountController extends Controller {
      * @return \Illuminate\Http\RedirectResponse
      */
     public function postStaffLinks(Request $request, UserService $service) {
-        $request->validate(staffProfile::$createRules);
+        $request->validate(StaffProfile::$createRules);
         if ($service->updateStaffLinks($request->only(['site', 'url']), Auth::user())) {
             flash('Staff links updated successfully.')->success();
         } else {
@@ -194,43 +188,43 @@ class AccountController extends Controller {
                 flash($error)->error();
             }
         }
+
         return redirect()->back();
     }
 
     /**
      * Edits the user's location from a list of locations that users can make their home.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function postLocation(Request $request, UserService $service)
-    {
-        if($service->updateLocation($request->input('location'), Auth::user())) {
+    public function postLocation(Request $request, UserService $service) {
+        if ($service->updateLocation($request->input('location'), Auth::user())) {
             flash('Location updated successfully.')->success();
+        } else {
+            foreach ($service->errors()->getMessages()['error'] as $error) {
+                flash($error)->error();
+            }
         }
-        else {
-            foreach($service->errors()->getMessages()['error'] as $error) flash($error)->error();
-        }
+
         return redirect()->back();
     }
 
     /**
      * Edits the user's faction from a list of factions that users can make their home.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function postFaction(Request $request, UserService $service)
-    {
-        if($service->updateFaction($request->input('faction'), Auth::user())) {
+    public function postFaction(Request $request, UserService $service) {
+        if ($service->updateFaction($request->input('faction'), Auth::user())) {
             flash('Faction updated successfully.')->success();
+        } else {
+            foreach ($service->errors()->getMessages()['error'] as $error) {
+                flash($error)->error();
+            }
         }
-        else {
-            foreach($service->errors()->getMessages()['error'] as $error) flash($error)->error();
-        }
+
         return redirect()->back();
     }
-
 
     /**
      * Edits the user's theme.
@@ -257,13 +251,14 @@ class AccountController extends Controller {
     public function postUsername(Request $request, UserService $service) {
         if ($service->updateUsername($request->get('username'), Auth::user())) {
             flash('Username updated successfully.')->success();
+        } else {
+            foreach ($service->errors()->getMessages()['error'] as $error) {
+                flash($error)->error();
+            }
         }
-        else {
-            foreach($service->errors()->getMessages()['error'] as $error) flash($error)->error();
-        }
+
         return redirect()->back();
     }
-    
 
     /**
      * Changes the user's password.
@@ -446,18 +441,21 @@ class AccountController extends Controller {
     }
 
     /**
-     * Changes user character warning visibility setting
+     * Changes user character warning visibility setting.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  App\Services\UserService  $service
+     * @param App\Services\UserService $service
+     *
      * @return \Illuminate\Http\RedirectResponse
      */
     public function postWarningVisibility(Request $request, UserService $service) {
         if ($service->updateWarningVisibility($request->input('warning_visibility'), Auth::user())) {
             flash('Setting updated successfully.')->success();
         } else {
-            foreach ($service->errors()->getMessages()['error'] as $error) flash($error)->error();
+            foreach ($service->errors()->getMessages()['error'] as $error) {
+                flash($error)->error();
+            }
         }
+
         return redirect()->back();
     }
 
@@ -637,6 +635,7 @@ class AccountController extends Controller {
                 flash($error)->error();
             }
         }
+
         return redirect()->back();
     }
 
@@ -646,9 +645,8 @@ class AccountController extends Controller {
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function postBorder(Request $request, UserService $service)
-    {
-        if ($service->updateBorder($request->only('border', 'border_variant_id', 'bottom_border_id','top_border_id'), Auth::user())) {
+    public function postBorder(Request $request, UserService $service) {
+        if ($service->updateBorder($request->only('border', 'border_variant_id', 'bottom_border_id', 'top_border_id'), Auth::user())) {
             flash('Border updated successfully.')->success();
         } else {
             foreach ($service->errors()->getMessages()['error'] as $error) {
@@ -704,24 +702,22 @@ class AccountController extends Controller {
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function getBorderVariants(Request $request)
-    {
+    public function getBorderVariants(Request $request) {
         $border = $request->input('border');
 
         return view('account.border_variants', [
             'border_variants' => ['0' => 'Select Border Variant'] + Border::where('parent_id', '=', $border)->where('border_type', 'variant')->active(Auth::user() ?? null)->get()
-            ->pluck('settingsName', 'id')
-            ->toArray(),
+                ->pluck('settingsName', 'id')
+                ->toArray(),
         ]);
     }
 
     /**
-     * Get applicable layers
+     * Get applicable layers.
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function getBorderLayers(Request $request)
-    {
+    public function getBorderLayers(Request $request) {
         $border = $request->input('border');
 
         $layeredborder = Border::find($border);
@@ -732,11 +728,11 @@ class AccountController extends Controller {
 
         return view('account.border_layers', [
             'top_layers' => $top_layers ?? ['0' => 'Select Top Layer'] + Border::where('parent_id', '=', $border)->where('border_type', 'top')->active(Auth::user() ?? null)->get()
-            ->pluck('settingsName', 'id')
-            ->toArray(),
+                ->pluck('settingsName', 'id')
+                ->toArray(),
             'bottom_layers' => $bottom_layers ?? ['0' => 'Select Bottom Layer'] + Border::where('parent_id', '=', $border)->where('border_type', 'bottom')->active(Auth::user() ?? null)->get()
-            ->pluck('settingsName', 'id')
-            ->toArray(),
+                ->pluck('settingsName', 'id')
+                ->toArray(),
         ]);
     }
 }

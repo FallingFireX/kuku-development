@@ -421,7 +421,7 @@ class DesignUpdateManager extends Service {
 
                 // Skip the feature if the rarity is too high.
                 // Comment out this check if rarities should have more berth for traits choice.
-                //if($features[$featureId]->rarity->sort > $rarity->sort) continue;
+                // if($features[$featureId]->rarity->sort > $rarity->sort) continue;
 
                 // Skip the feature if it's not the correct species.
                 if ($features[$featureId]->species_id && $features[$featureId]->species_id != $species->id) {
@@ -588,7 +588,7 @@ class DesignUpdateManager extends Service {
                 'hash'                       => $request->hash,
                 'fullsize_hash'              => $request->fullsize_hash ? $request->fullsize_hash : randomString(15),
                 'extension'                  => $extension,
-                'fullsize_extension' => config('lorekeeper.settings.masterlist_fullsizes_format') != null ? config('lorekeeper.settings.masterlist_fullsizes_format') : $request->extension,
+                'fullsize_extension'         => config('lorekeeper.settings.masterlist_fullsizes_format') != null ? config('lorekeeper.settings.masterlist_fullsizes_format') : $request->extension,
                 'use_cropper'                => $request->use_cropper,
                 'x0'                         => $request->x0,
                 'x1'                         => $request->x1,

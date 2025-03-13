@@ -48,11 +48,11 @@ return [
             ],
             [
                 'name' => 'Approved Affiliates',
-                'url' => 'admin/affiliates/current'
+                'url'  => 'admin/affiliates/current',
             ],
         ],
     ],
-    
+
     'Pages'       => [
         'power' => 'edit_pages',
         'links' => [
@@ -158,12 +158,12 @@ return [
             // [
             //     'name' => 'Skill Grants',
             //     'url'  => 'admin/grants/skills',
-            //],
+            // ],
             [
                 'name' => 'Border Grants',
-                'url' => 'admin/grants/borders'
+                'url'  => 'admin/grants/borders',
             ],
-        ]
+        ],
     ],
     'Masterlist' => [
         'power' => 'manage_characters',
@@ -247,7 +247,7 @@ return [
                 'name' => 'Awards',
                 'url'  => 'admin/data/awards',
             ],
-            
+
             [
                 'name' => 'Sub Masterlists',
                 'url'  => 'admin/data/sublists',
@@ -256,14 +256,14 @@ return [
                 'name' => 'Rarities',
                 'url'  => 'admin/data/rarities',
             ],
-            
+
             [
                 'name' => 'Shops',
                 'url'  => 'admin/data/shops',
             ],
             [
                 'name' => 'Dailies',
-                'url' => 'admin/data/dailies'
+                'url'  => 'admin/data/dailies',
             ],
             [
                 'name' => 'Currencies',
@@ -281,7 +281,7 @@ return [
                 'name' => 'Items',
                 'url'  => 'admin/data/items',
             ],
-        [
+            [
                 'name' => 'Library',
                 'url'  => 'admin/data/volumes',
             ],
@@ -295,50 +295,49 @@ return [
             ],
             [
                 'name' => 'User Borders',
-                'url' => 'admin/data/borders'
+                'url'  => 'admin/data/borders',
             ],
-        ]
+        ],
     ],
-    
+
     'World_Expanded' => [
         'power' => 'manage_world',
         'links' => [
             [
                 'name' => 'Glossary',
-                'url' => 'admin/world/glossary'
+                'url'  => 'admin/world/glossary',
             ],
             [
                 'name' => 'Locations',
-                'url' => 'admin/world/locations'
+                'url'  => 'admin/world/locations',
             ],
             [
                 'name' => 'Fauna',
-                'url' => 'admin/world/faunas'
+                'url'  => 'admin/world/faunas',
             ],
             [
                 'name' => 'Flora',
-                'url' => 'admin/world/floras'
+                'url'  => 'admin/world/floras',
             ],
             [
                 'name' => ' Events',
-                'url' => 'admin/world/events'
+                'url'  => 'admin/world/events',
             ],
             [
                 'name' => ' Figures',
-                'url' => 'admin/world/figures'
+                'url'  => 'admin/world/figures',
             ],
             [
                 'name' => 'Factions',
-                'url' => 'admin/world/factions'
+                'url'  => 'admin/world/factions',
             ],
             [
                 'name' => 'Concepts',
-                'url' => 'admin/world/concepts'
+                'url'  => 'admin/world/concepts',
             ],
-        ]
+        ],
     ],
-    
-            
+
     'Claymores' => [
         'power' => 'edit_claymores',
         'links' => [
@@ -378,13 +377,13 @@ return [
                 'name' => 'Elements',
                 'url'  => 'admin/data/elements',
             ],
-            [            
+            [
                 'name' => 'Criteria Rewards',
                 'url'  => 'admin/data/criteria',
             ],
         ],
     ],
-    
+
     'Settings'   => [
         'power' => 'edit_site_settings',
         'links' => [

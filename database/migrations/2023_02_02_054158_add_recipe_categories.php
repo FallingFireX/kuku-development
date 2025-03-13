@@ -4,20 +4,16 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddRecipeCategories extends Migration
-{
+class AddRecipeCategories extends Migration {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
-    public function up()
-    {
-        //Adding recipe categories as a table in the database as well as adding a recipe cateogry id to recipes for the recipes to reference.
+    public function up() {
+        // Adding recipe categories as a table in the database as well as adding a recipe cateogry id to recipes for the recipes to reference.
         Schema::create('recipe_categories', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->increments('id');
-            
+
             $table->string('name');
             $table->integer('sort')->unsigned()->default(0);
             $table->text('description')->nullable()->default(null);
@@ -33,11 +29,8 @@ class AddRecipeCategories extends Migration
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
-    public function down()
-    {
+    public function down() {
         //
         Schema::dropIfExists('items');
         Schema::dropIfExists('item_categories');

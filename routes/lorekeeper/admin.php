@@ -160,8 +160,8 @@ Route::group(['prefix' => 'data', 'namespace' => 'Data', 'middleware' => 'power:
     Route::post('pet-drops/create', 'PetController@postCreateEditDrop');
     Route::post('pet-drops/edit/{id?}', 'PetController@postCreateEditDrop');
     Route::post('pet-drops/delete/{id}', 'PetController@postDeleteDrop');
-    
-//unique items
+
+    // unique items
     Route::get('adoption-center', 'UniqueItemController@getItemIndex')->name('admin.uniqueitems.items');
     Route::get('adoption-center/create', 'UniqueItemController@getCreateItem');
     Route::get('adoption-center/edit/{id}', 'UniqueItemController@getEditItem');
@@ -173,9 +173,6 @@ Route::group(['prefix' => 'data', 'namespace' => 'Data', 'middleware' => 'power:
     Route::get('adoption-categories/edit/{id}', 'UniqueItemController@getEditItemCategory')->name('admin.uniqueitems.categories.edit');
     Route::post('adoption-categories/edit/{id}', 'UniqueItemController@postCreateEditItemCategory')->name('admin.uniqueitems.categories.post');
     Route::delete('adoption-center/delete/{id}', 'UniqueItemController@deleteUniqueItem')->name('admin.uniqueitems.delete');
-
-    
-   
 
     // ITEMS
     Route::get('item-categories', 'ItemController@getIndex');
@@ -229,7 +226,6 @@ Route::group(['prefix' => 'data', 'namespace' => 'Data', 'middleware' => 'power:
     Route::post('recipes/edit/{id?}', 'RecipeController@postCreateEditRecipe');
     Route::post('recipes/delete/{id}', 'RecipeController@postDeleteRecipe');
 
-    
     // PETS
     Route::get('pet-categories', 'PetController@getIndex');
     Route::get('pet-categories/create', 'PetController@getCreatePetCategory');
@@ -301,8 +297,8 @@ Route::group(['prefix' => 'data', 'namespace' => 'Data', 'middleware' => 'power:
     Route::post('recipe-categories/edit/{id?}', 'RecipeController@postCreateEditRecipeCategory');
     Route::post('recipe-categories/delete/{id}', 'RecipeController@postDeleteRecipeCategory');
     Route::post('recipe-categories/sort', 'RecipeController@postSortRecipeCategory');
-    
-    # SHOPS
+
+    // SHOPS
     Route::get('shops', 'ShopController@getIndex');
     Route::get('shops/create', 'ShopController@getCreateShop');
     Route::get('shops/edit/{id}', 'ShopController@getEditShop');
@@ -476,8 +472,8 @@ Route::group(['prefix' => 'data', 'namespace' => 'Data', 'middleware' => 'power:
     Route::post('elements/create', 'ElementController@postCreateEditElement');
     Route::post('elements/edit/{id?}', 'ElementController@postCreateEditElement');
     Route::post('elements/delete/{id}', 'ElementController@postDeleteElement');
-    
-    //RANDOM GENERATOR
+
+    // RANDOM GENERATOR
     Route::get('random', 'GeneratorController@getIndex');
     Route::get('random/create/{id}', 'GeneratorController@getCreateRandom');
     Route::get('random/edit/{id}', 'GeneratorController@getEditRandom');
@@ -493,8 +489,8 @@ Route::group(['prefix' => 'data', 'namespace' => 'Data', 'middleware' => 'power:
     Route::post('random/generator/edit/{id}', 'GeneratorController@postCreateEditRandomGenerator');
     Route::post('random/generator/delete/{id}', 'GeneratorController@postDeleteRandomGenerator');
     Route::post('random/generator/sort', 'GeneratorController@postSortGenerator');
-    
-    # DAILIES
+
+    // DAILIES
     Route::get('dailies', 'DailyController@getIndex');
     Route::get('dailies/create', 'DailyController@getCreateDaily');
     Route::get('dailies/edit/{id}', 'DailyController@getEditDaily');
@@ -502,9 +498,9 @@ Route::group(['prefix' => 'data', 'namespace' => 'Data', 'middleware' => 'power:
     Route::post('dailies/create', 'DailyController@postCreateEditDaily');
     Route::post('dailies/edit/{id?}', 'DailyController@postCreateEditDaily');
     Route::post('dailies/delete/{id}', 'DailyController@postDeleteDaily');
-    Route::post('dailies/sort', 'DailyController@postSortDaily'); 
-    
-    # CAROUSEL
+    Route::post('dailies/sort', 'DailyController@postSortDaily');
+
+    // CAROUSEL
     Route::get('carousel', 'CarouselController@getIndex');
     Route::post('carousel/create', 'CarouselController@postUploadCarousel');
     Route::get('carousel/delete/{id}', 'CarouselController@getDeleteCarousel');
@@ -512,24 +508,24 @@ Route::group(['prefix' => 'data', 'namespace' => 'Data', 'middleware' => 'power:
     Route::post('carousel/sort', 'CarouselController@postSortCarousel');
     Route::get('carousel/edit/{id}', 'CarouselController@getEditCarousel');
     Route::post('carousel/edit/{id}', 'CarouselController@postEditCarousel');
-    
-     # BORDERS
-     Route::get('border-categories', 'BorderController@getIndex');
-     Route::get('border-categories/create', 'BorderController@getCreateBorderCategory');
-     Route::get('border-categories/edit/{id}', 'BorderController@getEditBorderCategory');
-     Route::get('border-categories/delete/{id}', 'BorderController@getDeleteBorderCategory');
-     Route::post('border-categories/create', 'BorderController@postCreateEditBorderCategory');
-     Route::post('border-categories/edit/{id?}', 'BorderController@postCreateEditBorderCategory');
-     Route::post('border-categories/delete/{id}', 'BorderController@postDeleteBorderCategory');
-     Route::post('border-categories/sort', 'BorderController@postSortBorderCategory');
- 
-     Route::get('borders', 'BorderController@getBorderIndex');
-     Route::get('borders/create', 'BorderController@getCreateBorder');
-     Route::get('borders/edit/{id}', 'BorderController@getEditBorder');
-     Route::get('borders/delete/{id}', 'BorderController@getDeleteBorder');
-     Route::post('borders/create', 'BorderController@postCreateEditBorder');
-     Route::post('borders/edit/{id?}', 'BorderController@postCreateEditBorder');
-     Route::post('borders/delete/{id}', 'BorderController@postDeleteBorder');
+
+    // BORDERS
+    Route::get('border-categories', 'BorderController@getIndex');
+    Route::get('border-categories/create', 'BorderController@getCreateBorderCategory');
+    Route::get('border-categories/edit/{id}', 'BorderController@getEditBorderCategory');
+    Route::get('border-categories/delete/{id}', 'BorderController@getDeleteBorderCategory');
+    Route::post('border-categories/create', 'BorderController@postCreateEditBorderCategory');
+    Route::post('border-categories/edit/{id?}', 'BorderController@postCreateEditBorderCategory');
+    Route::post('border-categories/delete/{id}', 'BorderController@postDeleteBorderCategory');
+    Route::post('border-categories/sort', 'BorderController@postSortBorderCategory');
+
+    Route::get('borders', 'BorderController@getBorderIndex');
+    Route::get('borders/create', 'BorderController@getCreateBorder');
+    Route::get('borders/edit/{id}', 'BorderController@getEditBorder');
+    Route::get('borders/delete/{id}', 'BorderController@getDeleteBorder');
+    Route::post('borders/create', 'BorderController@postCreateEditBorder');
+    Route::post('borders/edit/{id?}', 'BorderController@postCreateEditBorder');
+    Route::post('borders/delete/{id}', 'BorderController@postDeleteBorder');
 
     Route::get('borders/edit/{border_id}/{type}s/create', 'BorderController@getCreateEditVariant');
     Route::get('borders/edit/{border_id}/{type}s/edit/{id}', 'BorderController@getCreateEditVariant');
@@ -574,14 +570,12 @@ Route::group(['prefix' => 'pages', 'middleware' => 'power:edit_pages'], function
     Route::post('create', 'PageController@postCreateEditPage');
     Route::post('edit/{id?}', 'PageController@postCreateEditPage');
     Route::post('delete/{id}', 'PageController@postDeletePage');
-
 });
 
 Route::group(['prefix' => 'sidebar', 'middleware' => 'power:edit_pages'], function () {
     Route::get('/', 'SidebarController@getIndex')->name('admin.sidebar.update');
     Route::post('/', 'SidebarController@update');
 });
-
 
 // NEWS
 Route::group(['prefix' => 'news', 'middleware' => 'power:manage_news'], function () {
@@ -618,8 +612,8 @@ Route::group(['prefix' => 'sales', 'middleware' => 'power:manage_sales'], functi
     Route::get('character/{slug}', 'SalesController@getCharacterInfo');
 });
 
-# AFFILIATES
-Route::group(['prefix' => 'affiliates', 'middleware' => 'power:manage_affiliates'], function() {
+// AFFILIATES
+Route::group(['prefix' => 'affiliates', 'middleware' => 'power:manage_affiliates'], function () {
     Route::get('/', 'AffiliateController@getIndex');
     Route::get('/current', 'AffiliateController@getIndex');
     Route::get('/{status}', 'AffiliateController@getQueue')->where('status', 'pending|accepted|rejected');
@@ -636,8 +630,8 @@ Route::group(['prefix' => 'affiliates', 'middleware' => 'power:manage_affiliates
     Route::post('delete/{id}', 'AffiliateController@postDeleteAffiliate');
 });
 
-# SITE SETTINGS
-Route::group(['prefix' => 'settings', 'middleware' => 'power:edit_site_settings'], function() {
+// SITE SETTINGS
+Route::group(['prefix' => 'settings', 'middleware' => 'power:edit_site_settings'], function () {
     Route::get('/', 'SettingsController@getIndex');
     Route::post('{key}', 'SettingsController@postEditSetting');
 });
@@ -677,7 +671,7 @@ Route::group(['prefix' => 'grants', 'namespace' => 'Users', 'middleware' => 'pow
 
     Route::get('recipes', 'GrantController@getRecipes');
     Route::post('recipes', 'GrantController@postRecipes');
-    
+
     Route::get('borders', 'GrantController@getBorders');
     Route::post('borders', 'GrantController@postBorders');
 });
@@ -755,8 +749,6 @@ Route::group(['prefix' => 'character', 'namespace' => 'Characters', 'middleware'
     Route::get('{slug}/stats', 'CharacterController@getEditCharacterStats');
     Route::post('{slug}/stats', 'CharacterController@postEditCharacterStats');
     Route::post('{slug}/stats', 'CharacterStatController@updateLevel');
-    
-
 
     Route::get('{slug}/description', 'CharacterController@getEditCharacterDescription');
     Route::post('{slug}/description', 'CharacterController@postEditCharacterDescription');
@@ -958,10 +950,9 @@ Route::group(['prefix' => 'typing', 'middleware' => 'power:edit_data', 'namespac
     Route::post('delete/{id}', 'ElementController@postDeleteTyping');
 });
 
-# WORLD EXPANSION
-Route::group(['prefix' => 'world',  'namespace' => 'World', 'middleware' => 'power:manage_world'], function() {
-
-    # LOCATIONS
+// WORLD EXPANSION
+Route::group(['prefix' => 'world',  'namespace' => 'World', 'middleware' => 'power:manage_world'], function () {
+    // LOCATIONS
     Route::get('location-types', 'LocationController@getIndex');
     Route::get('location-types/create', 'LocationController@getCreateLocationType');
     Route::get('location-types/edit/{id}', 'LocationController@getEditLocationType');
@@ -980,7 +971,7 @@ Route::group(['prefix' => 'world',  'namespace' => 'World', 'middleware' => 'pow
     Route::post('locations/delete/{id}', 'LocationController@postDeleteLocation');
     Route::post('locations/sort', 'LocationController@postSortLocation');
 
-    # FAUNA
+    // FAUNA
     Route::get('fauna-categories', 'FaunaController@getFaunaCategories');
     Route::get('fauna-categories/create', 'FaunaController@getCreateFaunaCategory');
     Route::get('fauna-categories/edit/{id}', 'FaunaController@getEditFaunaCategory');
@@ -999,7 +990,7 @@ Route::group(['prefix' => 'world',  'namespace' => 'World', 'middleware' => 'pow
     Route::post('faunas/delete/{id}', 'FaunaController@postDeleteFauna');
     Route::post('faunas/sort', 'FaunaController@postSortFauna');
 
-    # FLORA
+    // FLORA
     Route::get('flora-categories', 'FloraController@getFloraCategories');
     Route::get('flora-categories/create', 'FloraController@getCreateFloraCategory');
     Route::get('flora-categories/edit/{id}', 'FloraController@getEditFloraCategory');
@@ -1018,7 +1009,7 @@ Route::group(['prefix' => 'world',  'namespace' => 'World', 'middleware' => 'pow
     Route::post('floras/delete/{id}', 'FloraController@postDeleteFlora');
     Route::post('floras/sort', 'FloraController@postSortFlora');
 
-    # HISTORY
+    // HISTORY
     Route::get('event-categories', 'EventController@getEventCategories');
     Route::get('event-categories/create', 'EventController@getCreateEventCategory');
     Route::get('event-categories/edit/{id}', 'EventController@getEditEventCategory');
@@ -1037,7 +1028,7 @@ Route::group(['prefix' => 'world',  'namespace' => 'World', 'middleware' => 'pow
     Route::post('events/delete/{id}', 'EventController@postDeleteEvent');
     Route::post('events/sort', 'EventController@postSortEvent');
 
-    # HISTORY
+    // HISTORY
     Route::get('figure-categories', 'FigureController@getFigureCategories');
     Route::get('figure-categories/create', 'FigureController@getCreateFigureCategory');
     Route::get('figure-categories/edit/{id}', 'FigureController@getEditFigureCategory');
@@ -1056,7 +1047,7 @@ Route::group(['prefix' => 'world',  'namespace' => 'World', 'middleware' => 'pow
     Route::post('figures/delete/{id}', 'FigureController@postDeleteFigure');
     Route::post('figures/sort', 'FigureController@postSortFigure');
 
-    # FACTIONS
+    // FACTIONS
     Route::get('faction-types', 'FactionController@getIndex');
     Route::get('faction-types/create', 'FactionController@getCreateFactionType');
     Route::get('faction-types/edit/{id}', 'FactionController@getEditFactionType');
@@ -1075,7 +1066,7 @@ Route::group(['prefix' => 'world',  'namespace' => 'World', 'middleware' => 'pow
     Route::post('factions/delete/{id}', 'FactionController@postDeleteFaction');
     Route::post('factions/sort', 'FactionController@postSortFaction');
 
-    # CONCEPTS
+    // CONCEPTS
     Route::get('concept-categories', 'ConceptController@getConceptCategories');
     Route::get('concept-categories/create', 'ConceptController@getCreateConceptCategory');
     Route::get('concept-categories/edit/{id}', 'ConceptController@getEditConceptCategory');
@@ -1094,7 +1085,6 @@ Route::group(['prefix' => 'world',  'namespace' => 'World', 'middleware' => 'pow
     Route::post('concepts/delete/{id}', 'ConceptController@postDeleteConcept');
     Route::post('concepts/sort', 'ConceptController@postSortConcept');
 
-
     Route::get('glossary', 'GlossaryController@getGlossaryIndex');
     Route::post('glossary/toggle-setting', 'GlossaryController@postToggleSetting');
     Route::get('glossary/create', 'GlossaryController@getCreateEditTerm');
@@ -1103,5 +1093,4 @@ Route::group(['prefix' => 'world',  'namespace' => 'World', 'middleware' => 'pow
     Route::post('glossary/edit/{id}', 'GlossaryController@postCreateEditTerm');
     Route::get('glossary/delete/{id}', 'GlossaryController@getDeleteTerm');
     Route::post('glossary/delete/{id}', 'GlossaryController@postDeleteTerm');
-
 });

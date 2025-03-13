@@ -10,9 +10,9 @@ class AddExtraTransformationFields extends Migration {
      */
     public function up() {
         Schema::table('character_images', function (Blueprint $table) {
-            //displayed on the tab
+            // displayed on the tab
             $table->string('transformation_info')->nullable()->default(null);
-            //if the user wants to elaborate on some origin of why the form change takes place etc (shown on image_info)
+            // if the user wants to elaborate on some origin of why the form change takes place etc (shown on image_info)
             $table->string('transformation_description')->nullable()->default(null);
         });
 
@@ -21,9 +21,9 @@ class AddExtraTransformationFields extends Migration {
         });
 
         Schema::table('design_updates', function (Blueprint $table) {
-            //displayed on the tab
+            // displayed on the tab
             $table->string('transformation_info')->nullable()->default(null);
-            //if the user wants to elaborate on some origin of why the form change takes place etc (shown on image_info)
+            // if the user wants to elaborate on some origin of why the form change takes place etc (shown on image_info)
             $table->string('transformation_description')->nullable()->default(null);
         });
     }
