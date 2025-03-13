@@ -71,38 +71,6 @@
         @endif
     @endif
 
-    @if (Auth::user()->hasPower('manage_characters'))
-        <h3>Admin Transfer</h3>
-        <div class="alert alert-warning">
-            You are editing this character as a staff member.
-        </div>
-        <p>This will transfer the character automatically, without requiring the recipient to confirm the transfer. You may also transfer a character that is marked non-transferrable, or still under cooldown. Both the old and new owners will be notified
-            of the transfer.</p>
-        <p>Fill in either of the recipient fields - if transferring to an off-site user, leave the recipient field blank and vice versa.</p>
-        {!! Form::open(['url' => $character->is_myo_slot ? 'admin/myo/' . $character->id . '/transfer' : 'admin/character/' . $character->slug . '/transfer']) !!}
-        <div class="form-group">
-            {!! Form::label('recipient_id', 'Recipient') !!}
-            {!! Form::select('recipient_id', $userOptions, old('recipient_id'), ['class' => 'form-control selectize', 'placeholder' => 'Select User']) !!}
-        </div>
-        <div class="form-group">
-            {!! Form::label('recipient_url', 'Recipient Url') !!} {!! add_help('Characters can only be transferred to offsite user URLs from site(s) used for authentication.') !!}
-            {!! Form::text('recipient_url', old('recipient_url'), ['class' => 'form-control']) !!}
-        </div>
-        <div class="form-group">
-            {!! Form::label('cooldown', 'Transfer Cooldown (days)') !!}
-            {!! Form::text('cooldown', $cooldown, ['class' => 'form-control']) !!}
-        </div>
-        <div class="form-group">
-            {!! Form::label('reason', 'Reason for Transfer (optional)') !!}
-            {!! Form::text('reason', '', ['class' => 'form-control']) !!}
-        </div>
-        <div class="text-right">
-            {!! Form::submit('Send Transfer', ['class' => 'btn btn-primary']) !!}
-        </div>
-        {!! Form::close() !!}
-    @endif 
-@endif
-
 @if(Auth::user()->hasPower('manage_characters'))
     <h3>Admin Transfer</h3>
     <div class="alert alert-warning">
