@@ -248,15 +248,19 @@ class AccountController extends Controller {
      *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function postUsername(Request $request, UserService $service) {
-        if ($service->updateUsername($request->get('username'), Auth::user())) {
-            flash('Username updated successfully.')->success();
-        } else {
-            foreach ($service->errors()->getMessages()['error'] as $error) {
-                flash($error)->error();
-            }
-        }
+    public function postUsername(Request $request, UserService $service)
+    {
+        if($request['username'] == Auth::user()->name) flash("You are already using this username.");
+        $request->validate( [
+            'username' => 'required|string|min:3|max:255|alpha_dash|unique:users,name'
+        ]);
 
+        if($service->updateUsername($request->only(['username', 'password']), Auth::user())) {
+            flash('Username updated successfully.')->success();
+        }
+        else {
+            foreach($service->errors()->getMessages()['error'] as $error) flash($error)->error();
+        }
         return redirect()->back();
     }
 

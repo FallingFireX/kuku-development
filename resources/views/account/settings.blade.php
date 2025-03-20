@@ -29,7 +29,8 @@
             <!-- SESSION -->
             <div class="tab-pane fade  show active" id="session">
                 <!--USERNAME-->
-                <h3>Change Username</h3>
+                <div class="card p-3 mb-2">
+                    <h3>Change Username</h3>
                     <p>
                         For security and moderation purposes, all usernames changes will be recorded in your username log.
                         @if($usernameCooldown > 0)
@@ -57,7 +58,7 @@
                     @else
                         <p class="alert alert-warning">You must wait {{ $usernameCountdown }} more day{{ $usernameCountdown > 1 ? 's' : '' }} before you can change your username again.</p>
                     @endif
-
+                </div>
             <!--EMAIL-->
             <div class="card p-3 mb-2">
                 <h3>Email Address</h3>
