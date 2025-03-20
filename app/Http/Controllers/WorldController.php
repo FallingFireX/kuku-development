@@ -629,6 +629,7 @@ class WorldController extends Controller {
 
     public function getItem($id) {
         $item = Item::where('id', $id)->released(Auth::user() ?? null)->with('category');
+        $categories = ItemCategory::orderBy('sort', 'DESC')->get();
 
         if (config('lorekeeper.extensions.item_entry_expansion.extra_fields')) {
             $item->with('artist', 'shopStock')->withCount('shopStock');
