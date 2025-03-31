@@ -29,7 +29,7 @@ class EventController extends Controller
     // Create an object or array with properties to match the view's expectations
     $theme = (object) [
         'cssUrl' => ($page && $page->key === 'fod-2025') 
-            ? 'kukuri-arpg.com.2.css'  // Event theme
+            ? 'https://www.kukuri-arpg.com/themes/2.css'  // Event theme
             : $userTheme,
         'prioritize_css' => false,  // Example default value
         'has_css' => true,          // Set to true since the theme has CSS
