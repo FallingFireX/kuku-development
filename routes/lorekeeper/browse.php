@@ -364,3 +364,4 @@ Route::group(['prefix' => 'world', 'namespace' => 'WorldExpansion'], function ()
     Custom
 **************************************************************************************************/
 Route::get('fp-calculator', 'CustomController@getCalculator');
+Route::get('FoD-2025', 'EventController@getFODindex');
