@@ -28,7 +28,7 @@ class EventController extends Controller
 
     // Use the on-site file manager CSS path
     $themeUrl = ($page && $page->key === 'fod-2025') 
-        ? 'https://www.kukuri-arpg.com/files/Festival2.css'   // Local file manager theme
+        ? 'themes/2.css'   // Local file manager theme
         : $userTheme;
 
     // Pass the theme object to match the theme manager structure
