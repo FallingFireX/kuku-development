@@ -270,7 +270,7 @@
                     {{ str_replace(['<style>', '</style>'], '', view('layouts.editable_theme', ['theme' => $conditionalTheme])) }}
                     {{ str_replace(['<style>', '</style>'], '', view('layouts.editable_theme', ['theme' => $decoratorTheme])) }}
                     `,
-                    spoiler_caption: 'Toggle Spoiler',
+                    spoiler_caption: 'View Details',
                     target_list: false
                 });
                 bsCustomFileInput.init();

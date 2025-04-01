@@ -13,8 +13,6 @@
 
 <div class="site-page-content parsed-text">
     {!! $page->parsed_text !!}
-
-    <b>test test test</b>
 </div>
 
 
