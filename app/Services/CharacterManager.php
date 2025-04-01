@@ -1689,6 +1689,7 @@ class CharacterManager extends Service {
                 }
             }
             
+            $data['kotm'] = isset($data['kotm']) ? $data['kotm'] : 0;
 
             // Update the character's profile
             if (!$character->is_myo_slot) {
