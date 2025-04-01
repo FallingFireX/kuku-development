@@ -41,7 +41,7 @@
                     '{{ asset('css/app.css') }}',
                     '{{ asset('css/lorekeeper.css') }}'
                 ],
-                spoiler_caption: 'Toggle Spoiler',
+                spoiler_caption: 'View Details',
                 target_list: false
             });
         });
