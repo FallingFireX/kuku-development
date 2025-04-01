@@ -144,12 +144,11 @@
                 <div class="row">
                 <div class="col-md form-group">
                 {!! Form::label('Date of character adoption') !!}
-                {!! Form::text('adoption', $character->adoption, ['class' => 'form-control datepicker']) !!}
+                {!! Form::text('adoption', $character->adoption ?? '', ['class' => 'form-control datepicker', 'placeholder' => 'Enter adoption date']) !!}
                 </div>
-            
             <div class="col-md form-group">
             {!! Form::label('Date of character donation') !!}
-            {!! Form::text('donation', $character->donation, ['class' => 'form-control datepicker']) !!}
+            {!! Form::text('donation', $character->donation ?? '', ['class' => 'form-control datepicker', 'placeholder' => 'Enter donation date']) !!}
             </div>
         </div>
     @endif

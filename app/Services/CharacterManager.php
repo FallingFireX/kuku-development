@@ -1671,10 +1671,10 @@ class CharacterManager extends Service {
                     $data['kotm'] = 0;
                 }
                 if (!isset($data['adoption'])) {
-                    $data['adoption'] = 0;
+                    $data['adoption'] = '';
                 }
                 if (!isset($data['donation'])) {
-                    $data['donation'] = 0;
+                    $data['donation'] = '';
                 }
 
                 $character->is_gift_art_allowed = isset($data['is_gift_art_allowed']) && $data['is_gift_art_allowed'] <= 2 ? $data['is_gift_art_allowed'] : 0;

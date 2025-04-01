@@ -205,15 +205,25 @@ class CharacterController extends Controller {
             abort(404);
         }
 
+        $data = $request->only([
+            'name', 'link', 'text', 'is_gift_art_allowed', 'is_gift_writing_allowed', 
+            'is_trading', 'character_warning', 'custom_values_group', 'custom_values_name', 
+            'custom_values_data', 'alert_user', 'is_links_open', 'kotm', 'location', 'faction', 
+            'adoption', 'donation'
+        ]);
+
         $isMod = Auth::user()->hasPower('manage_characters');
         $isOwner = ($this->character->user_id == Auth::user()->id);
         if (!$isMod && !$isOwner) {
             abort(404);
         }
 
+        $data['adoption'] = empty($data['adoption']) ? null : $data['adoption'];
+        $data['donation'] = empty($data['donation']) ? null : $data['donation'];
+
         $request->validate(CharacterProfile::$rules);
 
-        if ($service->updateCharacterProfile($request->only(['name', 'link', 'text', 'is_gift_art_allowed', 'is_gift_writing_allowed', 'is_trading', 'character_warning', 'custom_values_group', 'custom_values_name', 'custom_values_data', 'alert_user', 'is_links_open', 'kotm', 'location', 'faction', 'adoption', 'donation']), $this->character, Auth::user(), !$isOwner)) {
+        if ($service->updateCharacterProfile($data, $this->character, Auth::user(), !$isOwner)) {
             flash('Profile edited successfully.')->success();
         } else {
             foreach ($service->errors()->getMessages()['error'] as $error) {
