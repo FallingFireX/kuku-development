@@ -15,15 +15,11 @@ use App\Models\SitePage;
 
 class EventController extends Controller
 {
-    public function getFOD()     
-    {
-    return view('events.fod');     
-    }
-
-
     public function getFODindex() 
 {
-    $userTheme = auth()->user()->theme;
+    $user = auth()->user();
+    $userTheme = $user ? $user->theme : 'themes/1.css'; // Provide a default theme
+
     $page = SitePage::where('key', 'fod-2025')->first();
 
     // Use the on-site file manager CSS path
@@ -43,5 +39,6 @@ class EventController extends Controller
         'theme' => $theme
     ]);
 }
+
 
 }
