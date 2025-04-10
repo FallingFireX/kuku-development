@@ -2068,16 +2068,6 @@ class CharacterManager extends Service {
         DB::beginTransaction();
 
         try {
-            if ($character->pets()->exists()) {
-                throw new \Exception('This character has pets attached to it.');
-            }
-            if ($character->weapons()->exists()) {
-                throw new \Exception('This character has weapons attached to it.');
-            }
-            if ($character->gear()->exists()) {
-                throw new \Exception('This character has gear attached to it.');
-            }
-
             if (isset($data['recipient_id']) && $data['recipient_id']) {
                 $recipient = User::find($data['recipient_id']);
                 if (!$recipient) {
@@ -2089,12 +2079,14 @@ class CharacterManager extends Service {
                 if (!$this->logAdminAction($user, 'Admin Transfer', 'Admin transferred '.$character->displayname.' to '.$recipient->displayName)) {
                     throw new \Exception('Failed to log admin action.');
                 }
-            } elseif (isset($data['recipient_url']) && $data['recipient_url']) {
-                // Transferring to an off-site user
-                $recipient = checkAlias($data['recipient_url']);
+            }  elseif (!empty($data['recipient_alias']) || !empty($data['recipient_url'])) {
+                // Support both recipient_alias and recipient_url keys
+                $alias = $data['recipient_alias'] ?? $data['recipient_url'];
+                $recipient = checkAlias($alias);
                 if (!$this->logAdminAction($user, 'Admin Transfer', 'Admin transferred '.$character->displayname.' to '.$recipient)) {
                     throw new \Exception('Failed to log admin action.');
                 }
+            
             } else {
                 throw new \Exception('Please enter a recipient for the transfer.');
             }
@@ -2117,42 +2109,7 @@ class CharacterManager extends Service {
 
             $sender = $character->user;
 
-            // Move the character
             $this->moveCharacter($character, $recipient, 'Transferred by '.$user->displayName.(isset($data['reason']) ? ': '.$data['reason'] : ''), $data['cooldown'] ?? -1);
-
-            // Find all of the children of this character
-            if ($childrenArray = CharacterLink::where('parent_id', $character->id)->get()->pluck('child_id')->toArray()) {
-                // get ALL the children
-                foreach ($childrenArray as $child) {
-                    if (!isset($children)) {
-                        $children = Character::where('id', $child)->get();
-                    } else {
-                        $children = $children->merge(Character::where('id', $child)->get());
-                    }
-                }
-                // get all the children of children
-                $search = 5;
-                while ($search >= 0) {
-                    foreach ($children as $child) {
-                        $grandchildren = null;
-                        if ($grandchildren = CharacterLink::where('parent_id', $child->id)->get()->pluck('child_id')->toArray()) {
-                            foreach ($grandchildren as $grandchild) {
-                                $children = $children->merge(Character::where('id', $grandchild)->get());
-                            }
-                        }
-                    }
-                    $search -= 1;
-                }
-            } else {
-                $children = false;
-            }
-
-            // Move all children of this character
-            if ($children) {
-                foreach ($children as $child) {
-                    $this->moveCharacter($child, $recipient, 'Parent '.$character->slug.' transferred to '.$user->displayName.(isset($data['reason']) ? ': '.$data['reason'] : ''), $data['cooldown'] ?? -1);
-                }
-            }
 
             // Add notifications for the old and new owners
             if ($sender) {
@@ -2185,8 +2142,8 @@ class CharacterManager extends Service {
     /**
      * Processes a character transfer.
      *
-     * @param array $data
-     * @param User  $user
+     * @param array                 $data
+     * @param \App\Models\User\User $user
      *
      * @return bool
      */
@@ -2206,62 +2163,26 @@ class CharacterManager extends Service {
 
                 // Process the character move if the transfer has already been approved
                 if ($transfer->is_approved) {
-                    // check the cooldown saved
+                    //check the cooldown saved
                     if (isset($transfer->data['cooldown'])) {
                         $cooldown = $transfer->data['cooldown'];
                     }
-
                     $this->moveCharacter($transfer->character, $transfer->recipient, 'User Transfer', $cooldown);
-
-                    // Find all of the children of this character
-                    if ($childrenArray = CharacterLink::where('parent_id', $transfer->character->id)->get()->pluck('child_id')->toArray()) {
-                        // get ALL the children
-                        foreach ($childrenArray as $child) {
-                            if (!isset($children)) {
-                                $children = Character::where('id', $child)->get();
-                            } else {
-                                $children = $children->merge(Character::where('id', $child)->get());
-                            }
-                        }
-                        // get all the children of children
-                        $search = 5;
-                        while ($search >= 0) {
-                            foreach ($children as $child) {
-                                $grandchildren = null;
-                                if ($grandchildren = CharacterLink::where('parent_id', $child->id)->get()->pluck('child_id')->toArray()) {
-                                    foreach ($grandchildren as $grandchild) {
-                                        $children = $children->merge(Character::where('id', $grandchild)->get());
-                                    }
-                                }
-                            }
-                            $search -= 1;
-                        }
-                    } else {
-                        $children = false;
-                    }
-
-                    // Move all children of this character
-                    if ($children) {
-                        foreach ($children as $child) {
-                            $this->moveCharacter($child, $transfer->recipient, 'Parent '.$transfer->character->slug.' transferred to '.$transfer->recipient->name, $cooldown);
-                        }
-                    }
-
                     if (!Settings::get('open_transfers_queue')) {
                         $transfer->data = json_encode([
                             'cooldown' => $cooldown,
                             'staff_id' => null,
                         ]);
                     }
-                }
 
-                // Notify sender of the successful transfer
-                Notifications::create('CHARACTER_TRANSFER_ACCEPTED', $transfer->sender, [
-                    'character_name' => $transfer->character->slug,
-                    'character_url'  => $transfer->character->url,
-                    'sender_name'    => $transfer->recipient->name,
-                    'sender_url'     => $transfer->recipient->url,
-                ]);
+                    // Notify sender of the successful transfer
+                    Notifications::create('CHARACTER_TRANSFER_ACCEPTED', $transfer->sender, [
+                        'character_name' => $transfer->character->slug,
+                        'character_url'  => $transfer->character->url,
+                        'sender_name'    => $transfer->recipient->name,
+                        'sender_url'     => $transfer->recipient->url,
+                    ]);
+                }
             } else {
                 $transfer->status = 'Rejected';
                 $transfer->data = json_encode([
@@ -2285,6 +2206,7 @@ class CharacterManager extends Service {
 
         return $this->rollbackReturn(false);
     }
+
 
     /**
      * Cancels a character transfer.
