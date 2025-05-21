@@ -43,6 +43,7 @@
                         <a href="{{ $pet->character->url }}">
                             <img src="{{ $pet->character->image->thumbnailUrl }}" class="rounded img-thumbnail mb-2" alt="Thumbnail for {{ $pet->character->fullName }}" />
                         </a>
+                        
                         @if ($namespace)
                             @if (Auth::check() && Auth::user()->id == $pet->character->user_id && $pet->canBond())
                                 <div class="form-group mb-0">

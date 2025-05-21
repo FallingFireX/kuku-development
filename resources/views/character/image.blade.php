@@ -1,4 +1,4 @@
-<div class="col-md-7">
+<div class="col-md-10">
     <div class="text-center">
         <a href="{{ $image->canViewFull(Auth::check() ? Auth::user() : null) && file_exists(public_path($image->imageDirectory . '/' . $image->fullsizeFileName)) ? $image->fullsizeUrl : $image->imageUrl }}" data-lightbox="entry"
             data-title="{{ $character->fullName }}">
@@ -6,8 +6,13 @@
                 alt="{{ $character->fullName }}" />
         </a>
     </div>
-    @if ($image->canViewFull(Auth::check() ? Auth::user() : null) && file_exists(public_path($image->imageDirectory . '/' . $image->fullsizeFileName)))
-        <div class="text-right">You are viewing the full-size image. <a href="{{ $image->imageUrl }}">View watermarked image</a>?</div>
+    @if(empty($ajax))
+    @if ($character->image->canViewFull(Auth::user() ?? null) && file_exists(public_path($character->image->imageDirectory . '/' . $character->image->fullsizeFileName)))
+        <div class="text-right">
+            You are viewing the full-size image.
+            <a href="{{ $character->image->imageUrl }}">View watermarked image</a>?
+        </div>
     @endif
+@endif
+
 </div>
-@include('character._image_info', ['image' => $image])

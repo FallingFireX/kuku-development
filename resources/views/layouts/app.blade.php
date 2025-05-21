@@ -250,10 +250,12 @@
                     height: 500,
                     menubar: false,
                     convert_urls: false,
+                    
                     plugins: [
                         'advlist autolink lists link image charmap print preview anchor',
                         'searchreplace visualblocks code fullscreen spoiler',
-                        'insertdatetime media table paste code help wordcount'
+                        'insertdatetime media table paste code help wordcount',
+                        "code"
                     ],
                     toolbar: 'undo redo | formatselect | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | spoiler-add spoiler-remove | removeformat | code',
                     content_css: [

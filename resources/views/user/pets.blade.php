@@ -11,16 +11,25 @@
         Familiars
     </h1>
 
-    @foreach ($pets as $categoryId => $categoryPets)
-        <div class="card mb-3 inventory-category">
-            <h5 class="card-header inventory-header">
-                {!! isset($categories[$categoryId]) ? '<a href="' . $categories[$categoryId]->searchUrl . '">' . $categories[$categoryId]->name . '</a>' : 'Miscellaneous' !!}
-            </h5>
-            <div class="card-body inventory-body">
-                @foreach ($categoryPets->chunk(4) as $chunk)
-                    <div class="row mb-3">
-                        @foreach ($chunk as $pet)
-                            <?php
+    <div class="card character-bio">
+    <div class="card-header">
+        <ul class="nav nav-tabs card-header-tabs">
+            @foreach($pets as $categoryId=>$categoryPets)
+                <li class="nav-item">
+                    <a class="nav-link {{ $loop->first ? 'active' : '' }}" id="categoryTab-{{ isset($categories[$categoryId]) ? $categoryId : 'misc'}}" data-toggle="tab" href="#category-{{ isset($categories[$categoryId]) ? $categoryId : 'misc'}}" role="tab">
+                        {!! isset($categories[$categoryId]) ? $categories[$categoryId]->name : 'Miscellaneous' !!}
+                    </a>
+                </li>
+            @endforeach
+        </ul>
+    </div>
+    <div class="card-body tab-content">
+        @foreach($pets as $categoryId=>$categoryPets)
+            <div class="tab-pane fade {{ $loop->first ? 'show active' : '' }}" id="category-{{ isset($categories[$categoryId]) ? $categoryId : 'misc'}}">
+            @foreach($categoryPets->chunk(4) as $chunk)
+                <div class="row mb-3">
+                    @foreach($chunk as $pet)
+                    <?php
                             $pet->pivot->pluck('pet_name', 'id');
                             $stackName = $pet->pivot->pluck('pet_name', 'id')->toArray()[$pet->pivot->id];
                             ?>
@@ -37,7 +46,8 @@
                                             <i class="fas fa-brush ml-1" data-toggle="tooltip" title="This pet has custom art."></i>
                                         @endif
                                         @if ($pet->pivot->character_id)
-                                            <span data-toggle="tooltip" title="Attached to {!! getDisplayName(\App\Models\Pet\Pet::class, $pet->pivot->chara_id) !!}"><i class="fas fa-link ml-1"></i></span>
+                                            <span data-toggle="tooltip" title="Attached to a character."><i class="fas fa-link ml-1"></i></span>
+                                            <p class="small">Attached to {!! getDisplayName(\App\Models\Character\Character::class, $pet->pivot->character_id) !!}</p>
                                         @endif
                                         @if ($pet->pivot->evolution_id)
                                             <span data-toggle="tooltip" title="This pet has evolved. Stage
@@ -59,9 +69,9 @@
                     </div>
                 @endforeach
             </div>
-        </div>
-    @endforeach
-
+        @endforeach
+    </div>
+</div>
 
     <h3>Latest Activity</h3>
     <table class="table table-sm">
