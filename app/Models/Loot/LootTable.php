@@ -115,57 +115,70 @@ class LootTable extends Model {
 
     **********************************************************************************************/
 
-    /**
-     * Rolls on the loot table and consolidates the rewards.
-     *
-     * @param int $quantity
-     *
-     * @return \Illuminate\Support\Collection
-     */
-    public function roll($quantity = 1) {
+    public function roll($quantity = 1, $giveAll = false) {
         $rewards = createAssetsArray();
-
         $loot = $this->loot;
-        $totalWeight = 0;
-        foreach ($loot as $l) {
-            $totalWeight += $l->weight;
-        }
-
-        for ($i = 0; $i < $quantity; $i++) {
-            $roll = mt_rand(0, $totalWeight - 1);
-            $result = null;
-            $prev = null;
-            $count = 0;
+    
+        if ($giveAll) {
             foreach ($loot as $l) {
+                if ($l->rewardable_type == 'LootTable') {
+                    $rewards = mergeAssetsArrays($rewards, $l->reward->roll($l->quantity, true));
+                } elseif ($l->rewardable_type == 'ItemCategory' || $l->rewardable_type == 'ItemCategoryRarity') {
+                    $rewards = mergeAssetsArrays($rewards, $this->rollCategory($l->rewardable_id, $l->quantity, ($l->data['criteria'] ?? null), ($l->data['rarity'] ?? null)));
+                } elseif ($l->rewardable_type == 'ItemRarity') {
+                    $rewards = mergeAssetsArrays($rewards, $this->rollRarityItem($l->quantity, $l->data['criteria'], $l->data['rarity']));
+                } else {
+                    addAsset($rewards, $l->reward, $l->quantity);
+                }
+            }
+            return $rewards;
+        }
+    
+        // Separate guaranteed drops from random drops
+        $guaranteed = $loot->filter(fn($l) => $l->weight >= 2);
+        $rollables = $loot->filter(fn($l) => $l->weight > 0 && $l->weight < 2);
+    
+        // Add guaranteed drops first
+        foreach ($guaranteed as $l) {
+            if ($l->rewardable_type == 'LootTable') {
+                $rewards = mergeAssetsArrays($rewards, $l->reward->roll($l->quantity));
+            } elseif ($l->rewardable_type == 'ItemCategory' || $l->rewardable_type == 'ItemCategoryRarity') {
+                $rewards = mergeAssetsArrays($rewards, $this->rollCategory($l->rewardable_id, $l->quantity, ($l->data['criteria'] ?? null), ($l->data['rarity'] ?? null)));
+            } elseif ($l->rewardable_type == 'ItemRarity') {
+                $rewards = mergeAssetsArrays($rewards, $this->rollRarityItem($l->quantity, $l->data['criteria'], $l->data['rarity']));
+            } else {
+                addAsset($rewards, $l->reward, $l->quantity);
+            }
+        }
+    
+        // Then roll for remaining entries
+        $totalWeight = $rollables->sum('weight');
+    
+        for ($i = 0; $i < $quantity; $i++) {
+            if ($totalWeight == 0) break;
+    
+            $roll = mt_rand(0, $totalWeight - 1);
+            $count = 0;
+            foreach ($rollables as $l) {
                 $count += $l->weight;
-
                 if ($roll < $count) {
-                    $result = $l;
+                    if ($l->rewardable_type == 'LootTable') {
+                        $rewards = mergeAssetsArrays($rewards, $l->reward->roll($l->quantity));
+                    } elseif ($l->rewardable_type == 'ItemCategory' || $l->rewardable_type == 'ItemCategoryRarity') {
+                        $rewards = mergeAssetsArrays($rewards, $this->rollCategory($l->rewardable_id, $l->quantity, ($l->data['criteria'] ?? null), ($l->data['rarity'] ?? null)));
+                    } elseif ($l->rewardable_type == 'ItemRarity') {
+                        $rewards = mergeAssetsArrays($rewards, $this->rollRarityItem($l->quantity, $l->data['criteria'], $l->data['rarity']));
+                    } else {
+                        addAsset($rewards, $l->reward, $l->quantity);
+                    }
                     break;
                 }
-                $prev = $l;
-            }
-            if (!$result) {
-                $result = $prev;
-            }
-
-            if ($result) {
-                // If this is chained to another loot table, roll on that table
-                if ($result->rewardable_type == 'LootTable') {
-                    $rewards = mergeAssetsArrays($rewards, $result->reward->roll($result->quantity));
-                } elseif ($result->rewardable_type == 'ItemCategory' || $result->rewardable_type == 'ItemCategoryRarity') {
-                    $rewards = mergeAssetsArrays($rewards, $this->rollCategory($result->rewardable_id, $result->quantity, ($result->data['criteria'] ?? null), ($result->data['rarity'] ?? null)));
-                } elseif ($result->rewardable_type == 'ItemRarity') {
-                    $rewards = mergeAssetsArrays($rewards, $this->rollRarityItem($result->quantity, $result->data['criteria'], $result->data['rarity']));
-                } else {
-                    addAsset($rewards, $result->reward, $result->quantity);
-                }
             }
         }
-
+    
         return $rewards;
     }
-
+    
     /**
      * Rolls on an item category.
      *
