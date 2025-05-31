@@ -28,21 +28,21 @@ class Kernel extends ConsoleKernel {
         $schedule->command('clean-donations')
             ->everyMinute();
         $schedule->exec('rm public/images/avatars/*.tmp')
-            ->daily()->at('01:02');
+            ->daily()->at('01:00');
         $schedule->command('update-extension-tracker')
             ->daily()->at('01:05');
         $schedule->command('update-credits')
             ->daily()->at('01:10');
         $schedule->command('update-staff-reward-actions')
-            ->daily()->at('01:01');
-        $schedule->command('restock-shops')
             ->daily()->at('01:15');
+        $schedule->command('restock-shops')
+            ->daily()->at('01:20');
         $schedule->command('update-timed-stock')
             ->everyMinute();
         $schedule->command('distribute-birthday-rewards')
             ->monthly();
         $schedule->command('reset-hol')
-            ->daily()->at('01:20');
+            ->daily()->at('01:25');
         $schedule->command('update-timed-daily')
             ->everyMinute();
     }
