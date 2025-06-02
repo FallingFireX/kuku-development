@@ -16,7 +16,7 @@
             </button>
             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                 <li><a class="dropdown-item" href="https://kukuri-arpg.w3spaces.com/activities/quests.html">Quest</a></li>
-                <li><a class="dropdown-item" href="https://www.deviantart.com/kukuri-arpg/journal/Coliseum-830233023">Coliseum</a></li>
+                <li><a class="dropdown-item" href="https://www.kukuri-arpg.com/info/coliseum">Coliseum</a></li>
                 <li><a class="dropdown-item" href="https://www.deviantart.com/momma-kuku/journal/Activity-letters-743764050">Activity Letters</a></li>
                 <li><a class="dropdown-item" href="https://kukuri-arpg.w3spaces.com/activities/traveling-merchant.html">Traveling Merchant</a></li>
                 <div class="dropdown-divider"></div>
