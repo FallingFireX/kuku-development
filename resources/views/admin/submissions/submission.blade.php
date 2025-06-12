@@ -59,11 +59,8 @@
         </div>
         <h2>Comments</h2>
         <div class="card mb-3">
-    <div class="card-body">
-        {!! preg_replace('/\s*style=("|\')(.*?)\1/', '', nl2br($submission->comments)) !!}
-    </div>
-</div>
-
+            <div class="card-body"> {!! preg_replace('/\s*style=("|\')(.*?)\1/', '', nl2br($submission->comments)) !!}</div>
+        </div>
         @if (Auth::check() && $submission->staff_comments && ($submission->user_id == Auth::user()->id || Auth::user()->hasPower('manage_submissions')))
             <h2>Staff Comments ({!! $submission->staff->displayName !!})</h2>
             <div class="card mb-3">
@@ -77,13 +74,38 @@
             </div>
         @endif
 
-        {!! Form::open(['url' => url()->current(), 'id' => 'submissionForm']) !!}
+        {!! Form::open(['url' => url()->current(), 'id' => 'submissionForm', 'onsubmit' => "$(this).find('input').prop('disabled', false)"]) !!}
 
-        <h2>Rewards</h2>
+        @if (isset($submission->data['criterion']))
+            <h2 class="mt-5">Criteria Rewards</h2>
+            @foreach ($submission->data['criterion'] as $key => $criterionData)
+                <div class="card p-3 mb-2">
+                    @php $criterion = \App\Models\Criteria\Criterion::where('id', $criterionData['id'])->first() @endphp
+                    <h3>{!! $criterion->displayName !!}</h3>
+                    {!! Form::hidden('criterion[' . $key . '][id]', $criterionData['id']) !!}
+                    @include('criteria._minimum_requirements', [
+                        'criterion' => $criterion,
+                        'values' => $criterionData,
+                        'minRequirements' => $submission->prompt->criteria->where('criterion_id', $criterionData['id'])->first()->minRequirements ?? null,
+                        'title' => 'Selections',
+                        'limitByMinReq' => true,
+                        'id' => $key,
+                        'criterion_currency' => isset($criterionData['criterion_currency_id']) ? $criterionData['criterion_currency_id'] : $criterion->currency_id,
+                    ])
+                </div>
+            @endforeach
+        @endif
+
+
+        <h2 class="mt-4">Rewards</h2>
         @include('widgets._loot_select', ['loots' => $submission->rewards, 'showLootTables' => true, 'showRaffles' => true])
+        @if ($submission->prompt_id)
+            <div class="mb-3">
+                @include('home._prompt', ['prompt' => $submission->prompt, 'staffView' => true])
+            </div>
+        @endif
 
         <h2>Characters</h2>
-        <p>Only focus characters will receive skill rewards. Exp and stat point rewards are on a per-character basis.</p>
         <div id="characters" class="mb-3">
             @if (count($submission->characters()->whereRelation('character', 'deleted_at', null)->get()) != count($submission->characters()->get()))
                 <div class="alert alert-warning">
@@ -91,7 +113,7 @@
                 </div>
             @endif
             @foreach ($submission->characters()->whereRelation('character', 'deleted_at', null)->get() as $character)
-                @include('widgets._character_select_entry', ['character' => $character, 'expanded_rewards' => $expanded_rewards])
+                @include('widgets._character_select_entry', ['characterCurrencies' => $characterCurrencies, 'items' => $items, 'tables' => $tables, 'character' => $character, 'expanded_rewards' => $expanded_rewards])
             @endforeach
         </div>
         <div class="text-right mb-3">
@@ -172,12 +194,8 @@
                         </div>
                         <div class="col-md-10">
                             <div class="form-group">
-                                {!! Form::label('slug[]', 'Character Code') !!}
-                                {!! Form::text('slug[]', null, ['class' => 'form-control character-code']) !!}
-                            </div>
-                            <div class="form-group col-6">
-                                {!! Form::label('character-is-focus[]', 'Focus Character?', ['class' => 'form-check-label ']) !!}
-                                {!! Form::select('character-is-focus[]', [0 => 'No', 1 => 'Yes'], 0, ['class' => 'form-control character-is-focus']) !!}
+                                {!! Form::label('slug', 'Character Code') !!}
+                                {!! Form::select('slug[]', $characters, null, ['class' => 'form-control character-code', 'placeholder' => 'Select Character']) !!}
                             </div>
                             <div class="character-rewards hide">
                                 <h4>Character Rewards</h4>
@@ -206,26 +224,15 @@
             </div>
             <table>
                 <tr class="character-reward-row">
+
                     @if ($expanded_rewards)
                         <td>
-                            {!! Form::select(
-                                'character_rewardable_type[]',
-                                ['Item' => 'Item', 'Currency' => 'Currency', 'LootTable' => 'Loot Table', 'Exp' => 'Exp', 'Points' => 'Stat Points', 'Element' => 'Element', 'StatusEffect' => 'Status Effect', 'Skill' => 'Skill'],
-                                null,
-                                [
-                                    'class' => 'form-control character-rewardable-type',
-                                    'placeholder' => 'Select Reward Type',
-                                ],
-                            ) !!}
+                            {!! Form::select('character_rewardable_type[]', ['Item' => 'Item', 'Currency' => 'Currency', 'LootTable' => 'Loot Table'], null, ['class' => 'form-control character-rewardable-type', 'placeholder' => 'Select Reward Type']) !!}
                         </td>
                         <td class="lootDivs">
                             <div class="character-currencies hide">{!! Form::select('character_rewardable_id[]', $characterCurrencies, 0, ['class' => 'form-control character-currency-id', 'placeholder' => 'Select Currency']) !!}</div>
                             <div class="character-items hide">{!! Form::select('character_rewardable_id[]', $items, 0, ['class' => 'form-control character-item-id', 'placeholder' => 'Select Item']) !!}</div>
                             <div class="character-tables hide">{!! Form::select('character_rewardable_id[]', $tables, 0, ['class' => 'form-control character-table-id', 'placeholder' => 'Select Loot Table']) !!}</div>
-                            <div class="character-claymores hide">{!! Form::number('character_claymores_id[]', 1, ['class' => 'form-control character-claymores-id']) !!}</div>
-                            <div class="character-elements hide">{!! Form::select('character_rewardable_id[]', $elements, 0, ['class' => 'form-control character-element-id', 'placeholder' => 'Select Element']) !!}</div>
-                            <div class="character-statuses hide">{!! Form::select('character_rewardable_id[]', $statuses, 0, ['class' => 'form-control character-status-id', 'placeholder' => 'Select Status Effect']) !!}</div>
-                            <div class="character-skills hide">{!! Form::select('character_rewardable_id[]', $skills, 0, ['class' => 'form-control character-skill-id', 'placeholder' => 'Select Skill']) !!}</div>
                         </td>
                     @else
                         <td class="lootDivs">
@@ -354,33 +361,6 @@
                     $submissionForm.attr('action', '{{ url()->current() }}/cancel');
                     $submissionForm.submit();
                 });
-
-                $('.original.skill-select').selectize();
-
-                $('#add-skill').on('click', function(e) {
-                    e.preventDefault();
-                    addSkillRow();
-                });
-                $('.remove-skill').on('click', function(e) {
-                    e.preventDefault();
-                    removeSkillRow($(this));
-                });
-
-                function addSkillRow() {
-                    var $clone = $('.skill-row').clone();
-                    $('#skillList').append($clone);
-                    $clone.removeClass('hide skill-row');
-                    $clone.addClass('d-flex');
-                    $clone.find('.remove-skill').on('click', function(e) {
-                        e.preventDefault();
-                        removeSkillRow($(this));
-                    })
-                    $clone.find('.skill-select').selectize();
-                }
-
-                function removeSkillRow($trigger) {
-                    $trigger.parent().remove();
-                }
             });
         </script>
     @endif
