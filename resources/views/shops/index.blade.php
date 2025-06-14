@@ -12,15 +12,18 @@
     </h1>
 
     <div class="row shops-row">
-        @foreach ($shops as $shop)
-            @if ($shop->is_staff)
-                @if (Auth::check() && Auth::user()->isstaff)
-                    @include('shops._shop')
-                @endif
-            @else
+    @foreach ($shops as $shop)
+    @if ($shop->is_visible)
+        @if ($shop->is_staff)
+            @if (Auth::check() && Auth::user()->isstaff)
                 @include('shops._shop')
             @endif
-        @endforeach
+        @else
+            @include('shops._shop')
+        @endif
+    @endif
+@endforeach
+
         <div class="col-md-3 col-6 mb-3 text-center">
         <div class="shop-image">
             <a href="{{ url('shops/donation-shop') }}"><img src="{{ asset('images/donation_shop.png') }}" /></a>
