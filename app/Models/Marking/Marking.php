@@ -14,7 +14,7 @@ class Marking extends Model {
      * @var array
      */
     protected $fillable = [
-        'slug', 'species_id', 'rarity_id', 'name', 'marking_image_id', 'description', 'short_description', 'is_visible', 'recessive', 'dominant'
+        'slug', 'species_id', 'rarity_id', 'name', 'marking_image_id', 'description', 'short_description', 'is_visible', 'recessive', 'dominant',
     ];
 
     /**
