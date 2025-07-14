@@ -194,10 +194,10 @@ Route::group(['prefix' => 'data', 'namespace' => 'Data', 'middleware' => 'power:
     // MARKINGS
     Route::get('markings', 'MarkingController@getMarkingIndex');
     Route::get('markings/create', 'MarkingController@getCreateMarking');
-    Route::get('marking/edit/{id}', 'MarkingController@getEditMarking');
+    Route::get('markings/edit/{id}', 'MarkingController@getEditMarking');
     Route::get('markings/delete/{id}', 'MarkingController@getDeleteMarking');
     Route::post('markings/create', 'MarkingController@postCreateEditMarking');
-    Route::post('markings/edit/{id?}', 'MarkingController@postCreateEditMarking');
+    Route::post('markings/edit/{id}', 'MarkingController@postCreateEditMarking');
     Route::post('markings/delete/{id}', 'MarkingController@postDeleteMarking');
 
     // CHARACTER CATEGORIES
