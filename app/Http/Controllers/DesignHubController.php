@@ -1,35 +1,22 @@
 <?php
 
-
 namespace App\Http\Controllers;
 
-
-use Auth;
-use db;
-
-
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use App\Models\SitePage;
-use App\Models\Rarity;
-use App\Models\Marking\Marking;
-use App\Models\Feature\FeatureCategory;
 use App\Models\Feature\Feature;
+use App\Models\Marking\Marking;
+use Auth;
+use Illuminate\Http\Request;
 
-
-class DesignHubController extends Controller
-{
+class DesignHubController extends Controller {
     public function getDesignHubPageView() {
-        return view('designhub.designhub');     
+        return view('designhub.designhub');
     }
 
-
     public function getDesignHubPage(Request $request) {
-
-    return view('designhub.designhub', [ 
-            'markings' => DesignHubController::getDesignHubGenetics($request),
-            'corrupt_mutations' => DesignHubController::getDesignHubTraitByCategory($request, 4),
-            'magical_mutations' => DesignHubController::getDesignHubTraitByCategory($request, 5),
+        return view('designhub.designhub', [
+            'markings'          => self::getDesignHubGenetics($request),
+            'corrupt_mutations' => self::getDesignHubTraitByCategory($request, 4),
+            'magical_mutations' => self::getDesignHubTraitByCategory($request, 5),
         ]);
     }
 
@@ -39,6 +26,7 @@ class DesignHubController extends Controller
             'name',
             'variant',
         ]);
+
         return $query->orderBy('name', 'ASC')->paginate(20)->appends($request->query());
     }
 
