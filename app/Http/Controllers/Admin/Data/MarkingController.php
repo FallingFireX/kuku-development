@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Admin\Data;
 
 use App\Http\Controllers\Controller;
-use App\Models\Rarity;
 use App\Models\Marking\Marking;
+use App\Models\Rarity;
 use App\Models\Species\Species;
 use App\Services\MarkingService;
 use Illuminate\Http\Request;
@@ -19,7 +19,6 @@ class MarkingController extends Controller {
     | Handles creation/editing of character markings & genetics.
     |
     */
-
 
     /**********************************************************************************************
 
