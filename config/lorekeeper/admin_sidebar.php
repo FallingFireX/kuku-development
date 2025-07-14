@@ -175,6 +175,10 @@ return [
                 'url'  => 'admin/data/traits',
             ],
             [
+                'name' => 'Markings',
+                'url'  => 'admin/data/markings',
+            ],
+            [
                 'name' => 'Shops',
                 'url'  => 'admin/data/shops',
             ],

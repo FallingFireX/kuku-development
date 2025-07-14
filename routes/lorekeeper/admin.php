@@ -191,6 +191,15 @@ Route::group(['prefix' => 'data', 'namespace' => 'Data', 'middleware' => 'power:
     Route::post('traits/edit/{id?}', 'FeatureController@postCreateEditFeature');
     Route::post('traits/delete/{id}', 'FeatureController@postDeleteFeature');
 
+    // MARKINGS
+    Route::get('markings', 'MarkingController@getMarkingIndex');
+    Route::get('markings/create', 'MarkingController@getCreateMarking');
+    Route::get('marking/edit/{id}', 'MarkingController@getEditMarking');
+    Route::get('markings/delete/{id}', 'MarkingController@getDeleteMarking');
+    Route::post('markings/create', 'MarkingController@postCreateEditMarking');
+    Route::post('markings/edit/{id?}', 'MarkingController@postCreateEditMarking');
+    Route::post('markings/delete/{id}', 'MarkingController@postDeleteMarking');
+
     // CHARACTER CATEGORIES
     Route::get('character-categories', 'CharacterCategoryController@getIndex');
     Route::get('character-categories/create', 'CharacterCategoryController@getCreateCharacterCategory');
