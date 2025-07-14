@@ -26,8 +26,12 @@ class DesignHubController extends Controller
 
     public function getDesignHubPage(Request $request) {
 
-    return view('designhub.designhub', [ 
-            'markings' => DesignHubController::getDesignHubGenetics($request),
+        $markings = DesignHubController::getDesignHubGenetics($request);
+        $rarities = Rarity::whereIn('id', Marking::select('rarity_id')->distinct()->get())->get();
+
+        return view('designhub.designhub', [ 
+            'markings'      => $markings,
+            'rarity_list'   => $rarities,
             'corrupt_mutations' => DesignHubController::getDesignHubTraitByCategory($request, 4),
             'magical_mutations' => DesignHubController::getDesignHubTraitByCategory($request, 5),
         ]);

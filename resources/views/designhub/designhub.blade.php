@@ -31,21 +31,28 @@
     </div>
     <div class="card-body">
         <input type="text" placeholder="Search markings by name or code..." class="searchBar bg-dark rounded border-0 mb-4 form-control" data-id="markingSearch" />
-        <div class="d-flex flex-wrap justify-content-between searchContent" data-id="markingSearch">
-            @if ($markings)
-                {!! $markings->render() !!}
-                    @foreach ($markings as $marking)
 
-                        @include('designhub._entry', [
-                            'imageUrl' => '/images/data/traits/pwGUf24yDN5-image.png',
-                            'name' => $marking->name . ' ('.$marking->recessive.'/'.$marking->dominant.')',
-                            'description' => $marking->short_description,
-                            'url'         => 'design-hub/marking/'.$marking->slug,
-                        ])
-                    @endforeach
-                {!! $markings->render() !!}
-            @endif
-        </div>
+        @if ($rarity_list)
+            @foreach ($rarity_list as $rarity_item)
+                <div class="card rounded mb-4">
+                    <div class="card-header"><span class="rarity-indicator" style="background-color:#{{ $rarity_item->color }}"></span> {{ $rarity_item->name }} Markings</div>
+                    <div class="card-body">
+                        <div class="d-flex flex-wrap justify-content-between searchContent" data-id="markingSearch">
+                            @foreach ($markings as $marking)
+                                @if ($marking->rarity_id === $rarity_item->id)
+                                    @include('designhub._entry', [
+                                        'imageUrl' => '/images/data/traits/pwGUf24yDN5-image.png',
+                                        'name' => $marking->name . ' ('.$marking->recessive.'/'.$marking->dominant.')',
+                                        'description' => $marking->short_description,
+                                        'url'         => 'design-hub/marking/'.$marking->slug,
+                                    ])
+                                @endif
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
+            @endforeach
+        @endif
     </div>
 </div>
 
