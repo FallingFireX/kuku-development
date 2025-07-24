@@ -1,7 +1,9 @@
 @extends('layouts.app')
 
 
-@section('title') Design Hub @endsection
+@section('title')
+    Design Hub
+@endsection
 
 
 @section('content')
@@ -10,10 +12,9 @@
 <h1>{{ $marking->name }} <span style="text-transform:none;">({{ $marking->recessive }}/{{ $marking->dominant }})</span></h1>
 <p>{{ $marking->short_description }}</p>
 
-<div class="site-page-content parsed-text">
+    <div class="site-page-content parsed-text">
         {!! $marking->description !!}
     </div>
-
 @endsection
 
 @section('scripts')
