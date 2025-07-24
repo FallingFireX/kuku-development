@@ -128,7 +128,7 @@
                         {!! $geno !!}
                     </div>
                 </div>
-                
+
                 <div>
                     <strong>Uploaded:</strong> {!! pretty_date($image->created_at) !!}
                 </div>
