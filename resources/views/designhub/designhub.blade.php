@@ -17,7 +17,7 @@
         <p>These guides are for every reosean! They include the basic principles as well as other resources you can use to find all of the needed information!</p>
         <div class="d-flex flex-gap justify-content-between align-items-center">
             <a class="btn btn-primary" href="#" role="button">General Design Principles</a>
-            <a class="btn btn-secondary" href="#" role="button">Base Coats</a>
+            <a class="btn btn-secondary" href="/design-hub/base-coats/" role="button">Base Coats</a>
             <a class="btn btn-secondary" href="#" role="button">Designing Your Import</a>
             <a class="btn btn-secondary" href="#" role="button">Backgrounds</a>
             <a class="btn btn-secondary" href="#" role="button">Design Approval Checklist</a>
@@ -41,7 +41,7 @@
                             @foreach ($markings as $marking)
                                 @if ($marking->rarity_id === $rarity_item->id)
                                     @include('designhub._entry', [
-                                        'imageUrl' => '/images/data/traits/pwGUf24yDN5-image.png',
+                                        'imageUrl' => file_exists($marking->imageDirectory . '/' . $marking->imageFileName) ? asset($marking->imageDirectory . '/' . $marking->imageFileName) : '/images/account.png',
                                         'name' => $marking->name . ' ('.$marking->recessive.'/'.$marking->dominant.')',
                                         'description' => $marking->short_description,
                                         'url'         => 'design-hub/marking/'.$marking->slug,
@@ -70,10 +70,29 @@
                         {!! $corrupt_mutations->render() !!}
                             @foreach ($corrupt_mutations as $mutation)
 
+                                        <?php 
+                                            $text = $mutation->description;
+                                            $short_description = '';
+
+                                            if($text) {
+                                                $dom = new DOMDocument();
+                                                libxml_use_internal_errors(true);
+                                                $dom->loadHTML($text);
+                                                libxml_clear_errors();
+
+                                                $paragraphs = $dom->getElementsByTagName('p');
+
+                                                if ($paragraphs->length > 0) {
+                                                    $short_description = $paragraphs->item(0)->textContent; // Get the text content of the first <p> tag
+                                                    
+                                                }
+                                            }
+                                        ?>
+
                                 @include('designhub._entry', [
-                                    'imageUrl' => $mutation->imageUrl ?? '/images/data/traits/XSqTnJ6wYW3-image.png',
+                                    'imageUrl' => $mutation->imageUrl ?? '/images/account.png',
                                     'name' => $mutation->name,
-                                    'description' => 'add a short description field',
+                                    'description' => $short_description ?? '',
                                     'url'         => '/world/traits?name='.$mutation->name,
                                 ])
                             @endforeach
@@ -90,10 +109,27 @@
                         {!! $magical_mutations->render() !!}
                             @foreach ($magical_mutations as $mutation)
 
+                                <?php 
+                                    $text = $mutation->description;
+                                    $short_description = '';
+
+                                    if($text) {
+                                        $dom = new DOMDocument();
+                                        libxml_use_internal_errors(true);
+                                        $dom->loadHTML($text);
+                                        libxml_clear_errors();
+                                        $paragraphs = $dom->getElementsByTagName('p');
+                                        if ($paragraphs->length > 0) {
+                                            $short_description = $paragraphs->item(0)->textContent;
+                                            
+                                        }
+                                    }
+                                ?>
+
                                 @include('designhub._entry', [
-                                    'imageUrl' => $mutation->imageUrl ?? '/images/data/traits/XSqTnJ6wYW3-image.png',
+                                    'imageUrl' => $mutation->imageUrl ?? '/images/account.png',
                                     'name' => $mutation->name,
-                                    'description' => 'add a short description field',
+                                    'description' => $short_description ?? '',
                                     'url'         => '/world/traits?name='.$mutation->name,
                                 ])
                             @endforeach

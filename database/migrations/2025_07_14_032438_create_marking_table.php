@@ -21,6 +21,7 @@ return new class extends Migration {
             $table->text('description')->nullable();
             $table->string('recessive', 10)->nullable();
             $table->string('dominant', 10)->nullable();
+            $table->integer('order_in_genome')->nullable();
             $table->boolean('is_visible');
         });
     }

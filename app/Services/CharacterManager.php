@@ -10,6 +10,8 @@ use App\Models\Character\CharacterCategory;
 use App\Models\Character\CharacterCurrency;
 use App\Models\Character\CharacterDesignUpdate;
 use App\Models\Character\CharacterFeature;
+use App\Models\Character\CharacterMarking;
+use App\Models\Marking\Marking;
 use App\Models\Character\CharacterImage;
 use App\Models\Character\CharacterTransfer;
 use App\Models\Sales\SalesCharacter;
@@ -136,6 +138,8 @@ class CharacterManager extends Service {
             if (!$image) {
                 throw new \Exception('Error happened while trying to create image.');
             }
+
+            $markings = $this->handleCharacterMarkings($data, $character);
 
             // Update the character's image ID
             $character->character_image_id = $image->id;
@@ -1855,6 +1859,7 @@ class CharacterManager extends Service {
                 'character_category_id', 'rarity_id', 'user_id',
                 'number', 'slug', 'description',
                 'sale_value', 'transferrable_at', 'is_visible',
+                'base', 'secondary_base', 'is_chimera'
             ]);
 
             $characterData['name'] = ($isMyo && isset($data['name'])) ? $data['name'] : null;
@@ -1868,6 +1873,7 @@ class CharacterManager extends Service {
             $characterData['is_gift_writing_allowed'] = 0;
             $characterData['is_trading'] = 0;
             $characterData['parsed_description'] = parse($data['description']);
+            $characterData['base'] = (isset($characterData['is_chimera']) ? $characterData['base'].'|'.$characterData['secondary_base'] : $characterData['base']);
             if ($isMyo) {
                 $characterData['is_myo_slot'] = 1;
             }
@@ -2050,5 +2056,103 @@ class CharacterManager extends Service {
         }
 
         return $result;
+    }
+
+    /**
+     * Updates a character's markings.
+     *
+     * @param array                                $data
+     * @param \App\Models\Character\Character      $character
+     * @param \App\Models\User\User                $user
+     *
+     * @return bool
+     */
+    public function updateCharacterMarkings($data, $character) {
+        DB::beginTransaction();
+
+        try {
+            // Clear old markings
+            $character->markings()->delete();
+
+            $is_chimera = $data['is_chimera'];
+            $glintID = 4; //Change this ID to whatever the ID of the glint modifier is
+
+            // Attach markings
+            foreach ($data['marking_id'] as $key => $markingId) {
+                if ($markingId) {
+                    $temp = Marking::where('marking_id', $markingId)->get();
+                    $is_dominant = $data['is_dominant'][$key];
+                    
+                    if($markingId === $glintID) {
+                        $glint = ($is_dominant ? $data['glint_1'].'|'.$data['glint_2'] : $data['glint_1']);
+                    }
+
+                    $marking = CharacterMarking::create([
+                        'character_id'  => $character->id, 
+                        'marking_id'    => $markingId,
+                        'code'          => ($is_dominant ? $temp->recessive : $temp->dominant),
+                        'order'         => $temp->order_in_genome,
+                        'is_dominant'   => $is_dominant,
+                        'data'          => $data['side_id'][$key] ?? null,
+                        'base_id'       => (isset($glint) ? $glint : null),
+                    ]);
+                }
+            }
+
+            $character->save();
+
+            return $this->commitReturn(true);
+        } catch (\Exception $e) {
+            $this->setError('error', $e->getMessage());
+        }
+
+        return $this->rollbackReturn(false);
+    }
+
+    /**
+     * Handles character marking data.
+     *
+     * @param array $data
+     * @param mixed $character
+     *
+     * @return \App\Models\Character\Character           $character
+     * @return \App\Models\Character\CharacterMarkings|bool
+     */
+    private function handleCharacterMarkings($data, $character) {
+        try {
+            $markingData = Arr::only($data, [
+                'marking_id', 'is_dominant', 'side_id',
+            ]);
+
+            $all_data = [];
+
+            // Attach markings
+            foreach ($data['marking_id'] as $key => $markingId) {
+                if ($markingId) {
+                    $temp = Marking::where('marking_id', $markingId)->get();
+                    $is_dominant = $data['is_dominant'][$key];
+                    
+                    if($markingId === $glintID) {
+                        $glint = ($is_dominant ? $data['glint_1'].'|'.$data['glint_2'] : $data['glint_1']);
+                    }
+
+                    $marking = CharacterMarking::create([
+                        'character_id'  => $character->id, 
+                        'marking_id'    => $markingId,
+                        'code'          => ($is_dominant ? $temp->recessive : $temp->dominant),
+                        'order'         => $temp->order_in_genome,
+                        'is_dominant'   => $is_dominant,
+                        'data'          => $data['side_id'][$key] ?? null,
+                        'base_id'       => (isset($glint) ? $glint : null),
+                    ]);
+                }
+            }
+
+            return true;
+        } catch (\Exception $e) {
+            $this->setError('error', $e->getMessage());
+        }
+
+        return false;
     }
 }

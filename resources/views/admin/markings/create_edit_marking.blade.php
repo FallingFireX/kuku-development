@@ -9,7 +9,7 @@
 
     <h1>{{ $marking->id ? 'Edit' : 'Create' }} Marking
         @if ($marking->id)
-            <a href="#" class="btn btn-danger float-right delete-feature-button">Delete Marking</a>
+            <a href="#" class="btn btn-danger float-right delete-marking-button">Delete Marking</a>
         @endif
     </h1>
 
@@ -35,11 +35,11 @@
     <div class="form-group">
         {!! Form::label('Preview Image (Optional)') !!} {!! add_help('This image is used only on design hub page.') !!}
         <div class="custom-file">
-            {!! Form::label('image', 'Choose file...', ['class' => 'custom-file-label']) !!}
+            {!! Form::label('image', file_exists($marking->imageDirectory . '/' . $marking->imageFileName) ?  $marking->imageFileName : 'Choose file...', ['class' => 'custom-file-label']) !!}
             {!! Form::file('image', ['class' => 'custom-file-input']) !!}
         </div>
         <div class="text-muted">Recommended size: 200px x 200px</div>
-        @if ($marking->marking_image_id !== null)
+        @if (file_exists($marking->imageDirectory . '/' . $marking->imageFileName))
             <div class="form-check">
                 {!! Form::checkbox('remove_image', 1, false, ['class' => 'form-check-input']) !!}
                 {!! Form::label('remove_image', 'Remove current image', ['class' => 'form-check-label']) !!}
@@ -107,7 +107,7 @@
     @parent
     <script>
         $(document).ready(function() {
-            $('.delete-feature-button').on('click', function(e) {
+            $('.delete-marking-button').on('click', function(e) {
                 e.preventDefault();
                 loadModal("{{ url('admin/data/markings/delete') }}/{{ $marking->id }}", 'Delete Marking');
             });

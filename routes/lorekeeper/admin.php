@@ -200,6 +200,15 @@ Route::group(['prefix' => 'data', 'namespace' => 'Data', 'middleware' => 'power:
     Route::post('markings/edit/{id}', 'MarkingController@postCreateEditMarking');
     Route::post('markings/delete/{id}', 'MarkingController@postDeleteMarking');
 
+    // BASES
+    Route::get('bases', 'BaseController@getBasesIndex');
+    Route::get('base/create', 'BaseController@getCreateBase');
+    Route::get('base/edit/{id}', 'BaseController@getEditBase');
+    Route::get('base/delete/{id}', 'BaseController@getDeleteBase');
+    Route::post('base/create', 'BaseController@postCreateEditBase');
+    Route::post('base/edit/{id}', 'BaseController@postCreateEditBase');
+    Route::post('base/delete/{id}', 'BaseController@postDeleteBase');
+
     // CHARACTER CATEGORIES
     Route::get('character-categories', 'CharacterCategoryController@getIndex');
     Route::get('character-categories/create', 'CharacterCategoryController@getCreateCharacterCategory');

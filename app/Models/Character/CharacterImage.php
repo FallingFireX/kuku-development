@@ -4,6 +4,7 @@ namespace App\Models\Character;
 
 use App\Models\Model;
 use App\Models\Rarity;
+use App\Models\Marking\Marking;
 use App\Models\Species\Species;
 use App\Models\Species\Subtype;
 use App\Models\User\User;
@@ -116,6 +117,18 @@ class CharacterImage extends Model {
             ->join('features', 'features.id', '=', 'character_features.feature_id')
             ->leftJoin('feature_categories', 'feature_categories.id', '=', 'features.feature_category_id')
             ->select(['character_features.*', 'features.*', 'character_features.id AS character_feature_id', 'feature_categories.sort']);
+
+        return $query->orderByDesc('sort');
+    }
+
+    /**
+     * Get the markings attached to the character image, ordered by display order.
+     */
+    public function markings() {
+        // $query = $this
+        //     ->hasMany(Marking::class, 'id')->whereNotNull('characters.markings')
+        //     ->join('markings', 'markings.id', '=', 'characters.markings') // <-- need to parse all serialized arrays... whoops
+        //     ->select(['character_features.*', 'features.*', 'character_features.id AS character_feature_id', 'feature_categories.sort']);
 
         return $query->orderByDesc('sort');
     }

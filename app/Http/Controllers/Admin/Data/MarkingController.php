@@ -95,7 +95,7 @@ class MarkingController extends Controller {
     public function postCreateEditMarking(Request $request, MarkingService $service, $id = null) {
         $id ? $request->validate(Marking::$updateRules) : $request->validate(Marking::$createRules);
         $data = $request->only([
-            'name', 'slug', 'species_id', 'rarity_id', 'description', 'marking_image_id', 'is_visible', 'recessive', 'dominant', 'short_description',
+            'name', 'slug', 'species_id', 'rarity_id', 'description', 'image', 'is_visible', 'recessive', 'dominant', 'short_description',
         ]);
         if ($id && $service->updateMarking(Marking::find($id), $data, Auth::user())) {
             flash('Marking updated successfully.')->success();
@@ -137,7 +137,7 @@ class MarkingController extends Controller {
      */
     public function postDeleteMarking(Request $request, MarkingService $service, $id) {
         if ($id && $service->deleteMarking(Marking::find($id), Auth::user())) {
-            flash('Trait deleted successfully.')->success();
+            flash('Marking deleted successfully.')->success();
         } else {
             foreach ($service->errors()->getMessages()['error'] as $error) {
                 flash($error)->error();

@@ -46,12 +46,8 @@ class MarkingService extends Service {
 
             $image = null;
             if (isset($data['image']) && $data['image']) {
-                $data['has_image'] = 1;
-                $data['hash'] = randomString(10);
                 $image = $data['image'];
                 unset($data['image']);
-            } else {
-                $data['has_image'] = 0;
             }
 
             $marking = Marking::create($data);
@@ -101,8 +97,6 @@ class MarkingService extends Service {
 
             $image = null;
             if (isset($data['image']) && $data['image']) {
-                $data['has_image'] = 1;
-                $data['hash'] = randomString(10);
                 $image = $data['image'];
                 unset($data['image']);
             }
@@ -113,7 +107,7 @@ class MarkingService extends Service {
                 throw new \Exception('Failed to log admin action.');
             }
 
-            if ($marking) {
+            if ($image) {
                 $this->handleImage($image, $marking->imagePath, $marking->imageFileName);
             }
 
@@ -138,7 +132,7 @@ class MarkingService extends Service {
 
         try {
             // Check first if the marking is currently in use
-            if (DB::table('character_markings')->where('marking_id', $marking->id)->exists()) {
+            if (DB::table('characters')->where('markings', 'like', '%'.$marking->id.'%')->exists()) {
                 throw new \Exception('A character with this marking exists. Please remove the marking first.');
             }
 
@@ -146,7 +140,7 @@ class MarkingService extends Service {
                 throw new \Exception('Failed to log admin action.');
             }
 
-            if ($marking->has_image) {
+            if (file_exists($marking->imageDirectory . '/' . $marking->imageFileName)) {
                 $this->deleteImage($marking->imagePath, $marking->imageFileName);
             }
             $marking->delete();

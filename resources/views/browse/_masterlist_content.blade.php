@@ -102,6 +102,24 @@
                 @endif
             </div>
             <hr />
+            <a href="#" class="float-right btn btn-sm btn-outline-primary add-marking-button">Add Marking</a>
+            {!! Form::label('Has Markings: ') !!} {!! add_help('This will narrow the search to characters that have ALL of the selected markings at the same time.') !!}
+            <div id="markingBody" class="row w-100">
+                @if (Request::get('marking_id'))
+                    @foreach (Request::get('marking_id') as $markingId)
+                        <div class="marking-block col-md-4 col-sm-6 mt-3 p-1">
+                            <div class="card">
+                                <div class="card-body d-flex">
+                                    {!! Form::select('marking[]', $markings, $markingId, ['class' => 'form-control marking-select selectize', 'placeholder' => 'Select Marking']) !!}
+                                    <a href="#" class="btn marking-remove ml-2"><i class="fas fa-times"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                @endif
+            </div>
+
+            <hr />
             <div class="masterlist-search-field">
                 {!! Form::checkbox('search_images', 1, Request::get('search_images'), ['class' => 'form-check-input mr-3', 'data-toggle' => 'toggle']) !!}
                 <span class="ml-2">Include all character images in search {!! add_help(
@@ -136,6 +154,16 @@
             <div class="card-body d-flex">
                 {!! Form::select('feature_id[]', $features, null, ['class' => 'form-control feature-select selectize', 'placeholder' => 'Select Trait']) !!}
                 <a href="#" class="btn feature-remove ml-2"><i class="fas fa-times"></i></a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="hide" id="markingContent">
+    <div class="marking-block col-md-4 col-sm-6 mt-3 p-1">
+        <div class="card">
+            <div class="card-body d-flex">
+                {!! Form::select('marking_id[]', $markings, null, ['class' => 'form-control marking-select selectize', 'placeholder' => 'Select Marking']) !!}
+                <a href="#" class="btn marking-remove ml-2"><i class="fas fa-times"></i></a>
             </div>
         </div>
     </div>

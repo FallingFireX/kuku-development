@@ -5,7 +5,7 @@
     <p>Are you sure you want to delete <strong>{{ $marking->name }}</strong>?</p>
 
     <div class="text-right">
-        {!! Form::submit('Delete Trait', ['class' => 'btn btn-danger']) !!}
+        {!! Form::submit('Delete Marking', ['class' => 'btn btn-danger']) !!}
     </div>
 
     {!! Form::close() !!}

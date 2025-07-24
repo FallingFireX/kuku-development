@@ -12,6 +12,8 @@ use App\Models\Rank\Rank;
 use App\Models\Rarity;
 use App\Models\Species\Species;
 use App\Models\Species\Subtype;
+use App\Models\Marking\Marking;
+use App\Models\Base\Base;
 use App\Models\User\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -254,6 +256,15 @@ class BrowseController extends Controller {
 
         $query->whereIn('id', $imageQuery->pluck('character_id')->toArray());
 
+        if ($request->get('marking_id')) {
+            $markingIds = $request->get('marking_id');
+            foreach ($markingIds as $markingId) {
+                $imageQuery->whereHas('markings', function ($query) use ($markingId) {
+                    $query->where('markings', $markingId);
+                });
+            }
+        }
+
         if ($request->get('is_gift_art_allowed')) {
             switch ($request->get('is_gift_art_allowed')) {
                 case 1:
@@ -317,6 +328,7 @@ class BrowseController extends Controller {
             'subtypes'    => [0 => 'Any Subtype'] + Subtype::visible(Auth::check() ? Auth::user() : null)->orderBy('subtypes.sort', 'DESC')->pluck('name', 'id')->toArray(),
             'rarities'    => [0 => 'Any Rarity'] + Rarity::orderBy('rarities.sort', 'DESC')->pluck('name', 'id')->toArray(),
             'features'    => Feature::getDropdownItems(),
+            'markings'     => Marking::getDropdownItems(),
             'sublists'    => Sublist::orderBy('sort', 'DESC')->get(),
             'userOptions' => User::query()->orderBy('name')->pluck('name', 'id')->toArray(),
         ]);
@@ -446,6 +458,7 @@ class BrowseController extends Controller {
             'specieses'   => [0 => 'Any Species'] + Species::visible(Auth::check() ? Auth::user() : null)->orderBy('specieses.sort', 'DESC')->pluck('name', 'id')->toArray(),
             'rarities'    => [0 => 'Any Rarity'] + Rarity::orderBy('rarities.sort', 'DESC')->pluck('name', 'id')->toArray(),
             'features'    => Feature::getDropdownItems(),
+            'markings'     => Marking::getDropdownItems(),
             'sublists'    => Sublist::orderBy('sort', 'DESC')->get(),
             'userOptions' => User::query()->orderBy('name')->pluck('name', 'id')->toArray(),
         ]);

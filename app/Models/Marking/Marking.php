@@ -33,10 +33,9 @@ class Marking extends Model {
         'species_id'          => 'nullable',
         'subtype_id'          => 'nullable',
         'rarity_id'           => 'required|exists:rarities,id',
-        'name'                => 'required|unique:markings|between:3,100',
+        'name'                => 'required|between:3,100',
         'description'         => 'nullable',
         'short_description'   => 'nullable',
-        'marking_image_id'    => 'nullable',
         'is_visible'          => 'nullable',
         'recessive'           => 'nullable',
         'dominant'            => 'nullable',
@@ -53,10 +52,9 @@ class Marking extends Model {
         'species_id'          => 'nullable',
         'subtype_id'          => 'nullable',
         'rarity_id'           => 'required|exists:rarities,id',
-        'name'                => 'required|unique:markings|between:3,100',
+        'name'                => 'required|between:3,100',
         'description'         => 'nullable',
         'short_description'   => 'nullable',
-        'marking_image_id'    => 'nullable',
         'is_visible'          => 'nullable',
         'recessive'           => 'nullable',
         'dominant'            => 'nullable',
@@ -196,7 +194,7 @@ class Marking extends Model {
      * @return string
      */
     public function getImageFileNameAttribute() {
-        return $this->name.$this->id.'-image.png';
+        return $this->slug.'-thumb.png';
     }
 
     /**
@@ -214,10 +212,9 @@ class Marking extends Model {
      * @return string
      */
     public function getImageUrlAttribute() {
-        if (!$this->has_image) {
+        if (!$this->slug) {
             return null;
         }
-
         return asset($this->imageDirectory.'/'.$this->imageFileName);
     }
 
@@ -227,7 +224,7 @@ class Marking extends Model {
      * @return string
      */
     public function getUrlAttribute() {
-        return url('design-hub/markings/'.$this->slug);
+        return url('design-hub/marking/'.$this->slug);
     }
 
     /**
@@ -263,39 +260,27 @@ class Marking extends Model {
 
     **********************************************************************************************/
 
-    // public static function getDropdownItems($withHidden = 0) {
-    //     $visibleOnly = 1;
-    //     if ($withHidden) {
-    //         $visibleOnly = 0;
-    //     }
+    public static function getDropdownItems($withHidden = 0) {
+        $visibleOnly = 1;
+        if ($withHidden) {
+            $visibleOnly = 0;
+        }
 
-    //     if (config('lorekeeper.extensions.organised_traits_dropdown')) {
-    //         $sorted_marking_categories = collect(FeatureCategory::all()->where('is_visible', '>=', $visibleOnly)->sortBy('sort')->pluck('name')->toArray());
+        if (config('lorekeeper.extensions.organised_traits_dropdown')) {
 
-    //         $grouped = self::where('is_visible', '>=', $visibleOnly)->select('name', 'id', 'marking_category_id')->with('category')->orderBy('name')->get()->keyBy('id')->groupBy('category.name', $preserveKeys = true)->toArray();
-    //         if (isset($grouped[''])) {
-    //             if (!$sorted_marking_categories->contains('Miscellaneous')) {
-    //                 $sorted_marking_categories->push('Miscellaneous');
-    //             }
-    //             $grouped['Miscellaneous'] ??= [] + $grouped[''];
-    //         }
+            $marking_rarities = Rarity::whereIn('id', Marking::select('rarity_id')->distinct()->get())->get();
+            $sorted_marking_rarities = [];
+            foreach($marking_rarities as $marking_rarity) {
 
-    //         $sorted_marking_categories = $sorted_marking_categories->filter(function ($value, $key) use ($grouped) {
-    //             return in_array($value, array_keys($grouped), true);
-    //         });
+                $markings = self::where('is_visible', 1)->where('rarity_id', $marking_rarity->id)->orderBy('name')->pluck('name', 'id')->toArray();
 
-    //         foreach ($grouped as $category => $markings) {
-    //             foreach ($markings as $id  => $marking) {
-    //                 $grouped[$category][$id] = $marking['name'];
-    //             }
-    //         }
-    //         $markings_by_category = $sorted_marking_categories->map(function ($category) use ($grouped) {
-    //             return [$category => $grouped[$category]];
-    //         });
-
-    //         return $markings_by_category;
-    //     } else {
-    //         return self::where('is_visible', '>=', $visibleOnly)->orderBy('name')->pluck('name', 'id')->toArray();
-    //     }
-    // }
+                $sorted_marking_rarities[$marking_rarity->id] = array(
+                    $marking_rarity->name => $markings,
+                );
+            }
+            return $sorted_marking_rarities;
+        } else {
+            return self::where('is_visible', '>=', $visibleOnly)->orderBy('name')->pluck('name', 'id')->toArray();
+        }
+    }
 }

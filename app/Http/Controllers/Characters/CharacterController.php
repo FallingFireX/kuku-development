@@ -9,6 +9,8 @@ use App\Models\Character\CharacterCurrency;
 use App\Models\Character\CharacterItem;
 use App\Models\Character\CharacterProfile;
 use App\Models\Character\CharacterTransfer;
+use App\Models\Base\Base;
+use App\Models\Marking\Marking;
 use App\Models\Currency\Currency;
 use App\Models\Gallery\GallerySubmission;
 use App\Models\Item\Item;
@@ -20,6 +22,8 @@ use App\Services\CharacterManager;
 use App\Services\CurrencyManager;
 use App\Services\DesignUpdateManager;
 use App\Services\InventoryManager;
+use App\Services\MarkingService;
+use App\Services\BaseService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\View;
@@ -115,12 +119,110 @@ class CharacterController extends Controller {
      * @return \Illuminate\Contracts\Support\Renderable
      */
     public function getCharacter($slug) {
+        $markings = $this->getMarkingFinalArray();
+
         return view('character.character', [
             'character'             => $this->character,
+            'markings'              => $markings,
+            'pheno'                 => $this->getMarkingPhenotype($markings),
+            'geno'                  => $this->getMarkingGenotype($markings),
             'showMention'           => true,
             'extPrevAndNextBtnsUrl' => '',
         ]);
     }
+
+    /**
+     * Gets the final array for the character genome.
+     *
+     * @return array
+     */
+    public function getMarkingFinalArray() {
+        $markings = unserialize($this->character->markings);
+
+        if(!is_array($markings)) {
+            return 'Unknown';
+        }
+
+        $rendered = array();
+        foreach($markings as $id => $type) {
+            $temp = Marking::where('id', $id)->first();
+            if ($temp){
+                $rendered[$temp->order_in_genome][] = array(
+                    'name'  => $temp->name,
+                    'code'  => ($type !== 1 ? $temp->recessive : $temp->dominant),
+                    'link'   => $temp->getUrlAttribute(),
+                );
+            }
+        }
+        return $rendered;
+    }
+
+    /**
+     * Gets the phenotype for the character genome.
+     *
+     * @return string
+     */
+    public function getMarkingPhenotype($markings) {
+        if(!is_array($markings)) {
+            return 'Unknown';
+        }
+        $rendered = '<div class="markings">';
+        $base = $this->getBaseCoat()['name'];
+        foreach($markings as $i => $group) {
+            foreach($group as $marking) {
+                $marking = (object) $marking;
+                $rendered .= '<a href="'.$marking->link.'">'.$marking->name.'</a>';
+            }
+            if($i == 1) {
+                $rendered .= ' '.$base.' with ';
+            }
+        }
+        $rendered .= '</div>';
+        return $rendered;
+    }
+
+    /**
+     * Gets the genotype for the character genome.
+     *
+     * @return string
+     */
+    public function getMarkingGenotype($markings) {
+        if(!is_array($markings)) {
+            return 'Unknown';
+        }
+        $rendered = array();
+        $base = $this->getBaseCoat()['code'];
+        foreach($markings as $i => $group) {
+            foreach($group as $marking) {
+                $marking = (object) $marking;
+                $rendered[] = '<a href="'.$marking->link.'">'.$marking->code.'</a>';
+            }
+        }
+        return '<div class="markings">'.$base.'+'.implode('/', $rendered).'</div>';
+    }
+
+    /**
+     * Gets the genotype for the character genome.
+     *
+     * @return array
+     */
+    public function getBaseCoat() {
+        $base = Base::where('id', $this->character->base)->first();
+
+        if(!$base) {
+            return array(
+                'name'  => 'Unknown',
+                'code'  => '??',
+            );
+        }
+
+        return array(
+            'name'  => $base->name,
+            'code'  => $base->code,
+        );
+    }
+
+
 
     /**
      * Shows a character's profile.
