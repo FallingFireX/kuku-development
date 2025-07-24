@@ -2,9 +2,9 @@
 
 namespace App\Models\Character;
 
+use App\Models\Marking\Marking;
 use App\Models\Model;
 use App\Models\Rarity;
-use App\Models\Marking\Marking;
 use App\Models\Species\Species;
 use App\Models\Species\Subtype;
 use App\Models\User\User;

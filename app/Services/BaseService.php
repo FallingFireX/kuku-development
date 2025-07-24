@@ -63,8 +63,8 @@ class BaseService extends Service {
      * Updates a base.
      *
      * @param \App\Models\Base\Base $base
-     * @param array                       $data
-     * @param \App\Models\User\User       $user
+     * @param array                 $data
+     * @param \App\Models\User\User $user
      *
      * @return \App\Models\Base\Base|bool
      */
@@ -107,7 +107,7 @@ class BaseService extends Service {
      * Deletes a base.
      *
      * @param \App\Models\Base\Base $base
-     * @param mixed                       $user
+     * @param mixed                 $user
      *
      * @return bool
      */
@@ -124,7 +124,7 @@ class BaseService extends Service {
                 throw new \Exception('Failed to log admin action.');
             }
 
-            if (file_exists($base->imageDirectory . '/' . $base->imageFileName)) {
+            if (file_exists($base->imageDirectory.'/'.$base->imageFileName)) {
                 $this->deleteImage($base->imagePath, $base->imageFileName);
             }
             $base->delete();
@@ -140,7 +140,7 @@ class BaseService extends Service {
     /**
      * Processes user input for creating/updating a base.
      *
-     * @param array                       $data
+     * @param array                 $data
      * @param \App\Models\Base\Base $base
      *
      * @return array

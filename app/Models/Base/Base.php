@@ -3,7 +3,6 @@
 namespace App\Models\Base;
 
 use App\Models\Model;
-use Illuminate\Support\Facades\DB;
 
 class Base extends Model {
     /**
@@ -161,6 +160,7 @@ class Base extends Model {
         if (!$this->id) {
             return null;
         }
+
         return asset($this->imageDirectory.'/'.$this->imageFileName);
     }
 
