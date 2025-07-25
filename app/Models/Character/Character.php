@@ -106,15 +106,15 @@ class Character extends Model {
      * @var array
      */
     public static $myoRules = [
-        'rarity_id'   => 'nullable',
-        'user_id'     => 'nullable',
-        'number'      => 'nullable',
-        'slug'        => 'nullable',
-        'description' => 'nullable',
-        'sale_value'  => 'nullable',
-        'name'        => 'required',
-        'image'       => 'nullable|mimes:jpeg,gif,png|max:2048',
-        'thumbnail'   => 'nullable|mimes:jpeg,gif,png|max:2048',
+        'rarity_id'             => 'nullable',
+        'user_id'               => 'nullable',
+        'number'                => 'nullable',
+        'slug'                  => 'nullable',
+        'description'           => 'nullable',
+        'sale_value'            => 'nullable',
+        'name'                  => 'required',
+        'image'                 => 'nullable|mimes:jpeg,gif,png|max:2048',
+        'thumbnail'             => 'nullable|mimes:jpeg,gif,png|max:2048',
         'base'                  => 'nullable',
     ];
 
@@ -362,7 +362,6 @@ class Character extends Model {
     public function getLogTypeAttribute() {
         return 'Character';
     }
-    
 
     /**********************************************************************************************
 

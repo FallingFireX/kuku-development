@@ -75,7 +75,7 @@ class BaseController extends Controller {
      * Creates or edits a base.
      *
      * @param App\Services\BaseService $service
-     * @param int|null                    $id
+     * @param int|null                 $id
      *
      * @return \Illuminate\Http\RedirectResponse
      */
@@ -84,7 +84,7 @@ class BaseController extends Controller {
         $data = $request->only([
             'name', 'image', 'code', 'is_visible',
         ]);
-        
+
         if ($id && $service->updateBase(Base::find($id), $data, Auth::user())) {
             flash('Base updated successfully.')->success();
         } elseif (!$id && $base = $service->createBase($data, Auth::user())) {
@@ -119,7 +119,7 @@ class BaseController extends Controller {
      * Deletes a base.
      *
      * @param App\Services\BaseService $service
-     * @param int                         $id
+     * @param int                      $id
      *
      * @return \Illuminate\Http\RedirectResponse
      */

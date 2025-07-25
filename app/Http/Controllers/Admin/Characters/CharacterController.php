@@ -4,13 +4,13 @@ namespace App\Http\Controllers\Admin\Characters;
 
 use App\Facades\Settings;
 use App\Http\Controllers\Controller;
+use App\Models\Base\Base;
 use App\Models\Character\Character;
 use App\Models\Character\CharacterCategory;
 use App\Models\Character\CharacterTransfer;
 use App\Models\Feature\Feature;
-use App\Models\Rarity;
 use App\Models\Marking\Marking;
-use App\Models\Base\Base;
+use App\Models\Rarity;
 use App\Models\Species\Species;
 use App\Models\Species\Subtype;
 use App\Models\Trade;

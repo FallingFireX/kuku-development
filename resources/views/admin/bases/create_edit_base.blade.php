@@ -38,13 +38,13 @@
         </div>
     </div>
 
-    
+
 
     <div class="form-group">
         {!! Form::label('Preview Image (Optional)') !!} {!! add_help('This image is used only on the base coats page.') !!}
         <div class="custom-file">
-            {!! Form::label('image', file_exists($base->imageDirectory . '/' . $base->imageFileName) ?  $base->imageFileName : 'Choose file...', ['class' => 'custom-file-label']) !!}
-            {!! Form::file('image',  ['class' => 'custom-file-input']) !!}
+            {!! Form::label('image', file_exists($base->imageDirectory . '/' . $base->imageFileName) ? $base->imageFileName : 'Choose file...', ['class' => 'custom-file-label']) !!}
+            {!! Form::file('image', ['class' => 'custom-file-input']) !!}
         </div>
         <div class="text-muted">Recommended size: 200px x 200px</div>
         @if ($base->image_id !== null)

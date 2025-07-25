@@ -215,6 +215,7 @@ class Marking extends Model {
         if (!$this->slug) {
             return null;
         }
+
         return asset($this->imageDirectory.'/'.$this->imageFileName);
     }
 
@@ -267,17 +268,16 @@ class Marking extends Model {
         }
 
         if (config('lorekeeper.extensions.organised_traits_dropdown')) {
-
-            $marking_rarities = Rarity::whereIn('id', Marking::select('rarity_id')->distinct()->get())->get();
+            $marking_rarities = Rarity::whereIn('id', self::select('rarity_id')->distinct()->get())->get();
             $sorted_marking_rarities = [];
-            foreach($marking_rarities as $marking_rarity) {
-
+            foreach ($marking_rarities as $marking_rarity) {
                 $markings = self::where('is_visible', 1)->where('rarity_id', $marking_rarity->id)->orderBy('name')->pluck('name', 'id')->toArray();
 
-                $sorted_marking_rarities[$marking_rarity->id] = array(
+                $sorted_marking_rarities[$marking_rarity->id] = [
                     $marking_rarity->name => $markings,
-                );
+                ];
             }
+
             return $sorted_marking_rarities;
         } else {
             return self::where('is_visible', '>=', $visibleOnly)->orderBy('name')->pluck('name', 'id')->toArray();

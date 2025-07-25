@@ -140,7 +140,7 @@ class MarkingService extends Service {
                 throw new \Exception('Failed to log admin action.');
             }
 
-            if (file_exists($marking->imageDirectory . '/' . $marking->imageFileName)) {
+            if (file_exists($marking->imageDirectory.'/'.$marking->imageFileName)) {
                 $this->deleteImage($marking->imagePath, $marking->imageFileName);
             }
             $marking->delete();

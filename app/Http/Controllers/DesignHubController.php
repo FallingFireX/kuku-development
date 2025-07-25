@@ -14,15 +14,14 @@ class DesignHubController extends Controller {
     }
 
     public function getDesignHubPage(Request $request) {
-
-        $markings = DesignHubController::getDesignHubGenetics($request);
+        $markings = self::getDesignHubGenetics($request);
         $rarities = Rarity::whereIn('id', Marking::select('rarity_id')->distinct()->get())->get();
 
-        return view('designhub.designhub', [ 
-            'markings'      => $markings,
-            'rarity_list'   => $rarities,
-            'corrupt_mutations' => DesignHubController::getDesignHubTraitByCategory($request, 4), //Swap '4' to the category ID
-            'magical_mutations' => DesignHubController::getDesignHubTraitByCategory($request, 5), //Swap '5' to the category ID
+        return view('designhub.designhub', [
+            'markings'          => $markings,
+            'rarity_list'       => $rarities,
+            'corrupt_mutations' => self::getDesignHubTraitByCategory($request, 4), //Swap '4' to the category ID
+            'magical_mutations' => self::getDesignHubTraitByCategory($request, 5), //Swap '5' to the category ID
         ]);
     }
 
