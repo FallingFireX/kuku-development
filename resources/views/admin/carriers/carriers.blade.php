@@ -63,7 +63,7 @@
                             </div>
                             <div class="col-12 col-md-9">
                                 <div class="logs-table-cell">
-                                   Marking List
+                                    Marking List
                                 </div>
                             </div>
                             <div class="col-12 col-md-1">
