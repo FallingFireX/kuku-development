@@ -15,6 +15,24 @@
     <div class="site-page-content parsed-text">
         {!! $marking->description !!}
     </div>
+
+    @if ($carriers)
+    <div class="site-page-content parsed-text">
+        <div class="card mb-4 rounded">
+            <h5 class="card-header">Carriers</h5>
+            <div class="card-body">
+                @foreach ($carriers as $carrier)
+                    <div class="card carrier-card mb-4 rounded">
+                        <h5 class="card-header">{{ $carrier->name }}</h5>
+                        <div class="card-body">
+                            {!! $carrier->description !!}
+                        </div>
+                    </div>
+                @endforeach  
+            </div>
+        </div>
+    </div>
+    @endif
 @endsection
 
 @section('scripts')

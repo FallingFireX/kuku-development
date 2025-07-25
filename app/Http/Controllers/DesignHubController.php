@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Feature\Feature;
 use App\Models\Marking\Marking;
+use App\Models\Rarity;
 use Auth;
 use Illuminate\Http\Request;
 

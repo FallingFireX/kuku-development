@@ -179,6 +179,10 @@ return [
                 'url'  => 'admin/data/markings',
             ],
             [
+                'name' => 'Carriers',
+                'url'  => 'admin/data/carriers',
+            ],
+            [
                 'name' => 'Bases',
                 'url'  => 'admin/data/bases',
             ],

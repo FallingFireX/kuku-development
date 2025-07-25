@@ -209,6 +209,15 @@ Route::group(['prefix' => 'data', 'namespace' => 'Data', 'middleware' => 'power:
     Route::post('base/edit/{id}', 'BaseController@postCreateEditBase');
     Route::post('base/delete/{id}', 'BaseController@postDeleteBase');
 
+    // BASES
+    Route::get('carriers', 'CarrierController@getCarriersIndex');
+    Route::get('carrier/create', 'CarrierController@getCreateCarrier');
+    Route::get('carrier/edit/{id}', 'CarrierController@getEditCarrier');
+    Route::get('carrier/delete/{id}', 'CarrierController@getDeleteCarrier');
+    Route::post('carrier/create', 'CarrierController@postCreateEditCarrier');
+    Route::post('carrier/edit/{id}', 'CarrierController@postCreateEditCarrier');
+    Route::post('carrier/delete/{id}', 'CarrierController@postDeleteCarrier');
+
     // CHARACTER CATEGORIES
     Route::get('character-categories', 'CharacterCategoryController@getIndex');
     Route::get('character-categories/create', 'CharacterCategoryController@getCreateCharacterCategory');

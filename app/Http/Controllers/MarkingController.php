@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Marking\Marking;
+use App\Models\Carrier\Carrier;
+use App\Models\Carrier\MarkingCarrier;
 
 class MarkingController extends Controller {
     public function getMarkingPage($slug) {
@@ -11,6 +13,9 @@ class MarkingController extends Controller {
             abort(404);
         }
 
-        return view('designhub.marking', ['marking' => $marking]);
+        $carriers = MarkingCarrier::where('marking_id', $marking->id)->pluck('carrier_id')->toArray();
+        $active_carriers = Carrier::whereIn('id', $carriers)->get();
+
+        return view('designhub.marking', ['marking' => $marking], ['carriers' => $active_carriers]);
     }
 }
