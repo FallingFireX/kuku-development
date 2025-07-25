@@ -3,7 +3,6 @@
 namespace App\Models\Carrier;
 
 use App\Models\Model;
-use Illuminate\Support\Facades\DB;
 
 class Carrier extends Model {
     /**
@@ -53,7 +52,7 @@ class Carrier extends Model {
      * Scope a query to sort carriers in alphabetical order.
      *
      * @param \Illuminate\Datacarrier\Eloquent\Builder $query
-     * @param bool                                  $reverse
+     * @param bool                                     $reverse
      *
      * @return \Illuminate\Datacarrier\Eloquent\Builder
      */
@@ -87,7 +86,7 @@ class Carrier extends Model {
      * Scope a query to show only visible carriers.
      *
      * @param \Illuminate\Datacarrier\Eloquent\Builder $query
-     * @param mixed|null                            $user
+     * @param mixed|null                               $user
      *
      * @return \Illuminate\Datacarrier\Eloquent\Builder
      */
@@ -159,6 +158,7 @@ class Carrier extends Model {
         if (!$this->id) {
             return null;
         }
+
         return asset($this->imageDirectory.'/'.$this->imageFileName);
     }
 

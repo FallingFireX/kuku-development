@@ -43,8 +43,8 @@ class CarrierService extends Service {
             }
 
             $carrier = Carrier::create($data);
-            
-            if(isset($data['attached_markings']) && $data['attached_markings']) {
+
+            if (isset($data['attached_markings']) && $data['attached_markings']) {
                 foreach ($data['attached_markings'] as $marking_id => $name) {
                     $relation = MarkingCarrier::create([
                         'marking_id' => $marking_id,
@@ -134,7 +134,7 @@ class CarrierService extends Service {
                 throw new \Exception('Failed to log admin action.');
             }
 
-            if (file_exists($carrier->imageDirectory . '/' . $carrier->imageFileName)) {
+            if (file_exists($carrier->imageDirectory.'/'.$carrier->imageFileName)) {
                 $this->deleteImage($carrier->imagePath, $carrier->imageFileName);
             }
             $carrier->delete();

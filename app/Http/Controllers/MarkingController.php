@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Marking\Marking;
 use App\Models\Carrier\Carrier;
 use App\Models\Carrier\MarkingCarrier;
+use App\Models\Marking\Marking;
 
 class MarkingController extends Controller {
     public function getMarkingPage($slug) {

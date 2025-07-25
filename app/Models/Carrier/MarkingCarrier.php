@@ -3,7 +3,6 @@
 namespace App\Models\Carrier;
 
 use App\Models\Model;
-use Illuminate\Support\Facades\DB;
 
 class MarkingCarrier extends Model {
     /**
@@ -47,11 +46,11 @@ class MarkingCarrier extends Model {
 
     **********************************************************************************************/
 
-        /**
+    /**
      * Scope a query to sort carriers in alphabetical order.
      *
      * @param \Illuminate\Datacarrier\Eloquent\Builder $query
-     * @param bool                                  $reverse
+     * @param bool                                     $reverse
      *
      * @return \Illuminate\Datacarrier\Eloquent\Builder
      */
