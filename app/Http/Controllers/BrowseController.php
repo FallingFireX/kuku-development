@@ -257,11 +257,9 @@ class BrowseController extends Controller {
 
         if ($request->get('marking_id')) {
             $markingIds = $request->get('marking_id');
-            foreach ($markingIds as $markingId) {
-                $imageQuery->whereHas('markings', function ($query) use ($markingId) {
-                    $query->where('markings', $markingId);
-                });
-            }
+            $query->join('character_markings', 'characters.id', '=', 'character_markings.character_id')
+                    ->whereIn('character_markings.marking_id', $markingIds);
+            //dd($query->toSql());
         }
 
         if ($request->get('is_gift_art_allowed')) {

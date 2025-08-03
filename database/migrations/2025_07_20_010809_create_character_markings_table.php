@@ -18,7 +18,7 @@ return new class extends Migration {
             $table->integer('order');
             $table->boolean('is_dominant');
             $table->string('data', 191)->nullable();
-            $table->integer('base_id')->nullable();
+            $table->string('base_id', 11)->nullable();
             $table->integer('carrier_id')->nullable();
         });
     }

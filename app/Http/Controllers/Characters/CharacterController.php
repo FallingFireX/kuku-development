@@ -10,11 +10,14 @@ use App\Models\Character\CharacterCurrency;
 use App\Models\Character\CharacterItem;
 use App\Models\Character\CharacterProfile;
 use App\Models\Character\CharacterTransfer;
+use App\Models\Character\CharacterMarking;
 use App\Models\Currency\Currency;
 use App\Models\Gallery\GallerySubmission;
 use App\Models\Item\Item;
 use App\Models\Item\ItemCategory;
 use App\Models\Marking\Marking;
+use App\Models\Carrier\Carrier;
+use App\Models\Carrier\MarkingCarrier;
 use App\Models\User\User;
 use App\Models\User\UserCurrency;
 use App\Models\User\UserItem;
@@ -122,8 +125,8 @@ class CharacterController extends Controller {
         return view('character.character', [
             'character'             => $this->character,
             'markings'              => $markings,
-            'pheno'                 => $this->getMarkingPhenotype($markings),
-            'geno'                  => $this->getMarkingGenotype($markings),
+            'pheno'                 => $this->getMarkingLinkedArray($markings),
+            'geno'                  => $this->getMarkingLinkedArray($markings, 'genotype'),
             'showMention'           => true,
             'extPrevAndNextBtnsUrl' => '',
         ]);
@@ -135,23 +138,50 @@ class CharacterController extends Controller {
      * @return array
      */
     public function getMarkingFinalArray() {
-        $markings = unserialize($this->character->markings);
+        $markings = CharacterMarking::where('character_id', $this->character->id)->get();
 
-        if (!is_array($markings)) {
-            return 'Unknown';
+        if (!$markings->count()) {
+            return [];
         }
 
         $rendered = [];
-        foreach ($markings as $id => $type) {
-            $temp = Marking::where('id', $id)->first();
+        foreach ($markings as $marking) {
+            $temp = Marking::where('id', $marking->marking_id)->first();
+            $rendered['is_chimera'] = $marking->data === null ? 0 : 1;
+            $has_multi_bases = false;
+            if($marking->carrier_id) {
+                //Add carriers if needed
+                $rendered['carriers'][$marking->carrier_id] = Carrier::where('id', $marking->carrier_id)->pluck('name')->toArray();
+            }
+            if(str_contains($marking->base_id, '|')) {
+                $has_multi_bases = true;
+                $multi_bases = explode('|', $marking->base_id);
+                foreach ($multi_bases as $base) {
+                    $temp_bases[] = Base::where('id', $base)->pluck('code', 'name')->toArray();
+                }
+            }
             if ($temp) {
-                $rendered[$temp->order_in_genome][] = [
-                    'name'   => $temp->name,
-                    'code'   => ($type !== 1 ? $temp->recessive : $temp->dominant),
-                    'link'   => $temp->getUrlAttribute(),
-                ];
+                if($rendered['is_chimera'] === 1) {
+                    $marksrender[$marking->data][$temp->order_in_genome][] = [
+                        'name'          => $temp->name,
+                        'is_dominant'   => $marking->is_dominant,
+                        'code'          => $marking->code,
+                        'link'          => $temp->getUrlAttribute(),
+                        'base_info'     => $has_multi_bases ? $temp_bases : Base::where('id', $marking->base_id)->pluck('code', 'name')->toArray(),
+                    ];
+                } else {
+                    $marksrender[0][$temp->order_in_genome][] = [
+                        'name'          => $temp->name,
+                        'is_dominant'   => $marking->is_dominant,
+                        'code'          => $marking->code,
+                        'link'          => $temp->getUrlAttribute(),
+                        'base_info'     => $has_multi_bases ? $temp_bases : Base::where('id', $marking->base_id)->pluck('code', 'name')->toArray(),
+                    ];
+                }
             }
         }
+        ksort($marksrender);
+        $rendered['markings'] = $marksrender;
 
         return $rendered;
     }
@@ -163,24 +193,94 @@ class CharacterController extends Controller {
      *
      * @return string
      */
-    public function getMarkingPhenotype($markings) {
-        if (!is_array($markings)) {
+    public function getMarkingLinkedArray($markings, $type = 'phenotype') {
+        $bases = $this->getBaseCoat();
+        if (!is_array($markings) || !array_key_exists('markings', $markings)) {
             return 'Unknown';
         }
-        $rendered = '<div class="markings">';
-        $base = $this->getBaseCoat()['name'];
-        foreach ($markings as $i => $group) {
-            foreach ($group as $marking) {
-                $marking = (object) $marking;
-                $rendered .= '<a href="'.$marking->link.'">'.$marking->name.'</a>';
-            }
-            if ($i == 1) {
-                $rendered .= ' '.$base.' with ';
+        $chimera = false;
+        if(array_key_exists('is_chimera', $markings) && $markings['is_chimera'] == 1) {
+            $chimera = true;
+            $geno_sides = [];
+        }
+
+        $html_inner = [];
+
+        //return $markings;
+
+        foreach($markings['markings'] as $side => $group) {
+            //Sides - Max of 2 for chimera
+            $sideInner = $this->handleMarkingGroup($group, $type);
+            $geno_sides[$side] = $sideInner;
+
+            //Get the bases per side
+            $geno_sides[$side][2] = $bases;
+            ksort($geno_sides[$side]);
+
+        }
+        foreach($geno_sides as $i => $side) {
+            $html_inner[] = $this->renderFinalMarkingOutput($side, $type);
+        }
+        if(count($html_inner) == 2) {
+            $seperator = ($type == 'phenotype' ? ' // ' : '//');
+            $html_inner = implode($seperator, $html_inner);
+        } else {
+            $html_inner = implode('', $html_inner);
+        }
+        
+        return $html_inner;
+    }
+
+    public function handleMarkingGroup($group, $type = 'phenotype') {
+        $html_inner = [];
+        foreach($group as $id => $order_group) {
+            //Inside each order group, we have the markings
+            foreach($order_group as $marking) {
+                //Individual markings
+                $html_inner[$id][] = $this->renderIndividualMarking($marking, $type);
             }
         }
-        $rendered .= '</div>';
+        return $html_inner;
+    }
 
-        return $rendered;
+    /**
+     * Gets the individual gene template for the marking string.
+     *
+     * @param mixed $markings
+     *
+     * @return string
+     */
+    public function renderIndividualMarking($marking, $type = 'phenotype') {
+        $marking = (object) $marking;
+        $url = $marking->link;
+
+        switch ($type) {
+            case 'phenotype':
+                $text = $marking->name;
+                if($marking->name == 'Glint') {
+                    if($marking->is_dominant) {
+                        $text = array_key_first($marking->base_info[0]).'/'.array_key_first($marking->base_info[1]).' '.$text; 
+                    } else {
+                       $text = array_key_first($marking->base_info) .' '.$text;
+                    }
+                    
+                }
+                break;
+            case 'genotype':
+                $text = $marking->code;
+                if($marking->name == 'Glint') {
+                    if($marking->is_dominant) {
+                        $text = $text.'-'.array_values($marking->base_info[0])[0].'/'.array_values($marking->base_info[1])[0]; 
+                    } else {
+                       $text = $text.'-'.array_values($marking->base_info)[0]; 
+                    }
+                }
+                break;
+            default:
+                $text = $marking->name;
+        }
+
+        return '<a href="'.$url.'" class="marking-link">'.$text.'</a>';
     }
 
     /**
@@ -190,20 +290,55 @@ class CharacterController extends Controller {
      *
      * @return string
      */
-    public function getMarkingGenotype($markings) {
-        if (!is_array($markings)) {
+    public function renderFinalMarkingOutput($array, $type = 'phenotype') {
+        if (!is_array($array)) {
             return 'Unknown';
         }
-        $rendered = [];
-        $base = $this->getBaseCoat()['code'];
-        foreach ($markings as $i => $group) {
-            foreach ($group as $marking) {
-                $marking = (object) $marking;
-                $rendered[] = '<a href="'.$marking->link.'">'.$marking->code.'</a>';
-            }
+
+        switch ($type) {
+            case 'phenotype':
+                $base = $array[2] ?? 'Unknown';
+                unset($array[2]);
+
+                foreach($array as $order => $marking_group) {
+                    foreach($marking_group as $marking) {
+                        if($order < 2) {
+                            $temp[0][] = $marking;
+                        } else if( $order > 2 && $order < 9) {
+                            $temp[1][] = $marking;
+                        } else if ($order >= 9) {
+                            $temp[2][] = $marking;
+                        }
+                    }
+                }
+
+                $html = implode(' ', $temp[0]) .' ' . $base[0]['name'];
+                if (isset($temp[1]) && count($temp[1]) > 0) {
+                    $html .= ' with '.implode(' ', $temp[1]);
+                }
+                $html .= isset($temp[2]) ? ' and '.implode(' ', $temp[2]) : '';
+
+                break;
+            case 'genotype':
+                $html = $array[2][0]['code'].'+';
+                unset($array[2]);
+                
+                foreach($array as $order => $marking_group) {
+                    foreach($marking_group as $marking) {
+                        if($order < 9) {
+                            $temp[0][] = $marking;
+                        } else if ($order >= 9) {
+                            $temp[1][] = $marking;
+                        }
+                    }
+                }
+                $html .= implode('/', $temp[0]);
+                $html .= (array_key_exists(1, $temp) && count($temp[1]) > 0 ? '/'.implode('/', $temp[1]) : '');
+
+                break;
         }
 
-        return '<div class="markings">'.$base.'+'.implode('/', $rendered).'</div>';
+        return '<span class="marking-output">'.$html.'</span>';
     }
 
     /**
@@ -212,6 +347,23 @@ class CharacterController extends Controller {
      * @return array
      */
     public function getBaseCoat() {
+
+        if(str_contains($this->character->base,  '|')) {
+            $chimera_bases = [];
+            $bases = explode('|', $this->character->base);
+            if (count($bases) > 1) {
+                foreach ($bases as $b) {
+                    $temp = Base::where('id', $b)->first();
+                    $chimera_bases[] = [
+                        'name' => $temp->name,
+                        'code' => $temp->code,
+                    ];
+                }
+                return $chimera_bases;
+            }
+        }
+
+        //If Not Chimera, Continue as normal
         $base = Base::where('id', $this->character->base)->first();
 
         if (!$base) {
@@ -221,10 +373,10 @@ class CharacterController extends Controller {
             ];
         }
 
-        return [
+        return [0 => [
             'name'  => $base->name,
             'code'  => $base->code,
-        ];
+        ]];
     }
 
     /**

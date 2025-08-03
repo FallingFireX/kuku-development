@@ -122,18 +122,6 @@ class CharacterImage extends Model {
     }
 
     /**
-     * Get the markings attached to the character image, ordered by display order.
-     */
-    public function markings() {
-        // $query = $this
-        //     ->hasMany(Marking::class, 'id')->whereNotNull('characters.markings')
-        //     ->join('markings', 'markings.id', '=', 'characters.markings') // <-- need to parse all serialized arrays... whoops
-        //     ->select(['character_features.*', 'features.*', 'character_features.id AS character_feature_id', 'feature_categories.sort']);
-
-        return $query->orderByDesc('sort');
-    }
-
-    /**
      * Get the designers/artists attached to the character image.
      */
     public function creators() {

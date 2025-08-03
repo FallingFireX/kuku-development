@@ -16,9 +16,9 @@
         {!! $marking->description !!}
     </div>
 
-    @if ($carriers)
+    @if (count($carriers) > 0)
     <div class="site-page-content parsed-text">
-        <div class="card mb-4 rounded">
+        <div class="card mb-4 rounded mt-4">
             <h5 class="card-header">Carriers</h5>
             <div class="card-body">
                 @foreach ($carriers as $carrier)

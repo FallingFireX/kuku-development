@@ -110,9 +110,12 @@ class CharacterController extends Controller {
             'designer_id', 'designer_url',
             'artist_id', 'artist_url',
             'species_id', 'subtype_id', 'rarity_id', 'feature_id', 'feature_data', 'marking_id', 'is_dominant', 'base', 'secondary_base', 'side_id',
-            'glint_1', 'glint_2', 'is_chimera',
+            'glint_1', 'glint_2',
             'image', 'thumbnail', 'image_description',
         ]);
+
+        \Log::info('postCreateCharacter', $data);
+
         if ($character = $service->createCharacter($data, Auth::user())) {
             flash('Character created successfully.')->success();
 
