@@ -1885,7 +1885,7 @@ class CharacterManager extends Service {
 
             return $this->commitReturn(true);
         } catch (\Exception $e) {
-             \Log::error('Marking error', ['error' => $e->getMessage()]);
+            \Log::error('Marking error', ['error' => $e->getMessage()]);
             $this->setError('error', $e->getMessage());
         }
 
@@ -2139,7 +2139,9 @@ class CharacterManager extends Service {
             foreach ($data['marking_id'] as $key => $markingId) {
                 if ($markingId) {
                     $temp = Marking::where('id', $markingId)->first();
-                    if(!$temp) continue;
+                    if (!$temp) {
+                        continue;
+                    }
 
                     $is_dominant = $data['is_dominant'][$key];
 

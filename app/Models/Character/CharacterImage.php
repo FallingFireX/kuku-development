@@ -2,7 +2,6 @@
 
 namespace App\Models\Character;
 
-use App\Models\Marking\Marking;
 use App\Models\Model;
 use App\Models\Rarity;
 use App\Models\Species\Species;
