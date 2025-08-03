@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Feature\Feature;
 use App\Models\Marking\Marking;
 use App\Models\Rarity;
+use App\Models\SitePage;
+use App\Models\Species\Species;
+use App\Models\Species\Subtype;
 use Auth;
 use Illuminate\Http\Request;
 
@@ -18,6 +21,10 @@ class DesignHubController extends Controller {
         $rarities = Rarity::whereIn('id', Marking::select('rarity_id')->distinct()->get())->get();
 
         return view('designhub.designhub', [
+            'dh_start'          => SitePage::where('key', 'dh-start')->first(),
+            'dh_end'            => SitePage::where('key', 'dh-end')->first(),
+            'specieses'         => Species::orderBy('sort', 'DESC')->get(),
+            'subtypes'          => Subtype::orderBy('sort', 'DESC')->get(),
             'markings'          => $markings,
             'rarity_list'       => $rarities,
             'corrupt_mutations' => self::getDesignHubTraitByCategory($request, 4), //Swap '4' to the category ID

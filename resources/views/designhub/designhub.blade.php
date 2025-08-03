@@ -13,17 +13,10 @@
 
     <div class="card rounded mb-4">
         <div class="card-header">
-            Design Principles
+            {!! $dh_start->title !!}
         </div>
         <div class="card-body">
-            <p>These guides are for every reosean! They include the basic principles as well as other resources you can use to find all of the needed information!</p>
-            <div class="d-flex flex-gap justify-content-between align-items-center">
-                <a class="btn btn-primary" href="#" role="button">General Design Principles</a>
-                <a class="btn btn-secondary" href="/design-hub/base-coats/" role="button">Base Coats</a>
-                <a class="btn btn-secondary" href="#" role="button">Designing Your Import</a>
-                <a class="btn btn-secondary" href="#" role="button">Backgrounds</a>
-                <a class="btn btn-secondary" href="#" role="button">Design Approval Checklist</a>
-            </div>
+            {!! $dh_start->text !!}
         </div>
     </div>
 
@@ -93,7 +86,7 @@
                                         'imageUrl' => $mutation->imageUrl ?? '/images/account.png',
                                         'name' => $mutation->name,
                                         'description' => $short_description ?? '',
-                                        'url' => '/world/traits?name=' . $mutation->name,
+                                        'url' => $mutation->getUrlAttribute() ?: '/world/traits?name=' . $mutation->name,
                                     ])
                                 @endforeach
                                 {!! $corrupt_mutations->render() !!}
@@ -144,7 +137,32 @@
                 Import Templates
             </div>
             <div class="card-body">
-                <div class="row">
+                <p>Here you can find templates for the various species of reosean. These templates are designed to help you create your own reosean designs.</p>
+                @foreach ($specieses as $species)
+                    <div class="card rounded mb-4">
+                        <div class="card-header">{{ $species->name }} Templates</div>
+                        <div class="card-body">
+                            <div class="d-flex flex-wrap flex-column justify-content-between">
+                                @foreach ($subtypes as $subtype)
+                                    @if ($subtype->species_id === $species->id)
+                                        <div class="card item flex-fill my-2">
+                                            <div class="card-body">
+                                                @if ($subtype->subtypeImageUrl)
+                                                    <a href="{{ $subtype->subtypeImageUrl }}" data-lightbox="entry" data-title="{{ $subtype->name }}">
+                                                        <img src="{{ $subtype->subtypeImageUrl }}" class="world-entry-image" alt="{{ $subtype->name }}" />
+                                                    </a>
+                                                @endif
+                                                <h3>{{ $subtype->name }}</h3>
+                                                <p>{!! $subtype->description !!}</p>
+                                            </div>
+                                        </div>
+                                    @endif
+                                @endforeach
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+                <!-- <div class="row">
                     <div class="col">
                         <div class="card item">
                             <div class="card-body">
@@ -161,50 +179,16 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> -->
             </div>
         </div>
 
         <div class="card rounded mb-4">
             <div class="card-header">
-                Submitting Your Design
+                {!! $dh_end->title !!}
             </div>
             <div class="card-body">
-                <div class="row">
-                    <div class="col">
-                        <div class="card item">
-                            <div class="card-body">
-                                <h3>Submit a New Design</h3>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur vel dolor nisl. Quisque iaculis bibendum eros et imperdiet. Nulla feugiat, purus quis placerat vehicula, nisi tellus scelerisque ex, pretium euismod
-                                    nisi
-                                    nibh et massa.</p>
-                                <a class="btn btn-primary" href="#" role="button">Submit Your Design</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div class="card item">
-                            <div class="card-body">
-                                <h3>Submit a Correction</h3>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur vel dolor nisl. Quisque iaculis bibendum eros et imperdiet. Nulla feugiat, purus quis placerat vehicula, nisi tellus scelerisque ex, pretium euismod
-                                    nisi
-                                    nibh et massa.</p>
-                                <a class="btn btn-primary" href="#" role="button">Submit Your Design</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div class="card item">
-                            <div class="card-body">
-                                <h3>Submit a Touch-Up or Do-Over</h3>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur vel dolor nisl. Quisque iaculis bibendum eros et imperdiet. Nulla feugiat, purus quis placerat vehicula, nisi tellus scelerisque ex, pretium euismod
-                                    nisi
-                                    nibh et massa.</p>
-                                <a class="btn btn-primary" href="#" role="button">Submit Your Design</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                {!! $dh_end->text !!}
             </div>
         </div>
 
