@@ -162,24 +162,6 @@
                         </div>
                     </div>
                 @endforeach
-                <!-- <div class="row">
-                    <div class="col">
-                        <div class="card item">
-                            <div class="card-body">
-                                <h3>Vayron</h3>
-                                <p>This is where we'd put the template files!</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div class="card item">
-                            <div class="card-body">
-                                <h3>Tyrian</h3>
-                                <p>This is where we'd put the template files!</p>
-                            </div>
-                        </div>
-                    </div>
-                </div> -->
             </div>
         </div>
 
