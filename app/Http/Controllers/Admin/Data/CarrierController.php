@@ -91,7 +91,7 @@ class CarrierController extends Controller {
         $data = $request->only([
             'name', 'description', 'image', 'attached_markings',
         ]);
-        
+
         if ($id && $service->updateCarrier(Carrier::find($id), $data, Auth::user())) {
             flash('Carrier updated successfully.')->success();
         } elseif (!$id && $carrier = $service->createCarrier($data, Auth::user())) {
