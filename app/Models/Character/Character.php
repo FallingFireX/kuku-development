@@ -260,14 +260,15 @@ class Character extends Model {
      * Scope a query to only include characters that have the selected markings.
      *
      * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param mixed                                 $markingIds
      *
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeWithMarkings($query, $markingIds) { 
-    return $query->join('character_markings', 'characters.id', '=', 'character_markings.character_id')
-        ->whereIn('character_markings.marking_id', $markingIds)
-        ->select('characters.*')
-        ->distinct();
+    public function scopeWithMarkings($query, $markingIds) {
+        return $query->join('character_markings', 'characters.id', '=', 'character_markings.character_id')
+            ->whereIn('character_markings.marking_id', $markingIds)
+            ->select('characters.*')
+            ->distinct();
     }
 
     /**********************************************************************************************

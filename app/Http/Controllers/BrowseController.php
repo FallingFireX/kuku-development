@@ -258,7 +258,7 @@ class BrowseController extends Controller {
         if ($request->get('marking_id')) {
             $markingIds = $request->get('marking_id');
             $query->join('character_markings', 'characters.id', '=', 'character_markings.character_id')
-                    ->whereIn('character_markings.marking_id', $markingIds);
+                ->whereIn('character_markings.marking_id', $markingIds);
             //dd($query->toSql());
         }
 

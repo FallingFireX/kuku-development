@@ -121,7 +121,7 @@
                                         'imageUrl' => $mutation->imageUrl ?? '/images/account.png',
                                         'name' => $mutation->name,
                                         'description' => $short_description ?? '',
-                                        'url' => '/world/traits?name=' . $mutation->name,
+                                        'url' => $mutation->getUrlAttribute() ?: '/world/traits?name=' . $mutation->name,
                                     ])
                                 @endforeach
                                 {!! $magical_mutations->render() !!}

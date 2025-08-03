@@ -5,19 +5,18 @@ namespace App\Http\Controllers\Characters;
 use App\Facades\Settings;
 use App\Http\Controllers\Controller;
 use App\Models\Base\Base;
+use App\Models\Carrier\Carrier;
 use App\Models\Character\Character;
 use App\Models\Character\CharacterCurrency;
 use App\Models\Character\CharacterItem;
+use App\Models\Character\CharacterMarking;
 use App\Models\Character\CharacterProfile;
 use App\Models\Character\CharacterTransfer;
-use App\Models\Character\CharacterMarking;
 use App\Models\Currency\Currency;
 use App\Models\Gallery\GallerySubmission;
 use App\Models\Item\Item;
 use App\Models\Item\ItemCategory;
 use App\Models\Marking\Marking;
-use App\Models\Carrier\Carrier;
-use App\Models\Carrier\MarkingCarrier;
 use App\Models\User\User;
 use App\Models\User\UserCurrency;
 use App\Models\User\UserItem;
@@ -149,11 +148,11 @@ class CharacterController extends Controller {
             $temp = Marking::where('id', $marking->marking_id)->first();
             $rendered['is_chimera'] = $marking->data === null ? 0 : 1;
             $has_multi_bases = false;
-            if($marking->carrier_id) {
+            if ($marking->carrier_id) {
                 //Add carriers if needed
                 $rendered['carriers'][$marking->carrier_id] = Carrier::where('id', $marking->carrier_id)->pluck('name')->toArray();
             }
-            if(str_contains($marking->base_id, '|')) {
+            if (str_contains($marking->base_id, '|')) {
                 $has_multi_bases = true;
                 $multi_bases = explode('|', $marking->base_id);
                 foreach ($multi_bases as $base) {
@@ -161,7 +160,7 @@ class CharacterController extends Controller {
                 }
             }
             if ($temp) {
-                if($rendered['is_chimera'] === 1) {
+                if ($rendered['is_chimera'] === 1) {
                     $marksrender[$marking->data][$temp->order_in_genome][] = [
                         'name'          => $temp->name,
                         'is_dominant'   => $marking->is_dominant,
@@ -190,6 +189,7 @@ class CharacterController extends Controller {
      * Gets the phenotype for the character genome.
      *
      * @param mixed $markings
+     * @param mixed $type
      *
      * @return string
      */
@@ -199,7 +199,7 @@ class CharacterController extends Controller {
             return 'Unknown';
         }
         $chimera = false;
-        if(array_key_exists('is_chimera', $markings) && $markings['is_chimera'] == 1) {
+        if (array_key_exists('is_chimera', $markings) && $markings['is_chimera'] == 1) {
             $chimera = true;
             $geno_sides = [];
         }
@@ -208,7 +208,7 @@ class CharacterController extends Controller {
 
         //return $markings;
 
-        foreach($markings['markings'] as $side => $group) {
+        foreach ($markings['markings'] as $side => $group) {
             //Sides - Max of 2 for chimera
             $sideInner = $this->handleMarkingGroup($group, $type);
             $geno_sides[$side] = $sideInner;
@@ -216,37 +216,38 @@ class CharacterController extends Controller {
             //Get the bases per side
             $geno_sides[$side][2] = $bases;
             ksort($geno_sides[$side]);
-
         }
-        foreach($geno_sides as $i => $side) {
+        foreach ($geno_sides as $i => $side) {
             $html_inner[] = $this->renderFinalMarkingOutput($side, $type);
         }
-        if(count($html_inner) == 2) {
+        if (count($html_inner) == 2) {
             $seperator = ($type == 'phenotype' ? ' // ' : '//');
             $html_inner = implode($seperator, $html_inner);
         } else {
             $html_inner = implode('', $html_inner);
         }
-        
+
         return $html_inner;
     }
 
     public function handleMarkingGroup($group, $type = 'phenotype') {
         $html_inner = [];
-        foreach($group as $id => $order_group) {
+        foreach ($group as $id => $order_group) {
             //Inside each order group, we have the markings
-            foreach($order_group as $marking) {
+            foreach ($order_group as $marking) {
                 //Individual markings
                 $html_inner[$id][] = $this->renderIndividualMarking($marking, $type);
             }
         }
+
         return $html_inner;
     }
 
     /**
      * Gets the individual gene template for the marking string.
      *
-     * @param mixed $markings
+     * @param mixed $marking
+     * @param mixed $type
      *
      * @return string
      */
@@ -257,22 +258,21 @@ class CharacterController extends Controller {
         switch ($type) {
             case 'phenotype':
                 $text = $marking->name;
-                if($marking->name == 'Glint') {
-                    if($marking->is_dominant) {
-                        $text = array_key_first($marking->base_info[0]).'/'.array_key_first($marking->base_info[1]).' '.$text; 
+                if ($marking->name == 'Glint') {
+                    if ($marking->is_dominant) {
+                        $text = array_key_first($marking->base_info[0]).'/'.array_key_first($marking->base_info[1]).' '.$text;
                     } else {
-                       $text = array_key_first($marking->base_info) .' '.$text;
+                        $text = array_key_first($marking->base_info).' '.$text;
                     }
-                    
                 }
                 break;
             case 'genotype':
                 $text = $marking->code;
-                if($marking->name == 'Glint') {
-                    if($marking->is_dominant) {
-                        $text = $text.'-'.array_values($marking->base_info[0])[0].'/'.array_values($marking->base_info[1])[0]; 
+                if ($marking->name == 'Glint') {
+                    if ($marking->is_dominant) {
+                        $text = $text.'-'.array_values($marking->base_info[0])[0].'/'.array_values($marking->base_info[1])[0];
                     } else {
-                       $text = $text.'-'.array_values($marking->base_info)[0]; 
+                        $text = $text.'-'.array_values($marking->base_info)[0];
                     }
                 }
                 break;
@@ -286,7 +286,8 @@ class CharacterController extends Controller {
     /**
      * Gets the genotype for the character genome.
      *
-     * @param mixed $markings
+     * @param mixed $array
+     * @param mixed $type
      *
      * @return string
      */
@@ -300,19 +301,19 @@ class CharacterController extends Controller {
                 $base = $array[2] ?? 'Unknown';
                 unset($array[2]);
 
-                foreach($array as $order => $marking_group) {
-                    foreach($marking_group as $marking) {
-                        if($order < 2) {
+                foreach ($array as $order => $marking_group) {
+                    foreach ($marking_group as $marking) {
+                        if ($order < 2) {
                             $temp[0][] = $marking;
-                        } else if( $order > 2 && $order < 9) {
+                        } elseif ($order > 2 && $order < 9) {
                             $temp[1][] = $marking;
-                        } else if ($order >= 9) {
+                        } elseif ($order >= 9) {
                             $temp[2][] = $marking;
                         }
                     }
                 }
 
-                $html = implode(' ', $temp[0]) .' ' . $base[0]['name'];
+                $html = implode(' ', $temp[0]).' '.$base[0]['name'];
                 if (isset($temp[1]) && count($temp[1]) > 0) {
                     $html .= ' with '.implode(' ', $temp[1]);
                 }
@@ -322,12 +323,12 @@ class CharacterController extends Controller {
             case 'genotype':
                 $html = $array[2][0]['code'].'+';
                 unset($array[2]);
-                
-                foreach($array as $order => $marking_group) {
-                    foreach($marking_group as $marking) {
-                        if($order < 9) {
+
+                foreach ($array as $order => $marking_group) {
+                    foreach ($marking_group as $marking) {
+                        if ($order < 9) {
                             $temp[0][] = $marking;
-                        } else if ($order >= 9) {
+                        } elseif ($order >= 9) {
                             $temp[1][] = $marking;
                         }
                     }
@@ -347,8 +348,7 @@ class CharacterController extends Controller {
      * @return array
      */
     public function getBaseCoat() {
-
-        if(str_contains($this->character->base,  '|')) {
+        if (str_contains($this->character->base, '|')) {
             $chimera_bases = [];
             $bases = explode('|', $this->character->base);
             if (count($bases) > 1) {
@@ -359,6 +359,7 @@ class CharacterController extends Controller {
                         'code' => $temp->code,
                     ];
                 }
+
                 return $chimera_bases;
             }
         }
