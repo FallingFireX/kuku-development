@@ -7,8 +7,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Base\Base;
 use App\Models\Character\Character;
 use App\Models\Character\CharacterCategory;
-use App\Models\Character\CharacterTransfer;
 use App\Models\Character\CharacterMarking;
+use App\Models\Character\CharacterTransfer;
 use App\Models\Feature\Feature;
 use App\Models\Marking\Marking;
 use App\Models\Rarity;
@@ -178,9 +178,9 @@ class CharacterController extends Controller {
 
         $glint_bases = [];
         $temp = CharacterMarking::where('character_id', $this->character->id)
-                ->whereIn('code', ['GG', 'Gl'])
-                ->value('base_id');
-        if($temp) {
+            ->whereIn('code', ['GG', 'Gl'])
+            ->value('base_id');
+        if ($temp) {
             $has_glint = true;
             if (str_contains($temp, '|')) {
                 $glint_bases = Base::whereIn('id', explode('|', $temp))->pluck('name', 'id')->toArray();
@@ -192,17 +192,17 @@ class CharacterController extends Controller {
         }
 
         return view('character.admin._edit_stats_modal', [
-            'character'   => $this->character,
-            'categories'  => CharacterCategory::orderBy('sort')->pluck('name', 'id')->toArray(),
-            'userOptions' => User::query()->orderBy('name')->pluck('name', 'id')->toArray(),
-            'number'      => format_masterlist_number($this->character->number, config('lorekeeper.settings.character_number_digits')),
-            'isMyo'       => false,
-            'markings'    => ['' => 'Select Markings(s)'] + Marking::orderBy('name', 'DESC')->pluck('name', 'id')->toArray(),
-            'bases'       => ['' => 'Select Base(s)'] + Base::orderBy('name', 'DESC')->pluck('name', 'id')->toArray(),
-            'is_chimera'  => (str_contains($this->character->base, '|') ? 1 : 0),
-            'characterMarkings' =>  CharacterMarking::where('character_id', $this->character->id)->get(),
-            'has_glint'   => $has_glint,
-            'glint_bases' => $glint_bases,
+            'character'         => $this->character,
+            'categories'        => CharacterCategory::orderBy('sort')->pluck('name', 'id')->toArray(),
+            'userOptions'       => User::query()->orderBy('name')->pluck('name', 'id')->toArray(),
+            'number'            => format_masterlist_number($this->character->number, config('lorekeeper.settings.character_number_digits')),
+            'isMyo'             => false,
+            'markings'          => ['' => 'Select Markings(s)'] + Marking::orderBy('name', 'DESC')->pluck('name', 'id')->toArray(),
+            'bases'             => ['' => 'Select Base(s)'] + Base::orderBy('name', 'DESC')->pluck('name', 'id')->toArray(),
+            'is_chimera'        => (str_contains($this->character->base, '|') ? 1 : 0),
+            'characterMarkings' => CharacterMarking::where('character_id', $this->character->id)->get(),
+            'has_glint'         => $has_glint,
+            'glint_bases'       => $glint_bases,
         ]);
     }
 

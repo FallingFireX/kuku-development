@@ -2,15 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use App\Models\Feature\Feature;
-use App\Models\Feature\FeatureCategory;
-use App\Models\Rarity;
-use App\Models\Species\Species;
-use App\Models\Species\Subtype;
-use App\Services\FeatureService;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class FeatureController extends Controller {
     /*
@@ -27,12 +19,10 @@ class FeatureController extends Controller {
         if (!$trait) {
             abort(404);
         }
-        if(!$trait->full_page) {
+        if (!$trait->full_page) {
             return redirect()->to('/world/traits?name='.$trait->name);
         }
 
         return view('designhub.trait', ['trait' => $trait]);
     }
-
-    
 }

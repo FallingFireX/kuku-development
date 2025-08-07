@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Facades\Settings;
+use App\Models\Base\Base;
 use App\Models\Character\Character;
 use App\Models\Character\CharacterCategory;
 use App\Models\Character\CharacterImage;
@@ -10,7 +11,6 @@ use App\Models\Character\CharacterMarking;
 use App\Models\Character\Sublist;
 use App\Models\Feature\Feature;
 use App\Models\Marking\Marking;
-use App\Models\Base\Base;
 use App\Models\Rank\Rank;
 use App\Models\Rarity;
 use App\Models\Species\Species;

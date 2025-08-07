@@ -1863,16 +1863,16 @@ class CharacterManager extends Service {
                     $glint = null;
                     if ($markingId == $glintID) {
                         $glint = 'got here';
-                        if($is_dominant) {
-                            $glint = $data['marking_color_0'][$i] . '|' . $data['marking_color_1'][$i];
+                        if ($is_dominant) {
+                            $glint = $data['marking_color_0'][$i].'|'.$data['marking_color_1'][$i];
                         } else {
                             $glint = $data['marking_color_0'][$i];
                         }
                     }
 
                     \Log::info('Processing marking', [
-                        'loop'          => $i, 
-                        'markingId'     => $markingId, 
+                        'loop'          => $i,
+                        'markingId'     => $markingId,
                         'code'          => ($is_dominant ? $temp->dominant : $temp->recessive),
                         'order'         => $temp->order_in_genome ?? 0,
                         'is_dominant'   => $is_dominant,
