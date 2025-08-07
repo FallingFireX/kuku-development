@@ -55,7 +55,7 @@
     $('#markingList').on('change', '.marking-select', function() {
         var marking = $(this).text();
         var markingRow = $(this).parents('.marking-row');
-        if(marking === 'Glint') {
+        if (marking === 'Glint') {
             markingRow.find('.form-group[connect="Glint"]:not(.dominant)').show();
         } else {
             markingRow.find('.form-group[connect="Glint"]:not(.dominant)').hide();
