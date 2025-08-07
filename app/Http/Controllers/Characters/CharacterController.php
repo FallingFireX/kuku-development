@@ -148,6 +148,7 @@ class CharacterController extends Controller {
             $temp = Marking::where('id', $marking->marking_id)->first();
             $rendered['is_chimera'] = $marking->data === null ? 0 : 1;
             $has_multi_bases = false;
+            $marking_data = $marking->data ?? 0;
             if ($marking->carrier_id) {
                 //Add carriers if needed
                 $rendered['carriers'][$marking->carrier_id] = Carrier::where('id', $marking->carrier_id)->pluck('name')->toArray();
@@ -161,7 +162,7 @@ class CharacterController extends Controller {
             }
             if ($temp) {
                 if ($rendered['is_chimera'] === 1) {
-                    $marksrender[$marking->data][$temp->order_in_genome][] = [
+                    $marksrender[$marking_data][$temp->order_in_genome][] = [
                         'name'          => $temp->name,
                         'is_dominant'   => $marking->is_dominant,
                         'code'          => $marking->code,
@@ -298,7 +299,7 @@ class CharacterController extends Controller {
 
         switch ($type) {
             case 'phenotype':
-                $base = $array[2] ?? 'Unknown';
+                $base = $array[2] ?? [0 => ['name' => 'Unknown', 'code' => '??']];
                 unset($array[2]);
 
                 foreach ($array as $order => $marking_group) {
@@ -312,8 +313,8 @@ class CharacterController extends Controller {
                         }
                     }
                 }
-
-                $html = implode(' ', $temp[0]).' '.$base[0]['name'];
+                $html = (isset($temp[0]) && count($temp[0]) > 0 ? implode(' ', $temp[0]).' ' : '');
+                $html .= $base[0]['name'];
                 if (isset($temp[1]) && count($temp[1]) > 0) {
                     $html .= ' with '.implode(' ', $temp[1]);
                 }
@@ -333,7 +334,7 @@ class CharacterController extends Controller {
                         }
                     }
                 }
-                $html .= implode('/', $temp[0]);
+                $html .= (isset($temp[0]) && count($temp[0]) > 0 ? implode('/', $temp[0]) : '');
                 $html .= (array_key_exists(1, $temp) && count($temp[1]) > 0 ? '/'.implode('/', $temp[1]) : '');
 
                 break;

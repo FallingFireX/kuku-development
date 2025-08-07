@@ -59,9 +59,124 @@
     <div class="collapse datepicker" id="collapsedt"></div>
 </div>
 
+<!-- Design Hub -->
+<div class="form-group">
+    {!! Form::checkbox('is_chimera', 0, ($is_chimera ? 1 : 0), ['class' => 'form-check-input', 'data-toggle' => 'toggle', 'id' => 'is_chimera']) !!}
+    {!! Form::label('is_chimera', 'Is Chimera', ['class' => 'form-check-label ml-3']) !!} {!! add_help('If this character has the Chimera modifier, then this will give you the ability to customize both genomes.') !!}
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            {!! Form::label('Base Color') !!}
+            {!! Form::select('base', $bases, ($is_chimera ? explode('|', $character->base)[0] : $character->base), ['class' => 'form-control']) !!}
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group" connect="is_chimera" {!! ($is_chimera ? '' : 'style="display:none"') !!}>
+            {!! Form::label('Secondary Base Color') !!}
+            {!! Form::select('secondary_base', $bases, ($is_chimera ? explode('|', $character->base)[1] : $character->base), ['class' => 'form-control']) !!}
+        </div>
+    </div>
+</div>
+
+<div class="form-group">
+    {!! Form::label('Markings') !!}
+    {!! add_help('Select markings applicable to character') !!}
+    <div><a href="#" class="btn btn-primary mb-2" id="add-marking">Add Marking</a></div>
+    <div id="markingList">
+        @foreach ($characterMarkings as $marking)
+            <div class="d-flex mb-2 marking-row">
+                {!! Form::select('marking_id[]', $markings, $marking->marking_id, ['class' => 'form-control mr-2 marking-select', 'placeholder' => 'Select Marking']) !!}
+                <div class="form-group" style="width:50%">
+                    <select name="is_dominant[]" id="is_dominant[]" class="form-control markingType" placeholder="Select Type...">
+                        <option value="" data-code="">Select Type...</option>
+                        <option value="0" data-code="0" {{ $marking->is_dominant == 0 ? 'selected' : '' }}>Recessive</option>
+                        <option value="1" data-code="1" {{ $marking->is_dominant == 1 ? 'selected' : '' }}>Dominant</option>
+                    </select>
+                </div>
+                <div class="form-group mx-2" connect="is_chimera" style="width:50%;{{ $is_chimera ? '' : 'display:none;' }}">
+                    <select name="side_id[]" id="side_id" class="form-control" placeholder="Select Side...">
+                        <option value="" data-code="">Select Side...</option>
+                        <option value="0" data-code="0" {{ $marking->data == 0 ? 'selected' : '' }}>Side 1</option>
+                        <option value="1" data-code="1" {{ $marking->data == 1 ? 'selected' : '' }}>Side 2</option>
+                    </select>
+                </div>
+                <?php
+                    $is_glint = ($marking->marking_id == 5 ? true : false); // Glint marking
+                    if($is_glint) {
+                       $glint_1 = isset(explode('|', $marking->data)[0]) ? explode('|', $marking->data)[0] : $marking->data;
+                    } else {
+                        $glint_1 = '';
+                    }
+                    $glint_2 = $is_glint && isset(explode('|', $marking->data)[1]) ? explode('|', $marking->data)[1] : false;
+                ?>
+                <div class="form-group mb-0 mx-2" connect="Glint" style="min-width: 10vw;{{ $is_glint ? '' : 'display:none;' }}">
+                    {!! Form::label('Marking Color') !!}
+                    {!! Form::select('marking_color_0[]', $bases, array_key_first($glint_bases), ['class' => 'form-control']) !!}
+                </div>
+                <div class="form-group mb-0 mx-2 dominant" connect="Glint" style="min-width: 10vw;{{ $is_glint && $glint_2 ? '' : 'display:none;' }}">
+                    {!! Form::label('Secondary Marking Color') !!}
+                    {!! Form::select('marking_color_1[]', $bases, array_keys($glint_bases)[1] ?? null, ['class' => 'form-control']) !!}
+                </div>
+                <a href="#" class="remove-marking btn btn-danger mb-2">×</a>
+            </div>
+        @endforeach
+    </div>
+    <div class="marking-row hide mb-2">
+        {!! Form::select('marking_id[]', $markings, null, ['class' => 'form-control mr-2 marking-select', 'placeholder' => 'Select Marking']) !!}
+        <div class="form-group" style="width:50%">
+            <select name="is_dominant[]" id="is_dominant[]" class="form-control markingType" placeholder="Select Type...">
+                <option value="" data-code="">Select Type...</option>
+                <option value="0" data-code="0">Recessive</option>
+                <option value="1" data-code="1">Dominant</option>
+            </select>
+        </div>
+        <div class="form-group mx-2" connect="is_chimera" style="width:50%;display:none;">
+            <select name="side_id[]" id="side_id" class="form-control" placeholder="Select Side...">
+                <option value="" data-code="">Select Side...</option>
+                <option value="0" data-code="0">Side 1</option>
+                <option value="1" data-code="1">Side 2</option>
+            </select>
+        </div>
+        <div class="form-group mb-0 mx-2" connect="Glint" style="min-width: 10vw; display:none;">
+            {!! Form::label('Marking Color') !!}
+            {!! Form::select('marking_color_0[]', $bases, old('marking_color_0'), ['class' => 'form-control']) !!}
+        </div>
+        <div class="form-group mb-0 mx-2 dominant" connect="Glint" style="min-width: 10vw; display:none;">
+            {!! Form::label('Secondary Marking Color') !!}
+            {!! Form::select('marking_color_1[]', $bases, old('marking_color_1'), ['class' => 'form-control']) !!}
+        </div>
+        <a href="#" class="remove-marking btn btn-danger mb-2">×</a>
+    </div>
+</div>
+
+<div class="card mb-3 glint-color" {{ $has_glint ? '' : 'style=display:none;' }}>
+    <div class="card-header">
+        <h3>Glint</h3>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    {!! Form::label('Glint Color') !!}
+                    {!! Form::select('glint_1', $bases, array_key_first($glint_bases), ['class' => 'form-control', 'id' => 'glint_1']) !!}
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group glint_dom" {{ count($glint_bases) > 1 ? '' : 'style=display:none;' }}>
+                    {!! Form::label('Secondary Glint Color') !!}
+                    {!! Form::select('glint_2', $bases, array_keys($glint_bases)[1] ?? null, ['class' => 'form-control', 'id' => 'glint_2']) !!}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="text-right">
     {!! Form::submit('Edit', ['class' => 'btn btn-primary']) !!}
 </div>
 {!! Form::close() !!}
 
 @include('widgets._datetimepicker_js', ['dtinline' => 'datepickeralt', 'dtvalue' => $character->transferrable_at])
+@include('widgets._markingbases_js', [])

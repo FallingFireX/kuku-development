@@ -24,6 +24,10 @@
                     {!! Form::label('subtype_id', 'Species Subtype: ') !!}
                     {!! Form::select('subtype_id', $subtypes, Request::get('subtype_id'), ['class' => 'form-control mr-2', 'style' => 'width: 250px']) !!}
                 </div>
+                <div class="masterlist-search-field">
+                    {!! Form::label('base', 'Base: ') !!}
+                    {!! Form::select('base', $bases, Request::get('base'), ['class' => 'form-control mr-2', 'style' => 'width: 250px']) !!}
+                </div>
                 <hr />
             @endif
             <div class="masterlist-search-field">

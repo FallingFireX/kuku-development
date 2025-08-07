@@ -286,45 +286,31 @@
             <div><a href="#" class="btn btn-primary mb-2" id="add-marking">Add Marking</a></div>
             <div id="markingList">
             </div>
-            <div class="marking-row hide mb-2">
+            <div class="marking-row align-items-end hide mb-2">
                 {!! Form::select('marking_id[]', $markings, null, ['class' => 'form-control mr-2 marking-select', 'placeholder' => 'Select Marking']) !!}
-                <div class="form-group" style="width:50%">
+                <div class="form-group mb-0" style="width:50%">
                     <select name="is_dominant[]" id="is_dominant[]" class="form-control markingType" placeholder="Select Type...">
                         <option value="" data-code="">Select Type...</option>
                         <option value="0" data-code="0">Recessive</option>
                         <option value="1" data-code="1">Dominant</option>
                     </select>
                 </div>
-                <div class="form-group mx-2" connect="is_chimera" style="width:50%;display:none;">
+                <div class="form-group mb-0 mx-2" connect="is_chimera" style="width:50%;display:none;">
                     <select name="side_id[]" id="side_id" class="form-control" placeholder="Select Side...">
                         <option value="" data-code="">Select Side...</option>
                         <option value="0" data-code="0">Side 1</option>
                         <option value="1" data-code="1">Side 2</option>
                     </select>
                 </div>
-                <a href="#" class="remove-marking btn btn-danger mb-2">×</a>
-            </div>
-        </div>
-
-        <div class="card mb-3 glint-color" style="display:none;">
-            <div class="card-header">
-                <h3>Glint</h3>
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            {!! Form::label('Glint Color') !!}
-                            {!! Form::select('glint_1', $bases, old('glint_id'), ['class' => 'form-control', 'id' => 'glint_1']) !!}
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group glint_dom" style="display:none;">
-                            {!! Form::label('Secondary Glint Color') !!}
-                            {!! Form::select('glint_2', $bases, old('glint_id'), ['class' => 'form-control', 'id' => 'glint_2']) !!}
-                        </div>
-                    </div>
+                <div class="form-group mb-0 mx-2" connect="Glint" style="min-width: 10vw; display:none;">
+                    {!! Form::label('Marking Color') !!}
+                    {!! Form::select('marking_color_0[]', $bases, old('marking_color_0'), ['class' => 'form-control']) !!}
                 </div>
+                <div class="form-group mb-0 mx-2 dominant" connect="Glint" style="min-width: 10vw; display:none;">
+                    {!! Form::label('Secondary Marking Color') !!}
+                    {!! Form::select('marking_color_1[]', $bases, old('marking_color_1'), ['class' => 'form-control']) !!}
+                </div>
+                <a href="#" class="remove-marking btn btn-danger mb-2">×</a>
             </div>
         </div>
 
@@ -341,6 +327,7 @@
     @include('widgets._character_create_options_js')
     @include('widgets._image_upload_js')
     @include('widgets._datetimepicker_js')
+    @include('widgets._markingbases_js', [])
     @if (!$isMyo)
         @include('widgets._character_code_js')
     @endif
@@ -358,91 +345,6 @@
             }).fail(function(jqXHR, textStatus, errorThrown) {
                 alert("AJAX call failed: " + textStatus + ", " + errorThrown);
             });
-        });
-        $(document).on('ready', function() {
-            $('#markings').selectize();
-        });
-
-        $('#add-marking').on('click', function(e) {
-            e.preventDefault();
-            addMarkingRow();
-        });
-        $('.remove-marking').on('click', function(e) {
-            e.preventDefault();
-            removeMarkingeRow($(this));
-        })
-
-        function addMarkingRow() {
-            var $clone = $('.marking-row').clone();
-            $('#markingList').append($clone);
-            $clone.removeClass('hide marking-row');
-            $clone.addClass('d-flex');
-            $clone.find('.remove-marking').on('click', function(e) {
-                e.preventDefault();
-                removeMarkingRow($(this));
-            })
-            @if (config('lorekeeper.extensions.organised_traits_dropdown'))
-                $clone.find('.marking-select').selectize({
-                    render: {
-                        item: featureSelectedRender
-                    }
-                });
-            @else
-                $clone.find('.marking-select').selectize();
-            @endif
-        }
-
-        function removeMarkingRow($trigger) {
-            $trigger.parent().remove();
-            updateGlint();
-        }
-
-        function markingSelectedRender(item, escape) {
-            return '<div><span>' + escape(item["text"].trim()) + ' (' + escape(item["optgroup"].trim()) + ')' + '</span></div>';
-        }
-
-        //If Chimera
-        $('#is_chimera').on('change', function(e) {
-            isChimera = $('#is_chimera').is(':checked');
-
-            if (isChimera) {
-                $('[connect="is_chimera"]').show();
-            } else {
-                $('[connect="is_chimera"]').hide();
-            }
-        });
-
-        //On marking list update
-        function updateMarkingList() {
-            var currentList = [];
-            $('#markingList select.marking-select').each(function() {
-                currentList.push($(this).text());
-            });
-            return currentList;
-        }
-
-        function updateGlint() {
-            var currentList = updateMarkingList();
-
-            if (currentList.includes('Glint')) {
-                $('.glint-color').show();
-            } else {
-                $('.glint-color').hide();
-            }
-        }
-
-        //If Glint
-        $('#markingList').on('change', '.marking-select', function() {
-            updateGlint();
-        });
-        $('#markingList').on('change', '.markingType', function() {
-            if ($(this).val() == 1) {
-                if (($(this).parents('.d-flex').find('.marking-select').text()).includes('Glint')) {
-                    $('.glint_dom').show();
-                }
-            } else {
-                $('.glint_dom').hide();
-            }
         });
     </script>
 @endsection

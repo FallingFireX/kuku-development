@@ -1847,26 +1847,38 @@ class CharacterManager extends Service {
 
         try {
             \Log::info('all_data', $data);
-            \Log::info('marking_id', ['marking_id' => $data['marking_id']]);
             // Clear old markings
             CharacterMarking::where('character_id', $character->id)->delete();
 
-            $glintID = 4; //Change this ID to whatever the ID of the glint modifier is
-
+            $glintID = Settings::get('glint_id');
             $i = 0;
 
             // Attach markings
             foreach ($data['marking_id'] as $markingId) {
-                \Log::info('Processing marking', ['loop' => $i, 'markingId' => $markingId]);
                 if ($markingId) {
                     $temp = Marking::where('id', $markingId)->first();
-                    \Log::info('Marking lookup', ['temp' => $temp]);
 
-                    $is_dominant = $data['is_dominant'][$i];
+                    $is_dominant = $data['is_dominant'][$i] ?? 0;
 
-                    if ($markingId === $glintID) {
-                        $glint = ($is_dominant ? $data['glint_1'].'|'.$data['glint_2'] : $data['glint_1']);
+                    $glint = null;
+                    if ($markingId == $glintID) {
+                        $glint = 'got here';
+                        if($is_dominant) {
+                            $glint = $data['marking_color_0'][$i] . '|' . $data['marking_color_1'][$i];
+                        } else {
+                            $glint = $data['marking_color_0'][$i];
+                        }
                     }
+
+                    \Log::info('Processing marking', [
+                        'loop'          => $i, 
+                        'markingId'     => $markingId, 
+                        'code'          => ($is_dominant ? $temp->dominant : $temp->recessive),
+                        'order'         => $temp->order_in_genome ?? 0,
+                        'is_dominant'   => $is_dominant,
+                        'data'          => $data['side_id'][$i] ?? 0,
+                        'base_id'       => $glint,
+                    ]);
 
                     $marking = CharacterMarking::create([
                         'character_id'  => $character->id,
@@ -1874,8 +1886,8 @@ class CharacterManager extends Service {
                         'code'          => ($is_dominant ? $temp->dominant : $temp->recessive),
                         'order'         => $temp->order_in_genome ?? 0,
                         'is_dominant'   => $is_dominant,
-                        'data'          => $data['side_id'][$i] ?? null,
-                        'base_id'       => ($glint ?? null),
+                        'data'          => $data['side_id'][$i] ?? 0,
+                        'base_id'       => $glint,
                     ]);
                 }
                 $i++;
@@ -2130,7 +2142,7 @@ class CharacterManager extends Service {
             ]);
 
             $all_data = [];
-            $glintID = 4; // Change this ID to whatever the ID of the glint modifier is
+            $glintID = Settings::get('glint_id');
 
             $glint_1 = $data['glint_1'] ?? null;
             $glint_2 = $data['glint_2'] ?? null;

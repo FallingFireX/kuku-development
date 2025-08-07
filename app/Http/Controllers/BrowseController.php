@@ -6,9 +6,11 @@ use App\Facades\Settings;
 use App\Models\Character\Character;
 use App\Models\Character\CharacterCategory;
 use App\Models\Character\CharacterImage;
+use App\Models\Character\CharacterMarking;
 use App\Models\Character\Sublist;
 use App\Models\Feature\Feature;
 use App\Models\Marking\Marking;
+use App\Models\Base\Base;
 use App\Models\Rank\Rank;
 use App\Models\Rarity;
 use App\Models\Species\Species;
@@ -207,6 +209,12 @@ class BrowseController extends Controller {
                 $query->where('owner_url', 'LIKE', '%'.$ownerUrl.'%');
             });
         }
+        if ($request->get('base')) {
+            $base = $request->get('base');
+            $query->where(function ($query) use ($base) {
+                $query->where('base', 'LIKE', '%'.$base.'%');
+            });
+        }
 
         // Search only main images
         if (!$request->get('search_images')) {
@@ -257,9 +265,8 @@ class BrowseController extends Controller {
 
         if ($request->get('marking_id')) {
             $markingIds = $request->get('marking_id');
-            $query->join('character_markings', 'characters.id', '=', 'character_markings.character_id')
-                ->whereIn('character_markings.marking_id', $markingIds);
-            //dd($query->toSql());
+            $characterIds = CharacterMarking::whereIn('marking_id', $markingIds)->pluck('character_id')->toArray();
+            $query->whereIn('characters.id', $characterIds);
         }
 
         if ($request->get('is_gift_art_allowed')) {
@@ -326,6 +333,7 @@ class BrowseController extends Controller {
             'rarities'     => [0 => 'Any Rarity'] + Rarity::orderBy('rarities.sort', 'DESC')->pluck('name', 'id')->toArray(),
             'features'     => Feature::getDropdownItems(),
             'markings'     => Marking::getDropdownItems(),
+            'bases'        => ['' => 'Select Base(s)'] + Base::orderBy('name', 'DESC')->pluck('name', 'id')->toArray(),
             'sublists'     => Sublist::orderBy('sort', 'DESC')->get(),
             'userOptions'  => User::query()->orderBy('name')->pluck('name', 'id')->toArray(),
         ]);

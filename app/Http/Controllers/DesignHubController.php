@@ -8,6 +8,7 @@ use App\Models\Rarity;
 use App\Models\SitePage;
 use App\Models\Species\Species;
 use App\Models\Species\Subtype;
+use App\Facades\Settings;
 use Auth;
 use Illuminate\Http\Request;
 
@@ -27,8 +28,8 @@ class DesignHubController extends Controller {
             'subtypes'          => Subtype::orderBy('sort', 'DESC')->get(),
             'markings'          => $markings,
             'rarity_list'       => $rarities,
-            'corrupt_mutations' => self::getDesignHubTraitByCategory($request, 4), //Swap '4' to the category ID
-            'magical_mutations' => self::getDesignHubTraitByCategory($request, 5), //Swap '5' to the category ID
+            'corrupt_mutations' => self::getDesignHubTraitByCategory($request, Settings::get('corrupt_mutation_id')),
+            'magical_mutations' => self::getDesignHubTraitByCategory($request, Settings::get('magical_mutation_id')),
         ]);
     }
 
