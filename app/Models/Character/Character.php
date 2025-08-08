@@ -3,11 +3,14 @@
 namespace App\Models\Character;
 
 use App\Facades\Notifications;
+use App\Models\Base\Base;
+use App\Models\Carrier\Carrier;
 use App\Models\Currency\Currency;
 use App\Models\Currency\CurrencyLog;
 use App\Models\Gallery\GalleryCharacter;
 use App\Models\Item\Item;
 use App\Models\Item\ItemLog;
+use App\Models\Marking\Marking;
 use App\Models\Model;
 use App\Models\Rarity;
 use App\Models\Submission\Submission;
@@ -15,10 +18,6 @@ use App\Models\Submission\SubmissionCharacter;
 use App\Models\Trade;
 use App\Models\User\User;
 use App\Models\User\UserCharacterLog;
-use App\Models\Base\Base;
-use App\Models\Marking\Marking;
-use App\Models\Carrier\Carrier;
-use App\Models\Carrier\MarkingCarrier;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -588,7 +587,7 @@ class Character extends Model {
 
     **********************************************************************************************/
 
-        /**
+    /**
      * Gets the final array for the character genome.
      *
      * @return array
@@ -655,17 +654,16 @@ class Character extends Model {
     public function getMarkingLinkedArray($markings, $type = 'phenotype') {
         $bases = $this->getBaseCoat();
 
-        if($markings === null || count($markings) < 1) {
-            if(count($bases) > 1) {
+        if ($markings === null || count($markings) < 1) {
+            if (count($bases) > 1) {
                 //If Chimera and no marks
-                if($type === 'phenotype') {
+                if ($type === 'phenotype') {
                     return $bases[0]['name'].' // '.$bases[1]['name'];
                 } else {
                     return $bases[0]['code'].'+//'.$bases[1]['code'].'+';
                 }
-
             } else {
-                if($type === 'phenotype') {
+                if ($type === 'phenotype') {
                     return $bases[0]['name'];
                 } else {
                     return $bases[0]['code'].'+';
@@ -858,5 +856,4 @@ class Character extends Model {
             'code'  => $base->code,
         ]];
     }
-
 }
