@@ -219,10 +219,31 @@ class CharacterController extends Controller {
             abort(404);
         }
 
+        $glint_bases = [];
+        $temp = CharacterMarking::where('character_id', $this->character->id)
+                ->whereIn('code', ['GG', 'Gl'])
+                ->value('base_id');
+        if($temp) {
+            $has_glint = true;
+            if (str_contains($temp, '|')) {
+                $glint_bases = Base::whereIn('id', explode('|', $temp))->pluck('name', 'id')->toArray();
+            } else {
+                $glint_bases = Base::where('id', $temp)->pluck('name', 'id')->toArray();
+            }
+        } else {
+            $has_glint = false;
+        }
+
         return view('character.admin._edit_stats_modal', [
             'character'   => $this->character,
             'userOptions' => User::query()->orderBy('name')->pluck('name', 'id')->toArray(),
             'isMyo'       => true,
+            'markings'    => ['' => 'Select Markings(s)'] + Marking::orderBy('name', 'DESC')->pluck('name', 'id')->toArray(),
+            'bases'       => ['' => 'Select Base(s)'] + Base::orderBy('name', 'DESC')->pluck('name', 'id')->toArray(),
+            'is_chimera'  => (str_contains($this->character->base, '|') ? 1 : 0),
+            'characterMarkings' =>  CharacterMarking::where('character_id', $this->character->id)->get(),
+            'has_glint'   => $has_glint,
+            'glint_bases' => $glint_bases,
         ]);
     }
 
