@@ -61,7 +61,7 @@
 
 <!-- Design Hub -->
 <div class="form-group">
-    {!! Form::checkbox('is_chimera', 0, ($is_chimera ? 1 : 0), ['class' => 'form-check-input', 'data-toggle' => 'toggle', 'id' => 'is_chimera']) !!}
+    {!! Form::checkbox('is_chimera', 0, $is_chimera ? 1 : 0, ['class' => 'form-check-input', 'data-toggle' => 'toggle', 'id' => 'is_chimera']) !!}
     {!! Form::label('is_chimera', 'Is Chimera', ['class' => 'form-check-label ml-3']) !!} {!! add_help('If this character has the Chimera modifier, then this will give you the ability to customize both genomes.') !!}
 </div>
 
@@ -69,13 +69,13 @@
     <div class="col-md-6">
         <div class="form-group">
             {!! Form::label('Base Color') !!}
-            {!! Form::select('base', $bases, ($is_chimera ? explode('|', $character->base)[0] : $character->base), ['class' => 'form-control']) !!}
+            {!! Form::select('base', $bases, $is_chimera ? explode('|', $character->base)[0] : $character->base, ['class' => 'form-control']) !!}
         </div>
     </div>
     <div class="col-md-6">
-        <div class="form-group" connect="is_chimera" {!! ($is_chimera ? '' : 'style="display:none"') !!}>
+        <div class="form-group" connect="is_chimera" {!! $is_chimera ? '' : 'style="display:none"' !!}>
             {!! Form::label('Secondary Base Color') !!}
-            {!! Form::select('secondary_base', $bases, ($is_chimera ? explode('|', $character->base)[1] : $character->base), ['class' => 'form-control']) !!}
+            {!! Form::select('secondary_base', $bases, $is_chimera ? explode('|', $character->base)[1] : $character->base, ['class' => 'form-control']) !!}
         </div>
     </div>
 </div>
@@ -103,13 +103,13 @@
                     </select>
                 </div>
                 <?php
-                    $is_glint = ($marking->marking_id == 5 ? true : false); // Glint marking
-                    if($is_glint) {
-                       $glint_1 = isset(explode('|', $marking->data)[0]) ? explode('|', $marking->data)[0] : $marking->data;
-                    } else {
-                        $glint_1 = '';
-                    }
-                    $glint_2 = $is_glint && isset(explode('|', $marking->data)[1]) ? explode('|', $marking->data)[1] : false;
+                $is_glint = $marking->marking_id == 5 ? true : false; // Glint marking
+                if ($is_glint) {
+                    $glint_1 = isset(explode('|', $marking->data)[0]) ? explode('|', $marking->data)[0] : $marking->data;
+                } else {
+                    $glint_1 = '';
+                }
+                $glint_2 = $is_glint && isset(explode('|', $marking->data)[1]) ? explode('|', $marking->data)[1] : false;
                 ?>
                 <div class="form-group mb-0 mx-2" connect="Glint" style="min-width: 10vw;{{ $is_glint ? '' : 'display:none;' }}">
                     {!! Form::label('Marking Color') !!}
