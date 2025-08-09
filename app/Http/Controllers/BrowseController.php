@@ -390,6 +390,12 @@ class BrowseController extends Controller {
                 $query->where('owner_url', 'LIKE', '%'.$ownerUrl.'%');
             });
         }
+        if ($request->get('base')) {
+            $base = $request->get('base');
+            $query->where(function ($query) use ($base) {
+                $query->where('base', 'LIKE', '%'.$base.'%');
+            });
+        }
 
         // Search only main images
         if (!$request->get('search_images')) {
@@ -433,6 +439,12 @@ class BrowseController extends Controller {
             }
         }
 
+        if ($request->get('marking_id')) {
+            $markingIds = $request->get('marking_id');
+            $characterIds = CharacterMarking::whereIn('marking_id', $markingIds)->pluck('character_id')->toArray();
+            $query->whereIn('characters.id', $characterIds);
+        }
+
         $query->whereIn('id', $imageQuery->pluck('character_id')->toArray());
 
         switch ($request->get('sort')) {
@@ -464,6 +476,7 @@ class BrowseController extends Controller {
             'rarities'     => [0 => 'Any Rarity'] + Rarity::orderBy('rarities.sort', 'DESC')->pluck('name', 'id')->toArray(),
             'features'     => Feature::getDropdownItems(),
             'markings'     => Marking::getDropdownItems(),
+            'bases'        => ['' => 'Select Base(s)'] + Base::orderBy('name', 'DESC')->pluck('name', 'id')->toArray(),
             'sublists'     => Sublist::orderBy('sort', 'DESC')->get(),
             'userOptions'  => User::query()->orderBy('name')->pluck('name', 'id')->toArray(),
         ]);

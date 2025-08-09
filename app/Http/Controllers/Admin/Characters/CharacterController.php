@@ -111,7 +111,7 @@ class CharacterController extends Controller {
             'designer_id', 'designer_url',
             'artist_id', 'artist_url',
             'species_id', 'subtype_id', 'rarity_id', 'feature_id', 'feature_data', 'marking_id', 'is_dominant', 'base', 'secondary_base', 'side_id',
-            'marking_color_0', 'marking_color_1',
+            'marking_color_0', 'marking_color_1', 'is_chimera',
             'image', 'thumbnail', 'image_description',
         ]);
 
@@ -152,6 +152,8 @@ class CharacterController extends Controller {
         ]);
         if ($character = $service->createCharacter($data, Auth::user(), true)) {
             flash('MYO slot created successfully.')->success();
+
+            $service->updateCharacterMarkings($data, $character);
 
             return redirect()->to($character->url);
         } else {
