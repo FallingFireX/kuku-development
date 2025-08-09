@@ -218,7 +218,7 @@
                                 @include('widgets._affiliates', ['affiliates' => $affiliates, 'featured' => $featured_affiliates, 'open' => $open])
                             </li>
                                   
-                            <li> <img src="https://discordapp.com/api/guilds/152924425774170113/widget.png?style=banner2" alt=""></li>
+                            <li><a href="https://discord.gg/XE25D68xMf"> <img src="https://discordapp.com/api/guilds/152924425774170113/widget.png?style=banner2" alt=""></a></li>
                         @endif
                     </ul>
                 </div>

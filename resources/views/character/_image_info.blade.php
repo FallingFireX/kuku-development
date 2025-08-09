@@ -151,7 +151,7 @@
                                     @endforeach
                                 </div>
                             @else
-                                <div>No rank trait listed.</div>
+                                <div><b>Rank: </b> None</div>
                             @endif
                         @else
                             <div>No traits listed.</div>
