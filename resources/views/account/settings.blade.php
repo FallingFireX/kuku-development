@@ -461,44 +461,51 @@
 @section('scripts')
     @parent
     <script>
-        $(document).ready(function() {
-            refreshBorder();
+    
+    function refreshBorder() {
+    var border = $('#border').val();
+
+    if (border) {
+        // Build base URLs from Blade without query params
+        var checkBorderUrl = "{{ url('account/check-border') }}";
+        var checkLayersUrl = "{{ url('account/check-layers') }}";
+
+        // Check Border Variant
+        $.ajax({
+            type: "GET",
+            url: checkBorderUrl + "?border=" + encodeURIComponent(border),
+            dataType: "text"
+        }).done(function(res) {
+            $("#bordervariant").html(res);
+        }).fail(function(jqXHR, textStatus, errorThrown) {
+            alert("Border variant AJAX call failed: " + textStatus + ", " + errorThrown);
         });
 
-        $("#border").change(function() {
-            refreshBorder();
+        // Check Layers
+        $.ajax({
+            type: "GET",
+            url: checkLayersUrl + "?border=" + encodeURIComponent(border),
+            dataType: "text"
+        }).done(function(res) {
+            $("#layers").html(res);
+        }).fail(function(jqXHR, textStatus, errorThrown) {
+            alert("Layer AJAX call failed: " + textStatus + ", " + errorThrown);
         });
+    } else {
+        console.warn("No border value provided. Skipping AJAX calls.");
+        $("#bordervariant").html(""); // Optional
+        $("#layers").html("");        // Optional
+    }
+};
 
-        function refreshBorder() {
-            var border = $('#border').val();
-            $.ajax({
-                type: "GET",
-                url: "{{ url('account/check-border') }}?border=" + border,
-                dataType: "text"
-            }).done(function(res) {
-                $("#bordervariant").html(res);
-            }).fail(function(jqXHR, textStatus, errorThrown) {
-                alert("AJAX call failed: " + textStatus + ", " + errorThrown);
-            });
-            $.ajax({
-                type: "GET",
-                url: "{{ url('account/check-layers') }}?border=" + border,
-                dataType: "text"
-            }).done(function(res) {
-                $("#layers").html(res);
-            }).fail(function(jqXHR, textStatus, errorThrown) {
-                alert("AJAX call failed: " + textStatus + ", " + errorThrown);
-            });
-        };
     </script>
 @endsection
 
 @section('scripts')
-@parent
-<script>
-$( document ).ready(function() {
-    $('.selectize').selectize();
-});
-
-</script>
+    @parent
+    <script>
+        $(document).ready(function() {
+            $('.selectize').selectize();
+        });
+    </script>
 @endsection

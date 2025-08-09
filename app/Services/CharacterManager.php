@@ -2142,8 +2142,8 @@ class CharacterManager extends Service {
     /**
      * Processes a character transfer.
      *
-     * @param array                 $data
-     * @param \App\Models\User\User $user
+     * @param array $data
+     * @param User  $user
      *
      * @return bool
      */
@@ -3232,6 +3232,8 @@ class CharacterManager extends Service {
 
         return $result;
     }
+
+    
 
     /**
      * Generates a list of image credits for displaying.

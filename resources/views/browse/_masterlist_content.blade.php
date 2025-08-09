@@ -111,6 +111,10 @@
                 {!! Form::text('genotype', Request::get('genotype'), ['class' => 'form-control mr-2', 'style' => 'width: 250px', 'placeholder' => 'Type a geno string']) !!}
                 </div>
                 <div class="masterlist-search-field">
+                {!! Form::label('description', 'Items: ') !!} {!! add_help('This will search all kukuri for a given marking. Ex: Entering &quotnCo&quot will return non-dominate collared kukuri') !!}
+                {!! Form::text('description', Request::get('description'), ['class' => 'form-control mr-2', 'style' => 'width: 250px', 'placeholder' => 'Type a geno string']) !!}
+                </div>
+                <div class="masterlist-search-field">
                     {!! Form::checkbox('kotm', 1, Request::get('kotm'), ['class' => 'form-check-input', 'data-toggle' => 'toggle', 'data-on' => 'KotM Winners', 'data-off' => 'All Kukuri', 'data-width' => '202', 'data-height' => '46']) !!}{!! add_help('This will filter by kukuri who have won kukuri of the month before!') !!}
                 </div>
             

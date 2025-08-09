@@ -10,5 +10,6 @@ return [
     'App\Models\Report\Report',
     'App\Models\SitePage',
     'App\Models\Gallery\GallerySubmission',
+    'App\Models\Submission\Submission',
 
 ];

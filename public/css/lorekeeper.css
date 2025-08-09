@@ -57,6 +57,12 @@ body {
     font-size: 80%;
 }
 
+.flex-wrapper {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+    justify-content: space-between;
+  }
 /**************************************************************************************************
 
     Helpers
@@ -102,6 +108,9 @@ img {
     max-width: 100%;
 }
 
+
+
+
 p {
     margin-bottom:0rem;
 }
@@ -124,8 +133,11 @@ p {
 }
 
 .navbar .navbar-brand, .navbar .nav-item {
-    text-transform: uppercase;
+    
     font-family: Roboto Condensed, serif;
+    font-size: 15px;
+    margin-right: 1rem;
+    margin-left: 1rem;
 }
 
 .navbar .row { width: 100%; }
@@ -136,16 +148,40 @@ p {
     text-align: right;
     padding-right: 0px;
     padding-left: 0px;
+    background-image: url("https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/2986889a-a8eb-4dfa-aac6-d65a72b03269/dkb3ytk-f2a74d20-be0a-4904-ba9a-6db8db4b264d.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcLzI5ODY4ODlhLWE4ZWItNGRmYS1hYWM2LWQ2NWE3MmIwMzI2OVwvZGtiM3l0ay1mMmE3NGQyMC1iZTBhLTQ5MDQtYmE5YS02ZGI4ZGI0YjI2NGQuanBnIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.Pv22YGNj_VdzCbk0UfYXEYBtSAWpO291skaXN_Myyyk");
+    background-size: cover;
+    background-position: top center;
+    background-repeat: no-repeat;
+    min-height: 100vh;
+    max-width: 100%;
+    box-sizing: border-box;
+
 }
+
+@media (max-width: 576px) {
+    .sidebar {
+        text-align: center;
+        
+    }
+    .sidebar .d-flex {
+       
+        align-items: center !important;
+    }
+    .sidebar .btn {
+        width: auto !important;
+        margin-bottom: 0.5rem;
+    }
+}
+
 
 .sidebar ul {
     list-style-type: none;
-    display: inline-block;
+    
     padding-top: 30px;
 }
 
 .sidebar ul li {
-    background-color: white;
+    background-color:white;
     border-top-left-radius: .25rem;
     border-bottom-left-radius: .25rem;
     margin-bottom: 1em;
@@ -181,7 +217,7 @@ p {
 .sidebar a {
     text-transform: uppercase;
     font-family: Roboto Condensed, serif;
-    color: rgba(0,0,0,0.4);
+    color: rgba(255, 255, 255, 0.849);
 }
 .sidebar a:hover {
     color: #16181b;
@@ -259,6 +295,23 @@ p {
         left: -100%;
         transition: left 0.2s;
     }
+
+    .rsidebar {
+        position: absolute;
+        padding-left: 0px;
+        text-align: left;
+        background-color: #A3D4BE;
+        ;
+        z-index: 3;
+        right: 0px;
+        bottom: 0px;
+        top: 0px;
+        overflow-y: scroll;
+
+        right: -100%;
+        transition: right 0.2s;
+    }
+
     .sidebar.active {
         left: 0%;
     }
@@ -401,6 +454,7 @@ p {
 
 .image, .image-thumb {
     max-width: 100%;
+    max-height: 100%;
 }
 
 .btn.disabled {
@@ -791,9 +845,9 @@ tr.accountbound {
         border-left-width: 2px!important;
     }
 .comment>p>img {
-        max-width: 100%;
-        height: auto;
-    }
+    max-width: 100%;
+    height: auto;
+}
 
 @media only screen and (max-width: 600px) {
     .comment_replies { padding-left:1rem;}
@@ -993,20 +1047,71 @@ tr.accountbound {
     
     display: block;
     margin-top:-10px;
-  }
+}
   
-  .dropdown>.dropdown-toggle:active {
+.dropdown>.dropdown-toggle:active {
     /*Without this, clicking will make it sticky*/
       pointer-events: none;
       bottom:100%;
-  }
+}
+
   
 .overflow-auto {overflow:auto;}
 
-/* .sidebar-bg {
+ .sidebar-bg {
     
-    background-image: url("https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/074ff87a-9880-4019-abec-2fc71c1f2a2b/darxlfx-2ec84e7b-44cc-43b0-868a-542f31b1743b.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcLzA3NGZmODdhLTk4ODAtNDAxOS1hYmVjLTJmYzcxYzFmMmEyYlwvZGFyeGxmeC0yZWM4NGU3Yi00NGNjLTQzYjAtODY4YS01NDJmMzFiMTc0M2IuanBnIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.iHUN4AROQTpSPDfOF5cGVYma6sRQFXCdg5iiYTTiY7Q"); 
+    background-image: url("https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/2986889a-a8eb-4dfa-aac6-d65a72b03269/dkb3ytk-f2a74d20-be0a-4904-ba9a-6db8db4b264d.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcLzI5ODY4ODlhLWE4ZWItNGRmYS1hYWM2LWQ2NWE3MmIwMzI2OVwvZGtiM3l0ay1mMmE3NGQyMC1iZTBhLTQ5MDQtYmE5YS02ZGI4ZGI0YjI2NGQuanBnIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.Pv22YGNj_VdzCbk0UfYXEYBtSAWpO291skaXN_Myyyk"); 
     background-size: cover;
     background-repeat: no-repeat;
+    background-position: top center;
     height: 100vh; 
-} */
+} 
+
+#rightSidebar {
+    background-image: url("https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/2986889a-a8eb-4dfa-aac6-d65a72b03269/dkb45ya-7c9e9614-19fc-4295-b07e-8427e3a08e4f.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcLzI5ODY4ODlhLWE4ZWItNGRmYS1hYWM2LWQ2NWE3MmIwMzI2OVwvZGtiNDV5YS03YzllOTYxNC0xOWZjLTQyOTUtYjA3ZS04NDI3ZTNhMDhlNGYuanBnIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.M61psFx3Q6GkTQigYGZMf4eFF5sAGF7B0oEo-fChMyI");
+    background-size: cover;
+    background-position: top center;
+    background-repeat: no-repeat;
+    min-height: 100vh;
+
+}
+
+#rightSidebar ul {
+    list-style-type: none;
+    
+    padding-top: 30px;
+    padding-left: 0;
+}
+
+#rightSidebar ul li {
+    background-color: #A3D4BEbf;
+    color:#101d17;
+    margin: 0.5rem;
+    border-radius: 0.25rem 0.25rem 0.25rem 0.25rem;
+    box-shadow: 3px 0px 6px 1px rgba(0,0,0,0.1), 3px 0px 6px rgba(0,0,0,0.1) inset;
+}
+
+.leftSidebar ul {
+    list-style-type: none;
+    
+    padding-top: 30px;
+    padding-left: 0;
+}
+
+.leftSidebar ul li {
+    background-color: #A3D4BEbf;
+    color:#101d17;
+    margin: 0.5rem;
+    border-radius: 0.25rem 0.25rem 0.25rem 0.25rem;
+    box-shadow: 3px 0px 6px 1px rgba(0,0,0,0.1), 3px 0px 6px rgba(0,0,0,0.1) inset;
+}
+
+.p-2{
+    background-color: #A3D4BEbf;
+    color: #101d17;
+    margin: 0.5rem;
+    margin-right: 1rem;
+    margin-left: 0rem;
+    border-radius: 0.25rem 0.25rem 0.25rem 0.25rem;
+    box-shadow: 3px 0px 6px 1px rgba(0, 0, 0, 0.1), 3px 0px 6px rgba(0, 0, 0, 0.1) inset;
+}

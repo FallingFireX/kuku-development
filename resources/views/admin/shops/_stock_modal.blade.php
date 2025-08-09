@@ -6,7 +6,7 @@
     @endif
 
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-3">
             <div class="form-group">
                 {!! Form::label('stock_type', 'Type') !!}
                 {!! Form::select('stock_type', ['Item' => 'Item', 'Pet' => 'Pet', 'Gear' => 'Gear', 'Weapon' => 'Weapon'], $stock->stock_type ?? null, ['class' => 'form-control stock-field', 'placeholder' => 'Select Stock Type', 'id' => 'type']) !!}
@@ -17,6 +17,12 @@
                 @if ($stock->id)
                     @include('admin.shops._stock_item', ['items' => $items, 'stock' => $stock])
                 @endif
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="form-group">
+                {!! Form::label('stock_quantity', 'Quantity') !!}
+                {!! Form::text('stock_quantity',  $stock->stock_quantity ?? null, ['class' => 'form-control stock-field', 'data-name' => 'quantity']) !!}
             </div>
         </div>
     </div>

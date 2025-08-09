@@ -6,13 +6,8 @@
                 <li class="nav-item">
                     <a class="nav-link active" id="infoTab-{{ $image->id }}" data-toggle="tab" href="#info-{{ $image->id }}" role="tab">Info</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" id="notesTab-{{ $image->id }}" data-toggle="tab" href="#notes-{{ $image->id }}" role="tab">Items</a>
-                </li>
                 
-                <li class="nav-item">
-                    <a class="nav-link" id="creditsTab-{{ $image->id }}" data-toggle="tab" href="#credits-{{ $image->id }}" role="tab">Credits</a>
-                </li>
+                
                 @if (Auth::check() && Auth::user()->hasPower('manage_characters'))
                     <li class="nav-item">
                         <a class="nav-link" id="settingsTab-{{ $image->id }}" data-toggle="tab" href="#settings-{{ $image->id }}" role="tab"><i class="fas fa-cog"></i></a>
@@ -69,7 +64,9 @@
                 @endif
                 @if($image->character->homeSetting)
                     <div class="row">
-                        <div class="col-lg-4 col-md-6 col-4"><h5>Home</h5></div>
+                        <div class="col-lg-4 col-md-6 col-4">
+                            <h5>Home</h5>
+                        </div>
                         <div class="col-lg-8 col-md-6 col-8">{!! $image->character->location ? $image->character->location : 'None' !!}</div>
                     </div>
                 @endif
@@ -93,14 +90,34 @@
                     <div class="col-lg-8 col-md-6 col-8">{!! $image->phenotype ? $image->phenotype : 'None' !!}</div>
                 </div>
                 <br>
-                <div class="row">
-                    <div class="col-lg-4 col-md-6 col-4"><strong>Stats</strong></div>
-                    <div class="col-lg-2 col-md-6 col-8">{!! '<strong>ATK: </strong> ', $image->atk ? $image->atk : '0' !!}</div>
-                    <div class="col-lg-2 col-md-6 col-8">{!! '<strong>DEF: </strong> ', $image->def ? $image->def : '0' !!}</div>
-                    <div class="col-lg-2 col-md-6 col-8">{!! '<strong>SPD: </strong> ', $image->spd ? $image->spd : '0' !!}</div>
+                
+               
+                <div class="mb-2">
+                    <div>
+                        @php
+                            $traitgroup = $image->features()->get()->groupBy('feature_category_id');
+                        @endphp
+                        @if ($image->features()->count())
+                            @foreach ($traitgroup as $key => $group)
+                                @if ($key) {{-- Skip if no category (Rank) --}}
+                                    <div class="mb-2">
+                                        <strong>{!! $group->first()->feature->category->displayName !!}:</strong>
+                                        @foreach ($group as $feature)
+                                            {!! $feature->feature->displayName !!}
+                                            @if ($feature->data)
+                                                ({{ $feature->data }})
+                                            @endif
+                                        @endforeach
+                                    </div>
+                                @endif
+                            @endforeach
+                        @else
+                            <div>Your kukuri doesnt have traits added! Please submit a import error prompt to get this fixed!</div>
+                        @endif
+                    </div>
                 </div>
-                <br>
-                <div class="row">
+
+                <div class="row pt-3">
                     <div class="col-lg-4 col-md-6 col-4"><strong>Biorhythm </strong></div>
                     <div class="col-lg-8 col-md-6 col-8">{!! $image->bio ? $image->bio : 'not set' !!}</div>
                 </div>
@@ -108,54 +125,51 @@
                     <div class="col-lg-4 col-md-6 col-4"><strong>Diet </strong></div>
                     <div class="col-lg-8 col-md-6 col-8">{!! $image->diet ? $image->diet : 'not set' !!}</div>
                 </div>
-                
-                <br><p></p>
-                <div class="mb-3">
-                   
-                    @if (config('lorekeeper.extensions.traits_by_category'))
-                        <div>
-                            @php
-                                $traitgroup = $image->features()->get()->groupBy('feature_category_id');
-                            @endphp
-                            @if ($image->features()->count())
-                                @foreach ($traitgroup as $key => $group)
-                                    <div class="mb-2">
-                                        @if ($key)
-                                            <strong>{!! $group->first()->feature->category->displayName !!}: </strong>
-                                        @else
-                                            <strong>Rank:</strong>
+
+                <div class="row pt-3">
+                    <div class="col-lg-4 col-md-6 col-4"><strong>Stats</strong></div>
+                    <div class="col-lg-2 col-md-6 col-8">{!! '<strong>ATK: </strong> ', $image->atk ? $image->atk : '0' !!}</div>
+                    <div class="col-lg-2 col-md-6 col-8">{!! '<strong>DEF: </strong> ', $image->def ? $image->def : '0' !!}</div>
+                    <div class="col-lg-2 col-md-6 col-8">{!! '<strong>SPD: </strong> ', $image->spd ? $image->spd : '0' !!}</div>
+                </div>
+
+
+                <!--rank-->
+                    <div class="mt-4">
+                        @php
+                            $traitgroup = $image->features()->get()->groupBy('feature_category_id');
+                        @endphp
+                        @if ($image->features()->count())
+                            @if ($traitgroup->has(null))
+                                <div class="mb-2">
+                                    <strong>Rank:</strong>
+                                    @foreach ($traitgroup[null] as $feature)
+                                        {!! $feature->feature->displayName !!}
+                                        @if ($feature->data)
+                                            ({{ $feature->data }})
                                         @endif
-                                        @foreach ($group as $feature)
-                                            {!! $feature->feature->displayName !!} 
-                                            @if ($feature->data) 
-                                                    ({{ $feature->data }})
-                                                @endif
-                                        @endforeach
-                                    </div>
-                                @endforeach
+                                    @endforeach
+                                </div>
                             @else
-                                <div>No traits listed.</div>
+                                <div>No rank trait listed.</div>
                             @endif
-                        </div>
+                        @else
+                            <div>No traits listed.</div>
+                        @endif
+                    </div>
+               
+
+
+                <!--Items-->
+                <div class="pt-3">
+                    @if ($image->parsed_description)
+                    <b>Items</b>:
+                        <div class="parsed-text imagenoteseditingparse">{!! $image->parsed_description !!}</div>
                     @else
-                        <div>
-                            <?php $features = $image->features()->with('feature.category')->get(); ?>
-                            @if ($features->count())
-                                @foreach ($features as $feature)
-                                    <div>
-                                        @if ($feature->feature->feature_category_id)
-                                            <strong>{!! $feature->feature->category->displayName !!}:</strong>
-                                            @endif {!! $feature->feature->displayName !!} @if ($feature->data)
-                                                ({{ $feature->data }})
-                                            @endif
-                                    </div>
-                                @endforeach
-                            @else
-                                <div>No traits listed.</div>
-                            @endif
-                        </div>
+                        <div class="imagenoteseditingparse"><b>Items</b>: None</div>
                     @endif
                 </div>
+                
                 @php
                     // check if there is a type for this object if not passed
                     // for characters first check subtype (since it takes precedence)
@@ -177,7 +191,7 @@
                     
                 
                 @if ($type || (Auth::check() && Auth::user()->hasPower('manage_characters')))
-                    <div class="row">
+                    <div class="row pt-3">
                         <div class="col-lg-4 col-md-6 col-4">
                             <b>Magic:</b>  {!! $type?->displayElements ? $type?->displayElements : 'None' !!}
                         </div>
@@ -192,46 +206,11 @@
                     </div> 
                     
                 @endif
-                    <br>
-                <div>
-                    <strong>Uploaded:</strong> {!! pretty_date($image->created_at) !!}
-                </div>
-                <div>
-                    <strong>Last Edited:</strong> {!! pretty_date($image->updated_at) !!}
-                </div>
 
-                @if (Auth::check() && Auth::user()->hasPower('manage_characters'))
-                    <div class="mt-3">
-                        <a href="#" class="btn btn-outline-info btn-sm edit-features mb-3" data-id="{{ $image->id }}"><i class="fas fa-cog"></i> Edit</a>
-                        <a href="#" class="btn btn-outline-info btn-sm edit-typing mb-3" data-id="{{ $image->id }}"><i class="fas fa-cog"></i> {{ $type ? 'Edit' : 'Add Magic' }}</a>
-                    </div>
-                @endif
-                <div class="text-right mb-1">
-                    <div class="badge badge-primary">Image #{{ $image->id }}</div>
-                </div>
-                
-            </div>
-
-            {{-- Image notes --}}
-            <div class="tab-pane fade" id="notes-{{ $image->id }}">
-                @if ($image->parsed_description)
-                    <div class="parsed-text imagenoteseditingparse">{!! $image->parsed_description !!}</div>
-                @else
-                    <div class="imagenoteseditingparse">No Items have been used on this kukuri.</div>
-                @endif
-                @if (Auth::check() && Auth::user()->hasPower('manage_characters'))
-                    <div class="mt-3">
-                        <a href="#" class="btn btn-outline-info btn-sm edit-notes" data-id="{{ $image->id }}"><i class="fas fa-cog"></i> Edit</a>
-                    </div>
-                @endif
-            </div>
-
-            {{-- Image credits --}}
-            <div class="tab-pane fade" id="credits-{{ $image->id }}">
-
-                <div class="row no-gutters mb-2">
+                <hr>
+                <div class="row no-gutters mb-2 mt-2">
                     <div class="col-lg-4 col-4">
-                        <h5>Design</h5>
+                        <b>Design by: </b>
                     </div>
                     <div class="col-lg-8 col-8">
                         @foreach ($image->designers as $designer)
@@ -241,7 +220,7 @@
                 </div>
                 <div class="row no-gutters">
                     <div class="col-lg-4 col-4">
-                        <h5>Art</h5>
+                        <b>Modifications by: </b>
                     </div>
                     <div class="col-lg-8 col-8">
                         @foreach ($image->artists as $artist)
@@ -249,38 +228,32 @@
                         @endforeach
                     </div>
                 </div>
-                    <hr>
-                    <h5>Mention this Kukuri</h5>
-                    In the rich text editor:
-                    <div class="alert alert-secondary">
-                        [character={{ $character->slug }}]
-                    </div>
-                    @if (!config('lorekeeper.settings.wysiwyg_comments'))
-                        In a comment:
-                        <div class="alert alert-secondary">
-                            [{{ $character->fullName }}]({{ $character->url }})
-                        </div>
-                    @endif
-                    <hr>
-                    <div class="my-2">
-                        <strong>For Thumbnails:</strong>
-                    </div>
-                    In the rich text editor:
-                    <div class="alert alert-secondary">
-                        [charthumb={{ $character->slug }}]
-                    </div>
-                    @if (!config('lorekeeper.settings.wysiwyg_comments'))
-                        In a comment:
-                        <div class="alert alert-secondary">
-                            [![Thumbnail of {{ $character->fullName }}]({{ $character->image->thumbnailUrl }})]({{ $character->url }})
-                        </div>
-                    @endif
+                   <br>
+                <div>
+                    <strong>Uploaded:</strong> {!! pretty_date($image->created_at) !!}
+                </div>
+                <div>
+                    <strong>Last Edited:</strong> {!! pretty_date($image->updated_at) !!}
+                </div>
+
+                <!--Admin tools-->
+                
 
                 @if (Auth::check() && Auth::user()->hasPower('manage_characters'))
+                <hr>
+                <b>Admin tools</b>
+                <br><i>You can see these because you are an admin with the power to edit characters.</i>
                     <div class="mt-3">
-                        <a href="#" class="btn btn-outline-info btn-sm edit-credits" data-id="{{ $image->id }}"><i class="fas fa-cog"></i> Edit</a>
+                        <a href="#" class="btn btn-outline-info btn-sm edit-features mb-3" data-id="{{ $image->id }}"><i class="fas fa-cog"></i> Edit Traits</a>
+                        <a href="#" class="btn btn-outline-info btn-sm edit-notes mb-3" data-id="{{ $image->id }}"><i class="fas fa-cog"></i> Add items</a>
+                        <a href="#" class="btn btn-outline-info btn-sm edit-typing mb-3" data-id="{{ $image->id }}"><i class="fas fa-cog"></i> {{ $type ? 'Edit' : 'Add Magic' }}</a>
                     </div>
+                <hr>
                 @endif
+                <div class="text-right mb-1">
+                    <div class="badge badge-primary">Image #{{ $image->id }}</div>
+                </div>
+                
             </div>
 
             @if (Auth::check() && Auth::user()->hasPower('manage_characters'))

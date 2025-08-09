@@ -8,7 +8,7 @@
     {!! breadcrumbs(['Users' => 'users', $user->name => $user->url, $submission->prompt_id ? 'Submission' : 'Claim (#' . $submission->id . ')' => $submission->viewUrl]) !!}
 
     @include('home._submission_content', ['submission' => $submission, 'isClaim' => $isClaim])
-
+    @comments(['model' => $submission, 'perPage' => 5])
     @auth
         @if ($submission->user_id == Auth::user()->id && $submission->status == 'Pending')
             {!! Form::open(['url' => url()->current(), 'id' => 'submissionForm']) !!}
@@ -34,7 +34,7 @@
                     </div>
                 </div>
             </div>
-
+            
             {!! Form::close() !!}
         @endif
     @endauth

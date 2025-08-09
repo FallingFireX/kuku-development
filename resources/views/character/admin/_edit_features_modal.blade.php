@@ -82,7 +82,7 @@
 
 <div class="form-group" id='diet'>
             {!! Form::label('diet') !!}
-            {!! Form::select('diet', ['Carnivore' => 'Carnivore', 'Omnivore' => 'Omnivore', 'Herbivore' => 'Herbivore', 'Carnivore (originally Herbivore)' => 'Carnivore (originally Herbivore)', 'Carnivore (originally Omnivore)' => 'Carnivore (originally Omnivore)', 'Herbivore (originally Carnivore)' => 'Herbivore (originally Carnivore)', 'Herbivore (originally Omnivore)' => 'Herbivore (originally Omnivore)', 'Omnivore (originally Herbivore)' => 'Omnivore (originally Herbivore)', 'Herbivore (originally Carnivore)' => 'Herbivore (originally Carnivore)'], $image->diet, ['class' => 'form-control']) !!}
+            {!! Form::select('diet', ['Carnivore' => 'Carnivore', 'Omnivore' => 'Omnivore', 'Herbivore' => 'Herbivore', 'Carnivore (originally Herbivore)' => 'Carnivore (originally Herbivore)', 'Omnivore (originally Carnivore)' =>'Omnivore (originally Carnivore)', 'Carnivore (originally Omnivore)' => 'Carnivore (originally Omnivore)', 'Herbivore (originally Carnivore)' => 'Herbivore (originally Carnivore)', 'Herbivore (originally Omnivore)' => 'Herbivore (originally Omnivore)', 'Omnivore (originally Herbivore)' => 'Omnivore (originally Herbivore)', 'Herbivore (originally Carnivore)' => 'Herbivore (originally Carnivore)'], $image->diet, ['class' => 'form-control']) !!}
         </div>
 
 <div class="text-right">

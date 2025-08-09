@@ -25,13 +25,8 @@
             {!! Form::select('rarity_id', $rarities, $feature->rarity_id, ['class' => 'form-control']) !!}
         </div>
     </div>
-    <div class="col-md-6">
-        <div class="form-group">
-            {!! Form::label('Rarity') !!}
-            {!! Form::select('rarity_id', $rarities, $feature->rarity_id, ['class' => 'form-control']) !!}
-        </div>
-    </div>
-</div>
+     
+
 
 @if($feature->altTypes->count())
     <div class="form-group">
@@ -69,25 +64,8 @@
             {!! Form::select('subtype_id', $subtypes, $feature->subtype_id, ['class' => 'form-control', 'id' => 'subtype']) !!}
         </div>
     </div>
-    <div class="col-md-4">
-        <div class="form-group">
-            {!! Form::label('Trait Subcategory (Optional)') !!}
-            {!! Form::select('feature_subcategory_id', $subcategories, $feature->feature_subcategory_id, ['class' => 'form-control']) !!}
-        </div>
-    </div>
-    <div class="col-md-4">
-        <div class="form-group">
-            {!! Form::label('Species Restriction (Optional)') !!}
-            {!! Form::select('species_id', $specieses, $feature->species_id, ['class' => 'form-control']) !!}
-        </div>
-    </div>
-    <div class="col-md-4">
-        <div class="form-group">
-            {!! Form::label('Subtype (Optional)') !!} {!! add_help('This is cosmetic and does not limit choice of traits in selections.') !!}
-            {!! Form::select('subtype_id', $subtypes, $feature->subtype_id, ['class' => 'form-control']) !!}
-        </div>
-    </div>
-</div>
+    
+
 <div class="form-group">
     {!! Form::label('Description (Optional)') !!}
     {!! Form::textarea('description', $feature->description, ['class' => 'form-control wysiwyg']) !!}

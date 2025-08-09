@@ -256,3 +256,5 @@
         </div>
     </div>
 @endif
+
+@comments(['page' => 'Submission', 'model' => $submission, 'perPage' => 5 ])

@@ -35,6 +35,9 @@ use App\Services\CharacterManager;
 use App\Services\CurrencyManager;
 use App\Services\DesignUpdateManager;
 use App\Services\InventoryManager;
+use App\Models\Feature\Feature;
+use App\Models\Feature\FeatureCategory;
+use App\Models\Feature\FeatureSubcategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\View;
@@ -139,6 +142,7 @@ class CharacterController extends Controller {
      * @return \Illuminate\Contracts\Support\Renderable
      */
     public function getCharacter($slug) {
+        
         return view('character.character', [
             'character'             => $this->character,
             'skills'                => Skill::where('parent_id', null)->orderBy('name', 'ASC')->get(),
@@ -148,6 +152,9 @@ class CharacterController extends Controller {
             'children'              => CharacterLink::where('parent_id', $this->character->id)->orderBy('child_id', 'ASC')->get(),
         ]);
     }
+
+    
+
 
     /**
      * Shows a character's profile.

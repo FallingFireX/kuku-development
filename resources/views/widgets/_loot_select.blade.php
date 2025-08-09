@@ -24,7 +24,7 @@
     <thead>
         <tr>
             <th width="35%">Reward Type</th>
-            <th width="35%">Reward</th>
+            <th width="35%">Reward</th> 
             <th width="20%">Quantity</th>
             <th width="10%"></th>
         </tr>

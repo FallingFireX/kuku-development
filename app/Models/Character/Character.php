@@ -12,6 +12,8 @@ use App\Models\Item\ItemLog;
 use App\Models\Level\LevelLog;
 use App\Models\Model;
 use App\Models\Rarity;
+use App\Models\Species\Species;
+use App\Models\Species\Subtype;
 use App\Models\Stat\CountLog;
 use App\Models\Stat\ExpLog;
 use App\Models\Stat\Stat;
@@ -62,6 +64,8 @@ class Character extends Model {
      */
     protected $casts = [
         'transferrable_at' => 'datetime',
+        'home_changed'     => 'datetime',
+        'faction_changed'  => 'datetime',
     ];
 
     /**
@@ -1157,4 +1161,15 @@ class Character extends Model {
             return $equipment->equipment->stats()->where('stat_id', $stat_id)->first();
         });
     }
+
+    public function features() {
+    $query = $this
+        ->hasMany(CharacterFeature::class, 'character_image_id')->where('character_features.character_type', 'Character')
+        ->join('features', 'features.id', '=', 'character_features.feature_id')
+        ->leftJoin('feature_categories', 'feature_categories.id', '=', 'features.feature_category_id')
+        ->select(['character_features.*', 'features.*', 'character_features.id AS character_feature_id', 'feature_categories.sort']);
+
+    return $query->orderByDesc('sort');
+}
+
 }

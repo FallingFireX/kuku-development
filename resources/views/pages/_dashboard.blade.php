@@ -1,205 +1,189 @@
-<h1>Welcome, {!! Auth::user()->displayName !!}!</h1>
-<!-- <div class="card mb-4 timestamp" style="background-color: rgba(0,0,0,0)">
-    <div class="card-body">
-        <i class="far fa-clock"></i> {!! LiveClock() !!}
-    </div>
-</div> -->
 
-<br>
-<div class="row">
-    <div class="col-md-7">
-    <div class="row">
-            <div class="col-md-4">
-            <div class="dropdown">
-            <button type="button" id="dropdownMenuButton" data-mdb-toggle="dropdown" aria-expanded="false" style="background: transparent; border-width: 0px;">
-                <img src="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/2986889a-a8eb-4dfa-aac6-d65a72b03269/dip8zcw-d0fcf425-9428-43da-b20e-149f6157a2d0.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcLzI5ODY4ODlhLWE4ZWItNGRmYS1hYWM2LWQ2NWE3MmIwMzI2OVwvZGlwOHpjdy1kMGZjZjQyNS05NDI4LTQzZGEtYjIwZS0xNDlmNjE1N2EyZDAucG5nIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.B0lFyeaLNjm6H97ZIk-bMN1kcyKpKC8niUC14Bj_MBM"> 
-            </button>
-            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <li><a class="dropdown-item" href="https://kukuri-arpg.w3spaces.com/activities/quests.html">Quest</a></li>
-                <li><a class="dropdown-item" href="https://www.kukuri-arpg.com/info/coliseum">Coliseum</a></li>
-                <li><a class="dropdown-item" href="https://www.deviantart.com/momma-kuku/journal/Activity-letters-743764050">Activity Letters</a></li>
-                <li><a class="dropdown-item" href="https://kukuri-arpg.w3spaces.com/activities/traveling-merchant.html">Traveling Merchant</a></li>
-                <div class="dropdown-divider"></div>
-                <li><a class="dropdown-item" href="https://kukuri-arpg.deviantart.com/journal/Hunting-604748328">Hunting</a></li>
-                <li><a class="dropdown-item" href="https://kukuri-arpg.deviantart.com/journal/Gathering-604748136">Gathering</a></li>
-                <li><a class="dropdown-item" href="https://kukuri-arpg.deviantart.com/journal/Excavating-629806452">Excavating</a></li>
-                <li><a class="dropdown-item" href="https://www.deviantart.com/kukuri-arpg/journal/Traveling-629806543">Traveling</a></li>
-                <div class="dropdown-divider"></div>
-                <li><a class="dropdown-item" href="https://kukuri-arpg.w3spaces.com/activities/breeding.html">Breeding</a></li>
-                <li><a class="dropdown-item" href="https://docs.google.com/spreadsheets/d/1Re928vXBmaullAY_1SZSEQXEs3G48GfTl6LX3kdc1p4/edit?gid=1710681872#gid=1710681872">Breeding Slots</a></li>
-                <li><a class="dropdown-item" href="https://kukuri-arpg.w3spaces.com/training/home.html">Training</a></li>
-                <li><a class="dropdown-item" href="https://www.deviantart.com/momma-kuku/journal/Training-Completion-Mar-2021-872871365">Training Completion</a></li>
-            </ul>
-            </div>
+<div class="row align-items-stretch">
+    <div class="col-md-7 d-flex">
+        <div class= "card flex-fill">
+            @include('widgets._news', ['textPreview' => true])
         </div>
-        <div class="col-md-4">
-            <div class="dropdown">
-            <button type="button" id="dropdownMenuButton" data-mdb-toggle="dropdown" aria-expanded="false" style="background: transparent; border-width: 0px;">
-                <img src="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/2986889a-a8eb-4dfa-aac6-d65a72b03269/dip8xps-615a2d06-2e80-49fd-8d09-a3e5cd798d19.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcLzI5ODY4ODlhLWE4ZWItNGRmYS1hYWM2LWQ2NWE3MmIwMzI2OVwvZGlwOHhwcy02MTVhMmQwNi0yZTgwLTQ5ZmQtOGQwOS1hM2U1Y2Q3OThkMTkucG5nIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.e7hFbyVwbl2mha8Q2h4GZH-qrKKhQleH7mSM64x0Fr0"> 
-            </button>
-            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <li><a class="dropdown-item" href="https://kukuri-arpg.deviantart.com/journal/Design-approval-570879060">Design Approval</a></li>
-                <li><a class="dropdown-item" href="https://www.deviantart.com/momma-kuku/journal/Import-updates-September-19-811742986">Import Updates</a></li>
-                <li><a class="dropdown-item" href="https://drive.google.com/drive/folders/1o2QmuzkdqtrNTaLEq6AgMP8r53E1nL1J">Blank Imports</a></li>
-                <div class="dropdown-divider"></div>
-                <li><a class="dropdown-item" href="https://kukuri-arpg.w3spaces.com/genetics/genes-and-mutations.html">Genetics and Mutations</a></li>
-                <li><a class="dropdown-item" href="https://www.deviantart.com/kukuri-arpg/journal/Traits-828401506">Traits</a></li>
-                <li><a class="dropdown-item" href="https://www.kukuri-arpg.com/world/trait-categories">Physical Traits</a></li>
-            </ul>
-        </div>
-            </div>
-            <div class="col-md-4">
-            <div class="dropdown">
-            <button type="button" id="dropdownMenuButton" data-mdb-toggle="dropdown" aria-expanded="false" style="background: transparent; border-width: 0px;">
-                <img src="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/2986889a-a8eb-4dfa-aac6-d65a72b03269/dip8xq7-768ca1f2-c80e-475f-851f-fa2e6f14d525.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcLzI5ODY4ODlhLWE4ZWItNGRmYS1hYWM2LWQ2NWE3MmIwMzI2OVwvZGlwOHhxNy03NjhjYTFmMi1jODBlLTQ3NWYtODUxZi1mYTJlNmYxNGQ1MjUucG5nIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.5HO719_wI6keNtImo0DwtScn0yLs_fjohSIzwIia0uM"> 
-            </button>
-            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <li><a class="dropdown-item" href="https://kukuri-arpg.w3spaces.com/activities/Illnesses-injuries.html">Illnesses and Injuries</a></li>
-                <div class="dropdown-divider"></div>
-                <li><a class="dropdown-item" href="https://kukuri-arpg.w3spaces.com/adoption-center.html">Adoption Center</a></li>
-                <li><a class="dropdown-item" href="https://kukuri-arpg.deviantart.com/journal/Leasing-629806120">Leasing</a></li>
-                <div class="dropdown-divider"></div>
-                <li><a class="dropdown-item" href="{{ url('shops') }}">Shops</a></li>
-                <li><a class="dropdown-item" href="{{ url('crafting') }}">Crafting</a></li>
-                <li><a class="dropdown-item" href="ttps://kukuri-arpg.deviantart.com/journal/The-Bank-570876859">Bank (Retired)</a></li>
-                <div class="dropdown-divider"></div>
-                <li><a class="dropdown-item" href="https://kukuri-arpg.w3spaces.com/fate-points.html">Fate Points and Stat Points</a></li>
-                <li><a class="dropdown-item" href="https://www.deviantart.com/kukuri-arpg/journal/Status-updates-589917887">Status Updates</a></li>
-            </ul>
-            </div>
-        </div>
-        
     </div>
-    <br><br>
-        <div class="row justify-content-center">
-            <div class="col-md-4">
-                <div class="card-body text-center">
-                    <img src="/images/avatars/{!! Auth::user()->avatar !!}" class="img-fluid rounded-circle" style="max-height: 150px;" alt="Avatar"/>
+    <div class="col-md-5 d-flex">
+        @include('widgets._carousel')
+    </div>
+</div>
+<br>
+
+<div class="row mb-4 align-items-stretch">
+    <div class="col-md-6 d-flex">
+        <div class= "card py-4 px-2 flex-fill" style="text-align: center">
+            <h5>Current Quest/event</h5>
+            <div class="row mt-auto mb-auto">
+            <div class="col-md-6 pt-2 pb-2">
+                    <p>Its getting quite hot... perhaps the desert has something to do with it?</p>  
+                    <p>Get the new background in the current quest!</p>
                     <br>
-                    <br><a href="{{ Auth::user()->url }}">Profile</a></li>
-                    <br><a href="{{ url('account/settings') }}">Settings</a></li>
+                    <p><i>Each entry has a 30% chance to earn the new background</i></p>
+                    <p>Kukuri get a +2 FP bonus per entry!</p>
+                </div>
+                <div class="col-md-5 ml-2 pt-2 pb-2">
+                    <img src = "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/074ff87a-9880-4019-abec-2fc71c1f2a2b/dk2gg4c-cded1498-76d1-4bc3-bcfa-4f06ffd032f0.png/v1/fill/w_1280,h_802,q_80,strp/bg_set___arid_highlands_by_momma_kuku_dk2gg4c-fullview.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9ODAyIiwicGF0aCI6IlwvZlwvMDc0ZmY4N2EtOTg4MC00MDE5LWFiZWMtMmZjNzFjMWYyYTJiXC9kazJnZzRjLWNkZWQxNDk4LTc2ZDEtNGJjMy1iY2ZhLTRmMDZmZmQwMzJmMC5wbmciLCJ3aWR0aCI6Ijw9MTI4MCJ9XV0sImF1ZCI6WyJ1cm46c2VydmljZTppbWFnZS5vcGVyYXRpb25zIl19.YM-QHEB7SZSVfWaQLurOaQv595zkDUAMQsF8sjqzt1s">
+                </div>
+                
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 d-flex">
+        <div class= "card pr-1 pl-1 flex-fill" style="text-align: center">
+            <div class="row mt-auto mb-auto">
+                <div class="col-md-4 ml-2 pt-2 pb-2">
+                    <img src = "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/b270d26f-24db-4b18-9f7b-ca5435d8ccdb/d9wg24f-48addbbf-6d97-4b26-827e-9b970c51863d.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcL2IyNzBkMjZmLTI0ZGItNGIxOC05ZjdiLWNhNTQzNWQ4Y2NkYlwvZDl3ZzI0Zi00OGFkZGJiZi02ZDk3LTRiMjYtODI3ZS05Yjk3MGM1MTg2M2QucG5nIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.HGSEEiH_l5I2_c95WGI-7C8JfI2haP9PxRShb_n0qqk">
+                </div>
+                <div class="col-md-7 pt-2 pb-2">
+                    <h5>Kiwi's Kukuri Facts</h5>
+                    <div id="factDisplay"></div>
                 </div>
             </div>
-            <div class="col-md-4">
-                    <div class="card-body text-center">
-                        <img src="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/2986889a-a8eb-4dfa-aac6-d65a72b03269/dip9bic-14a6aa70-ff4e-4f9c-8dfb-b6c7ee52eb61.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcLzI5ODY4ODlhLWE4ZWItNGRmYS1hYWM2LWQ2NWE3MmIwMzI2OVwvZGlwOWJpYy0xNGE2YWE3MC1mZjRlLTRmOWMtOGRmYi1iNmM3ZWU1MmViNjEucG5nIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.SwJCh8a_-IVHA1JbW65GKL-2nNXp2OzFyP495uKgP30" alt="Characters" class="card-img" style="width:80%"/>
-                        <br>
-                        <br><a href="{{ url('characters') }}">My Kukuri</a></li>
-                        <br><a href="{{ Auth::user()->url . '/pets' }}">Familiars</a></li>
-                    </div>     
-            </div>
-            <div class="col-md-4">
-                    <div class="card-body text-center" style="margin-bottom: 0.5rem">
-                        <br>
-                        <img src="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/074ff87a-9880-4019-abec-2fc71c1f2a2b/da98h23-939a7749-ed94-41f4-bd7d-c1332cec4bcc.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcLzA3NGZmODdhLTk4ODAtNDAxOS1hYmVjLTJmYzcxYzFmMmEyYlwvZGE5OGgyMy05MzlhNzc0OS1lZDk0LTQxZjQtYmQ3ZC1jMTMzMmNlYzRiY2MucG5nIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0._bGRCKTEgATpA6-sET8DI71u8ohuTXpWFmFGMv-3WrY" alt="Inventory" class="card-img" />
-                        <br>
-                        <br><a href="{{ url('inventory') }}">Bank</a></li>
-                        <br><a href="{{ url('bank') }}">Wallet</a></li>
-                    </div> 
-            </div>
         </div>
-     
-    <br>
-    <div style="text-align:center">
-        <a href="https://www.kukuri-arpg.com/info/games">
-        <img src ="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/074ff87a-9880-4019-abec-2fc71c1f2a2b/dcfymqg-47ff87e6-d554-4c60-998a-1ea66419f1a5.png/v1/fit/w_825,h_458/monthly_familiar_july_2018___puuhka_by_momma_kuku_dcfymqg-414w-2x.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9NDU4IiwicGF0aCI6IlwvZlwvMDc0ZmY4N2EtOTg4MC00MDE5LWFiZWMtMmZjNzFjMWYyYTJiXC9kY2Z5bXFnLTQ3ZmY4N2U2LWQ1NTQtNGM2MC05OThhLTFlYTY2NDE5ZjFhNS5wbmciLCJ3aWR0aCI6Ijw9ODI1In1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmltYWdlLm9wZXJhdGlvbnMiXX0.9f6Z02kXkHzAlY-Qia_VoUJHTcI7bNsLqwONU7-nq0Q" style= "width:40%">
-        </a>
-        <br>
-        <i>Play games, earn awards!</i>
-        <br>
-        <a href="https://www.kukuri-arpg.com/info/games"><b>Partake in Daily activites here!</b></a>
     </div>
-    <br><br><br>
-    @include('widgets._affiliates', ['affiliates' => $affiliates, 'featured' => $featured_affiliates, 'open' => $open])
 </div>
-    <div class="col-md-5">
-        @include('widgets._news', ['textPreview' => true])
-        @include('widgets._carousel')
-        <br>
-                <div class="card mb-3">
-                    <div class="card-body">
-                    <h5 class="card-title"  style="text-align: center">Queues <i class="fas fa-book"></i></h5>
-                    <div class="row">
-                        <div class="col-md-5">
-                        <p class="card-text" style="font-size: 14px">
-                            <b>Status Updates</b>: 
-                                @if ($fpCount)
-                                    {{ $fpCount }}
-                                @else
-                                    Empty!
-                                @endif
-                            <br><br>
-                            <b>Misc Queues</b>:
-                                @if ($misc2Count)
-                                    {{ $misc2Count }}
-                                @else
-                                    Empty!
-                                @endif
-                            <br><br>
-                            <b>Claims</b>:
-                                @if ($claimCount)
-                                    {{ $claimCount }}
-                                @else
-                                    Empty!
-                                @endif
-                                <br><br>
-                            <b>Trainings</b>:
-                                @if ($trainingCount)
-                                    {{ $trainingCount }}
-                                @else
-                                    Empty!
-                                @endif
-                            
-                            </p>
-                        </div>
-                        <div class="col-md-5">
-                        <p class="card-text" style="font-size: 14px">
-                        <b>Activity Rolls</b>: 
-                                @if ($arCount)
-                                    {{ $arCount }}
-                                @else
-                                    Empty!
-                                @endif
-                            <br><br>
-                            <b>Letters</b>:
-                                @if ($letterCount)
-                                    {{ $letterCount }}
-                                @else
-                                    Empty!
-                                @endif
-                            <br><br>
-                            <b>Coliseum</b>:
-                                @if ($coliCount)
-                                    {{ $coliCount }}
-                                @else
-                                    Empty!
-                                @endif
-                                <br><br>
-                            <b>Adoptions</b>:
-                                @if ($adoptCount)
-                                    {{ $adoptCount }}
-                                @else
-                                    Empty!
-                                @endif
-                            </p>
-                        </div>
-                    </div>
-                        <div style="text-align: center">
+<br>
+<div class="row align-items-stretch">
+    <div class="col-md-3 d-flex">
+        <div class= "card flex-fill text-center">
+        <h4>Activity Hub</h4>
+        <i>Want to get some items? Use some items? Find new and exciting places or take some risks? Heres some places to go!</i>
+            <br>
+            <a href="{{ url('https://kukuri-arpg.w3spaces.com/activities/quests.html') }}">
+                                Current Quest/Event
+                            </a>
+                            <hr>
+                            <a href="{{ url('info/hunting') }}">
+                                Hunting
+                            </a>
+                            <a href="{{ url('info/gathering') }}">
+                                Gathering
+                            </a>
+                            <a href="{{ url('info/traveling') }}">
+                                Traveling
+                            </a>
+                            <a  href="{{ url('info/excavating') }}">
+                                Excavating
+                            </a>
+                            <hr>
+                            <a  href="{{ url('info/letters') }}">
+                                Activity Letters
+                            </a>
+                            <a href="{{ url('info/coliseum') }}">
+                                Coliseum
+                            </a>
+                            <a href="https://kukuri-arpg.w3spaces.com/activities/traveling-merchant.html">
+                                Traveling Merchant
+                            </a>
+                            <hr>
+                            <a href="{{ url('crafting') }}">
+                                Crafting
+                            </a>
+                            <a href="{{ url('https://kukuri-arpg.w3spaces.com/activities/breeding.html') }}">
+                                Breeding
+                            </a>
                             <br>
+        </div>
+    </div>
+    <div class="col-md-3 d-flex">
+        <div class= "card flex-fill text-center">
+        <h4>Genetics</h4>
+            <img src ="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/b270d26f-24db-4b18-9f7b-ca5435d8ccdb/d9or9qu-14278989-1d00-4b2d-8ba4-e70ef54b57fe.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcL2IyNzBkMjZmLTI0ZGItNGIxOC05ZjdiLWNhNTQzNWQ4Y2NkYlwvZDlvcjlxdS0xNDI3ODk4OS0xZDAwLTRiMmQtOGJhNC1lNzBlZjU0YjU3ZmUucG5nIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.PIvBbzRRBwJnzvFmdEYYs78B2c06XailM5dm6ncWwFI" width=70% style="margin: auto">
+            <i>Curious about what those strange genetic letters mean? Or maybe what those feathers look like? Here are some guides for you get started with!</i>
+            <br><br>
+            <a href="">Genetics and Mutations</a>
+            <a href="">Physical Traits</a>
+            <a href="">Design Guide</a>
+            <br>
+        </div>
+    </div>
+    <div class="col-md-3 d-flex">
+        <div class= "card flex-fill text-center">
+            <h4>Guides</h4>
+            <img src="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/b270d26f-24db-4b18-9f7b-ca5435d8ccdb/daa0601-2278ed10-8f1c-4dcd-873c-4b51b940ca76.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcL2IyNzBkMjZmLTI0ZGItNGIxOC05ZjdiLWNhNTQzNWQ4Y2NkYlwvZGFhMDYwMS0yMjc4ZWQxMC04ZjFjLTRkY2QtODczYy00YjUxYjk0MGNhNzYucG5nIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.bHtGzr6iaKHlajaV7SpJ7Xi8BskqqSkqMXM0uuFZLjk" width=70% style="margin: auto">
+            <i>Confused about something? Maybe our background rules got you stumped... perhaps your stuck on some import editing... regardless, weve got a guide for it!</i>
+            <br><br>
+            <b>Guides coming soon!</b>
+            <i>These guides are not the same as our older, established pages. These will be new guide dedicated to certain parts of the game such as import editing, design creation, art rules and more. 
+                <br>
+                you can still find all current guides on their respective pages (traveling guide on the traveling page for example)</i>
+        </div>
+    </div>
+    <div class="col-md-3 d-flex">
+        <div class= "card flex-fill text-center">
+        <h4>Recourses</h4>
+            <i>Looking for something else? You may find it here!</i>
+            <br>
+            <a href="https://www.kukuri-arpg.com/prompts/prompts?prompt_category_id=11">Error and Mistake reports</a>
+            <a href="{{ url('reports') }}">Site Bug Reports</a>
+            <hr>
+            <a href="https://www.kukuri-arpg.com/adoption-center">Adoption Center</a>
+            <a href="https://www.kukuri-arpg.com/world/pets">Familiars</a>
+            <a href="https://www.kukuri-arpg.com/world/item-categories">Items</a>
+        </div>
+    </div>
+</div>
+
+<br>
+
+        <div class="card mb-3">
+            <div class="card-body">
+                <h5 class="card-title"  style="text-align: center">Queues <i class="fas fa-book"></i></h5>
+                    <div class="row">
+                        <div class="col-md-4">
+                           Want to see where you are in the queue? <b><a href="{{ url('queues') }}">Click here</a></b> to see our queue status and where you are!
+                            <br><br>
+                           Your entries will be highlighted in the list, and you can sort by prompt. If you dont see your entry, please check your drafts!
+
+                        </div>
+                        <div class="col-md-7">
+                        <div style="text-align: center">
                             All queues have an expected wait time of <b>2 weeks</b>.
                             <br><br>
                             These times might be longer or shorter depending on admin IRL, 
                             group events, or other things that may delay our work. Please
                             remain patient with us if the queues go a little over 2 weeks!
+                    </div>
+                           
                         </div>
+                    </div>
+                    
                     
                     </div>
-                </div>
-                <a href="{{ url('users') }}">@include('widgets._online_count')</a>
-                @include('widgets._recent_gallery_submissions', ['gallerySubmissions' => $gallerySubmissions])
-                
-    </div>
+                    </div>
+        <a href="{{ url('users') }}">@include('widgets._online_count')</a>
+        @include('widgets._recent_gallery_submissions', ['gallerySubmissions' => $gallerySubmissions])
 
+
+<script>
+    (function newFact() {
+  const facts = ['Did you know, all kukuri have beaks! Some show more than others, and on some kukuri you may not even see it! Most often a Kukuri\'s beak is covered in skin and fur.',
+   'Kukuri can pass on a maximum of 8 markings, if they have more markings than this, one or more gene will be marked as non-inheritable. This is done with brackets. For example, [nBl] is non-inheritable blanket!',
+   'Most Kukuri have an average nest size of 1-3 eggs, however rank, potions, and familiars can impact this number. Some nests can be as big as 5 eggs!',
+   'Some eggs are lost, or abandoned by their parent kukuri... these eggs are findable in activities such as traveling, hunting, excavating or gathering. This is pretty rare however.',
+   'If your kukuri is particularly experienced, reaching 2000, 3000, or even more FP; they will bring back an extra item in activities per additional 1,000 FP (Up to a max of 5 extra)',
+   'Common kukuris are domesticated versions of prairies, they did not occur naturally',
+   'The goddess, Death, does not like Cerberus, because before recieving Life\'s boon, he refused to rest in death. Because of this, his many rebirths caused the mutations he accumulated',
+    'All the first 4 sub-species of kukuri were planned out from the start of the game.',
+    'Prairies evolved from Aerial and Glider crossbreeds; the remaining aquatic blood in Gliders turned prairies into muscular land dwellers, but they kept some of the feathers from their Aerial ancestry.',
+    'Kukuris are a matriarchal species, and as such females tend to be more aggressive and in more leadership roles than their male counterparts',
+    'The goddess, Life, is the origin of some Kraken stories told by sailors and seafarers',
+    'The very first Aquatic seen was in the very first event the group held, where it was zombified and infected with mushrooms',
+    'While Kukuris are not capable of human speech, they can mimic random noises and some simple words. Some are better at this than others.',
+    'All kukuris are technically omnivores, the diet in their information mostly concerns what their preference is.',
+    'In the very early days of the game, due to an oversight, there was short horns and short ears. This was quickly fixed as the group began running.',
+    'A female Kukuri is called a dove, and a male kukuri is called a rook. A young kukuri is a puppy, and a group of kukuris is a loaf!',
+    'In the lore, Prairies were thought to be extinct amongst Aerials and Aquatics, but it turned out that Death had kept some of them hidden away until she felt it was right time to reveal them.',
+    'The goddess, Life, values experiences, and she revels in giving difficult obstacles so you can either fail, learn and do better, or prove yourself that you could indeed overcome it. She\'s always excited to learn new things and take part in competitions. For her, the mysteries and new challenges of the future are most important.',
+    'The goddess, Death, values comfort and stillness, in her realm the souls rest until they\'re ready to return anew. She enjoys listening to all the tales the souls tell, both happy and sad. She is acutely aware how finite life truly is, and how much can still be crammed into one lifespan. For her remembering those who came before is most important, as they lead to inspiration or warnings alike.',
+    'Kukuri do not have toe pads as many animals do, instead their feet are covered in a thin layer of fur, very similarly to Rabbits or Red pandas!'
+];
+  const randomFact = Math.floor(Math.random() * facts.length);
+  document.getElementById('factDisplay').innerHTML = facts[randomFact];
+})();
+</script>
 
 
 

@@ -14,12 +14,9 @@
     </div>
 </div>
 
-<nav class="navbar navbar-expand-md navbar-dark bg-dark col-lg-8" id="headerNav" style="margin:auto; border-radius: 10px 0px 0px 0px">
+<nav class="navbar navbar-expand-md navbar-dark bg-dark col-lg-12" id="headerNav" style="margin:auto; border-radius: 10px 0px 0px 0px">
 
     <div class="container-fluid">
-         <a class="navbar-brand" href="{{ url('/') }}">
-            {{ config('lorekeeper.settings.site_name', 'Lorekeeper') }}
-        </a> 
        
         </span>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
@@ -28,63 +25,54 @@
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <!-- Left Side Of Navbar -->
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item">
-                    @if (Auth::check() && Auth::user()->is_news_unread && config('lorekeeper.extensions.navbar_news_notif'))
-                        <a class="nav-link d-flex text-warning" href="{{ url('news') }}"><strong>News</strong><i class="fas fa-bell"></i></a>
-                    @else
-                        <a class="nav-link" href="{{ url('news') }}">News</a>
-                    @endif
-                </li>
-                @if(Auth::check() && Auth::user()->is_dev_logs_unread && Auth::user()->settings->dev_log_notif && Config::get('lorekeeper.extensions.navbar_news_notif'))
-                    <li class="nav-item">
-                        <a class="nav-link d-flex text-warning" href="{{ url('devlogs') }}"><strong>Devlog</strong><i class="fas fa-bell"></i></a>
-                    </li>
-                @endif
-                <li class="nav-item">
-                    @if (Auth::check() && Auth::user()->is_sales_unread && config('lorekeeper.extensions.navbar_news_notif'))
-                        <a class="nav-link d-flex text-warning" href="{{ url('sales') }}"><strong>Sales</strong><i class="fas fa-bell"></i></a>
-                    @else
-                        <a class="nav-link" href="{{ url('sales') }}">Divine Shop</a>
-                    @endif
-                </li>
-                @if (Auth::check())
-                    <li class="nav-item dropdown">
-                        <a id="inventoryDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                            Home
-                        </a>
+            <ul class="navbar-nav mr-auto ml-auto">
+                @php
+                    $hasNewsNotif = Auth::check() && config('lorekeeper.extensions.navbar_news_notif') && (
+                        Auth::user()->is_news_unread ||
+                        Auth::user()->is_sales_unread ||
+                        Auth::user()->is_raffles_unread ||
+                        (Auth::user()->is_dev_logs_unread && Auth::user()->settings->dev_log_notif)
+                    );
+                @endphp
 
-                        <div class="dropdown-menu" aria-labelledby="inventoryDropdown">
-                            <a class="dropdown-item" href="{{ Auth::user()->url . '/characters' }}">
-                                My Kukuri
+                <li class="nav-item dropdown">
+                    <a id="newsDropdown" class="nav-link dropdown-toggle {{ $hasNewsNotif ? 'text-warning d-flex align-items-center' : '' }}" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Home
+                        @if($hasNewsNotif)
+                            <i class="fas fa-bell ml-1"></i>
+                        @endif
+                    </a>
+
+                    <div class="dropdown-menu" aria-labelledby="newsDropdown">
+                        <a class="dropdown-item" href="{{ url('/') }}">Home</a>
+                        @if (Auth::check() && Auth::user()->is_news_unread && config('lorekeeper.extensions.navbar_news_notif'))
+                            <a class="dropdown-item text-warning d-flex justify-content-between" href="{{ url('news') }}">
+                                <span>News</span> <i class="fas fa-bell"></i>
                             </a>
-                            <!-- <a class="dropdown-item" href="{{ url('characters/myos') }}">
-                                My MYO Slots
-                            </a> -->
-                            <!-- <a class="dropdown-item" href="{{ url('breeding-permissions') }}">
-                                My Breeding Slots
-                                </a> -->
-                            <a class="dropdown-item" href="{{ url('pets') }}">
-                                My Familiars
+                        @else
+                            <a class="dropdown-item" href="{{ url('news') }}">News</a>
+                        @endif
+                        @if(Auth::check() && Auth::user()->is_dev_logs_unread && Auth::user()->settings->dev_log_notif && Config::get('lorekeeper.extensions.navbar_news_notif'))
+                            <a class="dropdown-item text-warning d-flex justify-content-between" href="{{ url('devlogs') }}">
+                                <span>Devlog</span> <i class="fas fa-bell"></i>
                             </a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="{{ url('inventory') }}">
-                                My Bank
+                        @endif
+                        @if (Auth::check() && Auth::user()->is_sales_unread && config('lorekeeper.extensions.navbar_news_notif'))
+                            <a class="dropdown-item text-warning d-flex justify-content-between" href="{{ url('sales') }}">
+                                <span>Divine Shop</span> <i class="fas fa-bell"></i>
                             </a>
-                            <a class="dropdown-item" href="{{ url('bank') }}">
-                                My Wallet
-                            </a>
-                            <!-- <a class="dropdown-item" href="{{ Auth::user()->url . '/awardcase' }}">
-                                {{ ucfirst(__('awards.awards')) }}
-                                </a> -->
-                            <!-- <a class="dropdown-item" href="{{ url('stats') }}">
-                                Stat Information
-                            </a> -->
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="{{ url('comments/liked') }}">
-                                Liked Comments
-                            </a>
-                            @if (Auth::check() && Auth::user()->is_raffles_unread && config('lorekeeper.extensions.navbar_news_notif'))
+                        @else
+                            <a class="dropdown-item" href="{{ url('sales') }}">Divine Shop</a>
+                        @endif
+                        <a class="dropdown-item" href="https://kukuri-arpg.w3spaces.com/rules-tos.html"> Rules and ToS </a>
+                        <a class="dropdown-item" href="{{ url('/team') }}"> Admin Team </a>
+                        <a class="dropdown-item" href="{{ url('users') }}">
+                            Players
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="https://kukuri-arpg.w3spaces.com/newbie-guide.html"> Newbie Guide </a>
+                        <a class="dropdown-item" href="{{ url('/adoption-center') }}"> Adoption Center </a>
+                        @if (Auth::check() && Auth::user()->is_raffles_unread && config('lorekeeper.extensions.navbar_news_notif'))
                                 <a class="dropdown-item text-warning" href="{{ url('raffles') }}">
                                     Raffles <i class="fas fa-bell"></i>
                                 </a>
@@ -93,6 +81,65 @@
                                     Raffles
                                 </a>
                             @endif
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="{{ url('/team') }}"> Discord </a>
+                        <a class="dropdown-item" href="{{ url('/team') }}"> DeviantArt Group </a>
+                        <a class="dropdown-item" href="{{ url('/team') }}"> FaQ </a>
+
+                    </div>
+                </li>
+
+                
+                    <li class="nav-item dropdown">
+                        <a id="inventoryDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                            Kukuology
+                        </a>
+
+                        <div class="dropdown-menu" aria-labelledby="inventoryDropdown">
+                            <a class="dropdown-item" href="https://kukuri-arpg.w3spaces.com/folklore.html">Folklore</a>
+                            <a class="dropdown-item" href="https://kukuri-arpg.w3spaces.com/genetics/species-info.html">Species Information</a>
+                            <a class="dropdown-item" href="https://kukuri-arpg.w3spaces.com/lore.html">The Story So Far</a>
+                            
+                            <div class="dropdown-divider"></div>
+
+                            <a class="dropdown-item" href="https://kukuri-arpg.w3spaces.com/genetics/genes-and-mutations.html">Genetics and Mutations</a>
+                            <a class="dropdown-item" href="https://kukuri-arpg.w3spaces.com/genetics/physical-traits.html">Physical Traits</a>
+                            <a class="dropdown-item" href="https://kukuri-arpg.w3spaces.com/genetics/physical-traits.html">Skill Traits</a>
+
+                            <div class="dropdown-divider"></div>
+
+                            <a class="dropdown-item" href="https://kukuri-arpg.w3spaces.com/activities/familiars.html">Familiars</a>
+                            <a class="dropdown-item" href="https://kukuri-arpg.w3spaces.com/handlers-guides.html">Handlers and Guides</a>
+                          
+                        </div>
+                    </li>
+                    
+                    <li class="nav-item dropdown">
+                        <a id="inventoryDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                            Your Kukuri
+                        </a>
+
+                        <div class="dropdown-menu" aria-labelledby="inventoryDropdown">
+                        @if (Auth::check())
+                            <a class="dropdown-item" href="{{ Auth::user()->url . '/characters' }}"> My Loaf </a>
+                            @endif
+                            <a class="dropdown-item" href="https://kukuri-arpg.w3spaces.com/training/home.html">Training</a>
+                            <a class="dropdown-item" href="https://kukuri-arpg.w3spaces.com/fate-points.html">Leveling and Fate Points</a>
+                            <a class="dropdown-item" href="https://kukuri-arpg.deviantart.com/journal/Injuries-and-illnesses-645173583">Health and Injuries</a>
+                            
+                            <div class="dropdown-divider"></div>
+
+                            <a class="dropdown-item" href="#"> Rank Updates </a>
+                            <a class="dropdown-item" href="https://www.deviantart.com/kukuri-arpg/journal/Ownership-transfers-593704983">Ownership Transfers</a>
+                            <a class="dropdown-item" href="#">Import Updates</a>
+                            <a class="dropdown-item" href="#">Heal your Kukuri</a>
+
+                            <div class="dropdown-divider"></div>
+
+                            <a class="dropdown-item" href="#"> Design Approvals </a>
+                            <a class="dropdown-item" href="#">Import Customization</a>
+                            <a class="dropdown-item" href="#">Creating Trackers</a>
+
                         </div>
                     </li>
                     <li class="nav-item dropdown">
@@ -100,14 +147,36 @@
                             Activity
                         </a>
                         <div class="dropdown-menu" aria-labelledby="queueDropdown">
-                           
-                            
-                            <a class="dropdown-item" href="{{ url('prompts/prompts') }}">
-                                Activities
+                            <a class="dropdown-item" href="{{ url('queues') }}">
+                                Check Queues
                             </a>
                             <a class="dropdown-item" href="{{ url('https://kukuri-arpg.w3spaces.com/activities/quests.html') }}">
-                                Current Quest
+                                Current Quest/Event
                             </a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="{{ url('info/hunting') }}">
+                                Hunting
+                            </a>
+                            <a class="dropdown-item" href="{{ url('info/gathering') }}">
+                                Gathering
+                            </a>
+                            <a class="dropdown-item" href="{{ url('info/traveling') }}">
+                                Traveling
+                            </a>
+                            <a class="dropdown-item" href="{{ url('info/excavating') }}">
+                                Excavating
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="{{ url('info/letters') }}">
+                                Activity Letters
+                            </a>
+                            <a class="dropdown-item" href="{{ url('info/coliseum') }}">
+                                Coliseum
+                            </a>
+                            <a class="dropdown-item" href="https://kukuri-arpg.w3spaces.com/activities/traveling-merchant.html">
+                                Traveling Merchant
+                            </a>
+                            <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="{{ url('crafting') }}">
                                 Crafting
                             </a>
@@ -120,7 +189,7 @@
                             <a class="dropdown-item" href="{{ url('/fp-calculator') }}">
                                 FP Calculator
                             </a>
-                            <a class="dropdown-item" href="{{ url('/info/games') }}">
+                            <!-- <a class="dropdown-item" href="{{ url('/info/games') }}">
                                 Minigames
                             </a>
                             <a class="dropdown-item" href="{{ url('generators') }}">
@@ -128,9 +197,9 @@
                             </a>
                             <a class="dropdown-item" href="{{ url('world/info') }}">
                                 World Expanded
-                            </a>
+                            </a> -->
                            
-                            <div class="dropdown-divider"></div>
+                            <!-- <div class="dropdown-divider"></div>
 
                             <a class="dropdown-item" href="{{ url('submissions') }}">
                                 My Submissions
@@ -138,6 +207,7 @@
                             <a class="dropdown-item" href="{{ url('submissions?type=draft') }}">
                                 Submission Drafts
                             </a>
+                            
                             <a class="dropdown-item" href="{{ url('claims') }}">
                                 My Claims
                             </a>
@@ -146,48 +216,35 @@
                             </a>
                             <a class="dropdown-item" href="{{ url('reports') }}">
                                 Reports
-                            </a>
+                            </a> -->
                             <!-- <a class="dropdown-item" href="{{ url('designs') }}">
                                 Design Approvals
                             </a> -->
                             
-                            <div class="dropdown-divider"></div>
+                            <!-- <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="{{ url('characters/transfers/incoming') }}">
                                 Character Transfers
                             </a>
                             <a class="dropdown-item" href="{{ url('trades/open') }}">
                                 Trades
-                            </a>
+                            </a> -->
                             <a class="dropdown-item" href="{{ url('shops') }}">
                                 Shops
                             </a>
                         </div>
                     </li>
-                @endif
+                
                 <li class="nav-item dropdown">
 
-                    @if (Auth::check() && Auth::user()->is_raffles_unread && config('lorekeeper.extensions.navbar_news_notif'))
-                        <a id="browseDropdown" class="nav-link dropdown-toggle text-warning" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                            <strong>About Us</strong> <i class="fas fa-bell"></i>
-                        </a>
-                    @else
+                   
+                     
                     <a id="browseDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                            About Us
+                            Guidebook
                         </a>
-                    @endif
+                    
 
                     <div class="dropdown-menu" aria-labelledby="browseDropdown">
-                        <a class="dropdown-item" href="{{ url('https://kukuri-arpg.w3spaces.com/rules-tos.html') }}">
-                            Group Rules
-                        </a>
-                        <a class="dropdown-item" href="{{ url('team') }}">
-                            Admin Team
-                        </a>
-                        <a class="dropdown-item" href="{{ url('users') }}">
-                            Players
-                        </a>
 
-                        <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="{{ url('https://kukuri-arpg.w3spaces.com/newbie-guide.html') }}">
                             Newbie guide
                         </a>
@@ -207,109 +264,37 @@
                         </a>
                     </div>
                 </li>
+                @if (Auth::check())
                 <li class="nav-item dropdown">
                     <a id="loreDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                        Kukuology
+                        Account
                     </a>
 
                     <div class="dropdown-menu" aria-labelledby="loreDropdown">
-                        <a class="dropdown-item" href="{{ url('masterlist') }}">
-                            Kukuri Masterlist
+                        <a class="dropdown-item" href="{{ Auth::user()->url }}">
+                            Profile
                         </a>
-                        <a class="dropdown-item" href="{{ url('adoption-center') }}">
-                            Adoption Center
-                        </a>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="{{ url('https://kukuri-arpg.w3spaces.com/genetics/genes-and-mutations.html') }}">
-                            Genetics
-                        </a>
-                        <a class="dropdown-item" href="{{ url('world/trait-categories') }}">
-                            Physical Features
-                        </a>
-                        <a class="dropdown-item" href="{{ url('https://kukuri-arpg.w3spaces.com/genetics/species-info.html') }}">
-                            Species Information
+                        <a class="dropdown-item" href="{{ url('characters') }}">
+                            My Loaf
                         </a>
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="{{ url('world/pets') }}">
-                            Familiars
+                        <a class="dropdown-item" href="{{ url('inventory') }}">
+                            Bank
                         </a>
-                        <a class="dropdown-item" href="{{ url('world/item-categories') }}">
-                            Items
+                        <a class="dropdown-item" href="{{ url('bank') }}">
+                            Wallet
                         </a>
-                        <a class="dropdown-item" href="{{ url('world/awards') }}">
-                            Awards
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="{{ url('account/settings') }}">
+                            Settings
                         </a>
-                    </div>
-                </li>
-            </ul>
-
-            <!-- Right Side Of Navbar -->
-            <ul class="navbar-nav ml-auto">
-                <!-- Authentication Links -->
-                @guest
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
-                    </li>
-                    @if (Route::has('register'))
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
-                        </li>
-                    @endif
-                @else
-                    @if(Auth::user()->isStaff)
-                        <li class="nav-item d-flex">
-                            <a class="nav-link position-relative display-inline-block" href="{{ url('admin') }}"><i class="fas fa-crown"></i>
-                              @if (Auth::user()->hasAdminNotification(Auth::user()))
-                                <span class="position-absolute rounded-circle bg-danger text-light" style="top: -2px; right: -5px; padding: 1px 6px 1px 6px; font-weight:bold; font-size: 0.8em; box-shadow: 1px 1px 1px rgba(0,0,0,.25);">
-                                  {{ Auth::user()->hasAdminNotification(Auth::user()) }}
-                                </span>
-                              @endif
-                            </a>
-                        </li>
-                    @endif
-                    @if (Auth::user()->notifications_unread)
-                        <li class="nav-item">
-                            <a class="nav-link btn btn-secondary btn-sm" href="{{ url('notifications') }}"><span class="fas fa-envelope"></span> {{ Auth::user()->notifications_unread }}</a>
-                        </li>
-                    @endif
-
-                    <li class="nav-item dropdown">
-                        <a id="browseDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                            Submit
+                        
+                        <a class="dropdown-item" href="{{ url('notifications') }}">
+                            Notifications
                         </a>
-
-                        <div class="dropdown-menu" aria-labelledby="browseDropdown">
-                            <a class="dropdown-item" href="{{ url('submissions/new') }}">
-                                Submit Prompt
-                            </a>
-                            <a class="dropdown-item" href="{{ url('claims/new') }}">
-                                Submit Claim
-                            </a>
-                            <a class="dropdown-item" href="{{ url('reports/new') }}">
-                                Submit Report
-                            </a>
-                        </div>
-                    </li>
-
-                    <li class="nav-item dropdown">
-                        <a id="navbarDropdown" class="nav-link dropdown-toggle" href="{{ Auth::user()->url }}" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                            {{ Auth::user()->name }} <span class="caret"></span>
-                        </a>
-
-                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="{{ Auth::user()->url }}">
-                                Profile
-                            </a>
-                            <a class="dropdown-item" href="{{ url('notifications') }}">
-                                Notifications
-                            </a>
-                            <a class="dropdown-item" href="{{ url('account/bookmarks') }}">
-                                Bookmarks
-                            </a>
-                            <a class="dropdown-item" href="{{ url('account/settings') }}">
-                                Settings
-                            </a>
-                            <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="{{ route('logout') }}"
+                                onclick="event.preventDefault();
                                                 document.getElementById('logout-form').submit();">
                                 {{ __('Logout') }}
                             </a>
@@ -317,10 +302,23 @@
                             <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                                 @csrf
                             </form>
-                        </div>
-                    </li>
+                    </div>
+                </li>
+                @endif
+                @guest
+                    
+                @else
+                    @if (Auth::user()->isStaff)
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url('admin') }}"><i class="fas fa-crown"></i></a>
+                        </li>
+                    @endif
+                    
                 @endguest
             </ul>
+
+          
+                
         </div>
     </div>
 </nav>

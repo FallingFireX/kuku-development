@@ -12,6 +12,7 @@ use App\Models\Report\Report;
 use App\Models\Sales\Sales;
 use App\Models\SitePage;
 use App\Models\User\User;
+use App\Models\Submission\Submission;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -108,6 +109,12 @@ class CommentController extends Controller {
                 $recipient = User::find($comment->commentable_id);
                 $post = 'your profile';
                 $link = $recipient->url.'/#comment-'.$comment->getKey();
+                break;
+            case 'App\Models\Submission\Submission':
+                $submission = Submission::find($comment->commentable_id);
+                $recipient = $submission->user;
+                $post = 'your submission';
+                $link = $submission->url.'/#comment-'.$comment->getKey();
                 break;
             case 'App\Models\Sales\Sales':
                 $sale = Sales::find($comment->commentable_id);

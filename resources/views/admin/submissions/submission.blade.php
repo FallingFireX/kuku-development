@@ -294,6 +294,7 @@
         <div class="alert alert-danger">This {{ $submission->prompt_id ? 'submission' : 'claim' }} has already been processed.</div>
         @include('home._submission_content', ['submission' => $submission])
     @endif
+    @comments(['model' => $submission, 'perPage' => 5])
 
 @endsection
 

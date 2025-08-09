@@ -72,6 +72,7 @@ class GalleryController extends Controller {
                 $query->where('gallery_submissions.title', 'LIKE', '%'.$request->get('title').'%');
             });
         }
+
         if ($request->get('prompt_id')) {
             $query->where('prompt_id', $request->get('prompt_id'));
         }
@@ -107,9 +108,9 @@ class GalleryController extends Controller {
         return view('galleries.gallery', [
             'gallery'          => $gallery,
             'submissions'      => $query->paginate(20)->appends($request->query()),
-            'prompts'          => [0 => 'Any Prompt'] + Prompt::whereIn('id', GallerySubmission::where('gallery_id', $gallery->id)->withOnly('prompt')->visible(Auth::user() ?? null)->whereNotNull('prompt_id')->select('prompt_id')->distinct()->pluck('prompt_id')->toArray())->orderBy('name')->pluck('name', 'id')->toArray(),
-            'childSubmissions' => $gallery->through('children')->has('submissions')->where('is_visible', 1)->where('status', 'Accepted'),
             'locations'        => [0 => 'Any Location'] + Location::whereIn('id', GallerySubmission::where('gallery_id', $gallery->id)->visible(Auth::check() ? Auth::user() : null)->accepted()->whereNotNull('location_id')->pluck('location_id')->toArray())->orderBy('name')->get()->pluck('styleParent', 'id')->toArray(),
+            'prompts'          => [0 => 'Any Prompt'] + Prompt::whereIn('id', GallerySubmission::where('gallery_id', $gallery->id)->visible(Auth::check() ? Auth::user() : null)->accepted()->whereNotNull('prompt_id')->pluck('prompt_id')->toArray())->orderBy('name')->pluck('name', 'id')->toArray(),
+            'childSubmissions' => GallerySubmission::whereIn('gallery_id', $gallery->children->pluck('id')->toArray())->where('is_visible', 1)->where('status', 'Accepted'),
             'galleryPage'      => true,
             'sideGallery'      => $gallery,
         ]);
@@ -337,6 +338,7 @@ class GalleryController extends Controller {
             'gallery'     => $gallery,
             'submission'  => new GallerySubmission,
             'prompts'     => Prompt::active()->sortAlphabetical()->pluck('name', 'id')->toArray(),
+            'locations'   => Location::visible()->sortAlphabetical()->get()->sortBy('parent_id')->pluck('styleParent', 'id')->toArray(),
             'users'       => User::visible()->orderBy('name')->pluck('name', 'id')->toArray(),
             'locations'   => Location::visible()->sortAlphabetical()->get()->sortBy('parent_id')->pluck('styleParent', 'id')->toArray(),
             'currency'    => Currency::find(Settings::get('group_currency')),

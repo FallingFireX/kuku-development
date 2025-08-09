@@ -155,11 +155,7 @@ class Award extends Model {
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeReleased($query) {
-        $users = UserAward::pluck('award_id')->toArray();
-        $characters = CharacterAward::pluck('award_id')->toArray();
-        $array = array_merge($users, $characters);
-
-        return $query->whereIn('id', $array)->orWhere('is_released', 1);
+       
     }
 
     /**********************************************************************************************

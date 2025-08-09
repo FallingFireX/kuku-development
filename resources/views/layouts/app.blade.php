@@ -132,6 +132,7 @@
     @include('feed::links')
 </head>
 
+
 <body>
     <div id="app">
         <div class="site-header-image" id="header" style="position: relative;">
@@ -144,44 +145,89 @@
             <div class="site-mobile-header bg-secondary"><a href="#" class="btn btn-sm btn-outline-light" id="mobileMenuButton">Menu <i class="fas fa-caret-right ml-1"></i></a></div>
         @endif
 
+        
         <main class="container-fluid" id="main">
-            <div class="row">
+            <div class="flex-wrapper">
+                <div class="row">
 
-                <div class="sidebar col-lg-2" id="sidebar">
-                    @yield('sidebar')
-                </div>
-                <div class="main-content col-lg-8 p-4">
-                    <div>
-                        @if (Settings::get('is_maintenance_mode'))
-                            <div class="alert alert-secondary">
-                                The site is currently in maintenance mode!
-                                @if (!Auth::check() || !Auth::user()->hasPower('maintenance_access'))
-                                    You can browse public content, but cannot make any submissions.
+                    {{-- Left sidebar --}}
+                    <div class="sidebar col-lg-2" id="sidebar">
+                        @yield('sidebar')
+                    </div>
+
+                    {{-- Main content --}}
+                    <div class="main-content col-lg-8 p-4">
+                        <div>
+                            @if (Settings::get('is_maintenance_mode'))
+                                <div class="alert alert-secondary">
+                                    The site is currently in maintenance mode!
+                                    @if (!Auth::check() || !Auth::user()->hasPower('maintenance_access'))
+                                        You can browse public content, but cannot make any submissions.
+                                    @endif
+                                </div>
+                            @endif
+                            @if (Auth::check() && !config('lorekeeper.extensions.navbar_news_notif'))
+                                @if (Auth::user()->is_news_unread)
+                                    <div class="alert alert-info"><a href="{{ url('news') }}">There is a new news post!</a></div>
                                 @endif
-                            </div>
-                        @endif
-                        @if (Auth::check() && !config('lorekeeper.extensions.navbar_news_notif'))
-                            @if (Auth::user()->is_news_unread)
-                                <div class="alert alert-info"><a href="{{ url('news') }}">There is a new news post!</a></div>
+                                @if (Auth::user()->is_sales_unread)
+                                    <div class="alert alert-info"><a href="{{ url('sales') }}">There is a new sales post!</a></div>
+                                @endif
+                                @if(Auth::user()->is_raffles_unread)
+                                    <div class="alert alert-info"><a href="{{ url('raffles') }}">There is a new raffle!</a></div>
+                                @endif
                             @endif
-                            @if (Auth::user()->is_sales_unread)
-                                <div class="alert alert-info"><a href="{{ url('sales') }}">There is a new sales post!</a></div>
-                            @endif
-                            @if(Auth::user()->is_raffles_unread)
-                                <div class="alert alert-info"><a href="{{ url('raffles') }}">There is a new raffle!</a></div>
-                            @endif
-                        @endif
-                        @include('flash::message')
-                        @yield('content')
-                    </div>
+                            @include('flash::message')
+                            @yield('content')
+                        </div>
 
-                    <div class="site-footer mt-4" id="footer">
-                        @include('layouts._footer')
+                        <div class="site-footer mt-4" id="footer">
+                            @include('layouts._footer')
+                        </div>
                     </div>
+                    
+                
+                
+                
+                <div class="rightSidebar col-lg-2 mb-0 p-0" id="rightSidebar">
+                    <ul class="text-center">
+                        @if (Request::is('/'))
+                            <li class="rightSidebar-section p-2">
+                                <h5>Kukuri of the Month</h5>
+                                @if(isset($featured) && $featured)
+                                    <div>
+                                        <a href="{{ $featured->url }}">
+                                            <img src="{{ $featured->image->thumbnailUrl }}" class="img-thumbnail" />
+                                        </a>
+                                    </div>
+                                    <div class="mt-1">
+                                        <a href="{{ $featured->url }}" class="h5 mb-0"  style="color:var(--dark);">
+                                            @if(!$featured->is_visible) <i class="fas fa-eye-slash"></i> @endif
+                                            {{ $featured->fullName }}
+                                        </a>
+                                    </div>
+                                    <div class="small" style="color:var(--dark)!important;">
+                                        Owned by: {!! $featured->displayOwner !!}
+                                    </div>
+                                @else
+                                    <p>There is no featured character.</p>
+                                @endif
+                            </li>
+
+                            <li class="rightSidebar-section p-2">
+                                @include('widgets._affiliates', ['affiliates' => $affiliates, 'featured' => $featured_affiliates, 'open' => $open])
+                            </li>
+                                  
+                            <li> <img src="https://discordapp.com/api/guilds/152924425774170113/widget.png?style=banner2" alt=""></li>
+                        @endif
+                    </ul>
                 </div>
-            </div>
+        
 
+    </div>
+         
         </main>
+
 
 
         <div class="modal fade" id="modal" tabindex="-1" role="dialog">

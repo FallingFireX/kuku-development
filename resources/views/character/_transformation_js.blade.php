@@ -2,6 +2,13 @@
     $(document).on('click', '.form-data-button', function() {
         // get value from data-id="" attribute
         var id = $(this).attr("data-id");
+
+        // Remove active class from all tabs
+        $('.form-data-button').removeClass('active');
+
+        // Add active class to clicked tab
+        $(this).addClass('active');
+
         // ajax get
         $.ajax({
             type: "GET",
@@ -35,10 +42,12 @@
                             height: 500,
                             menubar: false,
                             convert_urls: false,
+                            
                             plugins: [
                                 'advlist autolink lists link image charmap print preview anchor',
                                 'searchreplace visualblocks code fullscreen spoiler',
-                                'insertdatetime media table paste code help wordcount'
+                                'insertdatetime media table paste code help wordcount',
+                                'code'
                             ],
                             toolbar: 'undo redo | formatselect | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | spoiler-add spoiler-remove | removeformat | code',
                             content_css: [

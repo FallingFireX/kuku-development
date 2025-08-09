@@ -1,45 +1,72 @@
-<ul class="text-center">
-    <li class="sidebar-section p-2">
-        @if(isset($featured) && $featured)
-        <b><u>Kukuri of the Month</u></b>
-            <div>
-                <a href="{{ $featured->url }}"><img src="{{ $featured->image->thumbnailUrl }}" class="img-thumbnail" /></a>
-            </div>
-            <div class="mt-1">
-                <a href="{{ $featured->url }}" class="h5 mb-0">@if(!$featured->is_visible) <i class="fas fa-eye-slash"></i> @endif {{ $featured->fullName }}</a>
-            </div>
-            <div class="small">
-                {!! $featured->displayOwner !!}
-            </div>
-        @else
-            <p>There is no featured character.</p>
-        @endif
-    </li>
-    <li class="sidebar-section p-2">
-            <div class="mt-1">
-            <h5>Current Season</h5>
-                {!! $sidebar->box1content !!}
-                <i>Check prey species in hunting for the correct season!</i>
-            </div>
-            
-    </li>
+<style>@media (max-width: 576px) {
+    h4{
+        margin-top:5rem;
+    }
+}
+</style>
+<ul class="text-center list-unstyled">
 
-    <li class="sidebar-section p-2">
-            <div class="mt-1">
-                <h5>Current Quest</h5>
-                <br>
-                {!! $sidebar->box2content !!}
+                @guest
                 
-                <b><a href="https://kukuri-arpg.w3spaces.com/activities/quests.html">Read more here </a></b>
-            </div>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
+                    </li>
+                    @if (Route::has('register'))
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
+                        </li>
+                    @endif
+                @else
+                @endguest
+    @if (Auth::check())
+    <h4 >{!! Auth::user()->displayName !!}</h4>
+        <div class="d-flex justify-content-center">
+            <!-- Avatar -->
+    
+            <img src="/images/avatars/{!! Auth::user()->avatar !!}" alt="User Avatar" class="img-fluid rounded-circle" style="max-height: 115px;">
             
-    </li>
+            <!-- Buttons -->
+            <div class="d-flex flex-column ms-4 pl-2 pb-1 gap-2">
+                <a href="{{ url('notifications') }}"
+                    class="btn {{ Auth::user()->notifications_unread ? 'btn-warning' : 'btn-secondary' }} 
+                            rounded-circle p-2 mb-1 d-inline-flex justify-content-center align-items-center"
+                    style="width: 40px; height: 40px; text-decoration: none; color: inherit;">
+                        <i class="fas fa-envelope"></i>
+                </a>
 
-    <li class="sidebar-section p-2">
-            <div class="mt-1">
-            <h5>Beauty Contest Theme</h5>
-            {!! $sidebar->box3content !!}
-            </div>
+                <a href="{{ url('account/settings') }}" 
+                        class="btn btn-secondary rounded-circle p-2 mb-1 d-inline-flex justify-content-center align-items-center"
+                        style="width: 40px; height: 40px; text-decoration: none; color: inherit;">
+                    <i class="fas fa-cog"></i>
+                </a>
+
+                <a href="{{ Auth::user()->url }}" 
+                        class="btn btn-secondary rounded-circle p-2 mb-1 d-inline-flex justify-content-center align-items-center"
+                        style="width: 40px; height: 40px; text-decoration: none; color: inherit;">
+                    <i class="fas fa-user"></i>
+                </a>
+            </div>    
             
-    </li>
+        </div>
+        
+        <div class="d-flex justify-content-center ">
+            <a href="{{ url('characters') }}" class="btn btn-secondary my-auto mx-1 py-2" style="width:100%;">Loaf</a> 
+            <a href="{{ url('inventory') }}" class="btn btn-secondary my-auto mx-1 py-2" style="width:100%;">Bank</a> 
+            <a href="{{ url('bank') }}" class="btn btn-secondary my-auto mx-1 py-2" style="width:100%;">Wallet</a> 
+        </div>
+@endif
+<br><br>
+
+
+    <div class="p-2 ml-3">              
+    <h5>Current Season</h5>
+    {!! $sidebar->box1content !!}
+</div>
+
+<div class="p-2 ml-3">              
+    <h5>Beauty Contest Theme</h5>
+    {!! $sidebar->box1content !!}
+</div>
+  
+    
 </ul>

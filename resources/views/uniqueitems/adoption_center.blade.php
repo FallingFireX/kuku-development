@@ -17,27 +17,27 @@
     <form method="GET" action="{{ url('adoption-center') }}">
         <div class="row" style="float:left";>
             <div class="col-5">
-            <select name="category_1" class="form-control">
-                <option value="">Select Filter</option>
-                @foreach($categories as $category)
-                    <option value="{{ $category->id }}" {{ request('category_1') == $category->id ? 'selected' : '' }}>{{ $category->category_name }}</option>
-                @endforeach
-            </select>
+                <select name="category_1" class="form-control">
+                    <option value="">Select Filter</option>
+                    @foreach($categories as $category)
+                        <option value="{{ $category->id }}" {{ request('category_1') == $category->id ? 'selected' : '' }}>{{ $category->category_name }}</option>
+                    @endforeach
+                </select>
             </div>
             <div class="col-5">
-            <select name="category_2" class="form-control">
-                <option value="">Select Filter</option>
-                @foreach($categories as $category)
-                    <option value="{{ $category->id }}" {{ request('category_2') == $category->id ? 'selected' : '' }}>{{ $category->category_name }}</option>
-                @endforeach
-            </select>
+                <select name="category_2" class="form-control">
+                    <option value="">Select Filter</option>
+                    @foreach($categories as $category)
+                        <option value="{{ $category->id }}" {{ request('category_2') == $category->id ? 'selected' : '' }}>{{ $category->category_name }}</option>
+                    @endforeach
+                </select>
             </div>
             <div class="col-2">
                 <button type="submit" class="btn btn-primary">Filter</button>
             </div>
         </div>
     </form>
-</div>
+<br>
 <br>
     <div class="mb-4 logs-table">
         <div class="logs-table-header">
@@ -53,7 +53,8 @@
                 </div>
             </div>
         </div>
-        <div class="logs-table-body">
+</div>
+    <div class="logs-table-body">
     @foreach ($items as $item)
         @if ($item->owner) <!-- Skip the item if it has an owner -->
             @continue
@@ -84,10 +85,10 @@
         </div>
     @endforeach
 
-<div class="pagination">
-    {{ $items->appends(request()->query())->links() }}
-</div>
-
+        <div class="pagination">
+            {{ $items->appends(request()->query())->links() }}
+        </div>
+    </div>
 
 
 

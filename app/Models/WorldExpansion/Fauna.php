@@ -18,7 +18,6 @@ class Fauna extends Model {
     protected $fillable = [
         'name', 'description', 'summary', 'parsed_description', 'sort', 'image_extension', 'thumb_extension',
         'category_id', 'is_active', 'scientific_name',
-
     ];
 
     /**

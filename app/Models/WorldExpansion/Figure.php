@@ -18,7 +18,6 @@ class Figure extends Model {
     protected $fillable = [
         'name', 'description', 'summary', 'parsed_description', 'sort', 'image_extension', 'thumb_extension',
         'category_id', 'is_active', 'birth_date', 'death_date', 'faction_id',
-
     ];
 
     /**
@@ -27,7 +26,16 @@ class Figure extends Model {
      * @var string
      */
     protected $table = 'figures';
-    protected $dates = ['birth_date', 'death_date'];
+
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'birth_date'        => 'datetime',
+        'death_date'        => 'datetime',
+    ];
 
     public $timestamps = true;
 

@@ -239,6 +239,10 @@ class BrowseController extends Controller {
             $imageQuery->whereIn('id', $query->pluck('character_image_id')->toArray());
         }
 
+        if (!$request->get('search_images') && !$request->get('description')) {
+            $imageQuery->whereIn('id', $query->pluck('character_image_id')->toArray());
+        }
+
         // Searching on image properties
         if ($request->get('species_id')) {
             $imageQuery->where('species_id', $request->get('species_id'));
@@ -262,7 +266,13 @@ class BrowseController extends Controller {
             $imageQuery->whereNotNull('transformation_id');
         }
         if ($request->get('genotype')) {
-            $imageQuery->where('genotype', 'LIKE', '%'.$request->get('genotype').'%');
+            $genotype = $request->get('genotype');
+            $imageQuery->whereRaw('BINARY `genotype` LIKE ?', ["%$genotype%"]);
+        }
+        
+
+        if ($request->get('description')) {
+            $imageQuery->where('description', 'LIKE', '%'.$request->get('description').'%');
         }
 
         if ($request->get('artist')) {

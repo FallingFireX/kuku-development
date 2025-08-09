@@ -13,7 +13,6 @@ class Glossary extends Model {
      */
     protected $fillable = [
         'name', 'description', 'parsed_description', 'is_active', 'link_id', 'link_type',
-
     ];
 
     /**

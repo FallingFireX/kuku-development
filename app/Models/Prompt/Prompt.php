@@ -14,7 +14,7 @@ class Prompt extends Model {
     protected $fillable = [
         'prompt_category_id', 'name', 'summary', 'description', 'parsed_description', 'is_active',
         'start_at', 'end_at', 'hide_before_start', 'hide_after_end', 'has_image', 'prefix', 'limit', 'limit_period', 'limit_character',
-        'hide_submissions', 'staff_only', 'hash', 'level_req', 'form',
+        'hide_submissions', 'staff_only', 'hash', 'public_queue', 'level_req', 'form',
     ];
 
     /**

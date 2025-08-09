@@ -18,7 +18,6 @@ class Event extends Model {
     protected $fillable = [
         'name', 'description', 'summary', 'parsed_description', 'sort', 'image_extension', 'thumb_extension',
         'category_id', 'is_active', 'occur_start', 'occur_end',
-
     ];
 
     /**
@@ -28,7 +27,15 @@ class Event extends Model {
      */
     protected $table = 'events';
 
-    protected $dates = ['occur_start', 'occur_end'];
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'occur_start'        => 'datetime',
+        'occur_end'          => 'datetime',
+    ];
 
     public $timestamps = true;
 

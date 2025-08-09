@@ -63,7 +63,7 @@ class HomeController extends Controller {
             'claimCount'             => Submission::where('status', 'Pending')->whereNull('prompt_id')->count(),
             'about'                  => SitePage::where('key', 'about')->first(),
             'featured'               => $character,
-            'newses'                 => News::visible()->orderBy('updated_at', 'DESC')->take(2)->get(),
+            'newses'                 => News::visible()->orderBy('updated_at', 'DESC')->take(1)->get(),
             'gallerySubmissions'     => $gallerySubmissions,
             'open'                   => intval(Settings::get('affiliates_open')),
             'affiliates'             => Affiliate::where('status', 'Accepted')->featured(0)->inRandomOrder()->limit(10)->get(),

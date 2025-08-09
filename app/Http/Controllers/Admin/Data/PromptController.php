@@ -236,7 +236,7 @@ class PromptController extends Controller {
     public function postCreateEditPrompt(Request $request, PromptService $service, $id = null) {
         $id ? $request->validate(Prompt::$updateRules) : $request->validate(Prompt::$createRules);
         $data = $request->only([
-            'name', 'prompt_category_id', 'summary', 'description', 'start_at', 'end_at', 'hide_before_start', 'hide_after_end', 'is_active', 'rewardable_type', 'rewardable_id', 'quantity', 'image', 'remove_image', 'prefix', 'hide_submissions', 'staff_only', 'form',
+            'name', 'prompt_category_id', 'summary', 'description', 'start_at', 'end_at', 'hide_before_start', 'hide_after_end', 'is_active', 'rewardable_type', 'rewardable_id', 'quantity', 'image', 'remove_image', 'prefix', 'hide_submissions', 'staff_only', 'public_queue', 'form',
             'level_req', 'level_check', 'skill_id', 'skill_quantity',
             'limit', 'limit_period', 'limit_character',
             'criterion_id', 'criterion', 'criterion_currency_id', 'default_criteria',

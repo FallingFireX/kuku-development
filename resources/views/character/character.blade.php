@@ -30,42 +30,105 @@ strlen($character->character_warning) > 1 || isset($character->character_warning
 
 @include('character._header', ['character' => $character])
     
-
-    @if ($character->images()->where('is_valid', 1)->whereNotNull('transformation_id')->exists())
-    <div class="card-header mb-2">
-            <ul class="nav nav-tabs card-header-tabs">
-                @foreach ($character->images()->where('is_valid', 1)->get() as $image)
-                    <li class="nav-item">
-                        <a class="nav-link form-data-button {{ $image->id == $character->image->id ? 'active' : '' }}" data-toggle="tab" role="tab" data-id="{{ $image->id }}">
-                            {{ $image->transformation_id ? $image->transformation->name : 'Main' }} {{ $image->transformation_info ? ' ('.$image->transformation_info.')' : '' }}
-                        </a>
-                    </li>
-                @endforeach
-                <li>
-                    <h3>{!! add_help('Click on a '.__('transformations.transformation').' to view the image. If you don\'t see the '.__('transformations.transformation').' you\'re looking for, it may not have been uploaded yet.') !!}</h3>
-                </li>
-            </ul>
-        </div>
-@endif
-
+@php
+    $images = $character->images()->where('is_valid', 1)->get();
+    $hasTransformations = $images->pluck('transformation_id')->filter()->isNotEmpty();
+@endphp
+    
     {{-- Main Image --}}
-    <div class="row mb-3" id="main-tab">
-        <div class="col-md-7">
+    <div class="row mb-3">
+        <div class="col-md-10">
             <div class="text-center">
-                <a href="{{ $character->image->canViewFull(Auth::user() ?? null) && file_exists(public_path($character->image->imageDirectory . '/' . $character->image->fullsizeFileName)) ? $character->image->fullsizeUrl : $character->image->imageUrl }}"
-                    data-lightbox="entry" data-title="{{ $character->fullName }}">
-                    <img src="{{ $character->image->canViewFull(Auth::user() ?? null) && file_exists(public_path($character->image->imageDirectory . '/' . $character->image->fullsizeFileName)) ? $character->image->fullsizeUrl : $character->image->imageUrl }}"
-                        class="image" alt="{{ $character->fullName }}" />
-                </a>
+                <div id="main-tab">
+                    <a href="{{ $character->image->canViewFull(Auth::user() ?? null) && file_exists(public_path($character->image->imageDirectory . '/' . $character->image->fullsizeFileName)) ? $character->image->fullsizeUrl : $character->image->imageUrl }}"
+                        data-lightbox="entry" data-title="{{ $character->fullName }}">
+                        <img src="{{ $character->image->canViewFull(Auth::user() ?? null) && file_exists(public_path($character->image->imageDirectory . '/' . $character->image->fullsizeFileName)) ? $character->image->fullsizeUrl : $character->image->imageUrl }}"
+                            class="image" alt="{{ $character->fullName }}" />
+                        </a>
+                </div>
             </div>
             @if ($character->image->canViewFull(Auth::user() ?? null) && file_exists(public_path($character->image->imageDirectory . '/' . $character->image->fullsizeFileName)))
                 <div class="text-right">You are viewing the full-size image. <a href="{{ $character->image->imageUrl }}">View watermarked image</a>?</div>
             @endif
-            <br>
-            <p></p>
-            <br>
-            <!--Pets relocation-->
-            <div class="card mb-7">
+        </div>
+        
+        
+    <div class="col-md-2 overflow-auto">
+    @if (config('lorekeeper.extensions.character_status_badges'))
+        <!-- character trade/gift status badges -->
+        <div class="justify-content-center text-center">
+            <span class="btn {{ $character->is_trading ? 'badge-success' : 'badge-danger' }} mt-1" data-toggle="tooltip" title="{{ $character->is_trading ? 'OPEN for sale and trade offers.' : 'CLOSED for sale and trade offers.' }}"><i
+                    class="fas fa-comments-dollar"></i></span>
+            @if (!$character->is_myo_slot)
+                <span class="btn {{ $character->is_gift_writing_allowed == 1 ? 'badge-success' : ($character->is_gift_writing_allowed == 2 ? 'badge-warning text-light' : 'badge-danger') }} mt-1 " data-toggle="tooltip"
+                    title="{{ $character->is_gift_writing_allowed == 1 ? 'OPEN for gift writing.' : ($character->is_gift_writing_allowed == 2 ? 'PLEASE ASK before gift writing.' : 'CLOSED for gift writing.') }} mt-1"><i class="fas fa-file-alt"></i></span>
+                <span class="btn {{ $character->is_gift_art_allowed == 1 ? 'badge-success' : ($character->is_gift_art_allowed == 2 ? 'badge-warning text-light' : 'badge-danger') }} mt-1 " data-toggle="tooltip"
+                    title="{{ $character->is_gift_art_allowed == 1 ? 'OPEN for gift art.' : ($character->is_gift_art_allowed == 2 ? 'PLEASE ASK before gift art.' : 'CLOSED for gift art.') }} mt-1"><i class="fas fa-pencil-ruler"></i></span>    
+                @if($character->kotm == 1)
+                <span class="btn badge-info  mt-1" data-toggle="tooltip" title="{{ $character->kotm == 1 ? 'Previously been Kukuri of the Month' : 'CLOSED for link requests.' }}"><i
+                        class="fas fa-award"></i></span>
+                @endif
+            @endif
+        <ul class="nav nav-pills flex-column mt-2 ">
+            @if (config('lorekeeper.extensions.character_TH_profile_link') && $character->profile->link)
+            <a class="btn btn-outline-info mb-3" data-character-id="{{ $character->id }}" href="{{ $character->profile->link }}"><i class="fab fa-deviantart"></i> DA Import</a>
+            @endif
+        </ul>     
+
+             <!--Health-->   
+            <div class="row">
+                <div class="col-md-5">        
+                    <div style="font-size:16px"><b>Status: </b></div>
+                </div>
+                <div class="col-md-7 mb-3">
+                    @if ($character->getStatusEffects()->count())
+                        @foreach($image->character->getStatusEffects() as $status)
+                            <a href="{{ $character->url . '/status-effects' }}" class="{{ set_active('character/'.$character->slug.'/status-effects') }}">
+                                <div style="color: red; font-size:16px">{!! $status->displaySeverity($status->quantity) !!}</div>
+                            </a>
+                        @endforeach
+                            
+                        @else
+                            <a href="{{ $character->url . '/status-effects' }}" class="{{ set_active('character/'.$character->slug.'/status-effects') }}">
+                                <div style="color: green; font-size:16px">Healthy</div>
+                            </a>  
+                        @endif
+                    @endif
+                </div>
+            </div>
+            @include('widgets._awardcase_feature', ['target' => $character,
+                'count' => Config::get('lorekeeper.extensions.awards.character_featured'),
+                'float' => true,
+                'filterCategory' => 'Rank' 
+            ])
+            <hr>
+            @if ($hasTransformations)
+            <ul class="nav nav-pills flex-column mt-3 mb-3">
+                @if ($images->count() > 1)
+                <h5>Images  {!! add_help('If your kukuri has any Other Side, Original (unmodded) or other aiding images, those appear in this list') !!}</h5>
+                    <ul class="nav flex-column">
+                        @foreach ($images as $image)
+                            <li class="nav-item">
+                                <a class="nav-link form-data-button {{ $image->id == $character->image->id ? 'active' : '' }}" data-id="{{ $image->id }}">
+                                    <img src="{{ $image->thumbnail_url ?? $image->url }}" alt="Thumbnail" style="width: 100%; height: auto; border-radius: 5px;">
+                                    <div>{{ $image->transformation_id ? $image->transformation->name : 'Main' }}</div>
+                                </a>
+                            </li>
+                        @endforeach
+                    </ul>
+                @endif
+            </ul>
+        @endif
+        </div>
+    </div>
+
+        
+    </div>
+<!--FAMILIARS-->
+    <div class="row mb-3 " id="main-tab-row">
+        <div class="col-md-7">
+        
+            <div class="card mb-7 ">
                 <h5 class="card-header">
                     Familiars
                 </h5>
@@ -100,22 +163,47 @@ strlen($character->character_warning) > 1 || isset($character->character_warning
                 @endif
                 </div>
             </div>
+
+            <div class="my-3 card">
+                <h5 class="card-header">
+                                Award Wall
+                            </h5>
+                            
+                @include('widgets._awardcase_feature', ['target' => $character, 'count' => Config::get('lorekeeper.extensions.awards.character_featured'), 'float' => true])
+                    <div class="ml-auto float-right mr-3">
+                        <a href="{{ $character->slug . '/'.__('awards.awardcase') }}" class="btn btn-outline-info btn-sm mb-2">View All</a>
+                    </div>  
+                    
+            </div> 
+            
+
+
+            
+    {{-- Info --}}
+    <div class="card character-bio flex-fill">
+        <h5 class="card-header">
+                                Lineage
+                            </h5>
+        <div class="ml-auto mr-auto mt-3">
+            <p><i>This is your kukuri's immediate family tree, you can compare this to other kukuri to see who they are safe to breed to.</i></p>
+            <br>
+                @include('character._tab_lineage', ['character' => $character]) 
+                <br>
+                View Offspring here:
+                <br><div class="text-left mb-2">
+                    <a class="btn btn-primary create-folder mx-1" href="{{ $character->url . '/lineage' }}" class="{{ set_active('character/' . $character->slug . '/lineage') }}"><i class="fas fa-code-branch"></i> Descendants</a>
+                </div>
+        </div>
+        
+        <br>
+        
+    </div>
         </div>
         
         @include('character._image_info', ['image' => $character->image])
     </div>
         
-    <div class="my-3 card">
-    <h5 class="card-header">
-                    Award Wall
-                </h5>
-                
-    @include('widgets._awardcase_feature', ['target' => $character, 'count' => Config::get('lorekeeper.extensions.awards.character_featured'), 'float' => true])
-        <div class="ml-auto float-right mr-3">
-            <a href="{{ $character->slug . '/'.__('awards.awardcase') }}" class="btn btn-outline-info btn-sm mb-2">View All</a>
-        </div>  
-        
-    </div>    
+       
         
     {{-- Info --}}
     <div class="card character-bio">
@@ -125,11 +213,7 @@ strlen($character->character_warning) > 1 || isset($character->character_warning
                 <li class="nav-item">
                     <a class="nav-link active" id="notesTab" data-toggle="tab" href="#personality" role="tab">Personality</a>
                 </li>
-                @if($character->getLineageBlacklistLevel() < 2)
-                <li class="nav-item">
-                    <a class="nav-link" id="lineageTab" data-toggle="tab" href="#lineage" role="tab">Lineage</a>
-                </li>
-                @endif
+                
                 <li class="nav-item">
                     <a class="nav-link" id="notesTab" data-toggle="tab" href="#notes" role="tab">DA Data</a>
                 </li>
@@ -154,23 +238,9 @@ strlen($character->character_warning) > 1 || isset($character->character_warning
                 @endif
             </div>
 
-            <!-- LINEAGE -->
-            @if($character->getLineageBlacklistLevel() < 2)
-            <div class="tab-pane fade" id="lineage">
-                <h5>Lineage:</h5>
-                <br>
-                @include('character._tab_lineage', ['character' => $character])
-                <br><br>
-                <i>This is your kukuri's immediate family tree, you can compare this to other kukuri to see who they are safe to breed to.</i>
-                <br><br>
-                View Offspring here:
-                <br><div class="text-left mb-2">
-                    <a class="btn btn-primary create-folder mx-1" href="{{ $character->url . '/lineage' }}" class="{{ set_active('character/' . $character->slug . '/lineage') }}"><i class="fas fa-edit"></i> Descendants</a>
-                </div>
-            </div>
+          
             <br>
-            
-            @endif
+           
             @if (Auth::check() && Auth::user()->hasPower('manage_characters'))
                 <div class="tab-pane fade" id="settings-{{ $character->slug }}">
                     {!! Form::open(['url' => $character->is_myo_slot ? 'admin/myo/' . $character->id . '/settings' : 'admin/character/' . $character->slug . '/settings']) !!}
