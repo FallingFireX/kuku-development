@@ -82,11 +82,9 @@ strlen($character->character_warning) > 1 || isset($character->character_warning
                 </div>
                 <div class="col-md-7 mb-3">
                     @if ($character->getStatusEffects()->count())
-                        @foreach($image->character->getStatusEffects() as $status)
-                            <a href="{{ $character->url . '/status-effects' }}" class="{{ set_active('character/'.$character->slug.'/status-effects') }}">
-                                <div style="color: red; font-size:16px">{!! $status->displaySeverity($status->quantity) !!}</div>
-                            </a>
-                        @endforeach
+                        <a href="{{ $character->url . '/status-effects' }}" class="{{ set_active('character/'.$character->slug.'/status-effects') }}">
+                                <div style="color: red; font-size:16px">Sick/Injured</div>
+                            </a>  
                             
                         @else
                             <a href="{{ $character->url . '/status-effects' }}" class="{{ set_active('character/'.$character->slug.'/status-effects') }}">
