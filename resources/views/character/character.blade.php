@@ -36,7 +36,7 @@ strlen($character->character_warning) > 1 || isset($character->character_warning
 @endphp
     
     {{-- Main Image --}}
-    <div class="row mb-3">
+    <div class="row mb-3 align-items-stretch">
         <div class="col-md-10">
             <div class="text-center">
                 <div id="main-tab">
