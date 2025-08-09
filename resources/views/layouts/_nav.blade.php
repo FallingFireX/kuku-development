@@ -133,14 +133,14 @@
                             
                             <div class="dropdown-divider"></div>
 
-                            <a class="dropdown-item" href="#"> Rank Updates </a>
+                            <a class="dropdown-item" href="https://www.kukuri-arpg.com/prompts/2"> Rank Updates </a>
                             <a class="dropdown-item" href="https://www.deviantart.com/kukuri-arpg/journal/Ownership-transfers-593704983">Ownership Transfers</a>
-                            <a class="dropdown-item" href="#">Import Updates</a>
-                            <a class="dropdown-item" href="#">Heal your Kukuri</a>
+                            <a class="dropdown-item" href="https://www.kukuri-arpg.com/prompts/28">Import Updates</a>
+                            <a class="dropdown-item" href="https://www.kukuri-arpg.com/prompts/6">Heal your Kukuri</a>
 
                             <div class="dropdown-divider"></div>
 
-                            <a class="dropdown-item" href="#"> Design Approvals </a>
+                            <a class="dropdown-item" href="https://www.kukuri-arpg.com/prompts/22"> Design Approvals </a>
                             <a class="dropdown-item" href="#">Import Customization</a>
                             <a class="dropdown-item" href="#">Creating Trackers</a>
 
