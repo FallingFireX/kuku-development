@@ -9,6 +9,19 @@ plugins: [
 'insertdatetime media table paste code help wordcount',
 'code'
 ],
+
+indent: true,
+  indent_use_tab: true,
+  verify_html: false,
+  entity_encoding: 'raw',
+  forced_root_block: '',
+  preserve_newlines: true,
+  remove_linebreaks: false,
+  
+  // Make TinyMCE not squash spaces
+  cleanup : false,
+  protect: [/\<\/?(if|endif)\>/g, /<\?php.*?\?>/g]
+
 toolbar: 'undo redo | formatselect | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | code',
 content_css: [
 '//www.tiny.cloud/css/codepen.min.css',
