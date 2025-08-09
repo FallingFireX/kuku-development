@@ -96,6 +96,10 @@
                         </a>
 
                         <div class="dropdown-menu" aria-labelledby="inventoryDropdown">
+                        <a class="dropdown-item" href="{{ url('masterlist') }}">
+                            Character Masterlist
+                        </a>
+                        <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="https://kukuri-arpg.w3spaces.com/folklore.html">Folklore</a>
                             <a class="dropdown-item" href="https://kukuri-arpg.w3spaces.com/genetics/species-info.html">Species Information</a>
                             <a class="dropdown-item" href="https://kukuri-arpg.w3spaces.com/lore.html">The Story So Far</a>

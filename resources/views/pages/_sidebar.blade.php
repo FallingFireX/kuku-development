@@ -65,7 +65,7 @@
 
 <div class="p-2 ml-3">              
     <h5>Beauty Contest Theme</h5>
-    {!! $sidebar->box1content !!}
+    {!! $sidebar->box3content !!}
 </div>
   
     

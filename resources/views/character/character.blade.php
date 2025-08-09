@@ -99,7 +99,7 @@ strlen($character->character_warning) > 1 || isset($character->character_warning
             @include('widgets._awardcase_feature', ['target' => $character,
                 'count' => Config::get('lorekeeper.extensions.awards.character_featured'),
                 'float' => true,
-                'filterCategory' => 'Rank' 
+                'filterCategory' => 'Ranks' 
             ])
             <hr>
             @if ($hasTransformations)
