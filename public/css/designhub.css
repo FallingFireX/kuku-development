@@ -153,13 +153,13 @@
 	background-position: center;
 }
 .edge-mottled {
-	background-image: url(http://localhost/images/mottled-edge.png);
+	background-image: url(/images/mottled-edge.png);
 }
 .edge-textured {
-	background-image: url(http://localhost/images/textured-edge.png);
+	background-image: url(/images/textured-edge.png);
 }
 .edge-organic {
-	background-image: url(http://localhost/images/organic-edge.png);
+	background-image: url(/images/organic-edge.png);
 }
 .edge-furred,
 .edge-feathered {
