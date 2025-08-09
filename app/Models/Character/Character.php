@@ -35,7 +35,7 @@ class Character extends Model {
         'is_sellable', 'is_tradeable', 'is_giftable',
         'sale_value', 'transferrable_at', 'is_visible',
         'is_gift_art_allowed', 'is_gift_writing_allowed', 'is_trading', 'sort',
-        'is_myo_slot', 'name', 'trade_id', 'owner_url', 'base'
+        'is_myo_slot', 'name', 'trade_id', 'owner_url', 'base',
     ];
 
     /**
@@ -654,31 +654,33 @@ class Character extends Model {
     public function getMarkingLinkedArray($markings, $type = 'phenotype') {
         $bases = $this->getBaseCoat();
 
-        if($markings === null || count($markings) < 1) {
-            if(count($bases) > 1 && array_key_exists(1, $bases)) {
+        if ($markings === null || count($markings) < 1) {
+            if (count($bases) > 1 && array_key_exists(1, $bases)) {
                 //If Chimera and no marks
                 if ($type === 'phenotype') {
                     return $bases[0]['name'].' // '.$bases[1]['name'];
                 } else {
                     return $bases[0]['code'].'+//'.$bases[1]['code'].'+';
                 }
-            } else if(count($bases) > 1 && !array_key_exists(0, $bases)) {
+            } elseif (count($bases) > 1 && !array_key_exists(0, $bases)) {
                 //This shit is a mess, I know, I'm tired, no switchcase here :(
-                if($type === 'phenotype') {
+                if ($type === 'phenotype') {
                     return $bases['name'];
                 } else {
                     return $bases['code'].'+';
                 }
             } else {
-                if($type === 'phenotype') {
-                    if(array_key_exists(0, $bases)) {
+                if ($type === 'phenotype') {
+                    if (array_key_exists(0, $bases)) {
                         return $bases[0]['name'];
                     }
+
                     return $bases['name'];
                 } else {
-                    if(array_key_exists(0, $bases)) {
+                    if (array_key_exists(0, $bases)) {
                         return $bases[0]['code'].'+';
                     }
+
                     return $bases['code'].'+';
                 }
             }
@@ -707,11 +709,11 @@ class Character extends Model {
             $geno_sides[$side][2] = $bases[0];
             ksort($geno_sides[$side]);
         }
-        if(!isset($geno_sides[1]) && isset($bases[1])) {
+        if (!isset($geno_sides[1]) && isset($bases[1])) {
             //If secondary side is without markings
             $geno_sides[1][2] = $bases[1];
         }
-        if(!isset($geno_sides[0]) && isset($bases[0])) {
+        if (!isset($geno_sides[0]) && isset($bases[0])) {
             //If primary side is without markings
             $geno_sides[0][2] = $bases[0];
         }
@@ -831,7 +833,7 @@ class Character extends Model {
                         }
                     }
                 }
-                if(!isset($temp)) {
+                if (!isset($temp)) {
                     $temp = [];
                 }
                 $html .= (isset($temp[0]) && count($temp[0]) > 0 ? implode('/', $temp[0]) : '');
