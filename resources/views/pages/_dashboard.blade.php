@@ -93,9 +93,9 @@
             <img src ="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/b270d26f-24db-4b18-9f7b-ca5435d8ccdb/d9or9qu-14278989-1d00-4b2d-8ba4-e70ef54b57fe.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcL2IyNzBkMjZmLTI0ZGItNGIxOC05ZjdiLWNhNTQzNWQ4Y2NkYlwvZDlvcjlxdS0xNDI3ODk4OS0xZDAwLTRiMmQtOGJhNC1lNzBlZjU0YjU3ZmUucG5nIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.PIvBbzRRBwJnzvFmdEYYs78B2c06XailM5dm6ncWwFI" width=70% style="margin: auto">
             <i>Curious about what those strange genetic letters mean? Or maybe what those feathers look like? Here are some guides for you get started with!</i>
             <br><br>
-            <a href="">Genetics and Mutations</a>
-            <a href="">Physical Traits</a>
-            <a href="">Design Guide</a>
+            <a href="https://kukuri-arpg.w3spaces.com/genetics/genes-and-mutations.html">Genetics and Mutations</a>
+            <a href="https://kukuri-arpg.w3spaces.com/genetics/physical-traits.html">Physical Traits</a>
+            <a href="https://www.deviantart.com/momma-kuku/journal/Designing-guide-763556104">Design Guide</a>
             <br>
         </div>
     </div>
