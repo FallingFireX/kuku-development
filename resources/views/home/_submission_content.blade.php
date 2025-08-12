@@ -51,6 +51,7 @@
     </div>
 </div>
 
+
 <div class="card mb-3">
     <div class="card-header h2">Comments</div>
     <div class="card-body">
@@ -123,6 +124,7 @@
         </div>
     </div>
 @endif
+
 
 <div class="card mb-3">
     <div class="card-header h2">Characters</div>
@@ -257,4 +259,5 @@
     </div>
 @endif
 
+<h5>Comments</h5>
 @comments(['page' => 'Submission', 'model' => $submission, 'perPage' => 5 ])

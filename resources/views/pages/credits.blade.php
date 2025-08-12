@@ -8,6 +8,9 @@
     {!! breadcrumbs(['Credits' => url('credits')]) !!}
     <h1>Credits</h1>
 
+<p style="text-align: center;">&nbsp;</p>
+</div>
+
     <div class="site-page-content parsed-text">
         {!! $credits->parsed_text !!}
     </div>
