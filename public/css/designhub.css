@@ -113,19 +113,6 @@
 }
 .color-any {
     background-image: linear-gradient(135deg,red, orange, yellow, green, blue, indigo, violet, red);
-}.color-nat-slider {
-    background-image: linear-gradient(135deg,
-		#624549 0%, #624549 10%,
-		#8F818A 10%, #8F818A 20%,
-		#D79D77 20%, #D79D77 30%,
-		#D9A44E 30%, #D9A44E 40%,
-		#86391C 40%, #86391C 50%,
-		#B2835C 50%, #B2835C 60%,
-		#4A2F1D 60%, #4A2F1D 70%,
-		#817569 70%, #817569 80%,
-		#795835 80%, #795835 90%,
-		#B4A997 90%, #B4A997 100%
-	);
 }
 .attribute[data-color] {
 	background: attr(data-color type(<color>), gray);
