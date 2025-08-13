@@ -758,23 +758,9 @@ class Character extends Model {
         switch ($type) {
             case 'phenotype':
                 $text = $marking->name;
-                if ($marking->name == 'Glint') {
-                    if ($marking->is_dominant) {
-                        $text = array_key_first($marking->base_info[0]).'/'.array_key_first($marking->base_info[1]).' '.$text;
-                    } else {
-                        $text = array_key_first($marking->base_info).' '.$text;
-                    }
-                }
                 break;
             case 'genotype':
                 $text = $marking->code;
-                if ($marking->name == 'Glint') {
-                    if ($marking->is_dominant) {
-                        $text = $text.'-'.array_values($marking->base_info[0])[0].'/'.array_values($marking->base_info[1])[0];
-                    } else {
-                        $text = $text.'-'.array_values($marking->base_info)[0];
-                    }
-                }
                 break;
             default:
                 $text = $marking->name;

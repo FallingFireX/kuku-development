@@ -302,14 +302,6 @@
                         <option value="1" data-code="1">Side 2</option>
                     </select>
                 </div>
-                <div class="form-group mb-0 mx-2" connect="Glint" style="min-width: 10vw; display:none;">
-                    {!! Form::label('Marking Color') !!}
-                    {!! Form::select('marking_color_0[]', $bases, old('marking_color_0'), ['class' => 'form-control']) !!}
-                </div>
-                <div class="form-group mb-0 mx-2 dominant" connect="Glint" style="min-width: 10vw; display:none;">
-                    {!! Form::label('Secondary Marking Color') !!}
-                    {!! Form::select('marking_color_1[]', $bases, old('marking_color_1'), ['class' => 'form-control']) !!}
-                </div>
                 <a href="#" class="remove-marking btn btn-danger mb-2">×</a>
             </div>
         </div>

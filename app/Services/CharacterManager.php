@@ -1850,7 +1850,6 @@ class CharacterManager extends Service {
             // Clear old markings
             CharacterMarking::where('character_id', $character->id)->delete();
 
-            $glintID = Settings::get('glint_id');
             $i = 0;
 
             // Attach markings
@@ -1860,16 +1859,6 @@ class CharacterManager extends Service {
 
                     $is_dominant = $data['is_dominant'][$i] ?? 0;
 
-                    $glint = null;
-                    if ($markingId == $glintID) {
-                        $glint = 'got here';
-                        if ($is_dominant) {
-                            $glint = $data['marking_color_0'][$i].'|'.$data['marking_color_1'][$i];
-                        } else {
-                            $glint = $data['marking_color_0'][$i];
-                        }
-                    }
-
                     \Log::info('Processing marking', [
                         'loop'          => $i,
                         'markingId'     => $markingId,
@@ -1877,7 +1866,6 @@ class CharacterManager extends Service {
                         'order'         => $temp->order_in_genome ?? 0,
                         'is_dominant'   => $is_dominant,
                         'data'          => $data['side_id'][$i] ?? 0,
-                        'base_id'       => $glint,
                     ]);
 
                     $marking = CharacterMarking::create([
@@ -1887,7 +1875,6 @@ class CharacterManager extends Service {
                         'order'         => $temp->order_in_genome ?? 0,
                         'is_dominant'   => $is_dominant,
                         'data'          => $data['side_id'][$i] ?? 0,
-                        'base_id'       => $glint,
                     ]);
                 }
                 $i++;
@@ -2138,14 +2125,11 @@ class CharacterManager extends Service {
     private function handleCharacterMarkings($data, $character) {
         try {
             $markingData = Arr::only($data, [
-                'marking_id', 'is_dominant', 'side_id', 'glint_1', 'glint_2',
+                'marking_id', 'is_dominant', 'side_id'
             ]);
 
             $all_data = [];
-            $glintID = Settings::get('glint_id');
 
-            $glint_1 = $data['glint_1'] ?? null;
-            $glint_2 = $data['glint_2'] ?? null;
 
             // Attach markings
             foreach ($data['marking_id'] as $key => $markingId) {
@@ -2157,11 +2141,6 @@ class CharacterManager extends Service {
 
                     $is_dominant = $data['is_dominant'][$key];
 
-                    $glint = null;
-                    if ($markingId === $glintID) {
-                        $glint = ($is_dominant ? $data['glint_1'].'|'.$data['glint_2'] : $data['glint_1']);
-                    }
-
                     $marking = CharacterMarking::create([
                         'character_id'  => $character->id,
                         'marking_id'    => $markingId,
@@ -2169,7 +2148,6 @@ class CharacterManager extends Service {
                         'order'         => $temp->order_in_genome,
                         'is_dominant'   => $is_dominant,
                         'data'          => $data['side_id'][$key] ?? null,
-                        'base_id'       => $glint,
                     ]);
                 }
             }

@@ -20,6 +20,11 @@ class DesignHubController extends Controller {
     public function getDesignHubPage(Request $request) {
         $markings = self::getDesignHubGenetics($request);
         $rarities = Rarity::whereIn('id', Marking::select('rarity_id')->distinct()->get())->get();
+        $trait_categories = Settings::get('designhub_trait_categories');
+
+        if(str_contains(',', $trait_categories)) {
+            $trait_categories = explode(',', $trait_categories);
+        }
 
         return view('designhub.designhub', [
             'dh_start'          => SitePage::where('key', 'dh-start')->first(),
@@ -28,8 +33,7 @@ class DesignHubController extends Controller {
             'subtypes'          => Subtype::orderBy('sort', 'DESC')->get(),
             'markings'          => $markings,
             'rarity_list'       => $rarities,
-            'corrupt_mutations' => self::getDesignHubTraitByCategory($request, Settings::get('corrupt_mutation_id')),
-            'magical_mutations' => self::getDesignHubTraitByCategory($request, Settings::get('magical_mutation_id')),
+            'trait_lists'       => self::getDesignHubTraitByCategory($request, $trait_categories),
         ]);
     }
 
@@ -43,10 +47,10 @@ class DesignHubController extends Controller {
         return $query->orderBy('name', 'ASC')->paginate(20)->appends($request->query());
     }
 
-    public function getDesignHubTraitByCategory(Request $request, $category_id) {
+    public function getDesignHubTraitByCategory(Request $request, $category_ids) {
         $query = Feature::visible(Auth::check() ? Auth::user() : null)->with('category')->with('rarity')->with('species');
         $data = $request->only(['rarity_id', 'feature_category_id', 'species_id', 'subtype_id', 'name', 'sort']);
 
-        return $query->orderBy('id')->where('feature_category_id', $category_id)->paginate(20)->appends($request->query());
+        return $query->orderBy('id')->whereIn('feature_category_id', $category_ids)->paginate(20)->appends($request->query());
     }
 }
