@@ -2125,11 +2125,10 @@ class CharacterManager extends Service {
     private function handleCharacterMarkings($data, $character) {
         try {
             $markingData = Arr::only($data, [
-                'marking_id', 'is_dominant', 'side_id'
+                'marking_id', 'is_dominant', 'side_id',
             ]);
 
             $all_data = [];
-
 
             // Attach markings
             foreach ($data['marking_id'] as $key => $markingId) {
