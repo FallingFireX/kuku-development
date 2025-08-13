@@ -3,13 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Tracker\Tracker;
 use App\Models\Character\Character;
-use App\Models\Gallery\Gallery;
-use App\Models\Gallery\GallerySubmission;
 use App\Models\SiteOptions;
+use App\Models\Tracker\Tracker;
 use App\Services\TrackerManager;
-use App\Models\User\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -62,8 +59,8 @@ class TrackerController extends Controller {
         }
 
         return view('admin.trackers.tracker', [
-            'tracker'       => $tracker,
-            'cardData'      => $tracker->getDataAttribute(),
+            'tracker'          => $tracker,
+            'cardData'         => $tracker->getDataAttribute(),
             'characters'       => Character::visible(Auth::check() ? Auth::user() : null)->myo(0)->orderBy('slug', 'DESC')->get()->pluck('fullName', 'slug')->toArray(),
         ] + ($tracker->status == 'Pending' ? [
         ] : []));
@@ -99,10 +96,6 @@ class TrackerController extends Controller {
 
     /**
      * Gets the tracker settings edit page.
-     * 
-     * @param App\Services\SiteOptions $options
-     * 
-     * @return 
      */
     public function getTrackerSettingsPage(Request $request) {
         $options = SiteOptions::where('key', 'LIKE', 'tracker_%')->get();
@@ -110,30 +103,29 @@ class TrackerController extends Controller {
 
         return view('admin.trackers.trackersettings', [
             'all_options'   => $options,
-            'levels'        =>  isset($levels[0]) ? json_decode($levels[0]) : null,
+            'levels'        => isset($levels[0]) ? json_decode($levels[0]) : null,
             'xp_data'       => 'test',
         ]);
     }
 
     /**
      * Gets the tracker settings edit page.
-     * 
+     *
      * @param App\Services\TrackerManager $service
-     * 
-     * @return 
      */
     public function saveTrackerSettings(Request $request, TrackerManager $service) {
         $data = $request->all();
 
-        if($data && $service->updateTrackerSettings($data)) {
+        if ($data && $service->updateTrackerSettings($data)) {
             flash('Art Tracker settings updated successfully.');
         } else {
-            if(isset($service->errors()->getMessages()['error'])) {
+            if (isset($service->errors()->getMessages()['error'])) {
                 foreach ($service->errors()->getMessages()['error'] as $error) {
                     flash($error)->error();
                 }
             }
         }
+
         return redirect('/admin/tracker-settings');
     }
 }

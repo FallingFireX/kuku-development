@@ -2,11 +2,11 @@
 
 namespace App\Models\Tracker;
 
-use App\Models\Model;
 use App\Models\Character\Character;
-use App\Models\User\User;
 use App\Models\Gallery\GallerySubmission;
+use App\Models\Model;
 use App\Models\SiteOptions;
+use App\Models\User\User;
 use Carbon\Carbon;
 
 class Tracker extends Model {
@@ -213,15 +213,17 @@ class Tracker extends Model {
     }
 
     /**
-     * Gets all card data for a character
-     * 
+     * Gets all card data for a character.
+     *
+     * @param mixed $character_id
+     *
      * @return array (cards|total_points)
      */
     public static function renderAllCards($character_id) {
-        $tracker_cards = Tracker::where('character_id', $character_id)->whereIn('status', ['Approved', 'Pending'])->get();
+        $tracker_cards = self::where('character_id', $character_id)->whereIn('status', ['Approved', 'Pending'])->get();
         $total = 0;
         $accepted_total = 0;
-        foreach($tracker_cards as $card) {
+        foreach ($tracker_cards as $card) {
             $temp = $card->renderCard();
             $cards[] = $temp['card'];
             $total += floatval($temp['total_points']);
@@ -229,14 +231,16 @@ class Tracker extends Model {
         }
 
         return [
-            'cards' => implode('', $cards),
+            'cards'           => implode('', $cards),
             'accepted_points' => $accepted_total,
-            'total_points' => $total,
+            'total_points'    => $total,
         ];
     }
 
     /**
      * Renders the data for a single card into HTML.
+     *
+     * @param mixed $editable
      *
      * @return array (cards|total_points)
      */
@@ -248,24 +252,23 @@ class Tracker extends Model {
 
         $line_template = '<div class="line-item w-100 d-inline-flex justify-content-between p-2"><h5 class="lh-1 m-0">$title</h5><p class="lh-1 m-0">$value XP</p></div>';
 
-        foreach($data as $title => $value) {
-            if(gettype($value) === 'array') {
+        foreach ($data as $title => $value) {
+            if (gettype($value) === 'array') {
                 $sub_line = [];
                 //If this is a group rather than a single line
-                foreach($value as $sub_title => $sub_val) {
+                foreach ($value as $sub_title => $sub_val) {
                     $sub_line[] = str_replace(['$card_id', '$title', '$value'], [$this->id, $sub_title, $sub_val], $line_template);
-                    if($this->status === 'Approved') {
+                    if ($this->status === 'Approved') {
                         $accepted_points += $sub_val;
                         $total += $sub_val;
                     } else {
                         $total += $sub_val;
                     }
-                    
                 }
-                $cards[] = '<div class="line-group border border-secondary my-2"> <h4 class="line-header text-uppercase font-weight-bold p-2">'.$title.'</h4>'. implode('', $sub_line) .'</div>';
+                $cards[] = '<div class="line-group border border-secondary my-2"> <h4 class="line-header text-uppercase font-weight-bold p-2">'.$title.'</h4>'.implode('', $sub_line).'</div>';
             } else {
                 $cards[] = str_replace(['$title', '$value'], [$title, $value], $line_template);
-                if($this->status === 'Approved') {
+                if ($this->status === 'Approved') {
                     $accepted_points += $sub_val;
                     $total += $sub_val;
                 } else {
@@ -276,7 +279,7 @@ class Tracker extends Model {
 
         $card_badge = '<span class="badge badge-pill badge-'.($this->status === 'Pending' ? 'warning' : 'success').'">'.$this->status.'</span>';
 
-        if($this->gallery_id) {
+        if ($this->gallery_id) {
             $image_data = [
                 'url'   => $this->gallery->getUrlAttribute(),
                 'image' => $this->gallery->getThumbnailUrlAttribute() ?? 'images/watermark.png',
@@ -312,13 +315,15 @@ class Tracker extends Model {
 
         return [
             'accepted_points' => $accepted_points,
-            'total_points'  => $total,
-            'card'          => $card_html,
+            'total_points'    => $total,
+            'card'            => $card_html,
         ];
     }
 
     /**
      * Get the current XP level of the tracker.
+     *
+     * @param mixed $current_points
      *
      * @return int
      */
@@ -327,7 +332,7 @@ class Tracker extends Model {
 
         $level_names = array_keys($levels);
 
-        if($levels) {
+        if ($levels) {
             foreach ($levels as $level_name => $xp_required) {
                 $current_pos = array_search($level_name, $level_names);
                 $previous_key = $level_names[$current_pos - 1] ?? array_key_first($levels);
@@ -335,6 +340,7 @@ class Tracker extends Model {
                     return $previous_key;
                 }
             }
+
             return array_key_first($levels);
         }
     }
@@ -357,22 +363,22 @@ class Tracker extends Model {
             $percentage = ($threshold > 0 ? $threshold / $max * 100 : 0);
             $currentKeyPos = array_search($name, $level_names);
             $targetKeyPos = array_search($current_level, $level_names);
-            if($currentKeyPos !== false && $targetKeyPos !== false) {
+            if ($currentKeyPos !== false && $targetKeyPos !== false) {
                 $is_checked = ($currentKeyPos < $targetKeyPos ? true : false);
             }
-            if($name === $current_level) {
+            if ($name === $current_level) {
                 $is_checked = true;
             }
             $stops[] = [
-                'name' => $name,
-                'threshold' => $threshold,
+                'name'       => $name,
+                'threshold'  => $threshold,
                 'percentage' => $percentage,
                 'is_checked' => $is_checked ?? false,
             ];
         }
 
         $stop_html = [];
-        foreach($stops as $stop) {
+        foreach ($stops as $stop) {
             $stop_html[] = '<div class="progress-stop" style="left: '.$stop['percentage'].'%;"><h6><span class="badge badge-pill '.($stop['is_checked'] ? 'badge-primary' : 'badge-secondary').'">'.$stop['name'].'<br><small>'.$stop['threshold'].' XP</small></span></h6></div>';
         }
 

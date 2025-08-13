@@ -5,12 +5,8 @@ namespace App\Services;
 use App\Facades\Notifications;
 use App\Facades\Settings;
 use App\Models\Tracker\Tracker;
-use App\Models\Character\Character;
 use App\Models\User\User;
-use App\Models\SiteOptions;
-use App\Services\SiteOptionsManager;
 use Carbon\Carbon;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 
 class TrackerManager extends Service {
@@ -28,8 +24,6 @@ class TrackerManager extends Service {
      *
      * @param array                 $data
      * @param \App\Models\User\User $user
-     * @param bool                  $isClaim
-     * @param mixed                 $isDraft
      *
      * @return mixed
      */
@@ -43,13 +37,13 @@ class TrackerManager extends Service {
 
             // Create the tracker card itself.
             $tracker = Tracker::create([
-                'user_id'   => $user->id,
+                'user_id'       => $user->id,
                 'character_id'  => $data['character_id'],
                 'gallery_id'    => $data['gallery_id'] ?? null,
-                'url'       => $data['url'] ?? null,
-                'status'    => $isDraft ? 'Draft' : 'Pending',
-                'comments'  => $data['comments'],
-                'data'      => null,
+                'url'           => $data['url'] ?? null,
+                'status'        => $isDraft ? 'Draft' : 'Pending',
+                'comments'      => $data['comments'],
+                'data'          => null,
             ]);
 
             return $this->commitReturn($tracker);
@@ -65,7 +59,6 @@ class TrackerManager extends Service {
      *
      * @param array                 $data
      * @param \App\Models\User\User $user
-     * @param bool                  $isClaim
      * @param mixed                 $tracker
      * @param mixed                 $isSubmit
      *
@@ -75,7 +68,6 @@ class TrackerManager extends Service {
         DB::beginTransaction();
 
         try {
-
             if ($isSubmit) {
                 $tracker->update(['status' => 'Pending']);
             }
@@ -140,7 +132,7 @@ class TrackerManager extends Service {
                 Notifications::create('TRACKER_SUBMISSION_CANCELLED', $tracker->user, [
                     'staff_url'     => $user->url,
                     'staff_name'    => $user->name,
-                    'tracker_id' => $tracker->id,
+                    'tracker_id'    => $tracker->id,
                 ]);
             } else {
                 // This is when a user cancels their own submission back into draft form
@@ -308,7 +300,6 @@ class TrackerManager extends Service {
      * Updates all of the tracker settings to the site_options table.
      *
      * @param mixed $data the data of the submission to be deleted
-     * @param mixed $user the user performing the deletion
      */
     public function updateTrackerSettings($data) {
         try {
@@ -316,10 +307,10 @@ class TrackerManager extends Service {
                 throw new \Exception('Invalid data, something went wrong.');
             }
 
-            if(isset($data['level_name'])) {
+            if (isset($data['level_name'])) {
                 $i = 0;
-                foreach($data['level_name'] as $name) {
-                    if($name !== null && $data['level_threshold'][$i] !== null) {
+                foreach ($data['level_name'] as $name) {
+                    if ($name !== null && $data['level_threshold'][$i] !== null) {
                         $levels[$name] = $data['level_threshold'][$i];
                         $i++;
                     }
@@ -337,7 +328,6 @@ class TrackerManager extends Service {
             // if(isset($data['option_name'])) {
 
             // }
-
         } catch (\Exception $e) {
             $this->setError('error', $e->getMessage());
         }
@@ -367,5 +357,4 @@ class TrackerManager extends Service {
      * ATTACHMENT FUNCTIONS
      *
      **************************************************************************************************************/
-
 }
