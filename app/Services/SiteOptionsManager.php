@@ -18,7 +18,7 @@ class SiteOptionsManager extends Service {
     /**
      * Update or create an option.
      *
-     * @param array                 $data
+     * @param array $data
      *
      * @return \App\Models\SiteOptions|bool
      */
@@ -54,7 +54,7 @@ class SiteOptionsManager extends Service {
     /**
      * Delete an option.
      *
-     * @param array                 $data
+     * @param array $data
      *
      * @return bool
      */
