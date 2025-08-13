@@ -99,6 +99,10 @@ return [
                 'name' => 'Claim Submissions',
                 'url'  => 'admin/claims',
             ],
+            [
+                'name' => 'Tracker Submissions',
+                'url'  => 'admin/trackers',
+            ],
         ],
     ],
     'Grants'     => [
@@ -193,6 +197,10 @@ return [
             [
                 'name' => 'Items',
                 'url'  => 'admin/data/items',
+            ],
+            [
+                'name' => 'Art Tracker Settings',
+                'url'  => 'admin/tracker-settings',
             ],
         ],
     ],

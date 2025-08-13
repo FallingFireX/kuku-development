@@ -437,4 +437,23 @@ return [
         'message' => '<a href="{sender_url}">{sender}</a> has added you as a participant on a gallery submission. (<a href="{url}">View Submission</a>)',
         'url'     => 'gallery/view/{submission_id}',
     ],
+
+    // TRACKER_SUBMISSION_CREATED
+    781 => [
+        'name'    => 'Tracker Submission Approved',
+        'message' => 'Your tracker submission <strong>Tracker Card ${tracker_id}</strong> has been created. (<a href="{url}">View Card</a>)',
+        'url'     => 'tracker/view/{tracker_id}',
+    ],
+
+    782 => [
+        'name'    => 'Tracker Card Rejected',
+        'message' => 'Your tracker card <strong>Tracker Card ${tracker_id}</strong> has been rejected. (<a href="{url}">View Card</a>)',
+        'url'     => 'tracker/view/{tracker_id}',
+    ],
+
+    783 => [
+        'name'    => 'Tracker Card Cancelled',
+        'message' => 'Your tracker card <strong>Tracker Card ${tracker_id}</strong> has been cancelled. (<a href="{url}">View Card</a>)',
+        'url'     => 'tracker/view/{tracker_id}',
+    ],
 ];

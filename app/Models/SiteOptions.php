@@ -24,8 +24,8 @@ class SiteOptions extends Model {
      * @var array
      */
     public static $createRules = [
-        'key'        => 'required|unique:site_options|between:3,100',
-        'value'       => 'nullable|between:0,2048',
+        'key'        => 'required|unique:site_options',
+        'value'       => 'nullable',
     ];
 
     /**
@@ -34,8 +34,8 @@ class SiteOptions extends Model {
      * @var array
      */
     public static $updateRules = [
-        'key'        => 'required|unique:site_options|between:3,100',
-        'value'       => 'nullable|between:0,2048',
+        'key'        => 'required',
+        'value'       => 'nullable',
     ];
 
     /**********************************************************************************************

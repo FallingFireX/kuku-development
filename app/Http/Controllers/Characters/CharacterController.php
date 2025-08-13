@@ -16,6 +16,8 @@ use App\Models\Item\ItemCategory;
 use App\Models\User\User;
 use App\Models\User\UserCurrency;
 use App\Models\User\UserItem;
+use App\Models\Tracker\Tracker;
+use App\Models\SiteOptions;
 use App\Services\CharacterManager;
 use App\Services\CurrencyManager;
 use App\Services\DesignUpdateManager;
@@ -611,5 +613,27 @@ class CharacterController extends Controller {
         }
 
         return redirect()->back();
+    }
+
+    /**
+     * Shows a character's tracker.
+     *
+     * @param string $slug
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function getCharacterTracker(Request $request, $slug) {
+        $trackers = Tracker::renderAllCards($this->character->id);
+        $levels = json_decode(SiteOptions::where('key', 'xp_levels')->pluck('value')->first());
+
+        return view('character.tracker', [
+            'character'             => $this->character,
+            'levels'                => $levels,
+            'progress'              => Tracker::getXpProgressBar($trackers['accepted_points']),
+            'current_level'         => Tracker::getCurrentLevel($trackers['accepted_points']),
+            'tracker_cards'         => $trackers['cards'],
+            'total_xp'              => $trackers['total_points'],
+            'total_accepted'        => $trackers['accepted_points'],
+        ]);
     }
 }

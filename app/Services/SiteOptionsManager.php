@@ -16,35 +16,6 @@ class SiteOptionsManager extends Service {
     */
 
     /**
-     * Create an option.
-     *
-     * @param array                 $data
-     * @param \App\Models\SiteOptions $option
-     *
-     * @return \App\Models\SiteOptions|bool
-     */
-    public function createOption($data) {
-        DB::beginTransaction();
-
-        try {
-            if (!isset($data['key'])) {
-                throw new \Exception('Invalid key, cannot create.');
-            }
-
-            $option = SiteOptions::create([
-                'key'        => $data['key'],
-                'value'      => $data['option'] ?? null,
-            ]);
-
-            return $this->commitReturn($option);
-        } catch (\Exception $e) {
-            $this->setError('error', $e->getMessage());
-        }
-
-        return $this->rollbackReturn(false);
-    }
-
-    /**
      * Update or create an option.
      *
      * @param array                 $data
@@ -55,16 +26,22 @@ class SiteOptionsManager extends Service {
         DB::beginTransaction();
 
         try {
-            if (!isset($data['key'])) {
-                throw new \Exception('Invalid option selected.');
-                $this->createOption($data);
-            }
-
             $option = SiteOptions::where('key', $data['key'])->first();
 
-            $option->update([
-                'value'      => $data['option'] ?? null,
-            ]);
+            if ($option == null) {
+                $option = SiteOptions::create([
+                    'key'        => $data['key'],
+                    'value'      => $data['value'] ?? null,
+                ]);
+            } else {
+                \Log::info('UPDATED INSTEAD:', $data);
+                $option->update([
+                    'value' => $data['value'],
+                ]);
+                //$option->value = $data['value'] ?? null;
+                //$result = $option->save();
+                //\Log::info('Option save result:', [$result, $option]);
+            }
 
             return $this->commitReturn($option);
         } catch (\Exception $e) {
