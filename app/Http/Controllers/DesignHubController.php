@@ -22,7 +22,7 @@ class DesignHubController extends Controller {
         $rarities = Rarity::whereIn('id', Marking::select('rarity_id')->distinct()->get())->get();
         $trait_categories = Settings::get('designhub_trait_categories');
 
-        if(str_contains(',', $trait_categories)) {
+        if (str_contains(',', $trait_categories)) {
             $trait_categories = explode(',', $trait_categories);
         }
 
