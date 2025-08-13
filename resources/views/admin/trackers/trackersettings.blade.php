@@ -23,7 +23,7 @@
                 {!! Form::label('Levels') !!}
                 <div id="levelList">
                     @if ($levels)
-                        @foreach($levels as $name => $val)
+                        @foreach ($levels as $name => $val)
                             <div class="level-row mb-2 d-flex">
                                 {!! Form::text('level_name[]', $name, ['class' => 'form-control mr-2', 'placeholder' => 'Level Name']) !!}
                                 {!! Form::number('level_threshold[]', $val, ['class' => 'form-control mr-2', 'min' => 0, 'placeholder' => 'Minimum Level Threshold']) !!}
@@ -43,7 +43,7 @@
                 </div>
                 <div class="level-row hide mb-2">
                     {!! Form::text('level_name[]', null, ['class' => 'form-control mr-2', 'placeholder' => 'Level Name']) !!}
-                        {!! Form::number('level_threshold[]', null, ['class' => 'form-control mr-2', 'min' => 0, 'placeholder' => 'Minimum Level Threshold']) !!}
+                    {!! Form::number('level_threshold[]', null, ['class' => 'form-control mr-2', 'min' => 0, 'placeholder' => 'Minimum Level Threshold']) !!}
                     <a href="#" class="remove-level btn btn-primary" data-toggle="tooltip" title="REmove Level">-</a>
                 </div>
             </div>
@@ -115,98 +115,98 @@
     @parent
     <script>
         $(document).ready(function() {
-        $i  = 1;
-        //Level Repeater
-        $('#add-level').on('click', function(e) {
-            e.preventDefault();
-            addLevelRow();
-        });
-        $('.remove-level').on('click', function(e) {
-            e.preventDefault();
-            removeLevelRow($(this));
-        })
-
-        function addLevelRow() {
-            var $clone = $('.level-row.hide').clone();
-            $('#levelList').append($clone);
-            $clone.removeClass('hide');
-            $clone.addClass('d-flex');
-            $clone.find('.remove-level').on('click', function(e) {
+            $i = 1;
+            //Level Repeater
+            $('#add-level').on('click', function(e) {
+                e.preventDefault();
+                addLevelRow();
+            });
+            $('.remove-level').on('click', function(e) {
                 e.preventDefault();
                 removeLevelRow($(this));
+            })
+
+            function addLevelRow() {
+                var $clone = $('.level-row.hide').clone();
+                $('#levelList').append($clone);
+                $clone.removeClass('hide');
+                $clone.addClass('d-flex');
+                $clone.find('.remove-level').on('click', function(e) {
+                    e.preventDefault();
+                    removeLevelRow($(this));
+                });
+            }
+
+            function removeLevelRow($trigger) {
+                $trigger.parent().remove();
+            }
+
+            //Calculator Repeater
+            // --- Groups
+            $('#add-group').on('click', function(e) {
+                e.preventDefault();
+                addOptionGroup();
             });
-        }
-
-        function removeLevelRow($trigger) {
-            $trigger.parent().remove();
-        }
-
-        //Calculator Repeater
-        // --- Groups
-        $('#add-group').on('click', function(e) {
-            e.preventDefault();
-            addOptionGroup();
-        });
-        $('.remove-group').on('click', function(e) {
-            e.preventDefault();
-            removeOptionGroup($(this));
-        });
-
-        function addOptionGroup() {
-            var $clone = $('.group-row.hide').clone();
-            $('#calcList').append($clone);
-            $clone.removeClass('hide');
-            $clone.attr('count',  $i);
-            //Rename the fields
-            $inputs = $clone.find('input');
-            $inputs.each(function(i, input) {
-                $old_name = $(input).attr('name');
-                $new_name = $old_name.replace('[]', '_') + $i + '[]';
-                $(input).attr('name', $new_name);
-            });
-            $clone.find('.remove-group').on('click', function(e) {
+            $('.remove-group').on('click', function(e) {
                 e.preventDefault();
                 removeOptionGroup($(this));
             });
-            $clone.find('.add-op').on('click', function(e) {
-                e.preventDefault();
-                $c = $(this).parents('.group-row').attr('count');
-                addOption('.group-row[count="'+$c+'"] .calcList', $c);
-            });
-            $i++;
-        }
 
-        function removeOptionGroup($trigger) {
-            $trigger.parents('.group-row').remove();
-        }
-
-        // --- Options
-        $('.main-buttons #add-option').on('click', function(e) {
-            e.preventDefault();
-            addOption();
-        });
-
-        function addOption($selector = '#calcList', $c = null) {
-            var $clone = $('.option-row.hide').clone();
-            $($selector).append($clone);
-            $clone.removeClass('hide');
-            if($c !== null) {
+            function addOptionGroup() {
+                var $clone = $('.group-row.hide').clone();
+                $('#calcList').append($clone);
+                $clone.removeClass('hide');
+                $clone.attr('count', $i);
+                //Rename the fields
                 $inputs = $clone.find('input');
                 $inputs.each(function(i, input) {
                     $old_name = $(input).attr('name');
-                    $new_name = 'g_' + $old_name.replace('[]', '_') + $c + '[]';
+                    $new_name = $old_name.replace('[]', '_') + $i + '[]';
                     $(input).attr('name', $new_name);
                 });
+                $clone.find('.remove-group').on('click', function(e) {
+                    e.preventDefault();
+                    removeOptionGroup($(this));
+                });
+                $clone.find('.add-op').on('click', function(e) {
+                    e.preventDefault();
+                    $c = $(this).parents('.group-row').attr('count');
+                    addOption('.group-row[count="' + $c + '"] .calcList', $c);
+                });
+                $i++;
             }
-            $clone.find('.remove-option').on('click', function(e) {
-                e.preventDefault();
-                removeOption($(this));
-            });
-        }
 
-        function removeOption($trigger) {
-            $trigger.parents('.option-row').remove();
-        }
+            function removeOptionGroup($trigger) {
+                $trigger.parents('.group-row').remove();
+            }
+
+            // --- Options
+            $('.main-buttons #add-option').on('click', function(e) {
+                e.preventDefault();
+                addOption();
+            });
+
+            function addOption($selector = '#calcList', $c = null) {
+                var $clone = $('.option-row.hide').clone();
+                $($selector).append($clone);
+                $clone.removeClass('hide');
+                if ($c !== null) {
+                    $inputs = $clone.find('input');
+                    $inputs.each(function(i, input) {
+                        $old_name = $(input).attr('name');
+                        $new_name = 'g_' + $old_name.replace('[]', '_') + $c + '[]';
+                        $(input).attr('name', $new_name);
+                    });
+                }
+                $clone.find('.remove-option').on('click', function(e) {
+                    e.preventDefault();
+                    removeOption($(this));
+                });
+            }
+
+            function removeOption($trigger) {
+                $trigger.parents('.option-row').remove();
+            }
 
         });
     </script>

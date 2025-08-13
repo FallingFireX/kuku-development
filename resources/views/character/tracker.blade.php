@@ -38,7 +38,7 @@
         {!! $progress !!}
     </div>
 
-    <hr/>
+    <hr />
 
     @if ($tracker_cards)
         {!! $tracker_cards !!}
@@ -55,12 +55,14 @@
             background-color: var(--gray-800);
             z-index: 1;
         }
+
         .progress-stop .badge {
             position: absolute;
             bottom: -40px;
             left: 50%;
-        transform: translateX(-50%);
+            transform: translateX(-50%);
         }
+
         .progress-stop .badge::before {
             content: "";
             display: block;
@@ -74,5 +76,4 @@
             transform: rotate(45deg);
         }
     </style>
-
 @endsection

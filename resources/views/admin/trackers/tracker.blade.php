@@ -8,7 +8,6 @@
     {!! breadcrumbs(['Admin Panel' => 'admin', 'Tracker Queue' => 'admin/trackers/', 'Tracker (#' . $tracker->id . ')' => $tracker->viewUrl]) !!}
 
     @if ($tracker->status == 'Pending')
-
         <h1>
             Tracker Card (#{{ $tracker->id }})
             <span class="float-right badge badge-{{ $tracker->status == 'Pending' || $tracker->status == 'Draft' ? 'secondary' : ($tracker->status == 'Approved' ? 'success' : 'danger') }}">
@@ -38,37 +37,37 @@
         </div>
 
         <!-- Tracker Content -->
-         <style>
+        <style>
             .line-rows .line-item:nth-of-type(odd) {
-                background-color:var(--gray-800);
+                background-color: var(--gray-800);
             }
-         </style>
-         <div class="card my-3">
+        </style>
+        <div class="card my-3">
             <h4 class="card-header">Tracker Card Count</h4>
             <div class="card-body">
                 <div class="row">
                     <div class="col-md-3">
                         <!-- Gallery or optional image src here -->
-                         <img src="/images/account.png" class="img-fluid" />
-                         <hr/>
-                        <img src="{!! $tracker->character->image->thumbnailUrl !!}" alt="{!! $tracker->character->fullName !!}" class="img-fluid mt-3"/>
-                         <div class="row">
+                        <img src="/images/account.png" class="img-fluid" />
+                        <hr />
+                        <img src="{!! $tracker->character->image->thumbnailUrl !!}" alt="{!! $tracker->character->fullName !!}" class="img-fluid mt-3" />
+                        <div class="row">
                             <div class="col-md-6 col-6">
                                 <h5>Character</h5>
                             </div>
-                            <div class="col-md-6 col-6">{!! $tracker->character->displayName !!}</div>                            
+                            <div class="col-md-6 col-6">{!! $tracker->character->displayName !!}</div>
                         </div>
                     </div>
                     <div class="col-md-9">
                         <div class="px-4 line-rows">
                             <?php
-                                $total = 0;
+                            $total = 0;
                             ?>
-                            @foreach($cardData as $title => $value)
+                            @foreach ($cardData as $title => $value)
                                 @if (gettype($value) === 'array')
                                     <div class="line-group border border-secondary my-2">
                                         <h4 class="line-header text-uppercase font-weight-bold p-2">{!! $title !!}</h4>
-                                        @foreach($value as $title => $sub_val)
+                                        @foreach ($value as $title => $sub_val)
                                             <div class="line-item w-100 d-inline-flex justify-content-between p-2">
                                                 <h5 style="line-height:1;" class="m-0">{!! $title !!}</h5>
                                                 <p class="lh-1 m-0">{!! $sub_val !!} XP</p>
@@ -85,7 +84,7 @@
                                 @endif
                             @endforeach
                         </div>
-                    </div>               
+                    </div>
                 </div>
                 <div class="card-footer mt-3">
                     <div class="w-100 d-inline-flex justify-content-between p-2">
@@ -94,7 +93,7 @@
                     </div>
                 </div>
             </div>
-         </div>
+        </div>
 
         {!! Form::open(['url' => url()->current(), 'id' => 'trackerForm']) !!}
 

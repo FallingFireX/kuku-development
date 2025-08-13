@@ -20,7 +20,7 @@
             <a class="nav-link {{ set_active('admin/trackers/rejected*') }}" href="{{ url('admin/trackers/rejected') }}">Rejected</a>
         </li>
     </ul>
-    
+
 
     {!! Form::open(['method' => 'GET', 'class' => 'form-inline justify-content-end']) !!}
     <div class="form-inline justify-content-end">
