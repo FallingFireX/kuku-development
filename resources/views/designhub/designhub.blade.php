@@ -9,7 +9,6 @@
 @section('content')
     {!! breadcrumbs(['Design Hub' => 'Design Hub']) !!}
     <h1>Design Hub</h1>
-    <p>Welcome to the World of Reos Design Hub! Here you can find all of the applicable guides to design your reosean.</p>
 
     <div class="card rounded mb-4">
         <div class="card-header">
