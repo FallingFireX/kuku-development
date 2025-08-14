@@ -3,9 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\SiteOptions;
-use App\Models\Character\Character;
 use App\Models\User\User;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class XPCalcController extends Controller {
@@ -29,7 +27,7 @@ class XPCalcController extends Controller {
 
         return view('tracker.xp_calc', [
             'users_character'   => $users_character,
-            'xp_calc_form'      => $xp_calc_form
+            'xp_calc_form'      => $xp_calc_form,
         ]);
     }
 }
