@@ -5,7 +5,7 @@
 @endsection
 
 @section('content')
-    {!! breadcrumbs(["XP Calculator" => '/submit-xp']) !!}
+    {!! breadcrumbs(['XP Calculator' => '/submit-xp']) !!}
     <h1>Submit XP Tracker</h1>
 
     <div class="site-page-content parsed-text">
