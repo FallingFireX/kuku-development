@@ -103,6 +103,27 @@
         </div>
     </div>
 
+    <div class="card mt-4">
+        <div class="card-header">
+            <h3>Literature XP Calculator Settings</h3>
+            <p>Configure the XP points for literature here. Note that this ONLY applies to word count, the rest is shared with the general XP calculator settings. Leave all blank to disable.</p>
+        </div>
+        <div class="card-body">
+            <div class="form-group">
+                {!! Form::label('Word Count Options') !!}
+                <p>This is the rate at which word count is converted to XP. To enter the conversion use "Points|Word Count". Example: 1|100 would be 1 XP ever 100 words.</p>
+                <div class="d-flex mb-2">
+                    {!! Form::text('word_count_conversion_rate', null, ['class' => 'form-control mr-2', 'placeholder' => 'Word Count Conversion Rate']) !!}
+                    {!! Form::number('round_to', null, ['class' => 'form-control mr-2 roundTo', 'style' => 'display:none;', 'placeholder' => 'Round to the Nearest']) !!}
+                </div>
+                <div class="form-group">
+                    {!! Form::checkbox('enable_rounding', 1, old('enable_rounding'), ['class' => 'form-check-input enable-rounding', 'data-toggle' => 'toggle']) !!}
+                    {!! Form::label('enable_rounding', 'Enable Rounding', ['class' => 'form-check-label ml-3']) !!} {!! add_help('Enable to create a rounding rule for literature word counts.') !!}
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="text-right mt-4">
         {!! Form::submit('Save Settings', ['class' => 'btn btn-primary']) !!}
     </div>
@@ -115,6 +136,18 @@
     @parent
     <script>
         $(document).ready(function() {
+
+            $('.enable-rounding').on('change', function() {
+                console.log('rounding changed');
+                if ($(this).is(':checked')) {
+                    console.log('show!');
+                    $('.roundTo').show();
+                } else {
+                    console.log('hide!');
+                    $('.roundTo').hide();
+                }
+            });
+
             $i = 1;
             //Level Repeater
             $('#add-level').on('click', function(e) {
