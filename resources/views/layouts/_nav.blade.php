@@ -142,7 +142,7 @@
 
                             <a class="dropdown-item" href="https://www.kukuri-arpg.com/prompts/22"> Design Approvals </a>
                             <a class="dropdown-item" href="#">Import Customization</a>
-                            <a class="dropdown-item" href="#">Creating Trackers</a>
+                            <a class="dropdown-item" href="https://www.deviantart.com/kukuri-arpg/journal/FP-tracker-and-how-to-make-one-604378418">Creating Trackers</a>
 
                         </div>
                     </li>
