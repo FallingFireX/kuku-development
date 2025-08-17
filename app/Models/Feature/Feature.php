@@ -15,7 +15,7 @@ class Feature extends Model {
      * @var array
      */
     protected $fillable = [
-        'feature_category_id', 'species_id', 'subtype_id', 'rarity_id', 'name', 'has_image', 'description', 'parsed_description', 'parent_id', 'is_visible', 'hash', 'feature_subcategory_id',
+        'feature_category_id', 'species_id', 'subtype_id', 'rarity_id', 'name', 'has_image', 'description', 'parsed_description', 'parent_id', 'is_visible', 'full_page', 'hash', 'feature_subcategory_id',
     ];
 
     /**
@@ -376,7 +376,7 @@ public function getDisplayNameAttribute() {
      * @return string
      */
     public function getUrlAttribute() {
-        return url('world/traits?name='.$this->name);
+        return $this->full_page ? url('design-hub/trait/'.$this->name) : url('world/traits?name='.$this->name);
     }
 
     /**

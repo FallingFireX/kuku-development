@@ -1115,3 +1115,13 @@ tr.accountbound {
     border-radius: 0.25rem 0.25rem 0.25rem 0.25rem;
     box-shadow: 3px 0px 6px 1px rgba(0, 0, 0, 0.1), 3px 0px 6px rgba(0, 0, 0, 0.1) inset;
 }
+/* DESIGN HUB *************************************************************************************/
+.marking-output a {
+	color: inherit;
+	text-decoration: dotted underline;
+	text-decoration-color: var(--blue);
+	transition: 250ms all;
+}
+.marking-output a:hover {
+	color: var(--blue);
+}

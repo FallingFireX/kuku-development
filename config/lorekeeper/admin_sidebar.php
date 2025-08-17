@@ -222,6 +222,18 @@ return [
                 'url'  => 'admin/data/traits',
             ],
             [
+                'name' => 'Markings',
+                'url'  => 'admin/data/markings',
+            ],
+            [
+                'name' => 'Carriers',
+                'url'  => 'admin/data/carriers',
+            ],
+            [
+                'name' => 'Bases',
+                'url'  => 'admin/data/bases',
+            ],
+            [
                 'name' => 'Status Effects',
                 'url'  => 'admin/data/status-effects',
             ],

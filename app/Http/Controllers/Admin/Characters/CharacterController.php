@@ -5,13 +5,16 @@ namespace App\Http\Controllers\Admin\Characters;
 use App\Facades\Settings;
 use App\Http\Controllers\Controller;
 use App\Models\Character\BreedingPermission;
-use App\Models\Character\Character;
-use App\Models\Character\CharacterCategory;
 use App\Models\Character\CharacterLineageBlacklist;
 use App\Models\Character\CharacterLink;
+use App\Models\Base\Base;
+use App\Models\Character\Character;
+use App\Models\Character\CharacterCategory;
+use App\Models\Character\CharacterMarking;
 use App\Models\Character\CharacterTransfer;
 use App\Models\Character\CharacterTransformation as Transformation;
 use App\Models\Feature\Feature;
+use App\Models\Marking\Marking;
 use App\Models\Rarity;
 use App\Models\Species\Species;
 use App\Models\Species\Subtype;
@@ -57,6 +60,8 @@ class CharacterController extends Controller {
             'characterOptions' => CharacterLineageBlacklist::getAncestorOptions(),
             'rarities'         => ['0' => 'Select Rarity'] + Rarity::orderBy('sort', 'DESC')->pluck('name', 'id')->toArray(),
             'specieses'        => ['0' => 'Select Species'] + Species::orderBy('sort', 'DESC')->pluck('name', 'id')->toArray(),
+            'markings'    => ['' => 'Select Markings(s)'] + Marking::orderBy('name', 'DESC')->pluck('name', 'id')->toArray(),
+            'bases'       => ['' => 'Select Base(s)'] + Base::orderBy('name', 'DESC')->pluck('name', 'id')->toArray(),
             'subtypes'         => ['0' => 'Pick a Species First'],
             'features'         => Feature::GetDropdownItems(1),
             'transformations'  => ['0' => 'Pick a Species First'],
@@ -76,6 +81,8 @@ class CharacterController extends Controller {
             'characterOptions' => CharacterLineageBlacklist::getAncestorOptions(),
             'rarities'         => ['0' => 'Select Rarity'] + Rarity::orderBy('sort', 'DESC')->pluck('name', 'id')->toArray(),
             'specieses'        => ['0' => 'Select Species'] + Species::orderBy('sort', 'DESC')->pluck('name', 'id')->toArray(),
+            'markings'    => ['' => 'Select Markings(s)'] + Marking::orderBy('name', 'DESC')->pluck('name', 'id')->toArray(),
+            'bases'       => ['' => 'Select Base(s)'] + Base::orderBy('name', 'DESC')->pluck('name', 'id')->toArray(),
             'subtypes'         => ['0' => 'Pick a Species First'],
             'features'         => Feature::GetDropdownItems(1),
             'transformations'  => ['0' => 'Pick a Species First'],
@@ -168,12 +175,16 @@ class CharacterController extends Controller {
             'dam_dam_dam_id',    'dam_dam_dam_name',
             'generate_ancestors',
 
-            'species_id', 'subtype_id', 'rarity_id', 'feature_id', 'feature_data',
+            'species_id', 'subtype_id', 'rarity_id', 'feature_id', 'feature_data', 'marking_id', 'is_dominant', 'base', 'secondary_base', 'side_id',
+            'marking_color_0', 'marking_color_1', 'is_chimera',
             'image', 'thumbnail', 'image_description', 'parent_id', 'transformation_id', 'transformation_info', 'transformation_description', 'stats', 'genotype', 'phenotype', 'gender', 'eyecolor', 'spd', 'def', 'atk',
             'diet', 'bio',
         ]);
+
         if ($character = $service->createCharacter($data, Auth::user())) {
             flash('Character created successfully.')->success();
+
+            $service->updateCharacterMarkings($data, $character);
 
             return redirect()->to($character->url);
         } else {
@@ -219,12 +230,15 @@ class CharacterController extends Controller {
             'dam_dam_dam_id',    'dam_dam_dam_name',
             'generate_ancestors',
 
-            'species_id', 'subtype_id', 'rarity_id', 'feature_id', 'feature_data',
+            'species_id', 'subtype_id', 'rarity_id', 'feature_id', 'feature_data', 'marking_id', 'is_dominant', 'base', 'secondary_base', 'side_id',
+            'marking_color_0', 'marking_color_1', 'is_chimera',
             'image', 'thumbnail', 'parent_id', 'transformation_id', 'transformation_info', 'transformation_description', 'stats', 'genotype', 'phenotype', 'gender', 'eyecolor', 'spd', 'def', 'atk',
             'diet', 'bio',
         ]);
         if ($character = $service->createCharacter($data, Auth::user(), true)) {
             flash('MYO slot created successfully.')->success();
+
+            $service->updateCharacterMarkings($data, $character);
 
             return redirect()->to($character->url);
         } else {
@@ -249,12 +263,33 @@ class CharacterController extends Controller {
             abort(404);
         }
 
+        $glint_bases = [];
+        $temp = CharacterMarking::where('character_id', $this->character->id)
+            ->whereIn('code', ['GG', 'Gl'])
+            ->value('base_id');
+        if ($temp) {
+            $has_glint = true;
+            if (str_contains($temp, '|')) {
+                $glint_bases = Base::whereIn('id', explode('|', $temp))->pluck('name', 'id')->toArray();
+            } else {
+                $glint_bases = Base::where('id', $temp)->pluck('name', 'id')->toArray();
+            }
+        } else {
+            $has_glint = false;
+        }
+
         return view('character.admin._edit_stats_modal', [
-            'character'   => $this->character,
-            'categories'  => CharacterCategory::orderBy('sort')->pluck('name', 'id')->toArray(),
-            'userOptions' => User::query()->orderBy('name')->pluck('name', 'id')->toArray(),
-            'number'      => format_masterlist_number($this->character->number, config('lorekeeper.settings.character_number_digits')),
-            'isMyo'       => false,
+            'character'         => $this->character,
+            'categories'        => CharacterCategory::orderBy('sort')->pluck('name', 'id')->toArray(),
+            'userOptions'       => User::query()->orderBy('name')->pluck('name', 'id')->toArray(),
+            'number'            => format_masterlist_number($this->character->number, config('lorekeeper.settings.character_number_digits')),
+            'isMyo'             => false,
+            'markings'          => ['' => 'Select Markings(s)'] + Marking::orderBy('name', 'DESC')->pluck('name', 'id')->toArray(),
+            'bases'             => ['' => 'Select Base(s)'] + Base::orderBy('name', 'DESC')->pluck('name', 'id')->toArray(),
+            'is_chimera'        => (str_contains($this->character->base, '|') ? 1 : 0),
+            'characterMarkings' => CharacterMarking::where('character_id', $this->character->id)->get(),
+            'has_glint'         => $has_glint,
+            'glint_bases'       => $glint_bases,
         ]);
     }
 
@@ -271,10 +306,31 @@ class CharacterController extends Controller {
             abort(404);
         }
 
+        $glint_bases = [];
+        $temp = CharacterMarking::where('character_id', $this->character->id)
+            ->whereIn('code', ['GG', 'Gl'])
+            ->value('base_id');
+        if ($temp) {
+            $has_glint = true;
+            if (str_contains($temp, '|')) {
+                $glint_bases = Base::whereIn('id', explode('|', $temp))->pluck('name', 'id')->toArray();
+            } else {
+                $glint_bases = Base::where('id', $temp)->pluck('name', 'id')->toArray();
+            }
+        } else {
+            $has_glint = false;
+        }
+
         return view('character.admin._edit_stats_modal', [
-            'character'   => $this->character,
-            'userOptions' => User::query()->orderBy('name')->pluck('name', 'id')->toArray(),
-            'isMyo'       => true,
+            'character'         => $this->character,
+            'userOptions'       => User::query()->orderBy('name')->pluck('name', 'id')->toArray(),
+            'isMyo'             => true,
+            'markings'          => ['' => 'Select Markings(s)'] + Marking::orderBy('name', 'DESC')->pluck('name', 'id')->toArray(),
+            'bases'             => ['' => 'Select Base(s)'] + Base::orderBy('name', 'DESC')->pluck('name', 'id')->toArray(),
+            'is_chimera'        => (str_contains($this->character->base, '|') ? 1 : 0),
+            'characterMarkings' => CharacterMarking::where('character_id', $this->character->id)->get(),
+            'has_glint'         => $has_glint,
+            'glint_bases'       => $glint_bases,
         ]);
     }
 
@@ -291,7 +347,8 @@ class CharacterController extends Controller {
         $data = $request->only([
             'character_category_id', 'number', 'slug',
             'is_giftable', 'is_tradeable', 'is_sellable', 'sale_value',
-            'transferrable_at',
+            'transferrable_at', 'marking_id', 'is_dominant', 'base', 'secondary_base', 'side_id',
+            'marking_color_0', 'marking_color_1',
         ]);
         $this->character = Character::where('slug', $slug)->first();
         if (!$this->character) {
@@ -299,6 +356,8 @@ class CharacterController extends Controller {
         }
         if ($service->updateCharacterStats($data, $this->character, Auth::user())) {
             flash('Character stats updated successfully.')->success();
+
+            $service->updateCharacterMarkings($data, $this->character);
 
             return redirect()->to($this->character->url);
         } else {
@@ -323,7 +382,7 @@ class CharacterController extends Controller {
         $data = $request->only([
             'name',
             'is_giftable', 'is_tradeable', 'is_sellable', 'sale_value',
-            'transferrable_at',
+            'transferrable_at', 'marking_id', 'is_dominant', 'base', 'secondary_base', 'side_id', 'marking_color_0', 'marking_color_1',
         ]);
         $this->character = Character::where('is_myo_slot', 1)->where('id', $id)->first();
         if (!$this->character) {
@@ -331,6 +390,8 @@ class CharacterController extends Controller {
         }
         if ($service->updateCharacterStats($data, $this->character, Auth::user())) {
             flash('Character stats updated successfully.')->success();
+
+            $service->updateCharacterMarkings($data, $this->character);
 
             return redirect()->to($this->character->url);
         } else {

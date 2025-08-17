@@ -62,10 +62,14 @@ class MyoController extends Controller {
      * @return \Illuminate\Contracts\Support\Renderable
      */
     public function getCharacter($id) {
+        $markings = $this->character->getMarkingFinalArray();
+
         return view('character.myo.character', [
             'character' => $this->character,
             'parent'    => CharacterLink::where('child_id', $this->character->id)->orderBy('parent_id', 'DESC')->first(),
             'children'  => CharacterLink::where('parent_id', $this->character->id)->orderBy('child_id', 'DESC')->get(),
+            'pheno'     => $this->character->getMarkingLinkedArray($markings),
+            'geno'      => $this->character->getMarkingLinkedArray($markings, 'genotype'),
         ]);
     }
 

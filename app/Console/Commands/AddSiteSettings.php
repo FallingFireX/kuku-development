@@ -110,6 +110,8 @@ class AddSiteSettings extends Command {
         $this->addSiteSetting('can_transfer_currency_directly', 1, 'Whether or not users can directly transfer currency to other users without trading. 0: Users cannot directly transfer currency. 1: Direct currency transfers are allowed.');
 
         $this->addSiteSetting('can_transfer_items_directly', 1, 'Whether or not users can directly transfer items to other users without trading. 0: Users cannot directly transfer items. 1: Direct item transfers are allowed.');
+        
+        $this->addSiteSetting('designhub_trait_categories', 0, 'Enter in all of the trait categories you want to display on the design hub page. Seperate by comma. EX: "1,2,3"');
 
         $this->line("\nSite settings up to date!");
     }
