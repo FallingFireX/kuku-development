@@ -24,7 +24,7 @@
                     <p>Kukuri get a +2 FP bonus per entry!</p>
                 </div>
                 <div class="col-md-5 ml-2 pt-2 pb-2">
-                    <img src = "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/074ff87a-9880-4019-abec-2fc71c1f2a2b/dk2gg4c-cded1498-76d1-4bc3-bcfa-4f06ffd032f0.png/v1/fill/w_1280,h_802,q_80,strp/bg_set___arid_highlands_by_momma_kuku_dk2gg4c-fullview.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9ODAyIiwicGF0aCI6IlwvZlwvMDc0ZmY4N2EtOTg4MC00MDE5LWFiZWMtMmZjNzFjMWYyYTJiXC9kazJnZzRjLWNkZWQxNDk4LTc2ZDEtNGJjMy1iY2ZhLTRmMDZmZmQwMzJmMC5wbmciLCJ3aWR0aCI6Ijw9MTI4MCJ9XV0sImF1ZCI6WyJ1cm46c2VydmljZTppbWFnZS5vcGVyYXRpb25zIl19.YM-QHEB7SZSVfWaQLurOaQv595zkDUAMQsF8sjqzt1s">
+                <img src="https://drive.google.com/thumbnail?id=1uYSVtlilT__bf57cMctznqwiYLtcnP-9">
                 </div>
                 
             </div>

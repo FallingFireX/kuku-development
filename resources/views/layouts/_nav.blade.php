@@ -238,7 +238,7 @@
                         </div>
                     </li>
                 
-                <li class="nav-item dropdown">
+                <!-- <li class="nav-item dropdown">
                     <a id="designhubDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                         Design Guides
                     </a>
@@ -253,7 +253,7 @@
                     <a id="browseDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                             Guidebook
                         </a>
-                    
+                     -->
 
                     <div class="dropdown-menu" aria-labelledby="browseDropdown">
 

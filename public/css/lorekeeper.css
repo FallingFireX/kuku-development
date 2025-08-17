@@ -148,7 +148,7 @@ p {
     text-align: right;
     padding-right: 0px;
     padding-left: 0px;
-    background-image: url("https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/2986889a-a8eb-4dfa-aac6-d65a72b03269/dkb3ytk-f2a74d20-be0a-4904-ba9a-6db8db4b264d.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcLzI5ODY4ODlhLWE4ZWItNGRmYS1hYWM2LWQ2NWE3MmIwMzI2OVwvZGtiM3l0ay1mMmE3NGQyMC1iZTBhLTQ5MDQtYmE5YS02ZGI4ZGI0YjI2NGQuanBnIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.Pv22YGNj_VdzCbk0UfYXEYBtSAWpO291skaXN_Myyyk");
+    background-image: url("https://www.kukuri-arpg.com/files/newside1.webp");
     background-size: cover;
     background-position: top center;
     background-repeat: no-repeat;
@@ -1058,17 +1058,10 @@ tr.accountbound {
   
 .overflow-auto {overflow:auto;}
 
- .sidebar-bg {
-    
-    background-image: url("https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/2986889a-a8eb-4dfa-aac6-d65a72b03269/dkb3ytk-f2a74d20-be0a-4904-ba9a-6db8db4b264d.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcLzI5ODY4ODlhLWE4ZWItNGRmYS1hYWM2LWQ2NWE3MmIwMzI2OVwvZGtiM3l0ay1mMmE3NGQyMC1iZTBhLTQ5MDQtYmE5YS02ZGI4ZGI0YjI2NGQuanBnIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.Pv22YGNj_VdzCbk0UfYXEYBtSAWpO291skaXN_Myyyk"); 
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: top center;
-    height: 100vh; 
-} 
+
 
 #rightSidebar {
-    background-image: url("https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/2986889a-a8eb-4dfa-aac6-d65a72b03269/dkb45ya-7c9e9614-19fc-4295-b07e-8427e3a08e4f.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcLzI5ODY4ODlhLWE4ZWItNGRmYS1hYWM2LWQ2NWE3MmIwMzI2OVwvZGtiNDV5YS03YzllOTYxNC0xOWZjLTQyOTUtYjA3ZS04NDI3ZTNhMDhlNGYuanBnIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.M61psFx3Q6GkTQigYGZMf4eFF5sAGF7B0oEo-fChMyI");
+    background-image: url("https://www.kukuri-arpg.com/files/newside2.webp");
     background-size: cover;
     background-position: top center;
     background-repeat: no-repeat;
