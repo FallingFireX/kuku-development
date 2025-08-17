@@ -1,4 +1,6 @@
-<link rel="preload" as="image" href="https://www.kukuri-arpg.com/files/newside1.webp" fetchpriority="high">
+<head>
+    <link rel="preload" as="image" href="https://www.kukuri-arpg.com/files/newside1.webp" fetchpriority="high">
+</head>
 
 <style>@media (max-width: 576px) {
     h4{

@@ -90,7 +90,6 @@
     <div class="col-md-3 d-flex">
         <div class= "card flex-fill text-center">
         <h4>Genetics</h4>
-            <img src ="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/b270d26f-24db-4b18-9f7b-ca5435d8ccdb/d9or9qu-14278989-1d00-4b2d-8ba4-e70ef54b57fe.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcL2IyNzBkMjZmLTI0ZGItNGIxOC05ZjdiLWNhNTQzNWQ4Y2NkYlwvZDlvcjlxdS0xNDI3ODk4OS0xZDAwLTRiMmQtOGJhNC1lNzBlZjU0YjU3ZmUucG5nIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.PIvBbzRRBwJnzvFmdEYYs78B2c06XailM5dm6ncWwFI" width=70% style="margin: auto">
             <i>Curious about what those strange genetic letters mean? Or maybe what those feathers look like? Here are some guides for you get started with!</i>
             <br><br>
             <a href="https://kukuri-arpg.w3spaces.com/genetics/genes-and-mutations.html">Genetics and Mutations</a>
@@ -102,7 +101,6 @@
     <div class="col-md-3 d-flex">
         <div class= "card flex-fill text-center">
             <h4>Guides</h4>
-            <img src="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/b270d26f-24db-4b18-9f7b-ca5435d8ccdb/daa0601-2278ed10-8f1c-4dcd-873c-4b51b940ca76.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcL2IyNzBkMjZmLTI0ZGItNGIxOC05ZjdiLWNhNTQzNWQ4Y2NkYlwvZGFhMDYwMS0yMjc4ZWQxMC04ZjFjLTRkY2QtODczYy00YjUxYjk0MGNhNzYucG5nIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.bHtGzr6iaKHlajaV7SpJ7Xi8BskqqSkqMXM0uuFZLjk" width=70% style="margin: auto">
             <i>Confused about something? Maybe our background rules got you stumped... perhaps your stuck on some import editing... regardless, weve got a guide for it!</i>
             <br><br>
             <b>Guides coming soon!</b>
