@@ -380,8 +380,7 @@ class BrowseController extends Controller {
             'features'        => Feature::getDropdownItems(),
             'sublists'        => Sublist::orderBy('sort', 'DESC')->get(),
             'userOptions'     => User::query()->orderBy('name')->pluck('name', 'id')->toArray(),
-            'awardOptions'    => Award::query()->orderBy('name')->pluck('name', 'id')->toArray(),
-            'transformations' => [0 => 'Any '.ucfirst(__('transformations.transformation'))] + Transformation::orderBy('sort', 'DESC')->pluck('name', 'id')->toArray(),
+            
             'markings'     => Marking::getDropdownItems(),
             'bases'        => ['' => 'Select Base(s)'] + Base::orderBy('name', 'DESC')->pluck('name', 'id')->toArray(),
         ]);
