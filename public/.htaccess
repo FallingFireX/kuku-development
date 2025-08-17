@@ -37,15 +37,4 @@ Allow from all
 Deny from env=bad_bot
 </IfModule>
 
-<IfModule mod_rewrite.c>
-RewriteEngine On
 
-# Block everything by default
-RewriteCond %{HTTP_USER_AGENT} !Googlebot [NC]
-RewriteCond %{HTTP_USER_AGENT} !Bingbot [NC]
-RewriteCond %{HTTP_USER_AGENT} !DuckDuckBot [NC]
-RewriteCond %{HTTP_USER_AGENT} !Slurp [NC]
-RewriteCond %{HTTP_USER_AGENT} !Yahoo [NC]
-RewriteCond %{HTTP_USER_AGENT} !Applebot [NC]
-RewriteRule .* - [F,L]
-</IfModule>
