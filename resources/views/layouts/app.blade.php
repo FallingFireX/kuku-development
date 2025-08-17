@@ -1,5 +1,7 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<link rel="preload" as="image" href="https://www.kukuri-arpg.com/files/newside2.webp" fetchpriority="high">
+
 
 <head>
     <meta charset="utf-8">

@@ -1,3 +1,5 @@
+<link rel="preload" as="image" href="https://www.kukuri-arpg.com/files/newside1.webp" fetchpriority="high">
+
 <style>@media (max-width: 576px) {
     h4{
         margin-top:5rem;
