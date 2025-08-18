@@ -1,32 +1,23 @@
 <IfModule mod_rewrite.c>
+    RewriteEngine On
+
     <IfModule mod_negotiation.c>
         Options -MultiViews -Indexes
     </IfModule>
-
-    RewriteEngine On
 
     # Handle Authorization Header
     RewriteCond %{HTTP:Authorization} .
     RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
 
-    # Redirect Trailing Slashes If Not A Folder...
-    # RewriteCond %{REQUEST_FILENAME} !-d
-    # RewriteCond %{REQUEST_URI} (.+)/$
-    # RewriteRule ^ %1 [L,R=301]
-
     # Handle Front Controller...
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_URI} !^/index\.php$
     RewriteRule ^ index.php [L]
-</IfModule>
 
-# Block common bad bots and scrapers
-<IfModule mod_rewrite.c>
-RewriteEngine On
-
-# Block by User-Agent
-RewriteCond %{HTTP_USER_AGENT} ^.*(MJ12bot|AhrefsBot|SemrushBot|DotBot|Baiduspider|YandexBot|spbot|Scrapy|crawler|wget|curl).*$ [NC]
-RewriteRule .* - [F,L]
+    # Block common bad bots and scrapers
+    RewriteCond %{HTTP_USER_AGENT} ^.*(MJ12bot|AhrefsBot|SemrushBot|DotBot|Baiduspider|YandexBot|spbot|Scrapy|crawler|wget|curl).*$ [NC]
+    RewriteRule .* - [F,L]
 </IfModule>
 
 # Optional: Block empty User-Agent (often bots)
@@ -36,5 +27,3 @@ Order Allow,Deny
 Allow from all
 Deny from env=bad_bot
 </IfModule>
-
-
