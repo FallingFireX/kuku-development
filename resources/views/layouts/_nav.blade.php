@@ -133,7 +133,7 @@
                             
                             <div class="dropdown-divider"></div>
 
-                            <a class="dropdown-item" href="https://www.kukuri-arpg.com/prompts/2"> Rank Updates </a>
+                            <a class="dropdown-item" href="{{ url('/prompts/prompts?prompt_category_id=2}}"> Rank Updates </a>
                             <a class="dropdown-item" href="https://www.deviantart.com/kukuri-arpg/journal/Ownership-transfers-593704983">Ownership Transfers</a>
                             <a class="dropdown-item" href="https://www.kukuri-arpg.com/prompts/28">Import Updates</a>
                             <a class="dropdown-item" href="https://www.kukuri-arpg.com/prompts/6">Heal your Kukuri</a>
@@ -141,7 +141,7 @@
                             <div class="dropdown-divider"></div>
 
                             <a class="dropdown-item" href="https://www.kukuri-arpg.com/prompts/22"> Design Approvals </a>
-                            <a class="dropdown-item" href="#">Import Customization</a>
+                            <a class="dropdown-item" href="https://www.deviantart.com/momma-kuku/journal/Item-guides-645162809">Import Customization</a>
                             <a class="dropdown-item" href="https://www.deviantart.com/kukuri-arpg/journal/FP-tracker-and-how-to-make-one-604378418">Creating Trackers</a>
 
                         </div>
