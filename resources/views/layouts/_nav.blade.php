@@ -83,8 +83,8 @@
                             @endif
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="{{ url('/team') }}"> Discord </a>
-                        <a class="dropdown-item" href="{{ url('/team') }}"> DeviantArt Group </a>
-                        <a class="dropdown-item" href="{{ url('/team') }}"> FaQ </a>
+                        <a class="dropdown-item" href="https://www.deviantart.com/kukuri-arpg"> DeviantArt Group </a>
+                        <a class="dropdown-item" href="https://www.deviantart.com/kukuri-arpg/journal/Questions-and-answers-570883245"> FaQ </a>
 
                     </div>
                 </li>
@@ -128,7 +128,7 @@
                             <a class="dropdown-item" href="{{ Auth::user()->url . '/characters' }}"> My Loaf </a>
                             @endif
                             <a class="dropdown-item" href="https://kukuri-arpg.w3spaces.com/training/home.html">Training</a>
-                            <a class="dropdown-item" href="https://kukuri-arpg.w3spaces.com/fate-points.html">Leveling and Fate Points</a>
+                            <a class="dropdown-item" href="{{ url('/info/fp-fate-points') }}">Leveling and Fate Points</a>
                             <a class="dropdown-item" href="https://kukuri-arpg.deviantart.com/journal/Injuries-and-illnesses-645173583">Health and Injuries</a>
                             
                             <div class="dropdown-divider"></div>
@@ -142,7 +142,7 @@
 
                             <a class="dropdown-item" href="https://www.kukuri-arpg.com/prompts/22"> Design Approvals </a>
                             <a class="dropdown-item" href="#">Import Customization</a>
-                            <a class="dropdown-item" href="#">Creating Trackers</a>
+                            <a class="dropdown-item" href="https://www.deviantart.com/kukuri-arpg/journal/FP-tracker-and-how-to-make-one-604378418">Creating Trackers</a>
 
                         </div>
                     </li>
