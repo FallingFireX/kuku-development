@@ -133,7 +133,7 @@
                             
                             <div class="dropdown-divider"></div>
 
-                            <a class="dropdown-item" href="{{ url('/prompts/prompts?prompt_category_id=2}}"> Rank Updates </a>
+                            <a class="dropdown-item" href="https://www.kukuri-arpg.com/prompts/prompts?prompt_category_id=2"> Rank Updates </a>
                             <a class="dropdown-item" href="https://www.deviantart.com/kukuri-arpg/journal/Ownership-transfers-593704983">Ownership Transfers</a>
                             <a class="dropdown-item" href="https://www.kukuri-arpg.com/prompts/28">Import Updates</a>
                             <a class="dropdown-item" href="https://www.kukuri-arpg.com/prompts/6">Heal your Kukuri</a>
@@ -151,10 +151,10 @@
                             Activity
                         </a>
                         <div class="dropdown-menu" aria-labelledby="queueDropdown">
-                            <a class="dropdown-item" href="{{ url('queues') }}">
+                            <a class="dropdown-item" href="{{ url('/queues') }}">
                                 Check Queues
                             </a>
-                            <a class="dropdown-item" href="{{ url('https://kukuri-arpg.w3spaces.com/activities/quests.html') }}">
+                            <a class="dropdown-item" href="https://kukuri-arpg.w3spaces.com/activities/quests.html">
                                 Current Quest/Event
                             </a>
                             <div class="dropdown-divider"></div>
