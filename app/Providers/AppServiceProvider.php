@@ -67,6 +67,10 @@ class AppServiceProvider extends ServiceProvider {
             );
         });
 
+        if (\DB::getDriverName() === 'mysql') {
+            \DB::connection()->getPdo()->setAttribute(\PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, true);
+        }
+
         $this->bootToyhouseSocialite();
     }
 
