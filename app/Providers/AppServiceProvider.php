@@ -35,23 +35,37 @@ class AppServiceProvider extends ServiceProvider {
         Paginator::defaultSimpleView('layouts._simple-pagination');
     
         view()->composer('*', function () {
-                    $user = Auth::user();
-        $user->loadMissing(['theme', 'decoratorTheme']); // eagerly load related models
-
-        $theme = $user->theme ?? Theme::where('is_default', true)->first();
-        $conditionalTheme = null;
-        if (class_exists('\App\Models\Weather\WeatherSeason')) {
-            $conditionalTheme = Theme::where('link_type', 'season')
-                ->where('link_id', Settings::get('site_season'))
-                ->first() ??
-                Theme::where('link_type', 'weather')
-                ->where('link_id', Settings::get('site_weather'))
-                ->first() ??
-                $theme;
-        }
-        $decoratorTheme = $user->decoratorTheme;
-
+            $user = Auth::user();
+        
+            $theme = null;
+            $decoratorTheme = null;
+        
+            if ($user) {
+                // Only load relationships if a user is logged in
+                $user->loadMissing(['theme', 'decoratorTheme']);
+                $theme = $user->theme;
+                $decoratorTheme = $user->decoratorTheme;
+            }
+        
+            // Fallback for guests or if user has no theme
+            $theme ??= Theme::where('is_default', true)->first();
+        
+            $conditionalTheme = null;
+            if (class_exists('\App\Models\Weather\WeatherSeason')) {
+                $conditionalTheme = Theme::where('link_type', 'season')
+                    ->where('link_id', Settings::get('site_season'))
+                    ->first() ??
+                    Theme::where('link_type', 'weather')
+                    ->where('link_id', Settings::get('site_weather'))
+                    ->first() ??
+                    $theme;
+            }
+        
+            View::share('theme', $theme);
+            View::share('conditionalTheme', $conditionalTheme);
+            View::share('decoratorTheme', $decoratorTheme);
         });
+        
         
     
         Collection::macro('paginate', function ($perPage, $total = null, $page = null, $pageName = 'page') {
