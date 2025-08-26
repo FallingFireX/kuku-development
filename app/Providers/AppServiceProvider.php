@@ -35,8 +35,14 @@ class AppServiceProvider extends ServiceProvider {
         Paginator::defaultSimpleView('layouts._simple-pagination');
     
         view()->composer('*', function () {
-            $theme = Auth::user()->theme ?? Theme::where('is_default', true)->first() ?? null;
+            $user = Auth::user();
+        
+            // Force load theme/decorator relationships ahead of time
+            $user->loadMissing(['theme', 'decoratorTheme']);
+        
+            $theme = $user->theme ?? Theme::where('is_default', true)->first();
             $conditionalTheme = null;
+        
             if (class_exists('\App\Models\Weather\WeatherSeason')) {
                 $conditionalTheme = Theme::where('link_type', 'season')
                     ->where('link_id', Settings::get('site_season'))
@@ -46,11 +52,14 @@ class AppServiceProvider extends ServiceProvider {
                     ->first() ??
                     $theme;
             }
-            $decoratorTheme = Auth::user()->decoratorTheme ?? null;
+        
+            $decoratorTheme = $user->decoratorTheme ?? null;
+        
             View::share('theme', $theme);
             View::share('conditionalTheme', $conditionalTheme);
             View::share('decoratorTheme', $decoratorTheme);
         });
+        
     
         Collection::macro('paginate', function ($perPage, $total = null, $page = null, $pageName = 'page') {
             $page = $page ?: LengthAwarePaginator::resolveCurrentPage($pageName);
