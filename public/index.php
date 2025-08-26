@@ -56,3 +56,6 @@ $response = $kernel->handle(
 $response->send();
 
 $kernel->terminate($request, $response);
+
+ini_set('memory_limit', '512M'); // or -1 for unlimited
+

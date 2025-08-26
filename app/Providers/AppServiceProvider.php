@@ -35,29 +35,22 @@ class AppServiceProvider extends ServiceProvider {
         Paginator::defaultSimpleView('layouts._simple-pagination');
     
         view()->composer('*', function () {
-            $user = Auth::user();
-        
-            // Force load theme/decorator relationships ahead of time
-            $user->loadMissing(['theme', 'decoratorTheme']);
-        
-            $theme = $user->theme ?? Theme::where('is_default', true)->first();
-            $conditionalTheme = null;
-        
-            if (class_exists('\App\Models\Weather\WeatherSeason')) {
-                $conditionalTheme = Theme::where('link_type', 'season')
-                    ->where('link_id', Settings::get('site_season'))
-                    ->first() ??
-                    Theme::where('link_type', 'weather')
-                    ->where('link_id', Settings::get('site_weather'))
-                    ->first() ??
-                    $theme;
-            }
-        
-            $decoratorTheme = $user->decoratorTheme ?? null;
-        
-            View::share('theme', $theme);
-            View::share('conditionalTheme', $conditionalTheme);
-            View::share('decoratorTheme', $decoratorTheme);
+                    $user = Auth::user();
+        $user->loadMissing(['theme', 'decoratorTheme']); // eagerly load related models
+
+        $theme = $user->theme ?? Theme::where('is_default', true)->first();
+        $conditionalTheme = null;
+        if (class_exists('\App\Models\Weather\WeatherSeason')) {
+            $conditionalTheme = Theme::where('link_type', 'season')
+                ->where('link_id', Settings::get('site_season'))
+                ->first() ??
+                Theme::where('link_type', 'weather')
+                ->where('link_id', Settings::get('site_weather'))
+                ->first() ??
+                $theme;
+        }
+        $decoratorTheme = $user->decoratorTheme;
+
         });
         
     
