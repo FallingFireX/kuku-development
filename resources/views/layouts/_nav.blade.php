@@ -140,7 +140,7 @@
 
                             <div class="dropdown-divider"></div>
 
-                            <a class="dropdown-item" href="https://www.kukuri-arpg.com/prompts/22"> Design Approvals </a>
+                            <a class="dropdown-item" href="https://www.kukuri-arpg.com/info/design-approval"> Design Approvals </a>
                             <a class="dropdown-item" href="https://www.deviantart.com/momma-kuku/journal/Item-guides-645162809">Import Customization</a>
                             <a class="dropdown-item" href="https://www.deviantart.com/kukuri-arpg/journal/FP-tracker-and-how-to-make-one-604378418">Creating Trackers</a>
 
