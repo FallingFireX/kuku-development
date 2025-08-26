@@ -72,7 +72,7 @@ class SubmissionController extends Controller {
             'user'       => $submission->user,
             'categories' => ItemCategory::orderBy('sort', 'DESC')->get(),
             'inventory'  => $inventory,
-            'itemsrow'   => Item::all()->keyBy('id'),
+            'itemsrow' => Item::select('id','name')->get()->keyBy('id'),
             'isClaim'    => false,
         ]);
     }
@@ -102,6 +102,7 @@ class SubmissionController extends Controller {
             'page'                => 'submission',
             'expanded_rewards'    => config('lorekeeper.extensions.character_reward_expansion.expanded'),
         ]));
+        Log::info('Memory usage after items: ' . memory_get_usage());
     }
 
     /**
@@ -335,7 +336,7 @@ class SubmissionController extends Controller {
             'submission' => $submission,
             'user'       => $submission->user,
             'categories' => ItemCategory::orderBy('sort', 'DESC')->get(),
-            'itemsrow'   => Item::all()->keyBy('id'),
+            'itemsrow' => Item::select('id','name')->get()->keyBy('id'),
             'inventory'  => $inventory,
             'isClaim'    => true,
         ]);
@@ -347,6 +348,7 @@ class SubmissionController extends Controller {
      * @return \Illuminate\Contracts\Support\Renderable
      */
     public function getNewClaim(Request $request) {
+
         $closed = !Settings::get('is_claims_open');
         $inventory = UserItem::with('item')->whereNull('deleted_at')->where('count', '>', '0')->where('user_id', Auth::user()->id)->get();
 
