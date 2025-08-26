@@ -23,38 +23,38 @@ class AppServiceProvider extends ServiceProvider {
     /**
      * Bootstrap any application services.
      */
-    public function boot() {
-        //
+    public function boot()
+    {
+        // Force MySQL buffered queries immediately
+        if (\DB::getDriverName() === 'mysql') {
+            \DB::connection()->getPdo()->setAttribute(\PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, true);
+        }
+    
         Schema::defaultStringLength(191);
         Paginator::defaultView('layouts._pagination');
         Paginator::defaultSimpleView('layouts._simple-pagination');
-
+    
         view()->composer('*', function () {
             $theme = Auth::user()->theme ?? Theme::where('is_default', true)->first() ?? null;
             $conditionalTheme = null;
             if (class_exists('\App\Models\Weather\WeatherSeason')) {
-                $conditionalTheme = Theme::where('link_type', 'season')->where('link_id', Settings::get('site_season'))->first() ??
-                Theme::where('link_type', 'weather')->where('link_id', Settings::get('site_weather'))->first() ??
-                $theme;
+                $conditionalTheme = Theme::where('link_type', 'season')
+                    ->where('link_id', Settings::get('site_season'))
+                    ->first() ??
+                    Theme::where('link_type', 'weather')
+                    ->where('link_id', Settings::get('site_weather'))
+                    ->first() ??
+                    $theme;
             }
             $decoratorTheme = Auth::user()->decoratorTheme ?? null;
             View::share('theme', $theme);
             View::share('conditionalTheme', $conditionalTheme);
             View::share('decoratorTheme', $decoratorTheme);
         });
-
-        /*
-         * Paginate a standard Laravel Collection.
-         *
-         * @param int $perPage
-         * @param int $total
-         * @param int $page
-         * @param string $pageName
-         * @return array
-         */
+    
         Collection::macro('paginate', function ($perPage, $total = null, $page = null, $pageName = 'page') {
             $page = $page ?: LengthAwarePaginator::resolveCurrentPage($pageName);
-
+    
             return new LengthAwarePaginator(
                 $this->forPage($page, $perPage),
                 $total ?: $this->count(),
@@ -66,13 +66,10 @@ class AppServiceProvider extends ServiceProvider {
                 ]
             );
         });
-
-        if (\DB::getDriverName() === 'mysql') {
-            \DB::connection()->getPdo()->setAttribute(\PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, true);
-        }
-
+    
         $this->bootToyhouseSocialite();
     }
+    
 
     /**
      * Boot Toyhouse Socialite provider.
