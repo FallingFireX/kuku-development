@@ -46,6 +46,7 @@
                 </div>
             </div>
             <div class="logs-table-body">
+            @auth
                 @foreach ($submissions as $submission)
                     <div class="logs-table-row" style="{{ $submission->user->id == Auth::user()->id ? 'background-color:rgba(48, 121, 240, 0.1);' : '' }}">
                         <div class="row flex-wrap">
@@ -76,6 +77,7 @@
                         </div>
                     </div>
                 @endforeach
+            @endauth
             </div>
         </div>
         {!! $submissions->render() !!}
