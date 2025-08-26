@@ -816,43 +816,60 @@ class CharacterController extends Controller {
      * @return \Illuminate\Contracts\Support\Renderable
      */
     public function getTransfer($slug)
-{
-    if (!Auth::check()) {
-        abort(404);
-    }
-
-    $isMod = Auth::user()->hasPower('manage_characters');
-    $isOwner = ($this->character->user_id == Auth::user()->id);
-    if (!$isMod && !$isOwner) {
-        abort(404);
-    }
-
-    $parent = CharacterLink::where('child_id', $this->character->id)
-        ->orderBy('parent_id', 'DESC')
-        ->first();
-    if ($parent) {
-        $parent = $parent->parent->id;
-    }
-
-    // Eager-load any relationships fullName depends on (example: 'user', adjust as needed)
-    $characters = Character::visible()
-        ->myo(0)
-        ->with(['user']) // <--- eager-load relationships used in fullName
-        ->orderBy('slug', 'ASC')
-        ->get();
-
-    return view('character.transfer', [
-        'character'        => $this->character,
-        'transfer'         => CharacterTransfer::active()
+    {
+        if (!Auth::check()) {
+            abort(404);
+        }
+    
+        $isMod = Auth::user()->hasPower('manage_characters');
+        $isOwner = ($this->character->user_id == Auth::user()->id);
+        if (!$isMod && !$isOwner) {
+            abort(404);
+        }
+    
+        // Eager-load 'parent' relationship to prevent nested queries
+        $parentLink = CharacterLink::with('parent')
+            ->where('child_id', $this->character->id)
+            ->orderBy('parent_id', 'DESC')
+            ->first();
+    
+        $parentId = null;
+        if ($parentLink && $parentLink->parent) {
+            $parentId = $parentLink->parent->id;
+        }
+    
+        // Fetch the transfer record
+        $transfer = CharacterTransfer::active()
             ->where('character_id', $this->character->id)
-            ->first(),
-        'cooldown'         => Settings::get('transfer_cooldown'),
-        'transfersQueue'   => Settings::get('open_transfers_queue'),
-        'userOptions'      => User::visible()->orderBy('name')->pluck('name', 'id')->toArray(),
-        'parent'           => $parent,
-        'characterOptions' => [null => 'Unbound'] + $characters->pluck('fullName', 'id')->toArray(),
-    ]);
-}
+            ->first();
+    
+        // Fetch user options safely
+        $userOptions = User::visible()
+            ->orderBy('name')
+            ->pluck('name', 'id')
+            ->toArray();
+    
+        // Fetch character options safely
+        // Eager-load relationships used by fullName, e.g., 'user'
+        $characters = Character::visible()
+            ->myo(0)
+            ->with(['user']) // add other relationships fullName uses here
+            ->orderBy('slug', 'ASC')
+            ->get(); // fully fetch all rows
+    
+        $characterOptions = [null => 'Unbound'] + $characters->pluck('fullName', 'id')->toArray();
+    
+        return view('character.transfer', [
+            'character'        => $this->character,
+            'transfer'         => $transfer,
+            'cooldown'         => Settings::get('transfer_cooldown'),
+            'transfersQueue'   => Settings::get('open_transfers_queue'),
+            'userOptions'      => $userOptions,
+            'parent'           => $parentId,
+            'characterOptions' => $characterOptions,
+        ]);
+    }
+    
 
 
     /**
