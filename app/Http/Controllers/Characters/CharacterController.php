@@ -815,32 +815,45 @@ class CharacterController extends Controller {
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function getTransfer($slug) {
-        if (!Auth::check()) {
-            abort(404);
-        }
-
-        $isMod = Auth::user()->hasPower('manage_characters');
-        $isOwner = ($this->character->user_id == Auth::user()->id);
-        if (!$isMod && !$isOwner) {
-            abort(404);
-        }
-
-        $parent = CharacterLink::where('child_id', $this->character->id)->orderBy('parent_id', 'DESC')->first();
-        if ($parent) {
-            $parent = $parent->parent->id;
-        }
-
-        return view('character.transfer', [
-            'character'        => $this->character,
-            'transfer'         => CharacterTransfer::active()->where('character_id', $this->character->id)->first(),
-            'cooldown'         => Settings::get('transfer_cooldown'),
-            'transfersQueue'   => Settings::get('open_transfers_queue'),
-            'userOptions'      => User::visible()->orderBy('name')->pluck('name', 'id')->toArray(),
-            'parent'           => $parent,
-            'characterOptions' => [null => 'Unbound'] + Character::visible()->myo(0)->orderBy('slug', 'ASC')->get()->pluck('fullName', 'id')->toArray(),
-        ]);
+    public function getTransfer($slug)
+{
+    if (!Auth::check()) {
+        abort(404);
     }
+
+    $isMod = Auth::user()->hasPower('manage_characters');
+    $isOwner = ($this->character->user_id == Auth::user()->id);
+    if (!$isMod && !$isOwner) {
+        abort(404);
+    }
+
+    $parent = CharacterLink::where('child_id', $this->character->id)
+        ->orderBy('parent_id', 'DESC')
+        ->first();
+    if ($parent) {
+        $parent = $parent->parent->id;
+    }
+
+    // Eager-load any relationships fullName depends on (example: 'user', adjust as needed)
+    $characters = Character::visible()
+        ->myo(0)
+        ->with(['user']) // <--- eager-load relationships used in fullName
+        ->orderBy('slug', 'ASC')
+        ->get();
+
+    return view('character.transfer', [
+        'character'        => $this->character,
+        'transfer'         => CharacterTransfer::active()
+            ->where('character_id', $this->character->id)
+            ->first(),
+        'cooldown'         => Settings::get('transfer_cooldown'),
+        'transfersQueue'   => Settings::get('open_transfers_queue'),
+        'userOptions'      => User::visible()->orderBy('name')->pluck('name', 'id')->toArray(),
+        'parent'           => $parent,
+        'characterOptions' => [null => 'Unbound'] + $characters->pluck('fullName', 'id')->toArray(),
+    ]);
+}
+
 
     /**
      * Opens a transfer request for a character.
