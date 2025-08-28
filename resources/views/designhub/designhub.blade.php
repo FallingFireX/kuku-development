@@ -52,12 +52,12 @@
 
     <div class="card rounded mb-4">
         <div class="card-header">
-            Mutations & Non-Passable Modifiers
+            Trait Guides
         </div>
         <div class="card-body">
             <input type="text" placeholder="Search traits..." class="searchBar bg-dark rounded border-0 mb-4 form-control" data-id="traits" />
             <div class="card rounded mb-4">
-                <div class="card-header">Corrupt Mutations</div>
+                <div class="card-header">Trait Guides</div>
                 <div class="card-body">
                     <div class="d-flex flex-wrap justify-content-between searchContent" data-id="traits">
                         @if ($trait_lists)
