@@ -30,8 +30,8 @@
         </div>
     @endif
 
-    <hr/>
-    
+    <hr />
+
     <div class="comments">
         @comments([
             'model' => $request,
@@ -39,6 +39,4 @@
             'allow_dislikes' => false,
         ])
     </div>
-
 @endsection
-
