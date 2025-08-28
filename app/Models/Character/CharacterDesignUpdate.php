@@ -5,6 +5,7 @@ namespace App\Models\Character;
 use App\Models\Currency\Currency;
 use App\Models\Model;
 use App\Models\Rarity;
+use App\Traits\Commentable;
 use App\Models\Species\Species;
 use App\Models\Species\Subtype;
 use App\Models\User\User;
@@ -12,6 +13,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class CharacterDesignUpdate extends Model {
     use SoftDeletes;
+    use Commentable;
 
     /**
      * The attributes that are mass assignable.
