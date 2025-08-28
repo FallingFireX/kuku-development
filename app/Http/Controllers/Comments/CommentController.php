@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Comments;
 
 use App\Facades\Notifications;
 use App\Facades\Settings;
+use App\Models\Character\CharacterDesignUpdate;
 use App\Models\Comment\Comment;
 use App\Models\Gallery\GallerySubmission;
 use App\Models\News;
@@ -11,7 +12,6 @@ use App\Models\Report\Report;
 use App\Models\Sales\Sales;
 use App\Models\SitePage;
 use App\Models\Submission\Submission;
-use App\Models\Character\CharacterDesignUpdate;
 use App\Models\User\User;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
