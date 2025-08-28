@@ -861,7 +861,7 @@ class Character extends Model {
                 [
                     'name'  => 'Unknown',
                     'code'  => '??',
-                ]
+                ],
             ];
         }
 
