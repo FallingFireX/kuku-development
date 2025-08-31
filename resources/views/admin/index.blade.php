@@ -336,7 +336,7 @@
                             <div class="card-body" style="text-align: center;">
                             <h3><i class="fas fa-gavel"></i></h3><h5 class="card-title">Misc</h5>
                                 <div class="text-center">
-                                    <a href="{{ url('https://www.kukuri-arpg.com/admin/submissions/pending?prompt_category_id=3&prompt_id=none&sort=oldest') }}" class="card-link">View Queue <span class="fas fa-caret-right ml-1"></span></a>
+                                    <a href="{{ url('admin/submissions/pending?prompt_category_id=3&prompt_id=none&sort=oldest') }}" class="card-link">View Queue <span class="fas fa-caret-right ml-1"></span></a>
                                 </div>
                             </div>
                         </div>
@@ -344,7 +344,7 @@
                             <div class="card-body" style="text-align: center;">
                             <h3><i class="fas fa-wrench"></i></h3><h5 class="card-title">Import Updates</h5>
                                 <div class="text-center">
-                                    <a href="{{ url('admin/submissions/pending?prompt_category_id=3&sort=oldest') }}" class="card-link">View Queue <span class="fas fa-caret-right ml-1"></span></a>
+                                    <a href="{{ url('admin/submissions/pending?prompt_category_id=3&prompt_id=28&sort=oldest') }}" class="card-link">View Queue <span class="fas fa-caret-right ml-1"></span></a>
                                 </div>
                             </div>
                         </div>

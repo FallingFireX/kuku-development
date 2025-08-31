@@ -32,7 +32,7 @@ class HomeController extends Controller {
         return view('admin.index', [
             'submissionCount'        => Submission::where('status', 'Pending')->whereNotNull('prompt_id')->count(),
             'fpCount'                => Submission::where('status', 'Pending')->whereIn('prompt_id', [2, 4, 8])->count(),
-            'misc2Count'             => Submission::where('status', 'Pending')->whereIn('prompt_id', [3, 5, 6, 7])->count(),
+            'misc2Count'             => Submission::where('status', 'Pending')->whereIn('prompt_id', [3, 5, 6, 7, 28])->count(),
             'adoptCount'             => Submission::where('status', 'Pending')->whereIn('prompt_id', [9, 10, 11])->count(),
             'arCount'                => Submission::where('status', 'Pending')->whereIn('prompt_id', [12, 13, 14, 15])->count(),
             'coliCount'              => Submission::where('status', 'Pending')->whereIn('prompt_id', [16, 17, 18])->count(),

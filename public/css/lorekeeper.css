@@ -176,7 +176,7 @@ p {
 
 .sidebar ul {
     list-style-type: none;
-    
+
     padding-top: 30px;
 }
 
@@ -188,6 +188,9 @@ p {
     padding: 0.4em 0;
 
     box-shadow: 0px 0px 6px 3px rgba(0,0,0,0.1);
+
+    max-width:100%;
+    
 }
 
 .sidebar .sidebar-header,
@@ -285,7 +288,7 @@ p {
         padding-left: 0px;
         text-align: left;
         background-color: #A3D4BE;
-        ;
+        
         z-index: 3;
         right: 0px;
         bottom: 0px;
@@ -301,7 +304,7 @@ p {
         padding-left: 0px;
         text-align: left;
         background-color: #A3D4BE;
-        ;
+        
         z-index: 3;
         right: 0px;
         bottom: 0px;
