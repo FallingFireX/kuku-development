@@ -1066,6 +1066,8 @@ tr.accountbound {
     background-position: top center;
     background-repeat: no-repeat;
     min-height: 100vh;
+    max-width: 100%;
+    box-sizing: border-box;
 
 }
 
