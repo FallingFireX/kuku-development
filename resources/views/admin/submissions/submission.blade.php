@@ -4,7 +4,14 @@
     {{ $submission->prompt_id ? 'Submission' : 'Claim' }} (#{{ $submission->id }})
 @endsection
 
+<style>
+    .card-body {
+        line-height:1;
+    }
+</style>
+
 @section('admin-content')
+
     @if ($submission->prompt_id)
         {!! breadcrumbs(['Admin Panel' => 'admin', 'Prompt Queue' => 'admin/submissions/pending', 'Submission (#' . $submission->id . ')' => $submission->viewUrl]) !!}
     @else

@@ -4,6 +4,12 @@
     {{ $submission->prompt_id ? 'Submission' : 'Claim' }} (#{{ $submission->id }})
 @endsection
 
+<style>
+    .card-body {
+        line-height:1;
+    }
+</style>
+
 @section('home-content')
     {!! breadcrumbs(['Users' => 'users', $user->name => $user->url, $submission->prompt_id ? 'Submission' : 'Claim (#' . $submission->id . ')' => $submission->viewUrl]) !!}
 
