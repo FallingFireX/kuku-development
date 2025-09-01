@@ -27,17 +27,18 @@
 <div class="row mb-4 align-items-stretch">
     <div class="col-md-6 d-flex">
         <div class= "card py-4 px-2 flex-fill" style="text-align: center">
-            <h5>Current Quest/event</h5>
+        <h5>Current Quest/event</h5>
             <div class="row mt-auto mb-auto">
-                <div class="col-md-6 pt-2 pb-2">
-                        <p>Its getting quite hot... perhaps the desert has something to do with it?</p>  
-                        <p>Get the new background in the current quest!</p>
-                        <br>
-                        <p><i>Each entry has a 30% chance to earn the new background</i></p>
-                        <p>Kukuri get a +2 FP bonus per entry!</p>
+            <div class="col-md-6 pt-2 pb-2">
+                    <p>The leaves are turning... fall is around the corner... but something creeps through the forest. You arent alone here.</p>  
+                    <p>Get the Wisps/Wisp lantern pack in the current quest!</p>
+                    <br>
+                    <p><i>Each entry has a 50% chance to earn the item</i></p>
+                    <p>Kukuri get a +2 FP bonus per entry!</p>
                 </div>
                 <div class="col-md-5 ml-2 pt-2 pb-2">
-                    <img src = "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/074ff87a-9880-4019-abec-2fc71c1f2a2b/dk2gg4c-cded1498-76d1-4bc3-bcfa-4f06ffd032f0.png/v1/fill/w_1280,h_802,q_80,strp/bg_set___arid_highlands_by_momma_kuku_dk2gg4c-fullview.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9ODAyIiwicGF0aCI6IlwvZlwvMDc0ZmY4N2EtOTg4MC00MDE5LWFiZWMtMmZjNzFjMWYyYTJiXC9kazJnZzRjLWNkZWQxNDk4LTc2ZDEtNGJjMy1iY2ZhLTRmMDZmZmQwMzJmMC5wbmciLCJ3aWR0aCI6Ijw9MTI4MCJ9XV0sImF1ZCI6WyJ1cm46c2VydmljZTppbWFnZS5vcGVyYXRpb25zIl19.YM-QHEB7SZSVfWaQLurOaQv595zkDUAMQsF8sjqzt1s">
+                <img src="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/i/074ff87a-9880-4019-abec-2fc71c1f2a2b/de4cf56-d650bc1d-6610-4af9-96c9-73e35a18a972.png">
+                <br><br><a href="https://kukuri-arpg.w3spaces.com/activities/quests.html">Read about it here</a>
                 </div>
                 
             </div>
