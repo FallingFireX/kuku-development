@@ -196,7 +196,7 @@
             <div class="col-sm-5">
                 <div class="card mb-4">
                     <br>
-                <h3 class="card-title" style="text-align: center">Breeding</h3>
+                <h3 class="card-title" style="text-align: center; margin-top:10px;">Breeding</h3>
                     <!-- small box-->
                     <center>
                         <p class="card-text">
@@ -232,7 +232,7 @@
             <div class="col-sm-7">
                 <div class="card mb-4">
                     <br>
-                <h3 class="card-title" style="text-align: center">Design</h3>
+                <h3 class="card-title" style="text-align: center; margin-top:10px;">Design</h3>
                 <center>
                     <p class="card-text">
                         @if ($designCount)
@@ -277,7 +277,7 @@
             <div class="col-sm-7">
                 <div class="card mb-4">
                     <br>
-                <h3 class="card-title" style="text-align: center">Adoptions</h3>
+                <h3 class="card-title" style="text-align: center; margin-top:10px;">Adoptions</h3>
                     <center><p class="card-text">
                                     @if ($adoptCount)
                                     <h5><span class="badge badge-primary">{{ $adoptCount }}</span></h5>
@@ -319,7 +319,7 @@
             <div class="col-sm-5">
                 <div class="card mb-4">
                     <br>
-                <h3 class="card-title" style="text-align: center">Other Queues</h3>
+                <h3 class="card-title" style="text-align: center; margin-top:10px;">Other Queues</h3>
                     <center>
                         <p class="card-text">
                             @if ($misc2Count)
@@ -351,6 +351,114 @@
                     </div>
                 </div>
             </div>
+
+
+            <!-- big box -->
+        <div class="col-sm-12">
+                <div class="card mb-3">         
+                    <h3 class="card-title" style="text-align: center; margin-top:10px;">Error Fixes</h3>
+                    <!-- small box-->
+                    <div class="row">
+                        <div class="col-sm-2">
+                            <div class="card-body" style="text-align: center;">
+                            <h3><i class="fas fa-calculator"></i></h3><h5 class="card-title">FP Area</h5>
+                                <p class="card-text">
+                                    @if ($fpErrorCount)
+                                    <h5><span class="badge badge-primary">{{ $fpErrorCount }}</span></h5>
+                                    @else
+                                    <h5><span class="badge badge-success">Clear</span></h5>
+                                    @endif
+                                </p>
+                                <br>
+                                <div class="text-center">
+                                    <a href="{{ url('admin/submissions/pending?prompt_category_id=11&prompt_id=38&sort=oldest') }}" class="card-link">View Queue <span class="fas fa-caret-right ml-1"></span></a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-2">
+                            <div class="card-body" style="text-align: center;">
+                            <h3><i class="fas fa-map-marker-alt"></i></h3><h5 class="card-title">AR and Quests</h5>
+                                <p class="card-text">
+                                    @if ($arquestErrorCount)
+                                    <h5><span class="badge badge-primary">{{ $arquestErrorCount }}</span></h5>
+                                    @else
+                                    <h5><span class="badge badge-success">Clear</span></h5>
+                                    @endif
+                                </p>
+                                <br>
+                                <div class="text-center">
+                                    <a href="{{ url('admin/submissions/pending?prompt_category_id=11&prompt_id=39&sort=oldest') }}" class="card-link">View Queue <span class="fas fa-caret-right ml-1"></span></a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-2">
+                            <div class="card-body" style="text-align: center;">
+                            <h3><i class="fas fa-mail-bulk"></i></h3><h5 class="card-title">Letter/Coliseum/Training</h5>
+                                <p class="card-text">
+                                    @if ($lctErrorCount)
+                                    <h5><span class="badge badge-primary">{{ $lctErrorCount }}</span></h5>
+                                    @else
+                                    <h5><span class="badge badge-success">Clear</span></h5>
+                                    @endif
+                                </p>
+                                <br>
+                                <div class="text-center">
+                                    <a href="{{ url('admin/submissions/pending?prompt_category_id=11&prompt_id=40&sort=oldest') }}" class="card-link">View Queue <span class="fas fa-caret-right ml-1"></span></a>
+                                </div>
+                            </div>
+                        </div>           
+                        <div class="col-sm-2">
+                            <div class="card-body" style="text-align: center;">
+                            <h3><i class="fas fa-images"></i></h3><h5 class="card-title">Imports</h5>
+                                <p class="card-text">
+                                    @if ($importErrorCount)
+                                    <h5><span class="badge badge-primary">{{ $importErrorCount }}</span></h5>
+                                    @else
+                                    <h5><span class="badge badge-success">Clear</span></h5>
+                                    @endif
+                                </p>
+                                <br>
+                                <div class="text-center">
+                                    <a href="{{ url('admin/submissions/pending?prompt_category_id=11&prompt_id=3&sort=oldest') }}" class="card-link">View Queue <span class="fas fa-caret-right ml-1"></span></a>
+                                </div>
+                            </div>
+                        </div>  
+                        <div class="col-sm-2">
+                            <div class="card-body" style="text-align: center;">
+                            <h3><i class="fas fa-heart"></i></h3><h5 class="card-title">Breeding</h5>
+                                <p class="card-text">
+                                    @if ($breedErrorCount)
+                                    <h5><span class="badge badge-primary">{{ $breedErrorCount }}</span></h5>
+                                    @else
+                                    <h5><span class="badge badge-success">Clear</span></h5>
+                                    @endif
+                                </p>
+                                <br>
+                                <div class="text-center">
+                                    <a href="{{ url('admin/submissions/pending?prompt_category_id=11&prompt_id=41&sort=oldest') }}" class="card-link">View Queue <span class="fas fa-caret-right ml-1"></span></a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-2">
+                            <div class="card-body" style="text-align: center;">
+                            <h3><i class="fas fa-coins"></i></h3><h5 class="card-title">Bank</h5>
+                                <p class="card-text">
+                                    @if ($bankErrorCount)
+                                    <h5><span class="badge badge-primary">{{ $bankErrorCount }}</span></h5>
+                                    @else
+                                    <h5><span class="badge badge-success">Clear</span></h5>
+                                    @endif
+                                </p>
+                                <br>
+                                <div class="text-center">
+                                    <a href="{{ url('admin/submissions/pending?prompt_category_id=11&prompt_id=37&sort=oldest') }}" class="card-link">View Queue <span class="fas fa-caret-right ml-1"></span></a>
+                                </div>
+                            </div>
+                        </div>                     
+                </div>        
+            </div>
+        </div>
+
 
             @if (Auth::user()->hasPower('manage_reports'))
             <div class="col-sm-3">
