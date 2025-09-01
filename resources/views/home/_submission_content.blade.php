@@ -53,7 +53,7 @@
 
 
 <div class="card mb-3">
-    <div class="card-header h2">Comments</div>
+    <div class="card-header h2">Submission Comments</div>
     <div class="card-body">
         {!! nl2br($submission->comments) !!}
     </div>
@@ -259,5 +259,3 @@
     </div>
 @endif
 
-<h5>Comments</h5>
-@comments(['page' => 'Submission', 'model' => $submission, 'perPage' => 5 ])
