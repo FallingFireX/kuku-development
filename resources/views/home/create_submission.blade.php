@@ -8,9 +8,9 @@
     @if ($isClaim)
         {!! breadcrumbs(['Claims' => 'claims', 'New Claim' => 'claims/new']) !!}
     @else
-        
         {!! breadcrumbs(['Prompt Submissions' => 'submissions', 'New Submission' => 'submissions/new']) !!}
     @endif
+
     <h1>
         @if ($isClaim)
             New Claim
@@ -24,7 +24,7 @@
             The {{ $isClaim ? 'claim' : 'submission' }} queue is currently closed. You cannot make a new {{ $isClaim ? 'claim' : 'submission' }} at this time.
         </div>
     @else
-        @include('home._submission_form', ['submission' => $submission,  'isClaim' => $isClaim, ])
+        @include('home._submission_form', ['submission' => $submission, 'criteria' => $isClaim ? null : $criteria, 'isClaim' => $isClaim, 'userGallerySubmissions' => $userGallerySubmissions])
         <div class="modal fade" id="confirmationModal" tabindex="-1" role="dialog">
             <div class="modal-dialog" role="document">
 
@@ -70,9 +70,9 @@
     @parent
     @if (!$closed)
         @if ($isClaim)
-            @include('js._loot_js', ['showLootTables' => false, 'showRaffles' => true, 'showRecipes' => true])
+            @include('js._loot_js', ['showLootTables' => false, 'showRaffles' => true])
         @else
-            @include('js._loot_js', ['showLootTables' => false, 'showRaffles' => false, 'showRecipes' => false])
+            @include('js._loot_js', ['showLootTables' => false, 'showRaffles' => false])
         @endif
         @include('js._character_select_js')
         @include('widgets._inventory_select_js', ['readOnly' => true])
@@ -95,8 +95,6 @@
                 @if (!$isClaim)
                     var $prompt = $('#prompt');
                     var $rewards = $('#rewards');
-                    var $form = $('#prompt-form');
-                    $form.load('{{url('submissions/new/form') }}/' + $prompt.val());
 
                     $prompt.selectize();
                     $prompt.on('change', function(e) {
@@ -177,5 +175,5 @@
                 $('.criterion-select').on('change', loadForm);
             });
         </script>
-   @endif
+    @endif
 @endsection

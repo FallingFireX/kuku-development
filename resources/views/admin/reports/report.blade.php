@@ -131,6 +131,7 @@
                 </div>
             </div>
         </div>
+</div>
     @else
         <div class="alert alert-danger">This report has already been closed.</div>
         @include('home._report_content', ['report' => $report])

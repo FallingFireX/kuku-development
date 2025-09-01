@@ -14,19 +14,26 @@
 }
 .card {
 	border-color: var(--dark);
+	border-width: 0px!important;
+	text-align: center;
 }
 .searchContent .item {
-	width: calc(33% - 10px);
+	width: calc(100%);
 	background-color: rgba(255,255,255,0.05);
 	border: 0;
 	border-radius: 20px;
 }
 .card-header {
-	background-color: var(--dark);
+	background-color: transparent!important;
+	
 	font-weight: 700;
 	font-size: 18px;
 }
 .card.item h4 {
+	text-transform: unset;
+}
+
+.card.item h5,h6 {
 	text-transform: unset;
 }
 .rarity-indicator {
@@ -60,7 +67,7 @@
 	border-radius: 20px !important;
 }
 .card-header {
-	background-color: var(--dark);
+	background-color: var(--green);
 }
 .flex-gap {
 	gap: 10px;
@@ -178,7 +185,6 @@
 	aspect-ratio: 1;
 	border-radius: 50%;
 	background: #000;
-	margin-right: 10px;
 	border: 1px solid var(--gray-700);
 }
 .coverage.min {
@@ -222,4 +228,10 @@
 	color: var(--white);
 	margin: 0 20px;
 	cursor: pointer;
+}
+
+hr{
+	border-width: 2px;
+	border-color: var(--green-400);
+	padding: 0.25rem;
 }

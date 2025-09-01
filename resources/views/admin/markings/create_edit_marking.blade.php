@@ -1,3 +1,4 @@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.14.9/beautify-html.min.js"></script>
 @extends('admin.layout')
 
 @section('admin-title')
@@ -113,4 +114,5 @@
             });
         });
     </script>
+
 @endsection

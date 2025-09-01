@@ -51,6 +51,6 @@ class DesignHubController extends Controller {
         $query = Feature::visible(Auth::check() ? Auth::user() : null)->with('category')->with('rarity')->with('species');
         $data = $request->only(['rarity_id', 'feature_category_id', 'species_id', 'subtype_id', 'name', 'sort']);
 
-        return $query->orderBy('id')->whereIn('feature_category_id', $category_ids)->paginate(20)->appends($request->query());
+        return $query->orderBy('id')->where('feature_category_id', $category_ids)->paginate(20)->appends($request->query());
     }
 }

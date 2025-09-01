@@ -24,19 +24,33 @@
         <div class="card-header">
             Markings
         </div>
-        <div class="card-body">
-            <input type="text" placeholder="Search markings by name or code..." class="searchBar bg-dark rounded border-0 mb-4 form-control" data-id="markingSearch" />
+        <i>Kukuris have many different markings that express themselves in many different ways; rarely do two kukuri look the same.</i>
+        <p>Our markings come with various rules and guidelines, please click each link below to see each page for marking guides and ranges!
+            <br><br>
+            Its important to note, that Aquatics have different rarities than other breeds on certain markings. Each marking lists the standard rarity, as well as the 
+            aquatic rarity.
+        </p>
 
-            @if ($rarity_list)
-                @foreach ($rarity_list as $rarity_item)
-                    <div class="card rounded mb-4">
-                        <div class="card-header"><span class="rarity-indicator" style="background-color:#{{ $rarity_item->color }}"></span> {{ $rarity_item->name }} Markings</div>
-                        <div class="card-body">
-                            <div class="d-flex flex-wrap justify-content-between searchContent" data-id="markingSearch">
+        <div class="card-body">
+    <input type="text" placeholder="Search markings by name or gene..." 
+           class="searchBar bg-dark rounded border-0 mb-4 form-control" 
+           data-id="markingSearch" />
+
+        <div class="row">
+            @foreach ($rarity_list as $rarity_item)
+                <div class="col-md-4"> {{-- 3 equal columns --}}
+                    <div class="card mb-4 h-100">
+                        <div class="card-header" style="color:#{{ $rarity_item->color }}">
+                           <h4 style="text-transform: unset;"> {{ $rarity_item->name }} </h4>
+                        </div>
+                        <div class="card-body" style="padding: 0.25rem;">
+                            <div class="d-flex flex-wrap searchContent" data-id="markingSearch">
                                 @foreach ($markings as $marking)
                                     @if ($marking->rarity_id === $rarity_item->id)
                                         @include('designhub._entry', [
-                                            'imageUrl' => file_exists($marking->imageDirectory . '/' . $marking->imageFileName) ? asset($marking->imageDirectory . '/' . $marking->imageFileName) : '/images/account.png',
+                                            'imageUrl' => file_exists($marking->imageDirectory . '/' . $marking->imageFileName) 
+                                                ? asset($marking->imageDirectory . '/' . $marking->imageFileName) 
+                                                : '/images/account.png',
                                             'name' => $marking->name . ' (' . $marking->recessive . '/' . $marking->dominant . ')',
                                             'description' => $marking->short_description,
                                             'url' => 'design-hub/marking/' . $marking->slug,
@@ -46,9 +60,12 @@
                             </div>
                         </div>
                     </div>
-                @endforeach
-            @endif
+                </div>
+            @endforeach
         </div>
+  
+</div>
+
     </div>
 
     <div class="card rounded mb-4">

@@ -69,7 +69,7 @@
                 <p>Criteria can be used in addition to or in replacment of rewards. They take input on what you are turning in for the prompt in order to calculate your final reward.</p>
                 <p>Criteria may populate in with pre-selected minimum requirements for this prompt. </p>
                 <div id="criteria">
-                @if ($submission->id && isset($submission->data['criterion']))
+                    @if ($submission->id && $submission->data['criterion'])
                         @foreach ($submission->data['criterion'] as $i => $criterionData)
                             @php $criterion = \App\Models\Criteria\Criterion::where('id', $criterionData['id'])->first() @endphp
                             <div class="card p-3 mb-2 pl-0">
