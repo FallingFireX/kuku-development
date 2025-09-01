@@ -1,8 +1,6 @@
 @extends('admin.layout')
 
-@section('admin-title')
-    {{ $submission->prompt_id ? 'Submission' : 'Claim' }} (#{{ $submission->id }})
-@endsection
+@section('admin-title'){{ $submission->prompt_id ? 'Submission' : 'Claim' }} (#{{ $submission->id }})@endsection
 
 @section('admin-content')
     @if ($submission->prompt_id)
@@ -15,9 +13,7 @@
 
         <h1>
             {{ $submission->prompt_id ? 'Submission' : 'Claim' }} (#{{ $submission->id }})
-            <span class="float-right badge badge-{{ $submission->status == 'Pending' || $submission->status == 'Draft' ? 'secondary' : ($submission->status == 'Approved' ? 'success' : 'danger') }}">
-                {{ $submission->status }}
-            </span>
+            <span class="float-right badge badge-{{ $submission->status == 'Pending' || $submission->status == 'Draft' ? 'secondary' : ($submission->status == 'Approved' ? 'success' : 'danger') }}">{{ $submission->status }}</span>
         </h1>
 
         <div class="mb-1">
@@ -57,7 +53,7 @@
                 <div class="col-md-10 col-8">{!! format_date($submission->created_at) !!} ({{ $submission->created_at->diffForHumans() }})</div>
             </div>
         </div>
-        <h2>Comments</h2>
+        <h2>Submission Comments</h2>
         <div class="card mb-3">
             <div class="card-body"> {!! preg_replace('/\s*style=("|\')(.*?)\1/', '', nl2br($submission->comments)) !!}</div>
         </div>
@@ -73,7 +69,7 @@
                 </div>
             </div>
         @endif
-
+        @comments(['model' => $submission, 'perPage' => 5])
         {!! Form::open(['url' => url()->current(), 'id' => 'submissionForm', 'onsubmit' => "$(this).find('input').prop('disabled', false)"]) !!}
 
         @if (isset($submission->data['criterion']))
@@ -294,9 +290,9 @@
         <div class="alert alert-danger">This {{ $submission->prompt_id ? 'submission' : 'claim' }} has already been processed.</div>
         @include('home._submission_content', ['submission' => $submission])
     @endif
-    
 
 @endsection
+
 
 @section('scripts')
     @parent
@@ -366,3 +362,4 @@
         </script>
     @endif
 @endsection
+
