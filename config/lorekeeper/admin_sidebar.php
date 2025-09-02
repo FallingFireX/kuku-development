@@ -15,7 +15,7 @@ return [
     */
 
     'Admin'      => [
-        'power' => 'edit_rank',
+        'power' => 'manage_reports',
         'links' => [
             [
                 'name' => 'User Ranks',
