@@ -64,6 +64,7 @@
         <div class="card mb-3">
             <div class="card-body"> {!! preg_replace('/\s*style=("|\')(.*?)\1/', '', nl2br($submission->comments)) !!}</div>
         </div>
+
         @if (Auth::check() && $submission->staff_comments && ($submission->user_id == Auth::user()->id || Auth::user()->hasPower('manage_submissions')))
             <h2>Staff Comments ({!! $submission->staff->displayName !!})</h2>
             <div class="card mb-3">
@@ -76,6 +77,7 @@
                 </div>
             </div>
         @endif
+        {!! Form::open(['url' => url()->current(), 'id' => 'submissionForm']) !!}
 
 
         @if (isset($submission->data['criterion']))
@@ -292,13 +294,13 @@
                 </div>
             </div>
         </div>
+    
     @else
         <div class="alert alert-danger">This {{ $submission->prompt_id ? 'submission' : 'claim' }} has already been processed.</div>
         @include('home._submission_content', ['submission' => $submission])
     @endif
 
     @comments(['model' => $submission, 'perPage' => 5])
-    {!! Form::open(['url' => url()->current(), 'id' => 'submissionForm', 'onsubmit' => "$(this).find('input').prop('disabled', false)"]) !!}
 
 @endsection
 
@@ -370,6 +372,5 @@
             });
         </script>
     @endif
-
 @endsection
 
