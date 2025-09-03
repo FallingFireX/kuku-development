@@ -76,8 +76,7 @@
                 </div>
             </div>
         @endif
-        @comments(['model' => $submission, 'perPage' => 5])
-        {!! Form::open(['url' => url()->current(), 'id' => 'submissionForm', 'onsubmit' => "$(this).find('input').prop('disabled', false)"]) !!}
+
 
         @if (isset($submission->data['criterion']))
             <h2 class="mt-5">Criteria Rewards</h2>
@@ -298,6 +297,9 @@
         @include('home._submission_content', ['submission' => $submission])
     @endif
 
+    @comments(['model' => $submission, 'perPage' => 5])
+    {!! Form::open(['url' => url()->current(), 'id' => 'submissionForm', 'onsubmit' => "$(this).find('input').prop('disabled', false)"]) !!}
+
 @endsection
 
 
@@ -368,5 +370,6 @@
             });
         </script>
     @endif
+
 @endsection
 
