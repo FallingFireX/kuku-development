@@ -67,4 +67,8 @@ return [
         'name'        => 'Comment on Sales',
         'description' => 'Allow rank to comment on sales in preview mode.',
     ],
+    'edit_teams' => [
+        'name'        => 'Edit Teams',
+        'description' => 'Allow rank to edit admin teams/departments.',
+    ],
 ];

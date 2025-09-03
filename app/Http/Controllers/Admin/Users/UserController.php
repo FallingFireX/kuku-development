@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin\Users;
 
 use App\Http\Controllers\Controller;
 use App\Models\Rank\Rank;
+use App\Models\Team;
 use App\Models\User\User;
 use App\Models\User\UserAlias;
 use App\Models\User\UserUpdateLog;
@@ -82,6 +83,8 @@ class UserController extends Controller {
         return view('admin.users.user', [
             'user'  => $user,
             'ranks' => Rank::orderBy('ranks.sort')->pluck('name', 'id')->toArray(),
+            'teams'  => Team::orderBy('id')->pluck('name', 'id'),
+            
         ]);
     }
 
@@ -421,4 +424,25 @@ class UserController extends Controller {
 
         return redirect()->back();
     }
+    
+    public function updateTeams(Request $request, $name)
+{
+    $user = User::where('name', $name)->firstOrFail();
+
+    $teamIds = $request->input('team_ids', []);
+    $types   = $request->input('type', []); // matches form
+
+    $syncData = [];
+
+    foreach ($teamIds as $i => $teamId) {
+        if (!empty($teamId)) {
+            $syncData[$teamId] = ['type' => $types[$i] ?? null];
+        }
+    }
+
+    $user->teams()->sync($syncData);
+
+    return redirect()->back()->with('success', 'Teams updated!');
+}
+
 }

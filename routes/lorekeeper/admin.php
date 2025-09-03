@@ -24,6 +24,7 @@ Route::group(['prefix' => 'users', 'namespace' => 'Users'], function () {
 
         Route::get('{name}/edit', 'UserController@getUser');
         Route::post('{name}/basic', 'UserController@postUserBasicInfo');
+        Route::post('{name}/teams', 'UserController@updateTeams');
         Route::post('{name}/alias/{id}', 'UserController@postUserAlias');
         Route::post('{name}/account', 'UserController@postUserAccount');
         Route::post('{name}/birthday', 'UserController@postUserBirthday');
@@ -238,6 +239,14 @@ Route::group(['prefix' => 'data', 'namespace' => 'Data', 'middleware' => 'power:
     Route::post('prompts/create', 'PromptController@postCreateEditPrompt');
     Route::post('prompts/edit/{id?}', 'PromptController@postCreateEditPrompt');
     Route::post('prompts/delete/{id}', 'PromptController@postDeletePrompt');
+
+    Route::get('teams', 'TeamController@getIndex');
+    Route::get('teams/create', 'TeamController@getCreateTeam');
+    Route::get('teams/edit/{id}', 'TeamController@getEditTeam');
+    Route::get('teams/delete/{id}', 'TeamController@getDeletePrompt');
+    Route::post('teams/create', 'TeamController@postCreateEditTeam');
+    Route::post('teams/edit/{id?}', 'TeamController@postCreateEditTeam');
+    Route::post('prompts/delete/{id}', 'PromptController@postDeletePrompt');
 });
 
 // PAGES
@@ -406,6 +415,13 @@ Route::group(['prefix' => 'raffles', 'middleware' => 'power:manage_raffles'], fu
 Route::group(['prefix' => 'submissions', 'middleware' => 'power:manage_submissions'], function () {
     Route::get('/', 'SubmissionController@getSubmissionIndex');
     Route::get('/{status}', 'SubmissionController@getSubmissionIndex')->where('status', 'pending|approved|rejected');
+    Route::get('edit/{id}', 'SubmissionController@getSubmission');
+    Route::post('edit/{id}/{action}', 'SubmissionController@postSubmission')->where('action', 'approve|reject|cancel');
+});
+
+Route::group(['prefix' => 'applications', 'middleware' => 'power:edit_teams'], function () {
+    Route::get('/', 'AdminApplicationController@getApplicationIndex');
+    Route::get('/{status}', 'AdminApplicationController@getApplicationIndex')->where('status', 'pending|approved|rejected');
     Route::get('edit/{id}', 'SubmissionController@getSubmission');
     Route::post('edit/{id}/{action}', 'SubmissionController@postSubmission')->where('action', 'approve|reject|cancel');
 });

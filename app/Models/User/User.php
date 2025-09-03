@@ -19,6 +19,7 @@ use App\Models\Rank\RankPower;
 use App\Models\Shop\ShopLog;
 use App\Models\Submission\Submission;
 use App\Traits\Commenter;
+use App\Models\Team;
 use Carbon\Carbon;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -683,4 +684,12 @@ class User extends Authenticatable implements MustVerifyEmail {
     public function hasBookmarked($character) {
         return CharacterBookmark::where('user_id', $this->id)->where('character_id', $character->id)->first();
     }
+
+    public function teams()
+    {
+        return $this->belongsToMany(Team::class, 'user_admin_role')
+                    ->withPivot('type') // if you store role type
+                    ->withTimestamps();
+    }
+
 }
