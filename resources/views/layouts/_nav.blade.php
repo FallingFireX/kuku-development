@@ -289,6 +289,9 @@
                         <a class="dropdown-item" href="{{ url('characters') }}">
                             My Loaf
                         </a>
+                        <a class="dropdown-item" href="{{ url('submissions') }}">
+                            My Submissions
+                        </a>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="{{ url('inventory') }}">
                             Bank
