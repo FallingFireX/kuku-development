@@ -130,7 +130,7 @@ class AdminApplication extends Model
      * @return string
      */
     public function getAdminUrlAttribute() {
-        return url('admin/application/edit/'.$this->id);
+        return url('admin/applications/edit/'.$this->id);
     }
 
 }

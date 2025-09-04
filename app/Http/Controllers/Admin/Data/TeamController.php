@@ -60,14 +60,11 @@ class TeamController extends Controller
     }
 
     /**
-     * Creates or edits a marking.
-     *
-     * @param App\Services\MarkingService $service
-     * @param int|null                    $id
+     * Creates or edits a team
      *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function postCreateEditTeam(Request $request, $id = null) { // $id is now optional
+    public function postCreateEditTeam(Request $request, $id = null) { 
         $request->validate([
                 'name'           => 'required|between:2,225',
                 'apps_open'      => 'nullable|boolean',

@@ -5,7 +5,7 @@
 @endsection
 
 @section('admin-content')
-        {!! breadcrumbs(['Admin Panel' => 'admin', 'Prompt Queue' => 'admin/submissions/pending']) !!}
+        {!! breadcrumbs(['Admin Panel' => 'admin', 'Admin Applications' => 'admin/applications/pending']) !!}
 
     <h1>
         Applications Queue

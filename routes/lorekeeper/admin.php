@@ -422,8 +422,9 @@ Route::group(['prefix' => 'submissions', 'middleware' => 'power:manage_submissio
 Route::group(['prefix' => 'applications', 'middleware' => 'power:edit_teams'], function () {
     Route::get('/', 'AdminApplicationController@getApplicationIndex');
     Route::get('/{status}', 'AdminApplicationController@getApplicationIndex')->where('status', 'pending|approved|rejected');
-    Route::get('edit/{id}', 'SubmissionController@getSubmission');
-    Route::post('edit/{id}/{action}', 'SubmissionController@postSubmission')->where('action', 'approve|reject|cancel');
+    Route::get('edit/{id}', 'AdminApplicationController@getApplication');
+    Route::post('edit/{id}/{action}', 'AdminApplicationController@getApplication')->where('action', 'approve|reject|cancel');
+    Route::post('edit/{id}', 'AdminApplicationController@postApplication')    ->name('admin.applications.post');
 });
 
 // CLAIMS

@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Auth;
 
 class AdminApplicationController extends Controller {
     /**
-     * Shows the submission index page.
+     * Shows the application index page.
      *
      * @param string $status
      *
@@ -37,6 +37,54 @@ class AdminApplicationController extends Controller {
             'teams' => Team::orderBy('id')->first(),
 
         ]);
+    }
+
+    /**
+     * Shows the application detail page.
+     *
+     * @param int $id
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function getApplication($id) {
+        $applications = AdminApplication::where('id', $id)->where('status', '!=', 'Draft')->first();
+        
+        if (!$applications) {
+            abort(404);
+        }
+
+        return view('admin.submissions.application', [
+            'applications'       => $applications,
+            'teams' => Team::orderBy('id')->first(),
+        ]);
+    }
+
+
+    /**
+     * Accept or deny a application
+     */
+    public function postApplication(Request $request, $id = null)
+    {
+        $application = AdminApplication::findOrFail($id);
+
+        // Only allow valid statuses
+        if (!in_array($request->input('status'), ['accepted', 'denied'])) {
+            return redirect()->back()->with('error', 'Invalid status.');
+        }
+
+        $application->status = $request->input('status');
+
+        // Optional: track which staff handled it
+        $application->admin_id = auth()->id();
+
+        // Optional: save staff comments
+        if ($request->filled('admin_message')) {
+            $application->admin_message = $request->input('admin_message');
+        }
+
+        $application->save();
+
+        return redirect()->back()->with('success', 'Application ' . strtolower($application->status) . ' successfully.');
     }
 
  
