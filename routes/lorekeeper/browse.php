@@ -380,3 +380,5 @@ Route::group(['prefix' => 'design-hub'], function () {
     Route::get('base-coats/', 'BaseController@getBasePage');
     Route::get('trait/{slug}', 'FeatureController@getTraitPage');
 });
+Route::get('/teams', 'BrowseController@getTeamsIndex');
+Route::get('/join-the-team', 'BrowseController@getJoinTeam');

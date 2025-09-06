@@ -192,4 +192,6 @@ class Notification extends Model {
     public const RECIPE_GRANT = 600; // Draginraptor - Crafting
     public const BIRTHDAY_REWARDED = 1105;
     public const BORDER_GRANT = 1106;
+    public const APPLICATION_ACCEPTED = 1701;
+    public const APPLICATION_DENIED = 1702;
 }

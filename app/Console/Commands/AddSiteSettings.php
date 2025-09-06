@@ -112,6 +112,10 @@ class AddSiteSettings extends Command {
         $this->addSiteSetting('can_transfer_items_directly', 1, 'Whether or not users can directly transfer items to other users without trading. 0: Users cannot directly transfer items. 1: Direct item transfers are allowed.');
         
         $this->addSiteSetting('designhub_trait_categories', 0, 'Enter in all of the trait categories you want to display on the design hub page. Seperate by comma. EX: "1,2,3"');
+        
+        $this->addSiteSetting('notify_staff_applicants', 0, 'Toggle notifications sent when accepting/denying applicants to the staff team. 0: notifications disabled, 1 notifications enabled');
+
+        $this->addSiteSetting('is_applications_comment_read_only', 1, 'Allow/disallow replies to comments from staff on applications. 0: applicants CAN reply to comments 1: applicants CANT reply to comments.');
 
         $this->line("\nSite settings up to date!");
     }

@@ -687,4 +687,18 @@ return [
         'message' => 'It\'s your birthday this month, {user_name}! A gift has been left in your inventory. (<a href="{url}">View Inventory</a>)',
         'url'     => 'inventory',
     ],
+    
+    // APPLICATION_ACCEPTED
+    1701 => [
+        'name'    => 'Team Application Accepted',
+        'message' => 'Your application to the {team_name} team has been accepted by {admin_name}! Expect communication from staff on to do next! (<a href="{url}">View Applications</a>)',
+        'url'     => 'applications',
+    ],
+
+    // APPLICATION_DENIED
+    1702 => [
+        'name'    => 'Team Application Denied',
+        'message' => 'Your application to the {team_name} team has been declined. Please feel free to apply again in the future! (<a href="{url}">View Applications</a>)',
+        'url'     => 'applications',
+    ],
 ];

@@ -86,4 +86,8 @@ return [
         'description' => 'Allow rank to view the reports queue.',
     ],
 
+    'edit_teams' => [
+        'name'        => 'Edit Teams',
+        'description' => 'Allow rank to edit admin teams/departments.',
+    ],
 ];

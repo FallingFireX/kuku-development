@@ -65,7 +65,9 @@
                             <a class="dropdown-item" href="{{ url('sales') }}">Divine Shop</a>
                         @endif
                         <a class="dropdown-item" href="https://kukuri-arpg.w3spaces.com/rules-tos.html"> Rules and ToS </a>
-                        <a class="dropdown-item" href="{{ url('/team') }}"> Admin Team </a>
+                        <a class="dropdown-item" href="{{ url('teams') }}">
+                            Admin Team
+                        </a>
                         <a class="dropdown-item" href="{{ url('users') }}">
                             Players
                         </a>
@@ -306,6 +308,9 @@
                         
                         <a class="dropdown-item" href="{{ url('notifications') }}">
                             Notifications
+                        </a>
+                        <a class="dropdown-item" href="{{ url('applications') }}">
+                                My Applications
                         </a>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="{{ route('logout') }}"

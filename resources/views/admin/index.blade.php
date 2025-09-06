@@ -600,4 +600,17 @@
             @endif
         @endif
     </div>
+    <hr>
+    <h3>Team Responsibilities</h3>
+    <i>Here you can find any responsibilities you have based on the teams you are sorted into!</i>
+    <div class="row justify-content-center mt-4">
+        @foreach($teams as $teams) 
+            <div class="col-md-3">
+                <div class="card text-center" style="border-width:0px">
+                    <h5>{!! $teams->name !!}</h5>
+                    <p>{!! $teams->responsibilities !!}</p>
+                </div>
+            </div>
+        @endforeach
+    </div>
 @endsection
