@@ -62,9 +62,7 @@
                     <div class="option-row mb-2 p-2 border border-secondary rounded d-flex flex-column" field-id="0">
                         <div class="row-parent mb-2 d-flex">
                             {!! Form::text('field_name[]', null, ['class' => 'form-control mr-2', 'style' => 'width:40%', 'placeholder' => 'Field Name']) !!}
-                            {!! Form::select('field_type[]', 
-                                ['radio' => 'Radio Buttons', 'checkboxes' => 'Checkboxes', 'number' => 'Number'], 
-                            null, ['class' => 'form-control mr-2 ftype', 'style' => 'width:40%', 'placeholder' => 'Please select a Field Type...']) !!}
+                            {!! Form::select('field_type[]', ['radio' => 'Radio Buttons', 'checkboxes' => 'Checkboxes', 'number' => 'Number'], null, ['class' => 'form-control mr-2 ftype', 'style' => 'width:40%', 'placeholder' => 'Please select a Field Type...']) !!}
                             {!! Form::text('field_desc[]', null, ['class' => 'form-control mr-2', 'placeholder' => 'Description']) !!}
                             <a href="#" class="remove-field btn btn-primary" data-toggle="tooltip" title="Remove Field">-</a>
                         </div>
@@ -97,9 +95,7 @@
                 <div class="option-row template hide mb-2 p-2 border border-secondary rounded d-flex flex-column">
                     <div class="row-parent mb-2 d-flex">
                         {!! Form::text('field_name[]', null, ['class' => 'form-control mr-2', 'style' => 'width:40%', 'placeholder' => 'Field Name']) !!}
-                        {!! Form::select('field_type[]', 
-                            ['radio' => 'Radio Buttons', 'checkboxes' => 'Checkboxes', 'number' => 'Number'], 
-                        null, ['class' => 'form-control mr-2 ftype', 'style' => 'width:40%', 'placeholder' => 'Please select a Field Type...']) !!}
+                        {!! Form::select('field_type[]', ['radio' => 'Radio Buttons', 'checkboxes' => 'Checkboxes', 'number' => 'Number'], null, ['class' => 'form-control mr-2 ftype', 'style' => 'width:40%', 'placeholder' => 'Please select a Field Type...']) !!}
                         {!! Form::text('field_desc[]', null, ['class' => 'form-control mr-2', 'placeholder' => 'Description']) !!}
                         <a href="#" class="remove-field btn btn-primary" data-toggle="tooltip" title="Remove Field">-</a>
                     </div>
@@ -140,10 +136,10 @@
                 <p>This is the rate at which word count is converted to XP. To enter the conversion use "Points|Word Count". Example: 1|100 would be 1 XP every 100 words.</p>
                 <div class="d-flex mb-2">
                     {!! Form::text('word_count_conversion_rate', $lit_settings->conversion_rate, ['class' => 'form-control mr-2', 'placeholder' => 'Word Count Conversion Rate']) !!}
-                    {!! Form::number('round_to', $lit_settings->round_to, ['class' => 'form-control mr-2 roundTo', 'style' => ($lit_settings->round_to ? '': 'display:none;'), 'placeholder' => 'Round to the Nearest']) !!}
+                    {!! Form::number('round_to', $lit_settings->round_to, ['class' => 'form-control mr-2 roundTo', 'style' => $lit_settings->round_to ? '' : 'display:none;', 'placeholder' => 'Round to the Nearest']) !!}
                 </div>
                 <div class="form-group">
-                    {!! Form::checkbox('enable_rounding', 1, ($lit_settings->round_to ? 1 : 0), ['class' => 'form-check-input enable-rounding', 'data-toggle' => 'toggle']) !!}
+                    {!! Form::checkbox('enable_rounding', 1, $lit_settings->round_to ? 1 : 0, ['class' => 'form-check-input enable-rounding', 'data-toggle' => 'toggle']) !!}
                     {!! Form::label('enable_rounding', 'Enable Rounding', ['class' => 'form-check-label ml-3']) !!} {!! add_help('Enable to create a rounding rule for literature word counts.') !!}
                 </div>
             </div>
@@ -206,14 +202,14 @@
             // --- Groups
             $('#calcList').on('click', '#add-option', function(e) {
                 e.preventDefault();
-                addOption( $(this).parent().prev() );
+                addOption($(this).parent().prev());
             });
             $('.remove-option').on('click', function(e) {
                 e.preventDefault();
                 removeOption($(this));
             });
 
-            function addOption( $parent ) {
+            function addOption($parent) {
                 var $clone = $('.template .child-row.hide').clone();
                 $childLength = $parent.children('.child-row').length;
                 $field_id = $parent.parents('.option-row').attr('field-id');
