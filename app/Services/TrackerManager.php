@@ -326,7 +326,7 @@ class TrackerManager extends Service {
                 unset($data['level_name']);
                 unset($data['level_threshold']);
             }
-            if(isset($data['word_count_conversion_rate'])) {
+            if (isset($data['word_count_conversion_rate'])) {
                 //Set up the word count conversion rate
                 $manager = new SiteOptionsManager();
                 $manager->updateOption([
@@ -341,18 +341,18 @@ class TrackerManager extends Service {
                 unset($data['word_count_conversion_rate']);
                 unset($data['round_to']);
             }
-            if(isset($data['field_name'])) {
+            if (isset($data['field_name'])) {
                 \Log::info('CALCULATOR DATA:', $data);
 
                 $form_config = [];
 
                 //Set up the parent fields
                 $field_id = 0;
-                foreach($data['field_name'] as $field_name) {
-                    if($field_name !== null) {
+                foreach ($data['field_name'] as $field_name) {
+                    if ($field_name !== null) {
                         $form_config[$field_id] = [
-                            'field_name'    => $field_name,
-                            'field_type'    => $data['field_type'][$field_id],
+                            'field_name'        => $field_name,
+                            'field_type'        => $data['field_type'][$field_id],
                             'field_description' => $data['field_desc'][$field_id],
                             'field_options'     => [],
                         ];
@@ -360,10 +360,9 @@ class TrackerManager extends Service {
                     }
                 }
                 //Find the children and set them into 'field_options' for their parent
-                foreach($data as $sub_name => $value) {
-                    
+                foreach ($data as $sub_name => $value) {
                     $name_array = explode('_', $sub_name);
-                    \Log::info('OPTIONS:', [$sub_name . ' - SPLIT: ' .print_r($name_array, true)] );
+                    \Log::info('OPTIONS:', [$sub_name.' - SPLIT: '.print_r($name_array, true)]);
                     // if(count($name_array) > 2) {
                     //     $option_field = $name_array[2]; //ex: label
                     //     $field_group = $name_array[3]; //ex: group_id
@@ -383,30 +382,29 @@ class TrackerManager extends Service {
                     // }
                 }
 
-                /**
+                /*
                  * If all turns out right the array should look something like this:
                  * {
-                    "0": {
-                        "field_name": "name",
-                        "field_type": "type",
-                        "field_description": "desc",
-                        "field_options": {
-                            "0": {
-                                "point_value": 0,
-                                "label": "label",
-                                "description": "desc"
-                            }
-                        }
-                    },
-                    "literature": {
-                        "conversion_rate": "cr",
-                        "round_to": 100
-                        }
-                    }
+                 * "0": {
+                 * "field_name": "name",
+                 * "field_type": "type",
+                 * "field_description": "desc",
+                 * "field_options": {
+                 * "0": {
+                 * "point_value": 0,
+                 * "label": "label",
+                 * "description": "desc"
+                 * }
+                 * }
+                 * },
+                 * "literature": {
+                 * "conversion_rate": "cr",
+                 * "round_to": 100
+                 * }
+                 * }
                  */
 
-                \Log::info('FINISHED FORM:', $form_config );
-
+                \Log::info('FINISHED FORM:', $form_config);
             }
         } catch (\Exception $e) {
             $this->setError('error', $e->getMessage());
