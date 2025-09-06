@@ -1502,16 +1502,6 @@ class User extends Authenticatable implements MustVerifyEmail {
                         ->withPivot('type')
                         ->withTimestamps();
         }
-    }
-
-    public function adminRoles(){
-        return $this->hasMany(UserTeam::class, 'user_id');
-    }
-
-    public function teams(){
-            return $this->belongsToMany(Team::class, 'user_admin_role', 'user_id', 'team_id')
-                        ->withPivot('type')
-                        ->withTimestamps();
-        }
+    
 
 }
