@@ -1,35 +1,77 @@
-# Extension: Teams
-![Static Badge](https://img.shields.io/badge/Version-V3.0.0-blue)
-![Static Badge](https://img.shields.io/badge/Locally_tested-yes-green) ![Static Badge](https://img.shields.io/badge/Live_Test-No-red)
+# Lorekeeper
 
+Lorekeeper is a framework for managing deviantART-based ARPGs/closed species masterlists coded using the Laravel framework. In simple terms - you will be able to make a copy of the site, do some minor setup/enter data about your species and game, and it'll provide you with the automation to keep track of your species, players and ARPG submissions.
 
-In the event youve found yourself here without intending to find this extension, go here: [Base Lorekeeper](https://github.com/lk-arpg/lorekeeper)
+- Demo site: [http://lorekeeper.me/](http://lorekeeper.me/)
+- Wiki: [http://wiki.lorekeeper.me](http://wiki.lorekeeper.me/index.php?title=Main_Page)
 
-This extension adds team/departments support for staff and admin teams.this includes:
-- The ability to create, edit, and manage staff teams. Each team can be categorized as main, sub, leadership, or admin account teams.
-- The ability to give staff users a team assignment and give them different roles (Lead, Primary, Secondary, Trainee). 
-- The ability to toggle if a team is open to staff applications
-- A staff/admin application function, allowing members to apply to the team and for staff to either approve or deny them. 
-- A new staff power called "edit_teams" which controls which staff ranks can edit team data or add users to teams. 
-- Two new settings, "is_applications_comment_read_only", which toggles application comment chains to a read only state. and "notify_staff_applicants" which toggles if a application approval or denial notifies the user. 
-- Two new public pages that shows the current teams and who works in them, and a page showing which teams exist and which have open applications.
-- The admin panel now features a section at the bottom listing staff responsibilities by team.
+# Features
 
+- Users can create an account which will hold their characters and earnings from participating in the game.
+- Mods can add characters to the masterlist, which can also record updates to a character's design. (Yes, multiple mods can work on the masterlist at the same time.)
+- Characters get a little bio section on their profile that their owners can edit. Personalisation!
+- Users' ownership histories (including whether they are an FTO) and characters' previous owners are tracked.
+- Users can submit art to the submission queue, which mods can approve/reject. This dispenses rewards automagically.
+- Users can spend their hard-earned rewards immediately, without requiring mods to look over their trackers (because it's all been pre-approved).
+- Characters, items and currency can be transferred between users. Plus...secure trading between users for game items/currency/characters on-site is also a thing.
+- Logs for all transfers are kept, so it's easy to check where everything went. 
+- The masterlist is king, so ownership can't be ambiguous, and the current design of a character is always easily accessible.
+- Speaking of which, you can search for characters based on traits, rarity, etc. Also, trait/item/etc. data get their own searchable lists - no need to create additional pages detailing restrictions on how a trait should be drawn/described.
+- Unless you want to, in which case you can add custom pages in HTML without touching the codebase!
+- A raffle roller for consecutive raffles! Mods can add/remove tickets and users who have already won something will be automatically removed from future raffles in the sequence.
+- ...and more! Please refer to the [Wiki](http://wiki.lorekeeper.me/index.php?title=Category:Documentation) for more information and instructions for usage.
 
-# How to install
+# Setup
 
-- Pull the branch and fix any merge conflicts
-- `php artisan migrate`
-- `php artisan add-site-settings`
-- `php artisan update-extension-tracker`
-- Use the admin panel (logged in as the admin user) to add the needed "edit-teams" power to any ranks you want.
-- Set up teams using the team manager
-- To edit the "Join the team" page intro text, make a new page with the key `app-intro`. (I recommend adding any application specific text for your team here, including a application form)
+Important: For those who are not familiar with web dev, please refer to the [Wiki](http://wiki.lorekeeper.me/index.php?title=Tutorial:_Setting_Up) for a much more detailed set of instructions!!
 
-# Bug Reporting and making Suggestions
+## Obtain a copy of the code
 
-If youve found a bug, you can submit a PR, make an Issue, or DM me on discord (FallingFireX). Pease be sure to take screenshots or save snips from your error logs (this doesnt apply to PRs that directly fix the issue)! I am NOT a formally trained web developer, please be patient with bugs and bug fixes; there probably will be a few.
+```
+$ git clone https://github.com/corowne/lorekeeper.git
+```
 
-Making a suggestion can be done directly in my dms. Please be aware im not a very socially energetic person; I might not reply but I HAVE seen your message.
+## Configure .env in the directory
 
-# Images
+```
+$ cp .env.example .env
+```
+
+Client ID and secret for at least one supported social media platform are required for this step. See [the Wiki](http://wiki.lorekeeper.me/index.php?title=Category:Social_Media_Authentication) for platform-specific instructions.
+
+Add the following to .env, filling them in as required (also fill in the rest of .env where relevant):
+```
+CONTACT_ADDRESS=(contact email address)
+DEVIANTART_ACCOUNT=(username of ARPG group account)
+```
+
+## Setting up
+
+Composer install:
+```
+$ composer install
+```
+
+Generate app key and run database migrations:
+```
+$ php artisan key:generate 
+$ php artisan migrate
+```
+
+Add basic site data:
+```
+$ php artisan add-site-settings
+$ php artisan add-text-pages
+$ php artisan copy-default-images
+```
+
+Finally, set up the admin account for logging in:
+```
+$ php artisan setup-admin-user
+```
+
+You will need to send yourself the verification email and then link your social media account as prompted.
+
+## Contact
+
+If you have any questions, please feel free to ask in the Discord server: https://discord.gg/U4JZfsu
