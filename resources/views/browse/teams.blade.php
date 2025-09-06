@@ -17,7 +17,7 @@
             <div class="row justify-content-center mt-3">
                 @foreach($members as $entry)
                     <div class="col-md-3">
-                        <div class="card mb-3">
+                        <div class="card mb-3" style="background-color:transparent; border-width:0px;">
                             <div class="card-body text-center">
                             <img src="/images/avatars/{{ $entry->user->avatar }}" class="rounded-circle" style="width:100px; height:100px;" alt="{{ $entry->user->name }}">
                                 <h4>{!! $entry->user->displayName !!}</h4>
@@ -31,16 +31,20 @@
         <!--Normal teams sort by role priority-->
         <div class="mt-4">
         @foreach($teams as $teamId => $members)
-            <h3>{{ $members->first()->team->name }}</h3>
+            <h4>{{ $members->first()->team->name }}</h4>
             <div class="container mt-3">
                 <div class="row justify-content-center align-items-stretch">
                     @foreach($members->sortBy('priority') as $entry) 
                         <div class="col-md-3 d-flex">
-                            <div class="card mb-3 flex-fill">
+                            <div class="card mb-3 flex-fill" style="background-color:transparent; border-width:0px;">
                                 <div class="card-body text-center">
                                     <img src="/images/avatars/{{ $entry->user->avatar }}" class="rounded-circle" style="width:100px; height:100px;" alt="{{ $entry->user->name }}">
-                                    <h4>{!! $entry->user->displayName !!}</h4>
-                                    <h5>{{ $entry->role }}</h5>
+                                    <h5>{!! $entry->user->displayName !!}</h5>
+                                    @if ($entry->role === 'Primary')
+                                    <h6>Main</h6>
+                                    @else
+                                    <h6>{{ $entry->role }}</h6>
+                                    @endif
                                     @if($entry->otherRoles->isNotEmpty())
                                         <div class="text-center">
                                             @foreach($entry->otherRoles as $role)
