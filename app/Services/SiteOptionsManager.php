@@ -34,7 +34,7 @@ class SiteOptionsManager extends Service {
                     'value'      => $data['value'] ?? null,
                 ]);
             } else {
-                \Log::info('UPDATED INSTEAD:', $data);
+                // \Log::info('UPDATED INSTEAD:', $data);
                 $option->update([
                     'value' => $data['value'],
                 ]);

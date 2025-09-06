@@ -59,46 +59,72 @@
             <div class="form-group">
                 {!! Form::label('XP Calculator Options') !!}
                 <div id="calcList">
-                    <div class="option-row mb-2 d-flex">
-                        {!! Form::text('option_name[]', null, ['class' => 'form-control mr-2', 'style' => 'width:40%', 'placeholder' => 'Option Name']) !!}
-                        {!! Form::text('option_desc[]', null, ['class' => 'form-control mr-2', 'placeholder' => 'Description']) !!}
-                        {!! Form::number('option_value[]', null, ['class' => 'form-control mr-2', 'min' => 0, 'style' => 'width:40%', 'placeholder' => 'XP Value']) !!}
-                        <a href="#" class="remove-option btn btn-primary" data-toggle="tooltip" title="Remove Option">-</a>
+                    <div class="option-row mb-2 p-2 border border-secondary rounded d-flex flex-column" field-id="0">
+                        <div class="row-parent mb-2 d-flex">
+                            {!! Form::text('field_name[]', null, ['class' => 'form-control mr-2', 'style' => 'width:40%', 'placeholder' => 'Field Name']) !!}
+                            {!! Form::select('field_type[]', 
+                                ['radio' => 'Radio Buttons', 'checkboxes' => 'Checkboxes', 'number' => 'Number'], 
+                            null, ['class' => 'form-control mr-2 ftype', 'style' => 'width:40%', 'placeholder' => 'Please select a Field Type...']) !!}
+                            {!! Form::text('field_desc[]', null, ['class' => 'form-control mr-2', 'placeholder' => 'Description']) !!}
+                            <a href="#" class="remove-field btn btn-primary" data-toggle="tooltip" title="Remove Field">-</a>
+                        </div>
+                        <div class="mb-2 ml-3 border-left pl-3">
+                            <h5>Field Options</h5>
+                            <div class="row-children">
+                                <div class="child-row row mb-2 px-3">
+                                    <div class="col-md-2 px-1">
+                                        {!! Form::number('sub_option_value_0[]', null, ['class' => 'form-control w-100', 'placeholder' => 'Point Value']) !!}
+                                    </div>
+                                    <div class="col-md-4 px-1">
+                                        {!! Form::text('sub_option_label_0[]', null, ['class' => 'form-control w-100', 'placeholder' => 'Option Name']) !!}
+                                    </div>
+                                    <div class="col-md-6 px-1 d-flex">
+                                        {!! Form::text('sub_option_desc_0[]', null, ['class' => 'form-control w-100', 'placeholder' => 'Option Description']) !!}
+                                        <a href="#" class="remove-option ml-2 btn btn-primary" data-toggle="tooltip" title="Remove Option">-</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <a href="#" id="add-option" class="add-op mt-2 btn btn-primary" data-toggle="tooltip" title="Add Option">Add Option</a>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="text-right main-buttons">
-                    <a href="#" id="add-group" class="add-op-group btn btn-primary" data-toggle="tooltip" title="Add Group">Add Group</a>
-                    <a href="#" id="add-option" class="add-op btn btn-primary" data-toggle="tooltip" title="Add Option">Add Option</a>
+                    <a href="#" id="add-field" class="add-field btn btn-primary" data-toggle="tooltip" title="Add Field">Add Field</a>
                 </div>
-                <div class="option-row hide mb-2 d-flex">
-                    {!! Form::text('option_name[]', null, ['class' => 'form-control mr-2', 'style' => 'width:40%', 'placeholder' => 'Option Name']) !!}
-                    {!! Form::text('option_desc[]', null, ['class' => 'form-control mr-2', 'placeholder' => 'Description']) !!}
-                    {!! Form::number('option_value[]', null, ['class' => 'form-control mr-2', 'min' => 0, 'style' => 'width:40%', 'placeholder' => 'XP Value']) !!}
-                    <a href="#" class="remove-option btn btn-primary" data-toggle="tooltip" title="Remove Option">-</a>
-                </div>
-                <div id="group[]" class="group-row hide p-3 border border-secondary rounded my-2">
-                    <div class="row">
-                        <div class="text-left col-md-6">
-                            {!! Form::label('Group Name') !!}
+                <!-- Field Template Start -->
+                <div class="option-row template hide mb-2 p-2 border border-secondary rounded d-flex flex-column">
+                    <div class="row-parent mb-2 d-flex">
+                        {!! Form::text('field_name[]', null, ['class' => 'form-control mr-2', 'style' => 'width:40%', 'placeholder' => 'Field Name']) !!}
+                        {!! Form::select('field_type[]', 
+                            ['radio' => 'Radio Buttons', 'checkboxes' => 'Checkboxes', 'number' => 'Number'], 
+                        null, ['class' => 'form-control mr-2 ftype', 'style' => 'width:40%', 'placeholder' => 'Please select a Field Type...']) !!}
+                        {!! Form::text('field_desc[]', null, ['class' => 'form-control mr-2', 'placeholder' => 'Description']) !!}
+                        <a href="#" class="remove-field btn btn-primary" data-toggle="tooltip" title="Remove Field">-</a>
+                    </div>
+                    <div class="optionsList hide mb-2 ml-3 border-left pl-3">
+                        <h5>Field Options</h5>
+                        <div class="row-children">
+                            <div class="child-row hide row mb-2 px-3">
+                                <div class="col-md-2 px-1">
+                                    {!! Form::number('sub_option_value[]', null, ['class' => 'form-control w-100', 'placeholder' => 'Point Value']) !!}
+                                </div>
+                                <div class="col-md-4 px-1">
+                                    {!! Form::text('sub_option_label[]', null, ['class' => 'form-control w-100', 'placeholder' => 'Option Name']) !!}
+                                </div>
+                                <div class="col-md-6 px-1 d-flex">
+                                    {!! Form::text('sub_option_desc[]', null, ['class' => 'form-control w-100', 'placeholder' => 'Option Description']) !!}
+                                    <a href="#" class="remove-option ml-2 btn btn-primary" data-toggle="tooltip" title="Remove Option">-</a>
+                                </div>
+                            </div>
                         </div>
-                        <div class="text-right col-md-6">
-                            <a href="#" class="remove-group btn btn-primary mb-2" data-toggle="tooltip" title="Delete Group">Delete Group</a>
+                        <div class="text-right">
+                            <a href="#" id="add-option" class="add-op mt-2 btn btn-primary" data-toggle="tooltip" title="Add Option">Add Option</a>
                         </div>
                     </div>
-                    {!! Form::text('group_name[]', null, ['class' => 'form-control mr-2 mb-4', 'placeholder' => 'Group Name']) !!}
-                    <div class="calcList">
-                        <h5>Group Options</h5>
-                        <div class="option-row mb-2 d-flex">
-                            {!! Form::text('g_option_name[]', null, ['class' => 'form-control mr-2', 'style' => 'width:40%', 'placeholder' => 'Option Name']) !!}
-                            {!! Form::text('g_option_desc[]', null, ['class' => 'form-control mr-2', 'placeholder' => 'Description']) !!}
-                            {!! Form::number('g_option_value[]', null, ['class' => 'form-control mr-2', 'min' => 0, 'style' => 'width:40%', 'placeholder' => 'XP Value']) !!}
-                            <a href="#" class="remove-option btn btn-primary" data-toggle="tooltip" title="Remove Option">-</a>
-                        </div>
-                    </div>
-                    <div class="text-right">
-                        <a href="#" id="add-option" class="add-op btn btn-primary" data-toggle="tooltip" title="Add Option">Add Option</a>
-                    </div>
                 </div>
+                <!-- Field Template End -->
             </div>
         </div>
     </div>
@@ -111,13 +137,13 @@
         <div class="card-body">
             <div class="form-group">
                 {!! Form::label('Word Count Options') !!}
-                <p>This is the rate at which word count is converted to XP. To enter the conversion use "Points|Word Count". Example: 1|100 would be 1 XP ever 100 words.</p>
+                <p>This is the rate at which word count is converted to XP. To enter the conversion use "Points|Word Count". Example: 1|100 would be 1 XP every 100 words.</p>
                 <div class="d-flex mb-2">
-                    {!! Form::text('word_count_conversion_rate', null, ['class' => 'form-control mr-2', 'placeholder' => 'Word Count Conversion Rate']) !!}
-                    {!! Form::number('round_to', null, ['class' => 'form-control mr-2 roundTo', 'style' => 'display:none;', 'placeholder' => 'Round to the Nearest']) !!}
+                    {!! Form::text('word_count_conversion_rate', $lit_settings->conversion_rate, ['class' => 'form-control mr-2', 'placeholder' => 'Word Count Conversion Rate']) !!}
+                    {!! Form::number('round_to', $lit_settings->round_to, ['class' => 'form-control mr-2 roundTo', 'style' => ($lit_settings->round_to ? '': 'display:none;'), 'placeholder' => 'Round to the Nearest']) !!}
                 </div>
                 <div class="form-group">
-                    {!! Form::checkbox('enable_rounding', 1, old('enable_rounding'), ['class' => 'form-check-input enable-rounding', 'data-toggle' => 'toggle']) !!}
+                    {!! Form::checkbox('enable_rounding', 1, ($lit_settings->round_to ? 1 : 0), ['class' => 'form-check-input enable-rounding', 'data-toggle' => 'toggle']) !!}
                     {!! Form::label('enable_rounding', 'Enable Rounding', ['class' => 'form-check-label ml-3']) !!} {!! add_help('Enable to create a rounding rule for literature word counts.') !!}
                 </div>
             </div>
@@ -136,6 +162,8 @@
     @parent
     <script>
         $(document).ready(function() {
+
+            $field_count = 1;
 
             $('.enable-rounding').on('change', function() {
                 console.log('rounding changed');
@@ -176,70 +204,87 @@
 
             //Calculator Repeater
             // --- Groups
-            $('#add-group').on('click', function(e) {
+            $('#calcList').on('click', '#add-option', function(e) {
                 e.preventDefault();
-                addOptionGroup();
+                addOption( $(this).parent().prev() );
             });
-            $('.remove-group').on('click', function(e) {
+            $('.remove-option').on('click', function(e) {
                 e.preventDefault();
-                removeOptionGroup($(this));
+                removeOption($(this));
             });
 
-            function addOptionGroup() {
-                var $clone = $('.group-row.hide').clone();
-                $('#calcList').append($clone);
+            function addOption( $parent ) {
+                var $clone = $('.template .child-row.hide').clone();
+                $childLength = $parent.children('.child-row').length;
+                $field_id = $parent.parents('.option-row').attr('field-id');
+                $unique_row_id = $field_id + '_' + $childLength;
+                $parent.append($clone);
                 $clone.removeClass('hide');
                 $clone.attr('count', $i);
                 //Rename the fields
-                $inputs = $clone.find('input');
+                $inputs = $clone.find('input, select');
                 $inputs.each(function(i, input) {
                     $old_name = $(input).attr('name');
-                    $new_name = $old_name.replace('[]', '_') + $i + '[]';
+                    $new_name = $old_name.replace('[]', '_') + $unique_row_id + '[]';
                     $(input).attr('name', $new_name);
                 });
-                $clone.find('.remove-group').on('click', function(e) {
+                $clone.find('.child-row').on('click', function(e) {
                     e.preventDefault();
-                    removeOptionGroup($(this));
-                });
-                $clone.find('.add-op').on('click', function(e) {
-                    e.preventDefault();
-                    $c = $(this).parents('.group-row').attr('count');
-                    addOption('.group-row[count="' + $c + '"] .calcList', $c);
+                    removeOption($(this));
                 });
                 $i++;
             }
 
-            function removeOptionGroup($trigger) {
-                $trigger.parents('.group-row').remove();
+            function removeOption($trigger) {
+                $trigger.parents('.child-row').remove();
             }
 
             // --- Options
-            $('.main-buttons #add-option').on('click', function(e) {
+            $('.main-buttons #add-field').on('click', function(e) {
                 e.preventDefault();
-                addOption();
+                addField();
             });
 
-            function addOption($selector = '#calcList', $c = null) {
+            function addField($selector = '#calcList', $c = null) {
                 var $clone = $('.option-row.hide').clone();
                 $($selector).append($clone);
                 $clone.removeClass('hide');
+                $clone.removeClass('template');
+                $clone.attr('field-id', $field_count);
+                $clone.children('.child-row').first().attr('row-id', 0);
                 if ($c !== null) {
-                    $inputs = $clone.find('input');
+                    $inputs = $clone.find('input, select');
                     $inputs.each(function(i, input) {
                         $old_name = $(input).attr('name');
                         $new_name = 'g_' + $old_name.replace('[]', '_') + $c + '[]';
                         $(input).attr('name', $new_name);
                     });
                 }
-                $clone.find('.remove-option').on('click', function(e) {
+                $clone.find('.remove-field').on('click', function(e) {
                     e.preventDefault();
-                    removeOption($(this));
+                    removeField($(this));
                 });
             }
 
-            function removeOption($trigger) {
+            function removeField($trigger) {
                 $trigger.parents('.option-row').remove();
             }
+
+            //On Field Change
+            $('#calcList').on('change', 'select.ftype', function() {
+                var val = $(this).val();
+                if (val == 'radio' || val == 'checkboxes') {
+                    $(this).parents('.option-row').find('.optionsList').removeClass('hide');
+                } else {
+                    $(this).parents('.option-row').find('.optionsList').addClass('hide');
+                }
+            });
+
+            //Double check for remove option
+            $('#calcList').on('click', '.remove-option', function(e) {
+                e.preventDefault();
+                removeOption($(this));
+            });
 
         });
     </script>

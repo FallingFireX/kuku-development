@@ -100,11 +100,13 @@ class TrackerController extends Controller {
     public function getTrackerSettingsPage(Request $request) {
         $options = SiteOptions::where('key', 'LIKE', 'tracker_%')->get();
         $levels = SiteOptions::where('key', 'xp_levels')->pluck('value');
+        $lit_settings = json_decode(SiteOptions::where('key', 'xp_lit_conversion_options')->pluck('value'))[0];
 
         return view('admin.trackers.trackersettings', [
             'all_options'   => $options,
             'levels'        => isset($levels[0]) ? json_decode($levels[0]) : null,
             'xp_data'       => 'test',
+            'lit_settings'        => json_decode($lit_settings),
         ]);
     }
 
