@@ -6,7 +6,7 @@
 @endsection
 
 @section('admin-content')
-    {!! breadcrumbs(['Admin Panel' => 'admin', 'Teams' => 'admin/data/teams', ($teams->id ? 'Edit' : 'Create') . ' Teams' => $teams->id ? 'admin/data/teams/edit/' . $teams->id : 'admin/data/teams/create']) !!}
+    {!! breadcrumbs(['Admin Panel' => 'admin', 'Teams' => 'admin/teams', ($teams->id ? 'Edit' : 'Create') . ' Teams' => $teams->id ? 'admin/teams/edit/' . $teams->id : 'admin/teams/create']) !!}
 
     <h1>{{ $teams->id ? 'Edit' : 'Create' }} Team
         @if ($teams->id)
@@ -14,7 +14,7 @@
         @endif
     </h1>
 
-    {!! Form::open(['url' => $teams->id ? 'admin/data/teams/edit/' . $teams->id : 'admin/data/teams/create', 'files' => true]) !!}
+    {!! Form::open(['url' => $teams->id ? 'admin/teams/edit/' . $teams->id : 'admin/teams/create', 'files' => true]) !!}
 
     <h3>Basic Information</h3>
     <p>Create a new team below! Team types are as follows:
@@ -57,12 +57,17 @@
 
     
     <div class="form-group">
-        {!! Form::label('Description (Optional)') !!}
+        {!! Form::label('Description (Optional)') !!}{!! add_help('This text shows on pages such as the team applications page where it describes what a team does') !!}
         {!! Form::textarea('description', $teams->description, ['class' => 'form-control wysiwyg']) !!}
     </div>
 
     <div class="form-group">
-        {!! Form::checkbox('apps_open', 1, $teams->id ? $teams->apps_open : 1, ['class' => 'form-check-input', 'data-toggle' => 'toggle']) !!}
+        {!! Form::label('Responsibilities (Optional)') !!}{!! add_help('This shows a team\'s responsibilities on the admin dashboard') !!}
+        {!! Form::textarea('responsibilities', $teams->responsibilities, ['class' => 'form-control wysiwyg']) !!}
+    </div>
+
+    <div class="form-group">
+        {!! Form::checkbox('apps_open', 1, $teams->id ? $teams->apps_open : 0, ['class' => 'form-check-input', 'data-toggle' => 'toggle']) !!}
         {!! Form::label('apps_open', 'Applications Open?', ['class' => 'form-check-label ml-3']) !!} {!! add_help('Turning this on will open applications for this team. This does not create any announcement or news, you must do that yourself. This simply opens the queue.') !!}
     </div>
 

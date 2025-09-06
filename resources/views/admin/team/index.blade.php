@@ -12,7 +12,7 @@
     <p>Here you can see all teams youve created for your admins.</p>
 
     <div class="text-right mb-3">
-        <a class="btn btn-primary" href="{{ url('admin/data/teams/create') }}"><i class="fas fa-plus"></i> Create New Team</a>
+        <a class="btn btn-primary" href="{{ url('admin/teams/create') }}"><i class="fas fa-plus"></i> Create New Team</a>
     </div>
 
     <div>
@@ -62,7 +62,7 @@
                                 @endif</a></div>
                         </div>
                         <div class="col-12 col-md-1">
-                                <div class="logs-table-cell"><a href="{{ url('admin/data/teams/edit/' . $team->id) }}" class="btn btn-primary py-0 px-1 w-100">Edit</a></div>
+                                <div class="logs-table-cell"><a href="{{ url('admin/teams/edit/' . $team->id) }}" class="btn btn-primary py-0 px-1 w-100">Edit</a></div>
                         </div>
                     </div>
                 </div>

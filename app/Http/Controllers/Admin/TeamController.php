@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Admin\Data;
+namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -70,6 +70,7 @@ class TeamController extends Controller
                 'apps_open'      => 'nullable|boolean',
                 'description'    => 'nullable',
                 'relation'       => 'nullable',
+                'responsibilities'       => 'nullable',
             ]);
 
         if ($id) {
@@ -81,7 +82,7 @@ class TeamController extends Controller
             // Creating a new item
             $team = Team::create($request->all());
             flash('Team created successfully.')->success();
-            return redirect()->to('admin/data/teams/edit/'.$team->id);
+            return redirect()->to('admin/teams/edit/'.$team->id);
         }
 
         return redirect()->back();

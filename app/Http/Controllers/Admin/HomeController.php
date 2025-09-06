@@ -13,6 +13,7 @@ use App\Models\Report\Report;
 use App\Models\Submission\Submission;
 use App\Models\Trade;
 use App\Models\User\User;
+use App\Models\Team;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -42,6 +43,7 @@ class HomeController extends Controller {
             'galleryCurrencyAwards'  => $galleryCurrencyAwards,
             'gallerySubmissionCount' => GallerySubmission::collaboratorApproved()->where('status', 'Pending')->count(),
             'galleryAwardCount'      => GallerySubmission::requiresAward()->where('is_valued', 0)->count(),
+            'teams' => Team::orderBy('id')->get(),
         ]);
     }
 
