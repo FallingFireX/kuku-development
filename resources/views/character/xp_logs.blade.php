@@ -46,12 +46,11 @@
         <div class="logs-table-body">
             @foreach ($logs as $log)
                 <div class="logs-table-row">
-                    
+
                     <div class="row flex-wrap">
                         <div class="col-6 col-md-2">
                             <div class="logs-table-cell">
-                                <i
-                                    class="{{ $log->xp > 0 ? 'in' : 'out' }}flow bg-{{ $log->xp > 0 ? 'success' : 'danger' }} fas {{ $log->xp > 0 ? 'fa-arrow-up' : 'fa-arrow-down' }} mr-2"></i>
+                                <i class="{{ $log->xp > 0 ? 'in' : 'out' }}flow bg-{{ $log->xp > 0 ? 'success' : 'danger' }} fas {{ $log->xp > 0 ? 'fa-arrow-up' : 'fa-arrow-down' }} mr-2"></i>
                                 {!! $log->sender ? $log->sender->displayName : '' !!}
                             </div>
                         </div>
