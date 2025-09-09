@@ -290,6 +290,9 @@ Route::group(['prefix' => 'grants', 'namespace' => 'Users', 'middleware' => 'pow
     Route::post('items', 'GrantController@postItems');
 
     Route::get('item-search', 'GrantController@getItemSearch');
+
+    Route::get('xp', 'GrantController@getXP');
+    Route::post('xp', 'GrantController@postXP');
 });
 
 // MASTERLIST

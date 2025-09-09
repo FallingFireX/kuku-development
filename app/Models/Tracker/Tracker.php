@@ -221,6 +221,8 @@ class Tracker extends Model {
      */
     public static function renderAllCards($character_id) {
         $tracker_cards = self::where('character_id', $character_id)->whereIn('status', ['Approved', 'Pending'])->get();
+
+        $cards = [];
         $total = 0;
         $accepted_total = 0;
         foreach ($tracker_cards as $card) {
@@ -231,7 +233,7 @@ class Tracker extends Model {
         }
 
         return [
-            'cards'           => implode('', $cards),
+            'cards'           => $cards ? implode('', $cards) : null,
             'accepted_points' => $accepted_total,
             'total_points'    => $total,
         ];

@@ -6,6 +6,7 @@ use App\Facades\Notifications;
 use App\Facades\Settings;
 use App\Models\Tracker\Tracker;
 use App\Models\User\User;
+use App\Models\Character\Character;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
@@ -297,6 +298,103 @@ class TrackerManager extends Service {
     }
 
     /**
+     * Grants XP to a given character.
+     *
+     * @param mixed $data the data of the submission to be deleted
+     */
+    public function grantCharacterXP($data, $staff) {
+        try {
+            if(!$data) {
+                throw new \Exception('Error occured.');
+            }
+
+            // Process characters
+            $characters = Character::find($data['characters']);
+            if (count($characters) != count($data['characters'])) {
+                throw new \Exception('An invalid character was selected.');
+            }
+
+            $xp =  (floatval($data['levels']) ?? 0) + (floatval($data['static_xp']) ?? 0);
+
+            foreach($characters as $character) {
+                if (!$this->logAdminAction($staff, 'XP Grant', 'Granted '.$xp.' XP to '.$character->fullName)) {
+                    throw new \Exception('Failed to log admin action.');
+                }
+                if ($this->creditCharacterXP($staff, $user, 'Staff Grant', Arr::only($data, ['data']), $character, $xp)) {
+                    Notifications::create('XP_GRANT', $user, [
+                        'character_name'    => $character->fullName,
+                        'xp_points'         => $xp,
+                        'url'               => $character->url,
+                        'slug'              => $character->slug,
+                        'staff_name'        => $staff->name,
+                        'staff_url'         => $staff->url,
+                    ]);
+                } else {
+                    throw new \Exception('Failed to credit XP to '.$character->fullName.'.');
+                }
+            }
+
+
+        }  catch (\Exception $e) {
+            $this->setError('error', $e->getMessage());
+        }
+
+        return $this->rollbackReturn(false);
+    }
+
+    /** 
+     * Credit the XP to the character.
+     * 
+     * 
+     */
+    public function creditCharacterXP($sender, $recipient, $type, $data, $character, $xp) {
+        DB::beginTransaction();
+
+        //NOT DONE - WORK ON THIS MORE. To be converted from item grant to XP grant.
+
+        try {
+            $encoded_data = \json_encode($data);
+
+            
+
+            if ($type && !$this->createLog($sender ? $sender->id : null, $character ? $character->id : null, $data['data'], $xp)) {
+                throw new \Exception('Failed to create log.');
+            }
+
+            return $this->commitReturn(true);
+        } catch (\Exception $e) {
+            $this->setError('error', $e->getMessage());
+        }
+
+        return $this->rollbackReturn(false);
+    }
+
+    /**
+     * Creates an XP log.
+     *
+     * @param int    $senderId
+     * @param int    $recipientId
+     * @param string $data
+     * @param float  $xp
+     *
+     * @return float
+     */
+    public function createLog($senderId, $characterId, $data, $xp) {
+        return DB::table('xp_log')->insert(
+            [
+                'sender_id'      => $senderId,
+                'character_id'   => $characterId,
+                'log'            => 'XP Granted',
+                'log_type'       => 'XP Grant',
+                'data'           => $data, // this should be just a string
+                'xp'             => $xp,
+                'created_at'     => Carbon::now(),
+                'updated_at'     => Carbon::now(),
+            ]
+        );
+    }
+
+    /**
      * Updates all of the tracker settings to the site_options table.
      *
      * @param mixed $data the data of the submission to be deleted
@@ -340,6 +438,7 @@ class TrackerManager extends Service {
                 //Unset after updating
                 unset($data['word_count_conversion_rate']);
                 unset($data['round_to']);
+                unset($data['enable_rounding']);
             }
             if (isset($data['field_name'])) {
                 \Log::info('CALCULATOR DATA:', $data);
@@ -363,44 +462,51 @@ class TrackerManager extends Service {
                 foreach ($data as $sub_name => $value) {
                     $name_array = explode('_', $sub_name);
                     \Log::info('OPTIONS:', [$sub_name.' - SPLIT: '.print_r($name_array, true)]);
-                    // if(count($name_array) > 2) {
-                    //     $option_field = $name_array[2]; //ex: label
-                    //     $field_group = $name_array[3]; //ex: group_id
-                    //     $option_id = $name_array[4]; //ex: option_id
+                    if( array_key_exists(2, $name_array) && array_key_exists(3, $name_array) && array_key_exists(4, $name_array) ) {
+                        $option_field = $name_array[2]; //ex: label
+                        $field_group = $name_array[3]; //ex: group_id
+                        $option_id = $name_array[4]; //ex: option_id
 
-                    //     $rename_fields = [
-                    //         'value' => 'point_value',
-                    //         'desc'  => 'description',
-                    //         'label' => 'label',
-                    //     ];
+                        $rename_fields = [
+                            'value' => 'point_value',
+                            'desc'  => 'description',
+                            'label' => 'label',
+                        ];
+                        $updateField = $rename_fields[$option_field];
+                        $value = $value[0] ?? $value ?? null;
 
-                    //     if($option_field) {
-                    //         $form_config[$field_group]['field_options'][$option_id][$rename_fields][$option_field]] = $value;
-                    //     }
+                        \Log::info('VALUE OF OPTION:', [$sub_name.' - VAL: '.$value]);
 
-                    //     unset($data[$sub_name]);
-                    // }
+                        if($option_field) {
+                            $form_config[$field_group]['field_options'][$option_id][$updateField] = $value;
+                        }
+
+                        unset($data[$sub_name]);
+
+                        //Save to the DB
+                        $manager = new SiteOptionsManager();
+                        $manager->updateOption([
+                            'key'   => 'xp_calculator',
+                            'value' => json_encode($form_config),
+                        ]);
+                    }
                 }
 
                 /*
                  * If all turns out right the array should look something like this:
                  * {
                  * "0": {
-                 * "field_name": "name",
-                 * "field_type": "type",
-                 * "field_description": "desc",
-                 * "field_options": {
-                 * "0": {
-                 * "point_value": 0,
-                 * "label": "label",
-                 * "description": "desc"
-                 * }
-                 * }
-                 * },
-                 * "literature": {
-                 * "conversion_rate": "cr",
-                 * "round_to": 100
-                 * }
+                    * "field_name": "name",
+                    * "field_type": "type",
+                    * "field_description": "desc",
+                    * "field_options": {
+                        * "0": {
+                            * "point_value": 0,
+                            * "label": "label",
+                            * "description": "desc"
+                            * }
+                        * }
+                    * },
                  * }
                  */
 

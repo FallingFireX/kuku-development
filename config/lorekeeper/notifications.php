@@ -456,4 +456,10 @@ return [
         'message' => 'Your tracker card <strong>Tracker Card ${tracker_id}</strong> has been cancelled. (<a href="{url}">View Card</a>)',
         'url'     => 'tracker/view/{tracker_id}',
     ],
+    // TRACKER_GRANT
+    784 => [
+        'name'    => 'XP Grant',
+        'message' => '${character_name} was granted a total of ${xp_points} by <a href="${staff_url}">${staff_name}</a>. (<a href="{url}">View Character</a>)',
+        'url'     => 'character/{slug}',
+    ],
 ];

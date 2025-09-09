@@ -15,6 +15,7 @@ use App\Models\Item\Item;
 use App\Models\Item\ItemCategory;
 use App\Models\SiteOptions;
 use App\Models\Tracker\Tracker;
+use App\Models\Tracker\TrackerLog;
 use App\Models\User\User;
 use App\Models\User\UserCurrency;
 use App\Models\User\UserItem;
@@ -415,6 +416,21 @@ class CharacterController extends Controller {
             'character'             => $this->character,
             'extPrevAndNextBtnsUrl' => '/change-log',
             'logs'                  => $this->character->getCharacterLogs(),
+        ]);
+    }
+
+    /**
+     * Shows a character's XP logs.
+     *
+     * @param mixed $slug
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function getCharacterXPLogs($slug) {
+        return view('character.xp_logs', [
+            'character'             => $this->character,
+            'extPrevAndNextBtnsUrl' => '/xp-logs',
+            'logs'                  => $this->character->getXPLogs(0),
         ]);
     }
 

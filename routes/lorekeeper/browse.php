@@ -82,6 +82,7 @@ Route::group(['prefix' => 'character', 'namespace' => 'Characters'], function ()
     Route::get('{slug}/ownership', 'CharacterController@getCharacterOwnershipLogs');
     Route::get('{slug}/change-log', 'CharacterController@getCharacterLogs');
     Route::get('{slug}/submissions', 'CharacterController@getCharacterSubmissions');
+    Route::get('{slug}/xp-logs', 'CharacterController@getCharacterXPLogs');
 
     Route::get('{slug}/gallery', 'CharacterController@getCharacterGallery');
     Route::get('{slug}/tracker', 'CharacterController@getCharacterTracker');

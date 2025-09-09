@@ -116,6 +116,10 @@ return [
                 'name' => 'Item Grants',
                 'url'  => 'admin/grants/items',
             ],
+            [
+                'name' => 'Character XP Grants',
+                'url'  => 'admin/grants/xp',
+            ],
         ],
     ],
     'Masterlist' => [

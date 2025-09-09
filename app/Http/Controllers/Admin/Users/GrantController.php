@@ -12,6 +12,7 @@ use App\Models\Submission\Submission;
 use App\Models\Trade;
 use App\Models\User\User;
 use App\Models\User\UserItem;
+use App\Models\SiteOptions;
 use App\Services\CurrencyManager;
 use App\Services\InventoryManager;
 use Illuminate\Http\Request;
@@ -115,6 +116,22 @@ class GrantController extends Controller {
             'designUpdates'  => $item ? $designUpdates : null,
             'trades'         => $item ? $trades : null,
             'submissions'    => $item ? $submissions : null,
+        ]);
+    }
+
+    /**
+     * Show the XP grant page.
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function getXP() {
+        $levels = SiteOptions::where('key', 'xp_levels')->pluck('value');
+        return view('admin.grants.xp', [
+            'users' => User::orderBy('id')->pluck('name', 'id'),
+            'characters' => Character::orderBy('name')->get()->pluck('fullName', 'id')->mapWithKeys(function ($item, $key) {
+                return ['character-'.$key => $item];
+            })->toArray(),
+            'levels' => isset($levels[0]) ? json_decode($levels[0]) : null,
         ]);
     }
 }

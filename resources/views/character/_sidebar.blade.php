@@ -17,6 +17,7 @@
         <div class="sidebar-item"><a href="{{ $character->url . '/currency-logs' }}" class="{{ set_active('character/' . $character->slug . '/currency-logs') }}">Currency Logs</a></div>
         <div class="sidebar-item"><a href="{{ $character->url . '/submissions' }}" class="{{ set_active('character/' . $character->slug . '/submissions') }}">Submissions</a></div>
         <div class="sidebar-item"><a href="{{ $character->url . '/tracker' }}" class="{{ set_active('character/' . $character->slug . '/tracker') }}">XP Tracker</a></div>
+        <div class="sidebar-item"><a href="{{ $character->url . '/xp-logs' }}" class="{{ set_active('character/' . $character->slug . '/xp-logs') }}">XP Logs</a></div>
     </li>
     @if (Auth::check() && (Auth::user()->id == $character->user_id || Auth::user()->hasPower('manage_characters')))
         <li class="sidebar-section">

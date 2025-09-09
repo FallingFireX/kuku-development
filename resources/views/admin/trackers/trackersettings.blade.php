@@ -58,6 +58,45 @@
         <div class="card-body">
             <div class="form-group">
                 {!! Form::label('XP Calculator Options') !!}
+                @if($xp_calc_data)
+                <div id="calcList">
+                    @foreach($xp_calc_data as $field)
+                    <div class="option-row mb-2 p-2 border border-secondary rounded d-flex flex-column" field-id="0">
+                        <div class="row-parent mb-2 d-flex">
+                            {!! Form::text('field_name[]', $field->field_name, ['class' => 'form-control mr-2', 'style' => 'width:40%', 'placeholder' => 'Field Name']) !!}
+                            {!! Form::select('field_type[]', ['radio' => 'Radio Buttons', 'checkboxes' => 'Checkboxes', 'number' => 'Number'], $field->field_type, ['class' => 'form-control mr-2 ftype', 'style' => 'width:40%', 'placeholder' => 'Please select a Field Type...']) !!}
+                            {!! Form::text('field_desc[]', $field->field_description, ['class' => 'form-control mr-2', 'placeholder' => 'Description']) !!}
+                            <a href="#" class="remove-field btn btn-primary" data-toggle="tooltip" title="Remove Field">-</a>
+                        </div>
+                        <div class="mb-2 {!! $field->field_options ? '' : 'hide' !!} ml-3 border-left pl-3">
+                            <h5>Field Options</h5>
+                            <div class="row-children">
+                                @if($field->field_options)
+                                    @foreach($field->field_options as $option)
+                                        <div class="child-row row mb-2 px-3">
+                                            <div class="col-md-2 px-1">
+                                                {!! Form::number('sub_option_value_0_1[]', $option->point_value, ['class' => 'form-control w-100', 'placeholder' => 'Point Value']) !!}
+                                            </div>
+                                            <div class="col-md-4 px-1">
+                                                {!! Form::text('sub_option_label_0_1[]', $option->label, ['class' => 'form-control w-100', 'placeholder' => 'Option Name']) !!}
+                                            </div>
+                                            <div class="col-md-6 px-1 d-flex">
+                                                {!! Form::text('sub_option_desc_0_1[]', $option->description, ['class' => 'form-control w-100', 'placeholder' => 'Option Description']) !!}
+                                                <a href="#" class="remove-option ml-2 btn btn-primary" data-toggle="tooltip" title="Remove Option">-</a>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                @endif
+                            </div>
+                            <div class="text-right">
+                                <a href="#" id="add-option" class="add-op mt-2 btn btn-primary" data-toggle="tooltip" title="Add Option">Add Option</a>
+                            </div>
+                        </div>
+                    </div>
+                    @endforeach
+                </div>
+                @else
+                <!-- There's a first time for everything -->
                 <div id="calcList">
                     <div class="option-row mb-2 p-2 border border-secondary rounded d-flex flex-column" field-id="0">
                         <div class="row-parent mb-2 d-flex">
@@ -71,13 +110,13 @@
                             <div class="row-children">
                                 <div class="child-row row mb-2 px-3">
                                     <div class="col-md-2 px-1">
-                                        {!! Form::number('sub_option_value_0[]', null, ['class' => 'form-control w-100', 'placeholder' => 'Point Value']) !!}
+                                        {!! Form::number('sub_option_value_0_1[]', null, ['class' => 'form-control w-100', 'placeholder' => 'Point Value']) !!}
                                     </div>
                                     <div class="col-md-4 px-1">
-                                        {!! Form::text('sub_option_label_0[]', null, ['class' => 'form-control w-100', 'placeholder' => 'Option Name']) !!}
+                                        {!! Form::text('sub_option_label_0_1[]', null, ['class' => 'form-control w-100', 'placeholder' => 'Option Name']) !!}
                                     </div>
                                     <div class="col-md-6 px-1 d-flex">
-                                        {!! Form::text('sub_option_desc_0[]', null, ['class' => 'form-control w-100', 'placeholder' => 'Option Description']) !!}
+                                        {!! Form::text('sub_option_desc_0_1[]', null, ['class' => 'form-control w-100', 'placeholder' => 'Option Description']) !!}
                                         <a href="#" class="remove-option ml-2 btn btn-primary" data-toggle="tooltip" title="Remove Option">-</a>
                                     </div>
                                 </div>
@@ -88,6 +127,7 @@
                         </div>
                     </div>
                 </div>
+                @endif
                 <div class="text-right main-buttons">
                     <a href="#" id="add-field" class="add-field btn btn-primary" data-toggle="tooltip" title="Add Field">Add Field</a>
                 </div>
