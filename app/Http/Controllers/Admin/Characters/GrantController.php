@@ -57,7 +57,7 @@ class GrantController extends Controller {
     /**
      * Grants XP to characters.
      *
-     * @param string                        $slug
+     * @param string                      $slug
      * @param App\Services\TrackerManager $service
      *
      * @return \Illuminate\Http\RedirectResponse

@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\SiteOptions;
 use App\Models\User\User;
-use App\Models\Gallery\GallerySubmission;
 use Illuminate\Support\Facades\Auth;
 
 class XPCalcController extends Controller {

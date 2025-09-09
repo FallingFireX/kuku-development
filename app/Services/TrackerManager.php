@@ -4,9 +4,9 @@ namespace App\Services;
 
 use App\Facades\Notifications;
 use App\Facades\Settings;
+use App\Models\Character\Character;
 use App\Models\Tracker\Tracker;
 use App\Models\User\User;
-use App\Models\Character\Character;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
@@ -300,11 +300,12 @@ class TrackerManager extends Service {
     /**
      * Grants XP to a given character.
      *
-     * @param mixed $data the data of the submission to be deleted
+     * @param mixed $data  the data of the submission to be deleted
+     * @param mixed $staff
      */
     public function grantCharacterXP($data, $staff) {
         try {
-            if(!$data) {
+            if (!$data) {
                 throw new \Exception('Error occured.');
             }
 
@@ -314,9 +315,9 @@ class TrackerManager extends Service {
                 throw new \Exception('An invalid character was selected.');
             }
 
-            $xp =  (floatval($data['levels']) ?? 0) + (floatval($data['static_xp']) ?? 0);
+            $xp = (floatval($data['levels']) ?? 0) + (floatval($data['static_xp']) ?? 0);
 
-            foreach($characters as $character) {
+            foreach ($characters as $character) {
                 if (!$this->logAdminAction($staff, 'XP Grant', 'Granted '.$xp.' XP to '.$character->fullName)) {
                     throw new \Exception('Failed to log admin action.');
                 }
@@ -333,19 +334,22 @@ class TrackerManager extends Service {
                     throw new \Exception('Failed to credit XP to '.$character->fullName.'.');
                 }
             }
-
-
-        }  catch (\Exception $e) {
+        } catch (\Exception $e) {
             $this->setError('error', $e->getMessage());
         }
 
         return $this->rollbackReturn(false);
     }
 
-    /** 
+    /**
      * Credit the XP to the character.
-     * 
-     * 
+     *
+     * @param mixed $sender
+     * @param mixed $recipient
+     * @param mixed $type
+     * @param mixed $data
+     * @param mixed $character
+     * @param mixed $xp
      */
     public function creditCharacterXP($sender, $recipient, $type, $data, $character, $xp) {
         DB::beginTransaction();
@@ -354,8 +358,6 @@ class TrackerManager extends Service {
 
         try {
             $encoded_data = \json_encode($data);
-
-            
 
             if ($type && !$this->createLog($sender ? $sender->id : null, $character ? $character->id : null, $data['data'], $xp)) {
                 throw new \Exception('Failed to create log.');
@@ -373,9 +375,9 @@ class TrackerManager extends Service {
      * Creates an XP log.
      *
      * @param int    $senderId
-     * @param int    $recipientId
      * @param string $data
      * @param float  $xp
+     * @param mixed  $characterId
      *
      * @return float
      */
@@ -462,7 +464,7 @@ class TrackerManager extends Service {
                 foreach ($data as $sub_name => $value) {
                     $name_array = explode('_', $sub_name);
                     \Log::info('OPTIONS:', [$sub_name.' - SPLIT: '.print_r($name_array, true)]);
-                    if( array_key_exists(2, $name_array) && array_key_exists(3, $name_array) && array_key_exists(4, $name_array) ) {
+                    if (array_key_exists(2, $name_array) && array_key_exists(3, $name_array) && array_key_exists(4, $name_array)) {
                         $option_field = $name_array[2]; //ex: label
                         $field_group = $name_array[3]; //ex: group_id
                         $option_id = $name_array[4]; //ex: option_id
@@ -477,7 +479,7 @@ class TrackerManager extends Service {
 
                         \Log::info('VALUE OF OPTION:', [$sub_name.' - VAL: '.$value]);
 
-                        if($option_field) {
+                        if ($option_field) {
                             $form_config[$field_group]['field_options'][$option_id][$updateField] = $value;
                         }
 
