@@ -17,7 +17,7 @@ class Tracker extends Model {
      */
     protected $fillable = [
         'character_id', 'user_id', 'staff_id', 'gallery_id',
-        'url', 'staff_comments',
+        'image_url', 'url', 'staff_comments',
         'status', 'data',
     ];
 
@@ -44,6 +44,7 @@ class Tracker extends Model {
         'user_id'       => 'required',
         'staff_id'      => 'required',
         'gallery_id'    => 'nullable',
+        'image_url'     => 'nullable|url',
         'url'           => 'nullable|url',
         'staff_comments'=> 'nullable',
         'data'          => 'nullable',
@@ -59,6 +60,7 @@ class Tracker extends Model {
         'user_id'       => 'required',
         'staff_id'      => 'required',
         'gallery_id'    => 'nullable',
+        'image_url'     => 'nullable|url',
         'url'           => 'nullable|url',
         'staff_comments'=> 'nullable',
         'data'          => 'nullable',
@@ -284,13 +286,13 @@ class Tracker extends Model {
         if ($this->gallery_id) {
             $image_data = [
                 'url'   => $this->gallery->getUrlAttribute(),
-                'image' => $this->gallery->getThumbnailUrlAttribute() ?? 'images/watermark.png',
+                'image' => $this->gallery->getThumbnailUrlAttribute() ?? url('/').'/images/tracker_fallback.png',
                 'alt'   => $this->gallery->title,
             ];
         } else {
             $image_data = [
                 'url'   => $this->url,
-                'image' => $this->url ?? 'images/account.png',
+                'image' => $this->url ?? url('/').'/images/tracker_fallback.png',
                 'alt'   => 'Tracker Card Image (#'.$this->id.')',
             ];
         }

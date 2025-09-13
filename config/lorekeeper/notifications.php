@@ -441,25 +441,25 @@ return [
     // TRACKER_SUBMISSION_CREATED
     781 => [
         'name'    => 'Tracker Submission Approved',
-        'message' => 'Your tracker submission <strong>Tracker Card ${tracker_id}</strong> has been created. (<a href="{url}">View Card</a>)',
+        'message' => 'Your tracker submission <strong>Tracker Card #{tracker_id}</strong> has been created. (<a href="{url}">View Card</a>)',
         'url'     => 'tracker/view/{tracker_id}',
     ],
 
     782 => [
         'name'    => 'Tracker Card Rejected',
-        'message' => 'Your tracker card <strong>Tracker Card ${tracker_id}</strong> has been rejected. (<a href="{url}">View Card</a>)',
+        'message' => 'Your tracker card <strong>Tracker Card #{tracker_id}</strong> has been rejected. (<a href="{url}">View Card</a>)',
         'url'     => 'tracker/view/{tracker_id}',
     ],
 
     783 => [
         'name'    => 'Tracker Card Cancelled',
-        'message' => 'Your tracker card <strong>Tracker Card ${tracker_id}</strong> has been cancelled. (<a href="{url}">View Card</a>)',
+        'message' => 'Your tracker card <strong>Tracker Card #{tracker_id}</strong> has been cancelled. (<a href="{url}">View Card</a>)',
         'url'     => 'tracker/view/{tracker_id}',
     ],
     // TRACKER_GRANT
     784 => [
         'name'    => 'XP Grant',
-        'message' => '${character_name} was granted a total of ${xp_points} by <a href="${staff_url}">${staff_name}</a>. (<a href="{url}">View Character</a>)',
+        'message' => '{character_name} was granted a total of {xp_points} XP by <a href="{staff_url}">{staff_name}</a>. (<a href="{url}">View Character</a>)',
         'url'     => 'character/{slug}',
     ],
 ];

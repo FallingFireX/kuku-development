@@ -44,7 +44,7 @@
                 <div class="level-row hide mb-2">
                     {!! Form::text('level_name[]', null, ['class' => 'form-control mr-2', 'placeholder' => 'Level Name']) !!}
                     {!! Form::number('level_threshold[]', null, ['class' => 'form-control mr-2', 'min' => 0, 'placeholder' => 'Minimum Level Threshold']) !!}
-                    <a href="#" class="remove-level btn btn-primary" data-toggle="tooltip" title="REmove Level">-</a>
+                    <a href="#" class="remove-level btn btn-primary" data-toggle="tooltip" title="Remove Level">-</a>
                 </div>
             </div>
         </div>

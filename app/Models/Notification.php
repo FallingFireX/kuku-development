@@ -160,4 +160,5 @@ class Notification extends Model {
     public const TRACKER_SUBMISSION_APPROVED = 781;
     public const TRACKER_SUBMISSION_REJECTED = 782;
     public const TRACKER_SUBMISSION_CANCELLED = 783;
+    public const XP_GRANT = 784;
 }

@@ -34,7 +34,6 @@ class SiteOptions extends Model {
      * @var array
      */
     public static $updateRules = [
-        'key'         => 'required',
         'value'       => 'nullable',
     ];
 

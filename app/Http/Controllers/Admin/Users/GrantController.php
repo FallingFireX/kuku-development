@@ -13,6 +13,8 @@ use App\Models\Trade;
 use App\Models\User\User;
 use App\Models\User\UserItem;
 use App\Models\SiteOptions;
+use App\Models\Tracker;
+use App\Services\TrackerManager;
 use App\Services\CurrencyManager;
 use App\Services\InventoryManager;
 use Illuminate\Http\Request;
@@ -129,9 +131,30 @@ class GrantController extends Controller {
         return view('admin.grants.xp', [
             'users' => User::orderBy('id')->pluck('name', 'id'),
             'characters' => Character::orderBy('name')->get()->pluck('fullName', 'id')->mapWithKeys(function ($item, $key) {
-                return ['character-'.$key => $item];
+                return [$key => $item];
             })->toArray(),
             'levels' => isset($levels[0]) ? json_decode($levels[0]) : null,
         ]);
+    }
+
+    /**
+     * Grants XP to characters.
+     *
+     * @param App\Services\TrackerManager $service
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function postXP(Request $request, TrackerManager $service) {
+        $data = $request->only(['characters', 'data', 'levels', 'static_xp']);
+
+        if ($service->grantCharacterXP($data, Auth::user())) {
+            flash('XP granted successfully.')->success();
+        } else {
+            foreach ($service->errors()->getMessages()['error'] as $error) {
+                flash($error)->error();
+            }
+        }
+
+        return redirect()->back();
     }
 }

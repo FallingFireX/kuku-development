@@ -17,6 +17,7 @@ return new class extends Migration {
             $table->string('status', 96);
             $table->integer('character_id');
             $table->integer('gallery_id')->nullable();
+            $table->string('image_url', 1024)->nullable();
             $table->string('url', 1024)->nullable();
             $table->dateTime('created_at');
             $table->dateTime('updated_at')->nullable();

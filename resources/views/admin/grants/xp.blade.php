@@ -49,7 +49,7 @@
     <script>
         $(document).ready(function() {
             $('#characterList').selectize({
-                maxItems: 10
+                maxItems: 100
             });
 
             var total = {

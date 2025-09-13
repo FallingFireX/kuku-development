@@ -53,25 +53,4 @@ class GrantController extends Controller {
 
         return redirect()->back();
     }
-
-    /**
-     * Grants XP to characters.
-     *
-     * @param string                        $slug
-     * @param App\Services\TrackerManager $service
-     *
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function postCharacterXP($slug, Request $request, TrackerManager $service) {
-        $data = $request->only(['characters', 'data', 'levels', 'static_xp']);
-        if ($service->grantCharacterXP($data, Character::where('slug', $slug)->first(), Auth::user())) {
-            flash('XP granted successfully.')->success();
-        } else {
-            foreach ($service->errors()->getMessages()['error'] as $error) {
-                flash($error)->error();
-            }
-        }
-
-        return redirect()->back();
-    }
 }

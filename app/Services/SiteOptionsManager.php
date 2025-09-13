@@ -28,19 +28,19 @@ class SiteOptionsManager extends Service {
         try {
             $option = SiteOptions::where('key', $data['key'])->first();
 
-            if ($option == null) {
+            if (!$option) {
                 $option = SiteOptions::create([
                     'key'        => $data['key'],
                     'value'      => $data['value'] ?? null,
                 ]);
             } else {
-                // \Log::info('UPDATED INSTEAD:', $data);
+                \Log::info('UPDATED INSTEAD:', $data);
                 $option->update([
+                    'key'   => $data['key'],
                     'value' => $data['value'],
                 ]);
-                //$option->value = $data['value'] ?? null;
-                //$result = $option->save();
-                //\Log::info('Option save result:', [$result, $option]);
+                $option->save();
+                \Log::info('Option save result:', [$result, $option]);
             }
 
             return $this->commitReturn($option);

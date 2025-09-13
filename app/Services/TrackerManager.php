@@ -8,6 +8,7 @@ use App\Models\Tracker\Tracker;
 use App\Models\User\User;
 use App\Models\Character\Character;
 use Carbon\Carbon;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 
 class TrackerManager extends Service {
@@ -305,22 +306,25 @@ class TrackerManager extends Service {
     public function grantCharacterXP($data, $staff) {
         try {
             if(!$data) {
-                throw new \Exception('Error occured.');
+                throw new \Exception('Something went wrong, data missing.');
             }
 
             // Process characters
             $characters = Character::find($data['characters']);
             if (count($characters) != count($data['characters'])) {
-                throw new \Exception('An invalid character was selected.');
+                throw new \Exception('You must select at least 1 character.');
             }
 
-            $xp =  (floatval($data['levels']) ?? 0) + (floatval($data['static_xp']) ?? 0);
+            \Log::info($data);
+
+            $xp = (floatval($data['levels']) ?? 0) + (floatval($data['static_xp']) ?? 0);
 
             foreach($characters as $character) {
+                $user = User::where('id', $character->user_id)->first();
                 if (!$this->logAdminAction($staff, 'XP Grant', 'Granted '.$xp.' XP to '.$character->fullName)) {
                     throw new \Exception('Failed to log admin action.');
                 }
-                if ($this->creditCharacterXP($staff, $user, 'Staff Grant', Arr::only($data, ['data']), $character, $xp)) {
+                if ($this->creditCharacterXP($staff, $user, 'Staff Grant', $data['data'] ?? '', $character, $xp)) {
                     Notifications::create('XP_GRANT', $user, [
                         'character_name'    => $character->fullName,
                         'xp_points'         => $xp,
@@ -333,8 +337,6 @@ class TrackerManager extends Service {
                     throw new \Exception('Failed to credit XP to '.$character->fullName.'.');
                 }
             }
-
-
         }  catch (\Exception $e) {
             $this->setError('error', $e->getMessage());
         }
@@ -350,14 +352,25 @@ class TrackerManager extends Service {
     public function creditCharacterXP($sender, $recipient, $type, $data, $character, $xp) {
         DB::beginTransaction();
 
-        //NOT DONE - WORK ON THIS MORE. To be converted from item grant to XP grant.
-
         try {
-            $encoded_data = \json_encode($data);
+            $xp_data = ['Grant' => ['Manual Staff Grant' => $xp]];
 
-            
+            $temp_tracker = Tracker::create([
+                'user_id'   => $recipient->id,
+                'staff_id'  => $sender->id,
+                'status'    => 'Approved',
+                'character_id'  => $character->id,
+                'gallery_id'    => null,
+                'image_url'     => null,
+                'url'           => null,
+                'created_at'    => Carbon::now(),
+                'updated_at'    => Carbon::now(),
+                'data'          => json_encode($xp_data),
+            ]);
+            $temp_tracker->save();
+            $data = 'Staff Grant'. ($data ? ': '.$data : '');
 
-            if ($type && !$this->createLog($sender ? $sender->id : null, $character ? $character->id : null, $data['data'], $xp)) {
+            if ($type && !$this->createLog($sender ? $sender->id : null, $character ? $character->id : null, $data, $xp)) {
                 throw new \Exception('Failed to create log.');
             }
 
@@ -386,7 +399,7 @@ class TrackerManager extends Service {
                 'character_id'   => $characterId,
                 'log'            => 'XP Granted',
                 'log_type'       => 'XP Grant',
-                'data'           => $data, // this should be just a string
+                'data'           => json_encode($data),
                 'xp'             => $xp,
                 'created_at'     => Carbon::now(),
                 'updated_at'     => Carbon::now(),
@@ -441,8 +454,6 @@ class TrackerManager extends Service {
                 unset($data['enable_rounding']);
             }
             if (isset($data['field_name'])) {
-                \Log::info('CALCULATOR DATA:', $data);
-
                 $form_config = [];
 
                 //Set up the parent fields
@@ -461,7 +472,6 @@ class TrackerManager extends Service {
                 //Find the children and set them into 'field_options' for their parent
                 foreach ($data as $sub_name => $value) {
                     $name_array = explode('_', $sub_name);
-                    \Log::info('OPTIONS:', [$sub_name.' - SPLIT: '.print_r($name_array, true)]);
                     if( array_key_exists(2, $name_array) && array_key_exists(3, $name_array) && array_key_exists(4, $name_array) ) {
                         $option_field = $name_array[2]; //ex: label
                         $field_group = $name_array[3]; //ex: group_id
@@ -474,8 +484,6 @@ class TrackerManager extends Service {
                         ];
                         $updateField = $rename_fields[$option_field];
                         $value = $value[0] ?? $value ?? null;
-
-                        \Log::info('VALUE OF OPTION:', [$sub_name.' - VAL: '.$value]);
 
                         if($option_field) {
                             $form_config[$field_group]['field_options'][$option_id][$updateField] = $value;
@@ -491,26 +499,6 @@ class TrackerManager extends Service {
                         ]);
                     }
                 }
-
-                /*
-                 * If all turns out right the array should look something like this:
-                 * {
-                 * "0": {
-                    * "field_name": "name",
-                    * "field_type": "type",
-                    * "field_description": "desc",
-                    * "field_options": {
-                        * "0": {
-                            * "point_value": 0,
-                            * "label": "label",
-                            * "description": "desc"
-                            * }
-                        * }
-                    * },
-                 * }
-                 */
-
-                \Log::info('FINISHED FORM:', $form_config);
             }
         } catch (\Exception $e) {
             $this->setError('error', $e->getMessage());
