@@ -43,11 +43,11 @@
                                 <div class="card-body text-center">
                                     <img src="/images/avatars/{{ $entry->user->avatar }}" class="rounded-circle" style="width:100px; height:100px;" alt="{{ $entry->user->name }}">
                                     <h5>{!! $entry->user->displayName !!}</h5>
-                                    @if ($entry->role === 'Primary')
-                                    <h6>Main</h6>
-                                    @else
-                                    <h6>{{ $entry->role }}</h6>
-                                    @endif
+                                        @if ($entry->role === 'primary')
+                                        <h6>Main</h6>
+                                        @else
+                                        <h6>{{ $entry->role }}</h6>
+                                        @endif
                                     @if($entry->otherRoles->isNotEmpty())
                                         <div class="text-center">
                                             @foreach($entry->otherRoles as $role)

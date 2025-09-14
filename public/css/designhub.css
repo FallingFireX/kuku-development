@@ -230,6 +230,14 @@
 	cursor: pointer;
 }
 
+.carousel-item img {
+  height: 300px !important;      /* lock carousel height */
+  width: auto !important;        /* keep natural width scaling */
+  object-fit: contain; /* fit inside without cropping */
+  margin: 0 auto;     /* center horizontally */
+}
+
+
 hr{
 	border-width: 2px;
 	border-color: var(--green-400);
