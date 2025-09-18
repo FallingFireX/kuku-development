@@ -42,7 +42,7 @@ class IndexSitePages extends Command {
             //B. ------------------ Index types of content
             //1. FIND ALL CHARACTERS TO INDEX
             $existingCharacters = DB::table('characters')->pluck('id');
-            $characters = Character::visible()->myo(0)->whereNotIn('slug', $existingCharacters)->get();
+            $characters = Character::visible()->myo(0)->whereNotIn('slug', $existingCharacters)->where('is_visible', 1)->get();
             foreach ($characters as $character) {
                 DB::table('site_temp_index')->insert([
                     // input all neccessary fields
@@ -55,7 +55,7 @@ class IndexSitePages extends Command {
             }
 
             //2. FIND ALL PAGES TO INDEX
-            $pages = DB::table('site_pages')->get();
+            $pages = DB::table('site_pages')->get()->where('is_visible', 1);
             foreach ($pages as $page) {
                 DB::table('site_temp_index')->insert([
                     // input all neccessary fields
@@ -94,7 +94,7 @@ class IndexSitePages extends Command {
             }
 
             //5. FIND ALL PROMPTS TO INDEX
-            $prompts = DB::table('prompts')->get();
+            $prompts = DB::table('prompts')->where('is_active', 1)->get();
             foreach ($prompts as $prompt) {
                 DB::table('site_temp_index')->insert([
                     // input all neccessary fields
@@ -107,7 +107,7 @@ class IndexSitePages extends Command {
             }
 
             //6. FIND ALL SHOPS TO INDEX
-            $shops = DB::table('shops')->get();
+            $shops = DB::table('shops')->where('is_active', 1)->get();
             foreach ($shops as $shop) {
                 DB::table('site_temp_index')->insert([
                     // input all neccessary fields
@@ -116,6 +116,19 @@ class IndexSitePages extends Command {
                     'type'        => 'Shop',
                     'identifier'  => $shop->id,
                     'description' => substr_replace(strip_tags($shop->description), '...', 100),
+                ]);
+            }
+
+            //7. FIND ALL TRAITS TO INDEX
+            $features = DB::table('features')->where('is_visible', 1)->get();
+            foreach ($features as $feature) {
+                DB::table('site_temp_index')->insert([
+                    // input all neccessary fields
+                    'id'          => $feature->id,
+                    'title'       => $feature->name,
+                    'type'        => 'Feature',
+                    'identifier'  => $feature->name,
+                    'description' => substr_replace(strip_tags($feature->parsed_description), '...', 100),
                 ]);
             }
 
