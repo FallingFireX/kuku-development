@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Facades\Settings;
+use App\Models\Base\Base;
 use App\Models\Feature\Feature;
 use App\Models\Marking\Marking;
 use App\Models\Rarity;
@@ -36,6 +37,7 @@ class DesignHubController extends Controller {
             'subtypes'          => Subtype::orderBy('sort', 'DESC')->get(),
             'markings'          => $markings,
             'rarity_list'       => $rarities,
+            'bases'             => Base::where('is_visible', 1)->get(),
             'trait_lists'       => self::getDesignHubTraitByCategory($request, $trait_categories),
         ]);
     }
