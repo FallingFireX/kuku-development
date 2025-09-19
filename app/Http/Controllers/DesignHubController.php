@@ -37,7 +37,6 @@ class DesignHubController extends Controller {
             'subtypes'          => Subtype::orderBy('sort', 'DESC')->get(),
             'markings'          => $markings,
             'rarity_list'       => $rarities,
-            'bases'             => Base::where('is_visible', 1)->get(),
             'trait_lists'       => self::getDesignHubTraitByCategory($request, $trait_categories),
         ]);
     }
