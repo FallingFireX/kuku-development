@@ -158,18 +158,18 @@
 @endsection
 
 @section('scripts')
-@parent
-<script>
-    $(document).ready(function() {
-        $('.searchBar').on('keyup', function(e) {
-            var sTerm = $(this).val().toLowerCase();
-            var type = $(this).attr('data-id');
-            //console.log(type)
-            //console.log(sTerm);
-            $('.searchContent[data-id="' + type + '"]').children().each(function() {
-                console.log($(this))
-                $(this).toggle($(this).text().toLowerCase().indexOf(sTerm) > -1);
-            });
-        });
+    @parent
+    <script>
+        $(document).ready(function() {
+                    $('.searchBar').on('keyup', function(e) {
+                        var sTerm = $(this).val().toLowerCase();
+                        var type = $(this).attr('data-id');
+                        //console.log(type)
+                        //console.log(sTerm);
+                        $('.searchContent[data-id="' + type + '"]').children().each(function() {
+                            console.log($(this))
+                            $(this).toggle($(this).text().toLowerCase().indexOf(sTerm) > -1);
+                        });
+                    });
     </script>
 @endsection
