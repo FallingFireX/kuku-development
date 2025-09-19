@@ -10,19 +10,19 @@
     {!! breadcrumbs(['Design Hub' => 'Design Hub']) !!}
     <h1>Design Hub</h1>
 
-    @if($dh_start)
-    <div class="card rounded mb-4">
-        <div class="card-header">
-            {!! $dh_start->title !!}
+    @if ($dh_start)
+        <div class="card rounded mb-4">
+            <div class="card-header">
+                {!! $dh_start->title !!}
+            </div>
+            <div class="card-body">
+                {!! $dh_start->text !!}
+            </div>
         </div>
-        <div class="card-body">
-            {!! $dh_start->text !!}
-        </div>
-    </div>
     @elseif(!$dh_start && Auth::user()->isStaff)
-    <div class="alert alert-warning" role="alert">
-        Page for design hub start is missing. Please run <code>php artisan add-text-pages</code>. This message is only visible to staff.
-    </div>
+        <div class="alert alert-warning" role="alert">
+            Page for design hub start is missing. Please run <code>php artisan add-text-pages</code>. This message is only visible to staff.
+        </div>
     @endif
 
     <div class="card rounded mb-4">
@@ -132,19 +132,19 @@
         </div>
     </div>
 
-    @if($dh_end)
-    <div class="card rounded mb-4">
-        <div class="card-header">
-            {!! $dh_end->title !!}
+    @if ($dh_end)
+        <div class="card rounded mb-4">
+            <div class="card-header">
+                {!! $dh_end->title !!}
+            </div>
+            <div class="card-body">
+                {!! $dh_end->text !!}
+            </div>
         </div>
-        <div class="card-body">
-            {!! $dh_end->text !!}
-        </div>
-    </div>
     @elseif(!$dh_end && Auth::user()->isStaff)
-    <div class="alert alert-warning" role="alert">
-        Page for design hub end is missing. Please run <code>php artisan add-text-pages</code>. This message is only visible to staff.
-    </div>
+        <div class="alert alert-warning" role="alert">
+            Page for design hub end is missing. Please run <code>php artisan add-text-pages</code>. This message is only visible to staff.
+        </div>
     @endif
 
 
