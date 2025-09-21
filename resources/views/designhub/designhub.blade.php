@@ -161,15 +161,13 @@
     @parent
     <script>
         $(document).ready(function() {
-                    $('.searchBar').on('keyup', function(e) {
-                        var sTerm = $(this).val().toLowerCase();
-                        var type = $(this).attr('data-id');
-                        //console.log(type)
-                        //console.log(sTerm);
-                        $('.searchContent[data-id="' + type + '"]').children().each(function() {
-                            console.log($(this))
-                            $(this).toggle($(this).text().toLowerCase().indexOf(sTerm) > -1);
-                        });
-                    });
+            $('.searchBar').on('keyup', function(e) {
+                var sTerm = $(this).val().toLowerCase();
+                var type = $(this).attr('data-id');
+                $('.searchContent[data-id="' + type + '"]').children().each(function() {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(sTerm) > -1);
+                });
+            });
+        });
     </script>
 @endsection
