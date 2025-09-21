@@ -159,6 +159,9 @@
                             <a class="dropdown-item" href="https://kukuri-arpg.w3spaces.com/activities/quests.html">
                                 Current Quest/Event
                             </a>
+                            <a class="dropdown-item" href="{{ url('prompts/prompt-categories') }}">
+                                All Prompts
+                            </a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="{{ url('info/hunting') }}">
                                 Hunting
