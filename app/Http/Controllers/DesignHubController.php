@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Facades\Settings;
-use App\Models\Base\Base;
 use App\Models\Feature\Feature;
 use App\Models\Marking\Marking;
 use App\Models\Rarity;
