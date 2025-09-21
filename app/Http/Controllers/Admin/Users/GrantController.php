@@ -13,10 +13,9 @@ use App\Models\Submission\Submission;
 use App\Models\Trade;
 use App\Models\User\User;
 use App\Models\User\UserItem;
-use App\Models\Tracker;
-use App\Services\TrackerManager;
 use App\Services\CurrencyManager;
 use App\Services\InventoryManager;
+use App\Services\TrackerManager;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 

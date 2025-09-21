@@ -8,7 +8,6 @@ use App\Models\Character\Character;
 use App\Models\Tracker\Tracker;
 use App\Models\User\User;
 use Carbon\Carbon;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 
 class TrackerManager extends Service {
@@ -306,7 +305,7 @@ class TrackerManager extends Service {
      */
     public function grantCharacterXP($data, $staff) {
         try {
-            if(!$data) {
+            if (!$data) {
                 throw new \Exception('Something went wrong, data missing.');
             }
 
@@ -320,7 +319,7 @@ class TrackerManager extends Service {
 
             $xp = (floatval($data['levels']) ?? 0) + (floatval($data['static_xp']) ?? 0);
 
-            foreach($characters as $character) {
+            foreach ($characters as $character) {
                 $user = User::where('id', $character->user_id)->first();
                 if (!$this->logAdminAction($staff, 'XP Grant', 'Granted '.$xp.' XP to '.$character->fullName)) {
                     throw new \Exception('Failed to log admin action.');
@@ -338,7 +337,7 @@ class TrackerManager extends Service {
                     throw new \Exception('Failed to credit XP to '.$character->fullName.'.');
                 }
             }
-        }  catch (\Exception $e) {
+        } catch (\Exception $e) {
             $this->setError('error', $e->getMessage());
         }
 
@@ -362,9 +361,9 @@ class TrackerManager extends Service {
             $xp_data = ['Grant' => ['Manual Staff Grant' => $xp]];
 
             $temp_tracker = Tracker::create([
-                'user_id'   => $recipient->id,
-                'staff_id'  => $sender->id,
-                'status'    => 'Approved',
+                'user_id'       => $recipient->id,
+                'staff_id'      => $sender->id,
+                'status'        => 'Approved',
                 'character_id'  => $character->id,
                 'gallery_id'    => null,
                 'image_url'     => null,
@@ -374,7 +373,7 @@ class TrackerManager extends Service {
                 'data'          => json_encode($xp_data),
             ]);
             $temp_tracker->save();
-            $data = 'Staff Grant'. ($data ? ': '.$data : '');
+            $data = 'Staff Grant'.($data ? ': '.$data : '');
 
             if ($type && !$this->createLog($sender ? $sender->id : null, $character ? $character->id : null, $data, $xp)) {
                 throw new \Exception('Failed to create log.');
@@ -478,7 +477,7 @@ class TrackerManager extends Service {
                 //Find the children and set them into 'field_options' for their parent
                 foreach ($data as $sub_name => $value) {
                     $name_array = explode('_', $sub_name);
-                    if( array_key_exists(2, $name_array) && array_key_exists(3, $name_array) && array_key_exists(4, $name_array) ) {
+                    if (array_key_exists(2, $name_array) && array_key_exists(3, $name_array) && array_key_exists(4, $name_array)) {
                         $option_field = $name_array[2]; //ex: label
                         $field_group = $name_array[3]; //ex: group_id
                         $option_id = $name_array[4]; //ex: option_id
@@ -491,7 +490,7 @@ class TrackerManager extends Service {
                         $updateField = $rename_fields[$option_field];
                         $value = $value[0] ?? $value ?? null;
 
-                        if($option_field) {
+                        if ($option_field) {
                             $form_config[$field_group]['field_options'][$option_id][$updateField] = $value;
                         }
 
