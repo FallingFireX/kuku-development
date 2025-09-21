@@ -12,10 +12,10 @@ use App\Models\Model;
 use App\Models\Rarity;
 use App\Models\Submission\Submission;
 use App\Models\Submission\SubmissionCharacter;
+use App\Models\Tracker\TrackerLog;
 use App\Models\Trade;
 use App\Models\User\User;
 use App\Models\User\UserCharacterLog;
-use App\Models\Tracker\TrackerLog;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\SoftDeletes;
 

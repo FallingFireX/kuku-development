@@ -8,11 +8,11 @@ use App\Models\Character\CharacterDesignUpdate;
 use App\Models\Character\CharacterItem;
 use App\Models\Currency\Currency;
 use App\Models\Item\Item;
+use App\Models\SiteOptions;
 use App\Models\Submission\Submission;
 use App\Models\Trade;
 use App\Models\User\User;
 use App\Models\User\UserItem;
-use App\Models\SiteOptions;
 use App\Models\Tracker;
 use App\Services\TrackerManager;
 use App\Services\CurrencyManager;
@@ -128,8 +128,9 @@ class GrantController extends Controller {
      */
     public function getXP() {
         $levels = SiteOptions::where('key', 'xp_levels')->pluck('value');
+
         return view('admin.grants.xp', [
-            'users' => User::orderBy('id')->pluck('name', 'id'),
+            'users'      => User::orderBy('id')->pluck('name', 'id'),
             'characters' => Character::orderBy('name')->get()->pluck('fullName', 'id')->mapWithKeys(function ($item, $key) {
                 return [$key => $item];
             })->toArray(),

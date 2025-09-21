@@ -15,7 +15,7 @@ class TrackerLog extends Model {
     protected $fillable = [
         'sender_id', 'character_id',
         'log', 'log_type', 'data',
-        'xp'
+        'xp',
     ];
 
     /**

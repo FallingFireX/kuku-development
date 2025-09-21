@@ -4,9 +4,9 @@ namespace App\Services;
 
 use App\Facades\Notifications;
 use App\Facades\Settings;
+use App\Models\Character\Character;
 use App\Models\Tracker\Tracker;
 use App\Models\User\User;
-use App\Models\Character\Character;
 use Carbon\Carbon;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
@@ -301,7 +301,8 @@ class TrackerManager extends Service {
     /**
      * Grants XP to a given character.
      *
-     * @param mixed $data the data of the submission to be deleted
+     * @param mixed $data  the data of the submission to be deleted
+     * @param mixed $staff
      */
     public function grantCharacterXP($data, $staff) {
         try {
@@ -344,10 +345,15 @@ class TrackerManager extends Service {
         return $this->rollbackReturn(false);
     }
 
-    /** 
+    /**
      * Credit the XP to the character.
-     * 
-     * 
+     *
+     * @param mixed $sender
+     * @param mixed $recipient
+     * @param mixed $type
+     * @param mixed $data
+     * @param mixed $character
+     * @param mixed $xp
      */
     public function creditCharacterXP($sender, $recipient, $type, $data, $character, $xp) {
         DB::beginTransaction();
@@ -386,9 +392,9 @@ class TrackerManager extends Service {
      * Creates an XP log.
      *
      * @param int    $senderId
-     * @param int    $recipientId
      * @param string $data
      * @param float  $xp
+     * @param mixed  $characterId
      *
      * @return float
      */
