@@ -2,12 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use App\Models\User\UserTeam;
+use Illuminate\Database\Eloquent\Model;
 
-class Team extends Model
-{
+class Team extends Model {
     /**
      * The attributes that are mass assignable.
      *
@@ -37,8 +35,8 @@ class Team extends Model
      * @var array
      */
     public static $createRules = [
-        'name'        => 'unique:teams|required|between:2,225',
-        'description' => 'nullable',
+        'name'             => 'unique:teams|required|between:2,225',
+        'description'      => 'nullable',
         'responsibilities' => 'nullable',
     ];
 
@@ -54,14 +52,13 @@ class Team extends Model
         'relation'       => 'nullable',
     ];
 
-  
     /**********************************************************************************************
 
         ACCESSORS
 
     **********************************************************************************************/
 
-   /**
+    /**
      * Gets the admin edit URL.
      *
      * @return string
@@ -90,15 +87,15 @@ class Team extends Model
 
     public function users() {
         return $this->belongsToMany(User::class, 'user_admin_role', 'team_id', 'user_id')
-                    ->withPivot('type')
-                    ->withTimestamps();
+            ->withPivot('type')
+            ->withTimestamps();
     }
 
     public function userTeams() {
         return $this->hasMany(UserTeam::class, 'team_id');
     }
 
-    public function parentTeam(){
-        return $this->belongsTo(Team::class, 'relation');
+    public function parentTeam() {
+        return $this->belongsTo(self::class, 'relation');
     }
 }

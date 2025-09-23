@@ -687,7 +687,7 @@ return [
         'message' => 'It\'s your birthday this month, {user_name}! A gift has been left in your inventory. (<a href="{url}">View Inventory</a>)',
         'url'     => 'inventory',
     ],
-    
+
     // APPLICATION_ACCEPTED
     1701 => [
         'name'    => 'Team Application Accepted',

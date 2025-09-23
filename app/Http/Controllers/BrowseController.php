@@ -13,12 +13,12 @@ use App\Models\Feature\Feature;
 use App\Models\Marking\Marking;
 use App\Models\Rank\Rank;
 use App\Models\Rank\RankPower;
-use App\Models\SitePage;
 use App\Models\Rarity;
+use App\Models\SitePage;
 use App\Models\Species\Species;
 use App\Models\Species\Subtype;
-use App\Models\User\User;
 use App\Models\Team;
+use App\Models\User\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -276,9 +276,8 @@ class BrowseController extends Controller {
         }
         if ($request->get('genotype')) {
             $genotype = $request->get('genotype');
-            $imageQuery->whereRaw('BINARY `genotype` LIKE ?', ["%$genotype%"]);
+            $imageQuery->whereRaw('BINARY `genotype` LIKE ?', ["%{$genotype}%"]);
         }
-        
 
         if ($request->get('description')) {
             $imageQuery->where('description', 'LIKE', '%'.$request->get('description').'%');
@@ -382,7 +381,7 @@ class BrowseController extends Controller {
             'features'        => Feature::getDropdownItems(),
             'sublists'        => Sublist::orderBy('sort', 'DESC')->get(),
             'userOptions'     => User::query()->orderBy('name')->pluck('name', 'id')->toArray(),
-            
+
             'markings'     => Marking::getDropdownItems(),
             'bases'        => ['' => 'Select Base(s)'] + Base::orderBy('name', 'DESC')->pluck('name', 'id')->toArray(),
         ]);
@@ -519,15 +518,15 @@ class BrowseController extends Controller {
         }
 
         return view('browse.myo_masterlist', [
-            'isMyo'       => true,
-            'slots'       => $query->paginate(24)->appends($request->query()),
-            'specieses'   => [0 => 'Any Species'] + Species::visible(Auth::check() ? Auth::user() : null)->orderBy('specieses.sort', 'DESC')->pluck('name', 'id')->toArray(),
-            'rarities'    => [0 => 'Any Rarity'] + Rarity::orderBy('rarities.sort', 'DESC')->pluck('name', 'id')->toArray(),
-            'features'    => Feature::getDropdownItems(),
+            'isMyo'        => true,
+            'slots'        => $query->paginate(24)->appends($request->query()),
+            'specieses'    => [0 => 'Any Species'] + Species::visible(Auth::check() ? Auth::user() : null)->orderBy('specieses.sort', 'DESC')->pluck('name', 'id')->toArray(),
+            'rarities'     => [0 => 'Any Rarity'] + Rarity::orderBy('rarities.sort', 'DESC')->pluck('name', 'id')->toArray(),
+            'features'     => Feature::getDropdownItems(),
             'markings'     => Marking::getDropdownItems(),
             'bases'        => ['' => 'Select Base(s)'] + Base::orderBy('name', 'DESC')->pluck('name', 'id')->toArray(),
-            'sublists'    => Sublist::orderBy('sort', 'DESC')->get(),
-            'userOptions' => User::query()->orderBy('name')->pluck('name', 'id')->toArray(),
+            'sublists'     => Sublist::orderBy('sort', 'DESC')->get(),
+            'userOptions'  => User::query()->orderBy('name')->pluck('name', 'id')->toArray(),
         ]);
     }
 
@@ -736,14 +735,13 @@ class BrowseController extends Controller {
      * Get all teams and their members.
      * Each member is sorted by priority of their role. members will only ever appear on the page ONCE
      * unless they are on a leadership team.
-     * 
-     * Im not the smartest with Laravel so this is probably pretty ugly but it functions. 
+     *
+     * Im not the smartest with Laravel so this is probably pretty ugly but it functions.
      */
-    public function getTeamsIndex()
-    {
+    public function getTeamsIndex() {
         $users = User::with(['teams'])->get();
-        
-        //Roles are sorted by priority with lead being highest, trainee being lowest. Null is assumed to be a "primary" member.
+
+        // Roles are sorted by priority with lead being highest, trainee being lowest. Null is assumed to be a "primary" member.
         $rolePriority = [
             'Lead'      => 1,
             'Primary'   => 2,
@@ -753,11 +751,11 @@ class BrowseController extends Controller {
         ];
         $entries = collect();
 
-        //Get teams and team roles per staff member
+        // Get teams and team roles per staff member
         foreach ($users as $user) {
             foreach ($user->teams as $team) {
                 $role = $team->pivot->type ?? 'Primary';
-                $entries->push((object)[
+                $entries->push((object) [
                     'user'     => $user,
                     'team'     => $team,
                     'role'     => $role,
@@ -766,14 +764,14 @@ class BrowseController extends Controller {
             }
         }
 
-        $leadership = $entries->filter(fn($user) => $user->team->type === 'Leadership');
+        $leadership = $entries->filter(fn ($user) => $user->team->type === 'Leadership');
         $regular = $entries
-            ->reject(fn($user) => $user->team->type === 'Leadership')
+            ->reject(fn ($user) => $user->team->type === 'Leadership')
             ->groupBy('user.id')
             ->map(function ($userEntries) {
                 $sorted = $userEntries->sortBy('priority')->values();
-                $main = $sorted->first(); 
-                $main->otherRoles = $sorted->slice(1)->map(fn($role) => [
+                $main = $sorted->first();
+                $main->otherRoles = $sorted->slice(1)->map(fn ($role) => [
                     'team' => $role->team,
                     'role' => $role->role,
                 ]);
@@ -781,8 +779,8 @@ class BrowseController extends Controller {
                 return $main;
             });
 
-        $regularTeam    = $regular->groupBy(fn($user) => $user->team->id);
-        $leadershipTeam = $leadership->groupBy(fn($user) => $user->team->id);
+        $regularTeam = $regular->groupBy(fn ($user) => $user->team->id);
+        $leadershipTeam = $leadership->groupBy(fn ($user) => $user->team->id);
 
         return view('browse.teams', [
             'teams'      => $regularTeam,
@@ -790,14 +788,11 @@ class BrowseController extends Controller {
         ]);
     }
 
-    public function getJoinTeam (){
+    public function getJoinTeam() {
         return view('browse.teams_info', [
             'application_intro' => SitePage::where('key', 'app-intro')->first(),
-            'teams' => Team::orderBy('id')->get(),
-            'relation' => Team::orderBy('id')->get(),
+            'teams'             => Team::orderBy('id')->get(),
+            'relation'          => Team::orderBy('id')->get(),
         ]);
     }
-
-    
-
 }

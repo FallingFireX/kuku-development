@@ -3,13 +3,11 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\Team;
-use App\Models\User\User;
+use Illuminate\Http\Request;
 
-class TeamController extends Controller
-{
-     /*
+class TeamController extends Controller {
+    /*
     |--------------------------------------------------------------------------
     | Team/Department controller
     |--------------------------------------------------------------------------
@@ -40,8 +38,10 @@ class TeamController extends Controller
         ]);
     }
 
-     /**
+    /**
      * Shows the create team page.
+     *
+     * @param mixed $id
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
@@ -55,23 +55,25 @@ class TeamController extends Controller
         return view('admin.team.create_edit_team', [
             'teams'    => $team,
             'allTeams' => $allTeams,
-           
+
         ]);
     }
 
     /**
-     * Creates or edits a team
+     * Creates or edits a team.
+     *
+     * @param mixed|null $id
      *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function postCreateEditTeam(Request $request, $id = null) { 
+    public function postCreateEditTeam(Request $request, $id = null) {
         $request->validate([
-                'name'           => 'required|between:2,225',
-                'apps_open'      => 'nullable|boolean',
-                'description'    => 'nullable',
-                'relation'       => 'nullable',
-                'responsibilities'       => 'nullable',
-            ]);
+            'name'                   => 'required|between:2,225',
+            'apps_open'              => 'nullable|boolean',
+            'description'            => 'nullable',
+            'relation'               => 'nullable',
+            'responsibilities'       => 'nullable',
+        ]);
 
         if ($id) {
             // Editing an existing item
@@ -82,12 +84,10 @@ class TeamController extends Controller
             // Creating a new item
             $team = Team::create($request->all());
             flash('Team created successfully.')->success();
+
             return redirect()->to('admin/teams/edit/'.$team->id);
         }
 
         return redirect()->back();
     }
-
-
-   
 }

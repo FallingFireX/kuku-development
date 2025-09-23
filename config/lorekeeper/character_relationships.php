@@ -21,4 +21,3 @@ return [
     'Roomate'                  => 'Roomate',
     'Significant Others'       => 'Significant Others',
 ];
- 

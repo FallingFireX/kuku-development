@@ -35,9 +35,6 @@ use App\Services\CharacterManager;
 use App\Services\CurrencyManager;
 use App\Services\DesignUpdateManager;
 use App\Services\InventoryManager;
-use App\Models\Feature\Feature;
-use App\Models\Feature\FeatureCategory;
-use App\Models\Feature\FeatureSubcategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\View;
@@ -157,9 +154,6 @@ class CharacterController extends Controller {
         ]);
     }
 
-    
-
-
     /**
      * Shows a character's profile.
      *
@@ -217,10 +211,10 @@ class CharacterController extends Controller {
         }
 
         $data = $request->only([
-            'name', 'link', 'text', 'is_gift_art_allowed', 'is_gift_writing_allowed', 
-            'is_trading', 'character_warning', 'custom_values_group', 'custom_values_name', 
-            'custom_values_data', 'alert_user', 'is_links_open', 'kotm', 'location', 'faction', 
-            'adoption', 'donation'
+            'name', 'link', 'text', 'is_gift_art_allowed', 'is_gift_writing_allowed',
+            'is_trading', 'character_warning', 'custom_values_group', 'custom_values_name',
+            'custom_values_data', 'alert_user', 'is_links_open', 'kotm', 'location', 'faction',
+            'adoption', 'donation',
         ]);
 
         $isMod = Auth::user()->hasPower('manage_characters');
@@ -808,70 +802,79 @@ class CharacterController extends Controller {
         ]);
     }
 
-   
     /**
      * Shows a character's transfer page.
      *
-     * @param  string  $slug
+     * @param string $slug
+     *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function getTransfer($slug)
-    {
-        if(!Auth::check()) abort(404);
+    public function getTransfer($slug) {
+        if (!Auth::check()) {
+            abort(404);
+        }
 
         $isMod = Auth::user()->hasPower('manage_characters');
         $isOwner = ($this->character->user_id == Auth::user()->id);
-        if(!$isMod && !$isOwner) abort(404);
+        if (!$isMod && !$isOwner) {
+            abort(404);
+        }
 
         return view('character.transfer', [
-            'character' => $this->character,
-            'transfer' => CharacterTransfer::active()->where('character_id', $this->character->id)->first(),
-            'cooldown' => Settings::get('transfer_cooldown'),
+            'character'      => $this->character,
+            'transfer'       => CharacterTransfer::active()->where('character_id', $this->character->id)->first(),
+            'cooldown'       => Settings::get('transfer_cooldown'),
             'transfersQueue' => Settings::get('open_transfers_queue'),
-            'userOptions' => User::visible()->orderBy('name')->pluck('name', 'id')->toArray(),
+            'userOptions'    => User::visible()->orderBy('name')->pluck('name', 'id')->toArray(),
         ]);
     }
 
     /**
      * Opens a transfer request for a character.
      *
-     * @param  \Illuminate\Http\Request       $request
-     * @param  App\Services\CharacterManager  $service
-     * @param  string                         $slug
+     * @param App\Services\CharacterManager $service
+     * @param string                        $slug
+     *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function postTransfer(Request $request, CharacterManager $service, $slug)
-    {
-        if(!Auth::check()) abort(404);
+    public function postTransfer(Request $request, CharacterManager $service, $slug) {
+        if (!Auth::check()) {
+            abort(404);
+        }
 
-        if($service->createTransfer($request->only(['recipient_id', 'user_reason']), $this->character, Auth::user())) {
+        if ($service->createTransfer($request->only(['recipient_id', 'user_reason']), $this->character, Auth::user())) {
             flash('Transfer created successfully.')->success();
+        } else {
+            foreach ($service->errors()->getMessages()['error'] as $error) {
+                flash($error)->error();
+            }
         }
-        else {
-            foreach($service->errors()->getMessages()['error'] as $error) flash($error)->error();
-        }
+
         return redirect()->back();
     }
 
     /**
      * Cancels a transfer request for a character.
      *
-     * @param  \Illuminate\Http\Request       $request
-     * @param  App\Services\CharacterManager  $service
-     * @param  string                         $slug
-     * @param  int                            $id
+     * @param App\Services\CharacterManager $service
+     * @param string                        $slug
+     * @param int                           $id
+     *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function postCancelTransfer(Request $request, CharacterManager $service, $slug, $id)
-    {
-        if(!Auth::check()) abort(404);
+    public function postCancelTransfer(Request $request, CharacterManager $service, $slug, $id) {
+        if (!Auth::check()) {
+            abort(404);
+        }
 
-        if($service->cancelTransfer(['transfer_id' => $id], Auth::user())) {
+        if ($service->cancelTransfer(['transfer_id' => $id], Auth::user())) {
             flash('Transfer cancelled.')->success();
+        } else {
+            foreach ($service->errors()->getMessages()['error'] as $error) {
+                flash($error)->error();
+            }
         }
-        else {
-            foreach($service->errors()->getMessages()['error'] as $error) flash($error)->error();
-        }
+
         return redirect()->back();
     }
 

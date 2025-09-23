@@ -6,10 +6,8 @@ use Closure;
 use Illuminate\Support\Facades\Auth;
 use Settings;
 
-class CheckMaintenance
-{
-    public function handle($request, Closure $next)
-    {
+class CheckMaintenance {
+    public function handle($request, Closure $next) {
         if (Settings::get('is_maintenance_mode')) {
             // Allow admins with maintenance_access to bypass
             if (Auth::check() && Auth::user()->hasPower('maintenance_access')) {

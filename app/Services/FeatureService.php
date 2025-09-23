@@ -584,7 +584,6 @@ class FeatureService extends Service {
      * Processes user input for creating/updating a feature.
      *
      * @param Feature $feature
-     * @param mixed   $user
      *
      * @return array
      */

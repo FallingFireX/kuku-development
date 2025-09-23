@@ -241,44 +241,42 @@ class Feature extends Model {
 
     **********************************************************************************************/
 
- 
     /**
- * Displays the model's name, linked to its encyclopedia page.
- *
- * @return string
- */
-public function getDisplayNameAttribute() {
-    if (($this->parent_id || $this->altTypes->count()) && $this->display_mode != 0) {
-        switch ($this->display_mode) {
-            case 1:
-                $name = $this->name.' ('.($this->species ? $this->species->name : 'None').')';
-                break; // <-- Add this break!
-            case 2:
-                if ($this->subtype) {
-                    $name = $this->name.' ('.$this->subtype->name.')';
-                }
-                break;
-            case 3:
-                if ($this->parent) {
-                    $name = $this->parent->name.' ('.$this->name.')';
-                }
-                break;
-            case 4:
-                if ($this->parent) {
-                    $name = $this->name.' '.$this->parent->name;
-                }
-                break;
+     * Displays the model's name, linked to its encyclopedia page.
+     *
+     * @return string
+     */
+    public function getDisplayNameAttribute() {
+        if (($this->parent_id || $this->altTypes->count()) && $this->display_mode != 0) {
+            switch ($this->display_mode) {
+                case 1:
+                    $name = $this->name.' ('.($this->species ? $this->species->name : 'None').')';
+                    break; // <-- Add this break!
+                case 2:
+                    if ($this->subtype) {
+                        $name = $this->name.' ('.$this->subtype->name.')';
+                    }
+                    break;
+                case 3:
+                    if ($this->parent) {
+                        $name = $this->parent->name.' ('.$this->name.')';
+                    }
+                    break;
+                case 4:
+                    if ($this->parent) {
+                        $name = $this->name.' '.$this->parent->name;
+                    }
+                    break;
+            }
         }
+
+        // Only show rarity if it exists and its name is not "rank"
+        $rarityDisplay = ($this->rarity && strtolower($this->rarity->name) !== 'rank')
+            ? ' ('.$this->rarity->displayName.')'
+            : '';
+
+        return '<a href="'.($this->parent_id && !$this->display_separate ? $this->parent->url : $this->url).'" class="display-trait">'.($name ?? $this->name).'</a>'.$rarityDisplay;
     }
-
-    // Only show rarity if it exists and its name is not "rank"
-    $rarityDisplay = ($this->rarity && strtolower($this->rarity->name) !== 'rank')
-        ? ' ('.$this->rarity->displayName.')'
-        : '';
-
-    return '<a href="'.($this->parent_id && !$this->display_separate ? $this->parent->url : $this->url).'" class="display-trait">'.($name ?? $this->name).'</a>'.$rarityDisplay;
-}
-
 
     /**
      * Displays the model's name, clarified.

@@ -51,12 +51,12 @@ class UniqueItemController extends Controller {
      */
     public function postCreateEditItem(Request $request, $id = null) { // $id is now optional
         $request->validate([
-                'category_1'  => 'required|exists:unique_item_categories,id',
-                'category_2'  => 'nullable|exists:unique_item_categories,id',
-                'link'        => 'required|string',
-                'description' => 'required|string|max:10000',
-                'owner_id'    => 'nullable|sometimes|exists:users,id',
-            ]);
+            'category_1'  => 'required|exists:unique_item_categories,id',
+            'category_2'  => 'nullable|exists:unique_item_categories,id',
+            'link'        => 'required|string',
+            'description' => 'required|string|max:10000',
+            'owner_id'    => 'nullable|sometimes|exists:users,id',
+        ]);
 
         if ($id) {
             // Editing an existing item

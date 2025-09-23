@@ -23,6 +23,11 @@ class Shop extends Model {
      */
     protected $table = 'shops';
 
+    protected $casts = [
+        'start_at' => 'datetime',
+        'end_at'   => 'datetime',
+    ];
+
     /**
      * Validation rules for creation.
      */
@@ -43,13 +48,7 @@ class Shop extends Model {
         'image'       => 'mimes:png',
     ];
 
-    protected $casts = [
-        'start_at' => 'datetime',
-        'end_at' => 'datetime',
-    ];
-
-    public function getIsVisibleAttribute(): bool
-    {
+    public function getIsVisibleAttribute(): bool {
         if (!$this->is_timed_shop) {
             return true;                         // normal shops always visible
         }
@@ -58,15 +57,14 @@ class Shop extends Model {
     }
 
     /** Query scope so controllers can do Shop::visible()->get() */
-    public function scopeVisible($query)
-    {
+    public function scopeVisible($query) {
         $query->where(function ($q) {
             $q->where('is_timed_shop', false)
-              ->orWhere(function ($q) {
-                  $q->where('is_timed_shop', true)
-                    ->where('start_at', '<=', now())
-                    ->where('end_at',   '>=', now());
-              });
+                ->orWhere(function ($q) {
+                    $q->where('is_timed_shop', true)
+                        ->where('start_at', '<=', now())
+                        ->where('end_at', '>=', now());
+                });
         });
     }
 

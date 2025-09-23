@@ -2,9 +2,9 @@
 
 namespace App\Models\Character;
 
+use App\Facades\Notifications;
 use App\Models\Award\Award;
 use App\Models\Award\AwardLog;
-use App\Facades\Notifications;
 use App\Models\Base\Base;
 use App\Models\Carrier\Carrier;
 use App\Models\Currency\Currency;
@@ -33,7 +33,6 @@ use App\Models\User\UserCharacterLog;
 use App\Models\WorldExpansion\FactionRankMember;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\SoftDeletes;
-
 use Settings;
 
 class Character extends Model {
@@ -50,10 +49,10 @@ class Character extends Model {
         'is_sellable', 'is_tradeable', 'is_giftable',
         'sale_value', 'kotm', 'adoption', 'donation', 'transferrable_at', 'is_visible',
         'is_gift_art_allowed', 'is_gift_writing_allowed', 'is_trading', 'sort',
-        'is_myo_slot', 'name', 'trade_id', 'is_links_open', 'owner_url', 
+        'is_myo_slot', 'name', 'trade_id', 'is_links_open', 'owner_url',
         'home_id', 'home_changed', 'faction_id', 'faction_changed',
-        'character_warning', 'folder_id', 'class_id', 
-        'genotype', 'phenotype', 'gender', 'eyecolor', 'spd', 'def', 'atk', 'diet', 'bio', 
+        'character_warning', 'folder_id', 'class_id',
+        'genotype', 'phenotype', 'gender', 'eyecolor', 'spd', 'def', 'atk', 'diet', 'bio',
         'base',
     ];
 
@@ -1188,14 +1187,14 @@ class Character extends Model {
     }
 
     public function features() {
-    $query = $this
-        ->hasMany(CharacterFeature::class, 'character_image_id')->where('character_features.character_type', 'Character')
-        ->join('features', 'features.id', '=', 'character_features.feature_id')
-        ->leftJoin('feature_categories', 'feature_categories.id', '=', 'features.feature_category_id')
-        ->select(['character_features.*', 'features.*', 'character_features.id AS character_feature_id', 'feature_categories.sort']);
+        $query = $this
+            ->hasMany(CharacterFeature::class, 'character_image_id')->where('character_features.character_type', 'Character')
+            ->join('features', 'features.id', '=', 'character_features.feature_id')
+            ->leftJoin('feature_categories', 'feature_categories.id', '=', 'features.feature_category_id')
+            ->select(['character_features.*', 'features.*', 'character_features.id AS character_feature_id', 'feature_categories.sort']);
 
-    return $query->orderByDesc('sort');
-}
+        return $query->orderByDesc('sort');
+    }
 
     /**********************************************************************************************
 
@@ -1212,7 +1211,7 @@ class Character extends Model {
         $markings = CharacterMarking::where('character_id', $this->id)->get();
 
         if (!$markings->count()) {
-            //If no markings, return null
+            // If no markings, return null
             return null;
         }
 
@@ -1223,7 +1222,7 @@ class Character extends Model {
             $has_multi_bases = false;
             $marking_data = $marking->data ?? 0;
             if ($marking->carrier_id) {
-                //Add carriers if needed
+                // Add carriers if needed
                 $rendered['carriers'][$marking->carrier_id] = Carrier::where('id', $marking->carrier_id)->pluck('name')->toArray();
             }
             if (str_contains($marking->base_id, '|')) {
@@ -1272,14 +1271,14 @@ class Character extends Model {
 
         if ($markings === null || count($markings) < 1) {
             if (count($bases) > 1 && array_key_exists(1, $bases)) {
-                //If Chimera and no marks
+                // If Chimera and no marks
                 if ($type === 'phenotype') {
                     return $bases[0]['name'].' // '.$bases[1]['name'];
                 } else {
                     return $bases[0]['code'].'+//'.$bases[1]['code'].'+';
                 }
             } elseif (count($bases) > 1 && !array_key_exists(0, $bases)) {
-                //This shit is a mess, I know, I'm tired, no switchcase here :(
+                // This shit is a mess, I know, I'm tired, no switchcase here :(
                 if ($type === 'phenotype') {
                     return $bases['name'];
                 } else {
@@ -1314,23 +1313,23 @@ class Character extends Model {
 
         $html_inner = [];
 
-        //return print_r($markings, true);
+        // return print_r($markings, true);
 
         foreach ($markings['markings'] as $side => $group) {
-            //Sides - Max of 2 for chimera
+            // Sides - Max of 2 for chimera
             $sideInner = $this->handleMarkingGroup($group, $type);
             $geno_sides[$side] = $sideInner;
 
-            //Get the bases per side
+            // Get the bases per side
             $geno_sides[$side][2] = $bases[0];
             ksort($geno_sides[$side]);
         }
         if (!isset($geno_sides[1]) && isset($bases[1])) {
-            //If secondary side is without markings
+            // If secondary side is without markings
             $geno_sides[1][2] = $bases[1];
         }
         if (!isset($geno_sides[0]) && isset($bases[0])) {
-            //If primary side is without markings
+            // If primary side is without markings
             $geno_sides[0][2] = $bases[0];
         }
         foreach ($geno_sides as $i => $side) {
@@ -1349,9 +1348,9 @@ class Character extends Model {
     public function handleMarkingGroup($group, $type = 'phenotype') {
         $html_inner = [];
         foreach ($group as $id => $order_group) {
-            //Inside each order group, we have the markings
+            // Inside each order group, we have the markings
             foreach ($order_group as $marking) {
-                //Individual markings
+                // Individual markings
                 $html_inner[$id][] = $this->renderIndividualMarking($marking, $type);
             }
         }
@@ -1469,7 +1468,7 @@ class Character extends Model {
             }
         }
 
-        //If Not Chimera, Continue as normal
+        // If Not Chimera, Continue as normal
         $base = Base::where('id', $this->base)->first();
 
         if (!$base) {

@@ -118,7 +118,7 @@ class LootTable extends Model {
     public function roll($quantity = 1, $giveAll = false) {
         $rewards = createAssetsArray();
         $loot = $this->loot;
-    
+
         if ($giveAll) {
             foreach ($loot as $l) {
                 if ($l->rewardable_type == 'LootTable') {
@@ -131,13 +131,14 @@ class LootTable extends Model {
                     addAsset($rewards, $l->reward, $l->quantity);
                 }
             }
+
             return $rewards;
         }
-    
+
         // Separate guaranteed drops from random drops
-        $guaranteed = $loot->filter(fn($l) => $l->weight >= 2);
-        $rollables = $loot->filter(fn($l) => $l->weight > 0 && $l->weight < 2);
-    
+        $guaranteed = $loot->filter(fn ($l) => $l->weight >= 2);
+        $rollables = $loot->filter(fn ($l) => $l->weight > 0 && $l->weight < 2);
+
         // Add guaranteed drops first
         foreach ($guaranteed as $l) {
             if ($l->rewardable_type == 'LootTable') {
@@ -150,13 +151,15 @@ class LootTable extends Model {
                 addAsset($rewards, $l->reward, $l->quantity);
             }
         }
-    
+
         // Then roll for remaining entries
         $totalWeight = $rollables->sum('weight');
-    
+
         for ($i = 0; $i < $quantity; $i++) {
-            if ($totalWeight == 0) break;
-    
+            if ($totalWeight == 0) {
+                break;
+            }
+
             $roll = mt_rand(0, $totalWeight - 1);
             $count = 0;
             foreach ($rollables as $l) {
@@ -175,10 +178,10 @@ class LootTable extends Model {
                 }
             }
         }
-    
+
         return $rewards;
     }
-    
+
     /**
      * Rolls on an item category.
      *

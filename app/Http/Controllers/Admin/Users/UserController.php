@@ -101,9 +101,9 @@ class UserController extends Controller {
             'user_faction_enabled' => Settings::get('WE_user_factions'),
             'char_enabled'         => Settings::get('WE_character_locations'),
             'char_faction_enabled' => Settings::get('WE_character_factions'),
-            'ranks' => Rank::orderBy('ranks.sort')->pluck('name', 'id')->toArray(),
-            'teams'  => Team::orderBy('id')->pluck('name', 'id'),
-            
+            'ranks'                => Rank::orderBy('ranks.sort')->pluck('name', 'id')->toArray(),
+            'teams'                => Team::orderBy('id')->pluck('name', 'id'),
+
         ]);
     }
 
@@ -137,7 +137,7 @@ class UserController extends Controller {
             }
         }
 
-        //automatically remove teams if a staff or admin member is set to the player/member rank
+        // automatically remove teams if a staff or admin member is set to the player/member rank
         if ($user->rank_id == 2) {
             $user->teams()->detach();
         }
@@ -533,25 +533,23 @@ class UserController extends Controller {
 
         return redirect()->back();
     }
-    
-    public function updateTeams(Request $request, $name)
-{
-    $user = User::where('name', $name)->firstOrFail();
 
-    $teamIds = $request->input('team_ids', []);
-    $types   = $request->input('type', []); // matches form
+    public function updateTeams(Request $request, $name) {
+        $user = User::where('name', $name)->firstOrFail();
 
-    $syncData = [];
+        $teamIds = $request->input('team_ids', []);
+        $types = $request->input('type', []); // matches form
 
-    foreach ($teamIds as $i => $teamId) {
-        if (!empty($teamId)) {
-            $syncData[$teamId] = ['type' => $types[$i] ?? null];
+        $syncData = [];
+
+        foreach ($teamIds as $i => $teamId) {
+            if (!empty($teamId)) {
+                $syncData[$teamId] = ['type' => $types[$i] ?? null];
+            }
         }
+
+        $user->teams()->sync($syncData);
+
+        return redirect()->back()->with('success', 'Teams updated!');
     }
-
-    $user->teams()->sync($syncData);
-
-    return redirect()->back()->with('success', 'Teams updated!');
-}
-
 }

@@ -23,54 +23,51 @@ class AppServiceProvider extends ServiceProvider {
     /**
      * Bootstrap any application services.
      */
-    public function boot()
-    {
+    public function boot() {
         // Force MySQL buffered queries immediately
         if (\DB::getDriverName() === 'mysql') {
             \DB::connection()->getPdo()->setAttribute(\PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, true);
         }
-    
+
         Schema::defaultStringLength(191);
         Paginator::defaultView('layouts._pagination');
         Paginator::defaultSimpleView('layouts._simple-pagination');
-    
+
         view()->composer('*', function () {
             $user = Auth::user();
-        
+
             $theme = null;
             $decoratorTheme = null;
-        
+
             if ($user) {
                 // Only load relationships if a user is logged in
                 $user->loadMissing(['theme', 'decoratorTheme']);
                 $theme = $user->theme;
                 $decoratorTheme = $user->decoratorTheme;
             }
-        
+
             // Fallback for guests or if user has no theme
             $theme ??= Theme::where('is_default', true)->first();
-        
+
             $conditionalTheme = null;
             if (class_exists('\App\Models\Weather\WeatherSeason')) {
                 $conditionalTheme = Theme::where('link_type', 'season')
                     ->where('link_id', Settings::get('site_season'))
                     ->first() ??
                     Theme::where('link_type', 'weather')
-                    ->where('link_id', Settings::get('site_weather'))
-                    ->first() ??
+                        ->where('link_id', Settings::get('site_weather'))
+                        ->first() ??
                     $theme;
             }
-        
+
             View::share('theme', $theme);
             View::share('conditionalTheme', $conditionalTheme);
             View::share('decoratorTheme', $decoratorTheme);
         });
-        
-        
-    
+
         Collection::macro('paginate', function ($perPage, $total = null, $page = null, $pageName = 'page') {
             $page = $page ?: LengthAwarePaginator::resolveCurrentPage($pageName);
-    
+
             return new LengthAwarePaginator(
                 $this->forPage($page, $perPage),
                 $total ?: $this->count(),
@@ -82,10 +79,9 @@ class AppServiceProvider extends ServiceProvider {
                 ]
             );
         });
-    
+
         $this->bootToyhouseSocialite();
     }
-    
 
     /**
      * Boot Toyhouse Socialite provider.

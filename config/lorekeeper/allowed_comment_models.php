@@ -11,6 +11,6 @@ return [
     'App\Models\SitePage',
     'App\Models\Gallery\GallerySubmission',
     'App\Models\Submission\Submission',
-    'App\Models\Submission\AdminApplication'
+    'App\Models\Submission\AdminApplication',
 
 ];

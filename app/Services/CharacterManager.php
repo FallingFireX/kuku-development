@@ -16,14 +16,14 @@ use App\Models\Character\CharacterFeature;
 use App\Models\Character\CharacterImage;
 use App\Models\Character\CharacterLineage;
 use App\Models\Character\CharacterLink;
+use App\Models\Character\CharacterMarking;
 use App\Models\Character\CharacterStat;
+use App\Models\Character\CharacterTransfer;
 use App\Models\Character\CharacterTransformation as Transformation;
 use App\Models\Currency\Currency;
 use App\Models\Feature\Feature;
-use App\Models\Rarity;
-use App\Models\Character\CharacterMarking;
-use App\Models\Character\CharacterTransfer;
 use App\Models\Marking\Marking;
+use App\Models\Rarity;
 use App\Models\Sales\SalesCharacter;
 use App\Models\Species\Species;
 use App\Models\Species\Subtype;
@@ -688,7 +688,7 @@ class CharacterManager extends Service {
                 }
             }
 
-            //Check that species & rarity are selected
+            // Check that species & rarity are selected
             if (!(isset($data['species_id']) && $data['species_id'])) {
                 throw new \Exception('Characters require a species.');
             }
@@ -1692,15 +1692,15 @@ class CharacterManager extends Service {
                 $character->is_gift_writing_allowed = isset($data['is_gift_writing_allowed']) && $data['is_gift_writing_allowed'] <= 2 ? $data['is_gift_writing_allowed'] : 0;
                 $character->is_trading = isset($data['is_trading']);
                 $character->is_links_open = $data['is_links_open'];
-                
+
                 $character->save();
             } else {
                 if (!$this->logAdminAction($user, 'Updated Character Profile', 'Updated character profile on '.$character->displayname)) {
                     throw new \Exception('Failed to log admin action.');
                 }
             }
-            
-            $data['kotm'] = isset($data['kotm']) ? $data['kotm'] : 0;
+
+            $data['kotm'] ??= 0;
 
             // Update the character's profile
             if (!$character->is_myo_slot) {
@@ -2090,14 +2090,13 @@ class CharacterManager extends Service {
                 if (!$this->logAdminAction($user, 'Admin Transfer', 'Admin transferred '.$character->displayname.' to '.$recipient->displayName)) {
                     throw new \Exception('Failed to log admin action.');
                 }
-            }  elseif (!empty($data['recipient_alias']) || !empty($data['recipient_url'])) {
+            } elseif (!empty($data['recipient_alias']) || !empty($data['recipient_url'])) {
                 // Support both recipient_alias and recipient_url keys
                 $alias = $data['recipient_alias'] ?? $data['recipient_url'];
                 $recipient = checkAlias($alias);
                 if (!$this->logAdminAction($user, 'Admin Transfer', 'Admin transferred '.$character->displayname.' to '.$recipient)) {
                     throw new \Exception('Failed to log admin action.');
                 }
-            
             } else {
                 throw new \Exception('Please enter a recipient for the transfer.');
             }
@@ -2174,7 +2173,7 @@ class CharacterManager extends Service {
 
                 // Process the character move if the transfer has already been approved
                 if ($transfer->is_approved) {
-                    //check the cooldown saved
+                    // check the cooldown saved
                     if (isset($transfer->data['cooldown'])) {
                         $cooldown = $transfer->data['cooldown'];
                     }
@@ -2217,7 +2216,6 @@ class CharacterManager extends Service {
 
         return $this->rollbackReturn(false);
     }
-
 
     /**
      * Cancels a character transfer.
@@ -2615,8 +2613,8 @@ class CharacterManager extends Service {
     /**
      * Updates a character's markings.
      *
-     * @param array                           $data
-     * @param \App\Models\Character\Character $character
+     * @param array     $data
+     * @param Character $character
      *
      * @return bool
      */
@@ -3303,8 +3301,6 @@ class CharacterManager extends Service {
         return $result;
     }
 
-    
-
     /**
      * Generates a list of image credits for displaying.
      *
@@ -3330,7 +3326,7 @@ class CharacterManager extends Service {
      * @param array $data
      * @param mixed $character
      *
-     * @return \App\Models\Character\Character              $character
+     * @return Character                                    $character
      * @return \App\Models\Character\CharacterMarkings|bool
      */
     private function handleCharacterMarkings($data, $character) {

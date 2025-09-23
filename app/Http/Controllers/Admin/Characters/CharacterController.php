@@ -4,12 +4,12 @@ namespace App\Http\Controllers\Admin\Characters;
 
 use App\Facades\Settings;
 use App\Http\Controllers\Controller;
-use App\Models\Character\BreedingPermission;
-use App\Models\Character\CharacterLineageBlacklist;
-use App\Models\Character\CharacterLink;
 use App\Models\Base\Base;
+use App\Models\Character\BreedingPermission;
 use App\Models\Character\Character;
 use App\Models\Character\CharacterCategory;
+use App\Models\Character\CharacterLineageBlacklist;
+use App\Models\Character\CharacterLink;
 use App\Models\Character\CharacterMarking;
 use App\Models\Character\CharacterTransfer;
 use App\Models\Character\CharacterTransformation as Transformation;
@@ -60,8 +60,8 @@ class CharacterController extends Controller {
             'characterOptions' => CharacterLineageBlacklist::getAncestorOptions(),
             'rarities'         => ['0' => 'Select Rarity'] + Rarity::orderBy('sort', 'DESC')->pluck('name', 'id')->toArray(),
             'specieses'        => ['0' => 'Select Species'] + Species::orderBy('sort', 'DESC')->pluck('name', 'id')->toArray(),
-            'markings'    => ['' => 'Select Markings(s)'] + Marking::orderBy('name', 'DESC')->pluck('name', 'id')->toArray(),
-            'bases'       => ['' => 'Select Base(s)'] + Base::orderBy('name', 'DESC')->pluck('name', 'id')->toArray(),
+            'markings'         => ['' => 'Select Markings(s)'] + Marking::orderBy('name', 'DESC')->pluck('name', 'id')->toArray(),
+            'bases'            => ['' => 'Select Base(s)'] + Base::orderBy('name', 'DESC')->pluck('name', 'id')->toArray(),
             'subtypes'         => ['0' => 'Pick a Species First'],
             'features'         => Feature::GetDropdownItems(1),
             'transformations'  => ['0' => 'Pick a Species First'],
@@ -81,8 +81,8 @@ class CharacterController extends Controller {
             'characterOptions' => CharacterLineageBlacklist::getAncestorOptions(),
             'rarities'         => ['0' => 'Select Rarity'] + Rarity::orderBy('sort', 'DESC')->pluck('name', 'id')->toArray(),
             'specieses'        => ['0' => 'Select Species'] + Species::orderBy('sort', 'DESC')->pluck('name', 'id')->toArray(),
-            'markings'    => ['' => 'Select Markings(s)'] + Marking::orderBy('name', 'DESC')->pluck('name', 'id')->toArray(),
-            'bases'       => ['' => 'Select Base(s)'] + Base::orderBy('name', 'DESC')->pluck('name', 'id')->toArray(),
+            'markings'         => ['' => 'Select Markings(s)'] + Marking::orderBy('name', 'DESC')->pluck('name', 'id')->toArray(),
+            'bases'            => ['' => 'Select Base(s)'] + Base::orderBy('name', 'DESC')->pluck('name', 'id')->toArray(),
             'subtypes'         => ['0' => 'Pick a Species First'],
             'features'         => Feature::GetDropdownItems(1),
             'transformations'  => ['0' => 'Pick a Species First'],

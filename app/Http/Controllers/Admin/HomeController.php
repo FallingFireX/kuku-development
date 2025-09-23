@@ -13,9 +13,9 @@ use App\Models\Gallery\GalleryCriterion;
 use App\Models\Gallery\GallerySubmission;
 use App\Models\Report\Report;
 use App\Models\Submission\Submission;
+use App\Models\Team;
 use App\Models\Trade;
 use App\Models\User\User;
-use App\Models\Team;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -31,36 +31,36 @@ class HomeController extends Controller {
         $galleryRequireApproval = Settings::get('gallery_submissions_require_approval');
 
         return view('admin.index', [
-            'submissionCount'        => Submission::where('status', 'Pending')->whereNotNull('prompt_id')->count(),
-            'fpCount'                => Submission::where('status', 'Pending')->whereIn('prompt_id', [2, 4, 8])->count(),
-            'misc2Count'             => Submission::where('status', 'Pending')->whereIn('prompt_id', [5, 6, 7, 28])->count(),
-            'adoptCount'             => Submission::where('status', 'Pending')->whereIn('prompt_id', [9, 10, 11])->count(),
-            'arCount'                => Submission::where('status', 'Pending')->whereIn('prompt_id', [12, 13, 14, 15])->count(),
-            'coliCount'              => Submission::where('status', 'Pending')->whereIn('prompt_id', [16, 17, 18])->count(),
-            'trainingCount'          => Submission::where('status', 'Pending')->whereIn('prompt_id', [19])->count(),
-            'letterCount'            => Submission::where('status', 'Pending')->whereIn('prompt_id', [20, 21])->count(),
-            'breedCount'             => Submission::where('status', 'Pending')->whereIn('prompt_id', [25, 26])->count(),
-            'designCount'            => Submission::where('status', 'Pending')->whereIn('prompt_id', [22, 23, 24])->count(),
-            'questCount'             => Submission::where('status', 'Pending')->whereIn('prompt_id', [27])->count(),
-            'fpErrorCount'             => Submission::where('status', 'Pending')->whereIn('prompt_id', [38])->count(),
+            'submissionCount'               => Submission::where('status', 'Pending')->whereNotNull('prompt_id')->count(),
+            'fpCount'                       => Submission::where('status', 'Pending')->whereIn('prompt_id', [2, 4, 8])->count(),
+            'misc2Count'                    => Submission::where('status', 'Pending')->whereIn('prompt_id', [5, 6, 7, 28])->count(),
+            'adoptCount'                    => Submission::where('status', 'Pending')->whereIn('prompt_id', [9, 10, 11])->count(),
+            'arCount'                       => Submission::where('status', 'Pending')->whereIn('prompt_id', [12, 13, 14, 15])->count(),
+            'coliCount'                     => Submission::where('status', 'Pending')->whereIn('prompt_id', [16, 17, 18])->count(),
+            'trainingCount'                 => Submission::where('status', 'Pending')->whereIn('prompt_id', [19])->count(),
+            'letterCount'                   => Submission::where('status', 'Pending')->whereIn('prompt_id', [20, 21])->count(),
+            'breedCount'                    => Submission::where('status', 'Pending')->whereIn('prompt_id', [25, 26])->count(),
+            'designCount'                   => Submission::where('status', 'Pending')->whereIn('prompt_id', [22, 23, 24])->count(),
+            'questCount'                    => Submission::where('status', 'Pending')->whereIn('prompt_id', [27])->count(),
+            'fpErrorCount'                  => Submission::where('status', 'Pending')->whereIn('prompt_id', [38])->count(),
             'arquestErrorCount'             => Submission::where('status', 'Pending')->whereIn('prompt_id', [39])->count(),
-            'lctErrorCount'             => Submission::where('status', 'Pending')->whereIn('prompt_id', [40])->count(),
-            'importErrorCount'             => Submission::where('status', 'Pending')->whereIn('prompt_id', [3])->count(),
-            'breedErrorCount'             => Submission::where('status', 'Pending')->whereIn('prompt_id', [41])->count(),
-            'bankErrorCount'             => Submission::where('status', 'Pending')->whereIn('prompt_id', [37])->count(),
-            'claimCount'             => Submission::where('status', 'Pending')->whereNull('prompt_id')->count(),
-            'myoCount'               => CharacterDesignUpdate::myos()->where('status', 'Pending')->count(),
-            'reportCount'            => Report::where('status', 'Pending')->count(),
-            'assignedReportCount'    => Report::assignedToMe(Auth::user())->count(),
-            'openTransfersQueue'     => $openTransfersQueue,
-            'transferCount'          => $openTransfersQueue ? CharacterTransfer::active()->where('is_approved', 0)->count() : 0,
-            'tradeCount'             => $openTransfersQueue ? Trade::where('status', 'Pending')->count() : 0,
-            'galleryCurrencyAwards'  => GalleryCriterion::get()->count() > 0,
-            'galleryRequireApproval' => $galleryRequireApproval,
-            'gallerySubmissionCount' => GallerySubmission::collaboratorApproved()->where('status', 'Pending')->count(),
-            'galleryAwardCount'      => GallerySubmission::requiresAward()->where('is_valued', 0)->count(),
-            'affiliateCount'         => Affiliate::where('status', 'Pending')->count(),
-            'teams' => Team::orderBy('id')->get(),
+            'lctErrorCount'                 => Submission::where('status', 'Pending')->whereIn('prompt_id', [40])->count(),
+            'importErrorCount'              => Submission::where('status', 'Pending')->whereIn('prompt_id', [3])->count(),
+            'breedErrorCount'               => Submission::where('status', 'Pending')->whereIn('prompt_id', [41])->count(),
+            'bankErrorCount'                => Submission::where('status', 'Pending')->whereIn('prompt_id', [37])->count(),
+            'claimCount'                    => Submission::where('status', 'Pending')->whereNull('prompt_id')->count(),
+            'myoCount'                      => CharacterDesignUpdate::myos()->where('status', 'Pending')->count(),
+            'reportCount'                   => Report::where('status', 'Pending')->count(),
+            'assignedReportCount'           => Report::assignedToMe(Auth::user())->count(),
+            'openTransfersQueue'            => $openTransfersQueue,
+            'transferCount'                 => $openTransfersQueue ? CharacterTransfer::active()->where('is_approved', 0)->count() : 0,
+            'tradeCount'                    => $openTransfersQueue ? Trade::where('status', 'Pending')->count() : 0,
+            'galleryCurrencyAwards'         => GalleryCriterion::get()->count() > 0,
+            'galleryRequireApproval'        => $galleryRequireApproval,
+            'gallerySubmissionCount'        => GallerySubmission::collaboratorApproved()->where('status', 'Pending')->count(),
+            'galleryAwardCount'             => GallerySubmission::requiresAward()->where('is_valued', 0)->count(),
+            'affiliateCount'                => Affiliate::where('status', 'Pending')->count(),
+            'teams'                         => Team::orderBy('id')->get(),
         ]);
     }
 

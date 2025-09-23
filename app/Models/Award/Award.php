@@ -2,11 +2,9 @@
 
 namespace App\Models\Award;
 
-use App\Models\Character\CharacterAward;
 use App\Models\Model;
 use App\Models\Prompt\Prompt;
 use App\Models\User\User;
-use App\Models\User\UserAward;
 
 class Award extends Model {
     /**
@@ -154,9 +152,7 @@ class Award extends Model {
      *
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeReleased($query) {
-       
-    }
+    public function scopeReleased($query) {}
 
     /**********************************************************************************************
 

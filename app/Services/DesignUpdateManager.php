@@ -832,6 +832,7 @@ class DesignUpdateManager extends Service {
      * @param array                 $data
      * @param CharacterDesignUpdate $request
      * @param User                  $user
+     * @param mixed                 $self
      *
      * @return bool
      */
