@@ -1266,19 +1266,27 @@ class Character extends Model {
      *
      * @return string
      */
+    /**
+     * Gets the phenotype for the character genome.
+     *
+     * @param mixed $markings
+     * @param mixed $type
+     *
+     * @return string
+     */
     public function getMarkingLinkedArray($markings, $type = 'phenotype') {
         $bases = $this->getBaseCoat();
 
         if ($markings === null || count($markings) < 1) {
             if (count($bases) > 1 && array_key_exists(1, $bases)) {
-                // If Chimera and no marks
+                //If Chimera and no marks
                 if ($type === 'phenotype') {
                     return $bases[0]['name'].' // '.$bases[1]['name'];
                 } else {
                     return $bases[0]['code'].'+//'.$bases[1]['code'].'+';
                 }
             } elseif (count($bases) > 1 && !array_key_exists(0, $bases)) {
-                // This shit is a mess, I know, I'm tired, no switchcase here :(
+                //This shit is a mess, I know, I'm tired, no switchcase here :(
                 if ($type === 'phenotype') {
                     return $bases['name'];
                 } else {
@@ -1313,23 +1321,23 @@ class Character extends Model {
 
         $html_inner = [];
 
-        // return print_r($markings, true);
+        //return print_r($markings, true);
 
         foreach ($markings['markings'] as $side => $group) {
-            // Sides - Max of 2 for chimera
+            //Sides - Max of 2 for chimera
             $sideInner = $this->handleMarkingGroup($group, $type);
             $geno_sides[$side] = $sideInner;
 
-            // Get the bases per side
+            //Get the bases per side
             $geno_sides[$side][2] = $bases[0];
             ksort($geno_sides[$side]);
         }
         if (!isset($geno_sides[1]) && isset($bases[1])) {
-            // If secondary side is without markings
+            //If secondary side is without markings
             $geno_sides[1][2] = $bases[1];
         }
         if (!isset($geno_sides[0]) && isset($bases[0])) {
-            // If primary side is without markings
+            //If primary side is without markings
             $geno_sides[0][2] = $bases[0];
         }
         foreach ($geno_sides as $i => $side) {
@@ -1348,9 +1356,9 @@ class Character extends Model {
     public function handleMarkingGroup($group, $type = 'phenotype') {
         $html_inner = [];
         foreach ($group as $id => $order_group) {
-            // Inside each order group, we have the markings
+            //Inside each order group, we have the markings
             foreach ($order_group as $marking) {
-                // Individual markings
+                //Individual markings
                 $html_inner[$id][] = $this->renderIndividualMarking($marking, $type);
             }
         }
@@ -1468,13 +1476,15 @@ class Character extends Model {
             }
         }
 
-        // If Not Chimera, Continue as normal
+        //If Not Chimera, Continue as normal
         $base = Base::where('id', $this->base)->first();
 
         if (!$base) {
             return [
-                'name'  => 'Unknown',
-                'code'  => '??',
+                [
+                    'name'  => 'Unknown',
+                    'code'  => '??',
+                ],
             ];
         }
 
