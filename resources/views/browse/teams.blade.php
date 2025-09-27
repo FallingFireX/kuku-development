@@ -27,24 +27,25 @@
                     </div>
                 @endforeach
             </div>
-</div>
+        </div>
         @endforeach
 
         <!-- Normal teams sort by role priority -->
         <div class="mt-4">
             @foreach($teams as $parentId => $members)
+            <div class="card mt-3 pt-2 rounded">
                 <h2>{{ $members->first()->parent->name }}</h2>
 
                 @foreach($members->groupBy(fn($members) => $members->team->id) as $subTeamId => $subMembers)
-                    @if($subTeamId !== $parentId) 
-                        <h4 class="mt-3">{{ $subMembers->first()->team->name }}</h4>
-                    @endif
+                        @if($subTeamId !== $parentId) 
+                            Sub Team: <p class="mt-3">{{ $subMembers->first()->team->name }}</p>
+                        @endif
 
                     <div class="container mt-3">
                         <div class="row justify-content-center align-items-stretch">
                             @foreach($subMembers->sortBy('priority') as $entry) 
                                 <div class="col-md-3 d-flex">
-                                    <div class="card mb-3 flex-fill">
+                                    
                                         <div class="card-body text-center">
                                             <img src="/images/avatars/{{ $entry->user->avatar }}" class="rounded-circle" style="width:75px; height:75px;" alt="{{ $entry->user->name }}">
                                             <h4>{!! $entry->user->displayName !!}</h4>
