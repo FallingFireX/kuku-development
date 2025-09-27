@@ -25,6 +25,8 @@ use App\Models\User\User;
 use App\Models\User\UserCurrency;
 use App\Models\User\UserPet;
 use App\Models\User\UserUpdateLog;
+use App\Models\Team;
+use App\Models\User\UserTeam;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\View;
@@ -92,6 +94,8 @@ class UserController extends Controller {
             $aliases->visible();
         }
 
+        $teams = $this->user->teams()->get();
+
         return view('user.profile', [
             'user'                  => $this->user,
             'name'                  => $name,
@@ -103,6 +107,7 @@ class UserController extends Controller {
             'pets'                  => $this->user->pets()->orderBy('user_pets.updated_at', 'DESC')->take(5)->get(),
             'user_enabled'          => Settings::get('WE_user_locations'),
             'user_factions_enabled' => Settings::get('WE_user_factions'),
+            'teams'      => $teams
         ]);
     }
 

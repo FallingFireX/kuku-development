@@ -95,7 +95,13 @@ class Team extends Model {
         return $this->hasMany(UserTeam::class, 'team_id');
     }
 
-    public function parentTeam() {
-        return $this->belongsTo(self::class, 'relation');
+    public function parent()
+    {
+        return $this->belongsTo(Team::class, 'relation');
+    }
+
+    public function children()
+    {
+        return $this->hasMany(Team::class, 'relation');
     }
 }

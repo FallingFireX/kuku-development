@@ -30,40 +30,40 @@
 </div>
         @endforeach
 
-        <!--Normal teams sort by role priority-->
+        <!-- Normal teams sort by role priority -->
         <div class="mt-4">
-        @foreach($teams as $teamId => $members)
-        <div class="card mt-3 pt-2 rounded">
-            <h4>{{ $members->first()->team->name }}</h4>
-            <div class="container mt-3">
-                <div class="row justify-content-center align-items-stretch">
-                    @foreach($members->sortBy('priority') as $entry) 
-                        <div class="col-md-3 d-flex">
-                            <div class="card mb-3 flex-fill" style="background-color:transparent; border-width:0px;">
-                                <div class="card-body text-center">
-                                    <img src="/images/avatars/{{ $entry->user->avatar }}" class="rounded-circle" style="width:100px; height:100px;" alt="{{ $entry->user->name }}">
-                                    <h5>{!! $entry->user->displayName !!}</h5>
-                                        @if ($entry->role === 'primary')
-                                        <h6>Main</h6>
-                                        @else
-                                        <h6>{{ $entry->role }}</h6>
-                                        @endif
-                                    @if($entry->otherRoles->isNotEmpty())
-                                        <div class="text-center">
-                                            @foreach($entry->otherRoles as $role)
-                                                {{ $role['team']->name }} ({{ $role['role'] }})<br>
-                                            @endforeach
+            @foreach($teams as $parentId => $members)
+                <h2>{{ $members->first()->parent->name }}</h2>
+
+                @foreach($members->groupBy(fn($members) => $members->team->id) as $subTeamId => $subMembers)
+                    @if($subTeamId !== $parentId) 
+                        <h4 class="mt-3">{{ $subMembers->first()->team->name }}</h4>
+                    @endif
+
+                    <div class="container mt-3">
+                        <div class="row justify-content-center align-items-stretch">
+                            @foreach($subMembers->sortBy('priority') as $entry) 
+                                <div class="col-md-3 d-flex">
+                                    <div class="card mb-3 flex-fill">
+                                        <div class="card-body text-center">
+                                            <img src="/images/avatars/{{ $entry->user->avatar }}" class="rounded-circle" style="width:75px; height:75px;" alt="{{ $entry->user->name }}">
+                                            <h4>{!! $entry->user->displayName !!}</h4>
+                                            <h5>{{ $entry->role }}</h5>
+                                            @if($entry->otherRoles->isNotEmpty())
+                                                <div class="text-center">
+                                                    @foreach($entry->otherRoles as $role)
+                                                        {{ $role['team']->name }} ({{ $role['role'] }})<br>
+                                                    @endforeach
+                                                </div>
+                                            @endif
                                         </div>
-                                    @endif
+                                    </div>
                                 </div>
-                            </div>
+                            @endforeach
                         </div>
-                    @endforeach
-                </div>
-            </div>
-            </div>
-        @endforeach
-        
+                    </div>
+                @endforeach
+            @endforeach
         </div>
     </div>
 @endsection
