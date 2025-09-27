@@ -37,10 +37,7 @@
                 <h2>{{ $members->first()->parent->name }}</h2>
 
                 @foreach($members->groupBy(fn($members) => $members->team->id) as $subTeamId => $subMembers)
-                        @if($subTeamId !== $parentId) 
-                            Sub Team: <p class="mt-3">{{ $subMembers->first()->team->name }}</p>
-                        @endif
-
+                    
                     <div class="container mt-3">
                         <div class="row justify-content-center align-items-stretch">
                             @foreach($subMembers->sortBy('priority') as $entry) 
