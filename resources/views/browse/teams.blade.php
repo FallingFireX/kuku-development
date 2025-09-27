@@ -56,13 +56,15 @@
                                         </div>
                                     </div>
                                 </div>
+                                 @endif
                             @endforeach
                         </div>
+                       
                     @endforeach
                 </div>
             </div>
             </div>
-        @endforeach
+    
         
         </div>
     </div>
