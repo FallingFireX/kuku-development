@@ -83,11 +83,11 @@
                 </div>
                 <div class="row">
                     <div class="col-lg-4 col-md-6 col-4"><strong>Genotype</strong></div>
-                    <div class="col-lg-8 col-md-6 col-8">{!! $geno ?? $image->genotype ?? 'None' !!}</div>
+                    <div class="col-lg-8 col-md-6 col-8">{!! $image->genotype ? $image->genotype : 'None' !!}</div>
                 </div>
                 <div class="row">
                     <div class="col-lg-4 col-md-6 col-4"><strong>Phenotype</strong></div>
-                    <div class="col-lg-8 col-md-6 col-8">{!! $pheno ?? $image->phenotype ?? 'None' !!}</div>
+                    <div class="col-lg-8 col-md-6 col-8">{!! $image->phenotype ?? $image->phenotype ?? 'None' !!}</div>
                 </div>
                 <br>
                 
