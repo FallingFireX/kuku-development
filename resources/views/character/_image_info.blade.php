@@ -247,6 +247,7 @@
                         <a href="#" class="btn btn-outline-info btn-sm edit-features mb-3" data-id="{{ $image->id }}"><i class="fas fa-cog"></i> Edit Traits</a>
                         <a href="#" class="btn btn-outline-info btn-sm edit-notes mb-3" data-id="{{ $image->id }}"><i class="fas fa-cog"></i> Add items</a>
                         <a href="#" class="btn btn-outline-info btn-sm edit-typing mb-3" data-id="{{ $image->id }}"><i class="fas fa-cog"></i> {{ $type ? 'Edit' : 'Add Magic' }}</a>
+                        <a href="#" class="btn btn-outline-info btn-sm edit-stats mb-3" data-{{ $character->is_myo_slot ? 'id' : 'slug' }}="{{ $character->is_myo_slot ? $character->id : $character->slug }}"><i class="fas fa-cog"></i> Edit</a>
                     </div>
                 <hr>
                 @endif

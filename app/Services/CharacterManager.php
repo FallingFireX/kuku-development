@@ -2801,6 +2801,7 @@ class CharacterManager extends Service {
                 'character_category_id', 'rarity_id', 'user_id',
                 'number', 'slug', 'description',
                 'sale_value', 'transferrable_at', 'is_visible',
+                'base', 'secondary_base', 'is_chimera',
             ]);
 
             $characterData['name'] = ($isMyo && isset($data['name'])) ? $data['name'] : null;
@@ -2809,12 +2810,12 @@ class CharacterManager extends Service {
             $characterData['is_tradeable'] = isset($data['is_tradeable']);
             $characterData['is_giftable'] = isset($data['is_giftable']);
             $characterData['is_visible'] = isset($data['is_visible']);
-            $characterData['kotm'] = isset($data['kotm']);
             $characterData['sale_value'] = $data['sale_value'] ?? 0;
             $characterData['is_gift_art_allowed'] = 0;
             $characterData['is_gift_writing_allowed'] = 0;
             $characterData['is_trading'] = 0;
             $characterData['parsed_description'] = parse($data['description']);
+            $characterData['base'] = (isset($data['is_chimera']) ? $data['base'].'|'.$data['secondary_base'] : $data['base']);
             if ($isMyo) {
                 $characterData['is_myo_slot'] = 1;
             }

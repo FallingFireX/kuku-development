@@ -61,7 +61,7 @@ class CharacterController extends Controller {
             'rarities'         => ['0' => 'Select Rarity'] + Rarity::orderBy('sort', 'DESC')->pluck('name', 'id')->toArray(),
             'specieses'        => ['0' => 'Select Species'] + Species::orderBy('sort', 'DESC')->pluck('name', 'id')->toArray(),
             'markings'         => ['' => 'Select Markings(s)'] + Marking::orderBy('name', 'DESC')->pluck('name', 'id')->toArray(),
-            'bases'            => ['' => 'Select Base(s)'] + Base::orderBy('name', 'DESC')->pluck('name', 'id')->toArray(),
+            'bases'       => ['' => 'Select Base(s)'] + Base::orderBy('name', 'DESC')->pluck('name', 'id')->toArray(),
             'subtypes'         => ['0' => 'Pick a Species First'],
             'features'         => Feature::GetDropdownItems(1),
             'transformations'  => ['0' => 'Pick a Species First'],
@@ -82,7 +82,7 @@ class CharacterController extends Controller {
             'rarities'         => ['0' => 'Select Rarity'] + Rarity::orderBy('sort', 'DESC')->pluck('name', 'id')->toArray(),
             'specieses'        => ['0' => 'Select Species'] + Species::orderBy('sort', 'DESC')->pluck('name', 'id')->toArray(),
             'markings'         => ['' => 'Select Markings(s)'] + Marking::orderBy('name', 'DESC')->pluck('name', 'id')->toArray(),
-            'bases'            => ['' => 'Select Base(s)'] + Base::orderBy('name', 'DESC')->pluck('name', 'id')->toArray(),
+            'bases'       => ['' => 'Select Base(s)'] + Base::orderBy('name', 'DESC')->pluck('name', 'id')->toArray(),
             'subtypes'         => ['0' => 'Pick a Species First'],
             'features'         => Feature::GetDropdownItems(1),
             'transformations'  => ['0' => 'Pick a Species First'],
@@ -157,6 +157,11 @@ class CharacterController extends Controller {
             'x0', 'x1', 'y0', 'y1',
             'designer_id', 'designer_url',
             'artist_id', 'artist_url',
+            'species_id', 'subtype_id', 'rarity_id', 'feature_id', 'feature_data', 'marking_id', 'is_dominant', 'base', 'secondary_base', 'side_id',
+            'marking_color_0', 'marking_color_1', 'is_chimera',
+            'designer_id', 'designer_url',
+            'artist_id', 'artist_url',
+            
 
             // hello darkness my old friend //
             'sire_id',           'sire_name',
@@ -175,8 +180,7 @@ class CharacterController extends Controller {
             'dam_dam_dam_id',    'dam_dam_dam_name',
             'generate_ancestors',
 
-            'species_id', 'subtype_id', 'rarity_id', 'feature_id', 'feature_data', 'marking_id', 'is_dominant', 'base', 'secondary_base', 'side_id',
-            'marking_color_0', 'marking_color_1', 'is_chimera',
+            'species_id', 'subtype_id', 'rarity_id', 'feature_id', 'feature_data', 
             'image', 'thumbnail', 'image_description', 'parent_id', 'transformation_id', 'transformation_info', 'transformation_description', 'stats', 'genotype', 'phenotype', 'gender', 'eyecolor', 'spd', 'def', 'atk',
             'diet', 'bio',
         ]);
@@ -368,6 +372,7 @@ class CharacterController extends Controller {
 
         return redirect()->back()->withInput();
     }
+
 
     /**
      * Edits an MYO slot's stats.

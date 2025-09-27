@@ -24,6 +24,8 @@ class DesignHubController extends Controller {
 
         if (str_contains(',', $trait_categories)) {
             $trait_categories = explode(',', $trait_categories);
+        } else {
+            $trait_categories = [$trait_categories];
         }
 
         return view('designhub.designhub', [

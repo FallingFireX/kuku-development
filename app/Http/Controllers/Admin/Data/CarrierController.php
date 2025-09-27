@@ -41,6 +41,7 @@ class CarrierController extends Controller {
 
         return view('admin.carriers.carriers', [
             'carriers'   => $query->paginate(20)->appends($request->query()),
+            'markings'   => Marking::orderBy('name', 'DESC')->pluck('name', 'id')->toArray(),
         ]);
     }
 
@@ -73,7 +74,7 @@ class CarrierController extends Controller {
 
         return view('admin.carriers.create_edit_carrier', [
             'carrier'         => $carrier,
-            'active_markings' => Carrier::whereIn('id', $active_markings)->pluck('name', 'id')->toArray(),
+            'active_markings' => Marking::whereIn('id', $active_markings)->pluck('id')->toArray(),
             'markings'        => Marking::orderBy('name', 'DESC')->pluck('name', 'id')->toArray(),
         ]);
     }

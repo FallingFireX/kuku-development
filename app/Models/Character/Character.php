@@ -1196,6 +1196,8 @@ class Character extends Model {
         return $query->orderByDesc('sort');
     }
 
+    
+
     /**********************************************************************************************
 
         CHARACTER GENO/PHENO
@@ -1211,7 +1213,7 @@ class Character extends Model {
         $markings = CharacterMarking::where('character_id', $this->id)->get();
 
         if (!$markings->count()) {
-            // If no markings, return null
+            //If no markings, return null
             return null;
         }
 
@@ -1222,7 +1224,7 @@ class Character extends Model {
             $has_multi_bases = false;
             $marking_data = $marking->data ?? 0;
             if ($marking->carrier_id) {
-                // Add carriers if needed
+                //Add carriers if needed
                 $rendered['carriers'][$marking->carrier_id] = Carrier::where('id', $marking->carrier_id)->pluck('name')->toArray();
             }
             if (str_contains($marking->base_id, '|')) {
@@ -1258,14 +1260,6 @@ class Character extends Model {
         return $rendered;
     }
 
-    /**
-     * Gets the phenotype for the character genome.
-     *
-     * @param mixed $markings
-     * @param mixed $type
-     *
-     * @return string
-     */
     /**
      * Gets the phenotype for the character genome.
      *

@@ -59,6 +59,7 @@
             {!! Form::text('eyecolor', $image->eyecolor, ['class' => 'form-control mr-2']) !!}
         </div>
 
+        
 <div class="form-group" id='genotype'>
             {!! Form::label('genotype') !!}
             {!! Form::text('genotype', $image->genotype, ['class' => 'form-control mr-2']) !!}
@@ -84,7 +85,7 @@
             {!! Form::label('diet') !!}
             {!! Form::select('diet', ['Carnivore' => 'Carnivore', 'Omnivore' => 'Omnivore', 'Herbivore' => 'Herbivore', 'Carnivore (originally Herbivore)' => 'Carnivore (originally Herbivore)', 'Omnivore (originally Carnivore)' =>'Omnivore (originally Carnivore)', 'Carnivore (originally Omnivore)' => 'Carnivore (originally Omnivore)', 'Herbivore (originally Carnivore)' => 'Herbivore (originally Carnivore)', 'Herbivore (originally Omnivore)' => 'Herbivore (originally Omnivore)', 'Omnivore (originally Herbivore)' => 'Omnivore (originally Herbivore)', 'Herbivore (originally Carnivore)' => 'Herbivore (originally Carnivore)'], $image->diet, ['class' => 'form-control']) !!}
         </div>
-
+ 
 <div class="text-right">
     {!! Form::submit('Edit', ['class' => 'btn btn-primary']) !!}
 </div>
