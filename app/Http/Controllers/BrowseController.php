@@ -652,7 +652,7 @@ class BrowseController extends Controller {
      * Each member is sorted by priority of their role. members will only ever appear on the page ONCE
      * unless they are on a leadership team.
      * 
-     * Im not the smartest with Laravel so this is probably pretty ugly but it functions. 
+     * Im not the smartest with Laravel so this is probably pretty ugly but it functions.
      */
     public function getTeamsIndex()
     {
@@ -666,25 +666,33 @@ class BrowseController extends Controller {
             'Trainee'   => 4,
             null        => 2, // treat null as Primary
         ];
+
+        
+        //Get teams, sub teams, and team roles per staff member
+        //Everything below is just sorting logic; and because of how I formatted teams, its not amazing.
         $entries = collect();
-
-        //Get teams and team roles per staff member
         foreach ($users as $user) {
-            foreach ($user->teams as $team) {
-                $role = $team->pivot->type ?? 'Primary';
-                $entries->push((object)[
-                    'user'     => $user,
-                    'team'     => $team,
-                    'role'     => $role,
-                    'priority' => $rolePriority[$role] ?? 2,
-                ]);
+        foreach ($user->teams as $team) {
+            $parent = $team;
+            while ($parent->parent) {
+                $parent = $parent->parent;
             }
-        }
 
+            $role = $team->pivot->type ?? 'Primary';
+
+            $entries->push((object)[
+                'user'     => $user,
+                'team'     => $team,   
+                'parent'   => $parent,
+                'role'     => $role,
+                'priority' => $rolePriority[$role] ?? 2,
+            ]);
+        }
+    }
+
+        //Sort leadership from normal teams. Leadership ALWAYS shows regardless of other team assignments.
         $leadership = $entries->filter(fn($user) => $user->team->type === 'Leadership');
-        $regular = $entries
-            ->reject(fn($user) => $user->team->type === 'Leadership')
-            ->groupBy('user.id')
+        $regular = $entries->reject(fn($user) => $user->team->type === 'Leadership')->groupBy('user.id')
             ->map(function ($userEntries) {
                 $sorted = $userEntries->sortBy('priority')->values();
                 $main = $sorted->first(); 
@@ -696,8 +704,8 @@ class BrowseController extends Controller {
                 return $main;
             });
 
-        $regularTeam    = $regular->groupBy(fn($user) => $user->team->id);
-        $leadershipTeam = $leadership->groupBy(fn($user) => $user->team->id);
+        $regularTeam    = $regular->groupBy(fn($user) => $user->parent->id);
+        $leadershipTeam = $leadership->groupBy(fn($user) => $user->parent->id);
 
         return view('browse.teams', [
             'teams'      => $regularTeam,
@@ -705,6 +713,9 @@ class BrowseController extends Controller {
         ]);
     }
 
+    /**
+     * supports the team info page and join the team page
+     */
     public function getJoinTeam (){
         return view('browse.teams_info', [
             'application_intro' => SitePage::where('key', 'app-intro')->first(),

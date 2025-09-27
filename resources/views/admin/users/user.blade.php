@@ -57,33 +57,33 @@
     </div>
 
     @if (Auth::check() && Auth::user()->hasPower('edit_teams'))
-    <div class="card p-3 mb-2">
-        <h3>Teams</h3>
-        <i>Here you can add a admin to their teams. They can be a member of any number of teams, they can be a member of EVERY team if you want.</i>
-        <p class="mt-2">By default, there are four roles you can give people. Lead, Primary, Secondary, and Trainee. This assumes a ladder of leadership in your teams. 
-            <br>
-            The team page is sorted by these roles. With the team sorting taking Lead or Primary as its priority when sorting teams. 
-        {!! Form::open(['url' => 'admin/users/' . $user->name . '/teams']) !!}
-            <div><a href="#" class="btn btn-primary mb-2" id="add-team">Add Team</a></div>
-            <div id="teamList">
-                @foreach ($user->teams as $team)
-                    <div class="d-flex mb-2">
-                    {!! Form::select('team_ids[]', $teams, $team->id, ['class' => 'form-control mr-2 team-select original','placeholder' => 'Select Team']) !!}
-                    {!! Form::select('type[]', ['Lead' => 'Lead','Primary' => 'Primary','Secondary' => 'Secondary','Trainee' => 'Trainee'], $team->pivot->type, ['class' => 'form-control mr-2 team-select original','placeholder' => 'Select Role']) !!}
-                <a href="#" class="remove-team btn btn-danger mb-2 ml-2">×</a>
-                    </div>
-                @endforeach
-            </div>
-            <div class="team-row hide mb-2">
-                {!! Form::select('team_ids[]', $teams, null, ['class' => 'form-control mr-2 team-select','placeholder' => 'Select Team']) !!}
-                {!! Form::select('type[]', ['Lead' => 'Lead','Primary' => 'Primary','Secondary' => 'Secondary','Trainee' => 'Trainee'], null, ['class' => 'form-control','placeholder' => 'Select Role']) !!}
-                <a href="#" class="remove-team btn btn-danger mb-2 ml-2">×</a>      
-            </div>
-            <div class="text-right">
-                {!! Form::submit('Edit', ['class' => 'btn btn-primary']) !!}
-            </div>
-        {!! Form::close() !!}
-    </div>
+        <div class="card p-3 mb-2">
+            <h3>Teams</h3>
+            <i>Here you can add a admin to their teams. They can be a member of any number of teams, they can be a member of EVERY team if you want.</i>
+            <p class="mt-2">By default, there are four roles you can give people. Lead, Primary, Secondary, and Trainee. This assumes a ladder of leadership in your teams. 
+                <br>
+                The team page is sorted by these roles. With the team sorting taking Lead or Primary as its priority when sorting teams. 
+            {!! Form::open(['url' => 'admin/users/' . $user->name . '/teams']) !!}
+                <div><a href="#" class="btn btn-primary mb-2" id="add-team">Add Team</a></div>
+                <div id="teamList">
+                    @foreach ($user->teams as $team)
+                        <div class="d-flex mb-2">
+                        {!! Form::select('team_ids[]', $teams, $team->id, ['class' => 'form-control mr-2 team-select original','placeholder' => 'Select Team']) !!}
+                        {!! Form::select('type[]', ['Lead' => 'Lead','Primary' => 'Primary','Secondary' => 'Secondary','Trainee' => 'Trainee'], $team->pivot->type, ['class' => 'form-control mr-2 team-select original','placeholder' => 'Select Role']) !!}
+                    <a href="#" class="remove-team btn btn-danger mb-2 ml-2">×</a>
+                        </div>
+                    @endforeach
+                </div>
+                <div class="team-row hide mb-2">
+                    {!! Form::select('team_ids[]', $teams, null, ['class' => 'form-control mr-2 team-select','placeholder' => 'Select Team']) !!}
+                    {!! Form::select('type[]', ['Lead' => 'Lead','Primary' => 'Primary','Secondary' => 'Secondary','Trainee' => 'Trainee'], null, ['class' => 'form-control','placeholder' => 'Select Role']) !!}
+                    <a href="#" class="remove-team btn btn-danger mb-2 ml-2">×</a>      
+                </div>
+                <div class="text-right">
+                    {!! Form::submit('Edit', ['class' => 'btn btn-primary']) !!}
+                </div>
+            {!! Form::close() !!}
+        </div>
     @endif
 
     <div class="card p-3 mb-2">
