@@ -5,7 +5,6 @@ namespace App\Models\Tracker;
 use App\Models\Character\Character;
 use App\Models\Gallery\GallerySubmission;
 use App\Models\Model;
-use App\Models\SiteOptions;
 use App\Models\User\User;
 use Carbon\Carbon;
 use DB;

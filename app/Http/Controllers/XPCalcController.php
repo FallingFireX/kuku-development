@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\SiteOptions;
 use App\Models\User\User;
-use Illuminate\Support\Facades\Auth;
 use DB;
+use Illuminate\Support\Facades\Auth;
 
 class XPCalcController extends Controller {
     /**

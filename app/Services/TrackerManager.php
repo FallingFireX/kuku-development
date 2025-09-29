@@ -476,7 +476,7 @@ class TrackerManager extends Service {
                 \Log::info($data);
                 //Find the children and set them into 'field_options' for their parent
                 foreach ($data as $sub_name => $value) {
-                    if(str_contains($sub_name, 'sub_')) {
+                    if (str_contains($sub_name, 'sub_')) {
                         $name_array = explode('_', $sub_name);
                         if (array_key_exists(2, $name_array) && array_key_exists(3, $name_array) && array_key_exists(4, $name_array)) {
                             $option_field = $name_array[2]; //ex: label
@@ -492,7 +492,7 @@ class TrackerManager extends Service {
 
                             \Log::info('NAME ARRAY: '.print_r($name_array, true));
 
-                            foreach($value as $i => $row) {
+                            foreach ($value as $i => $row) {
                                 $form_config[$field_group]['field_options'][$i][$updateField] = $row;
                             }
                             unset($data[$sub_name]);
@@ -514,12 +514,12 @@ class TrackerManager extends Service {
     }
 
     private function updateSiteOption($key, $value) {
-        if($value) {
+        if ($value) {
             $exists = DB::table('site_settings')->where('key', $key)->first();
             $value = json_encode($value);
-            if($exists) {
+            if ($exists) {
                 //Update
-                if($exists->value !== $value) {
+                if ($exists->value !== $value) {
                     DB::table('site_settings')->where('key', $key)->update(['value' => $value]);
                 }
             } else {
