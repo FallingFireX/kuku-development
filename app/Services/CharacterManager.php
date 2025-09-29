@@ -1167,6 +1167,11 @@ class CharacterManager extends Service {
                 $old['transferrable_at'] = $character->transferrable_at;
                 $new['transferrable_at'] = $characterData['transferrable_at'];
             }
+            if ($characterData['base'] != $character->base) {
+                $result[] = 'base';
+                $old['base'] = $character->base;
+                $new['base'] = $characterData['base'];
+            }
 
             if (count($result)) {
                 $character->update($characterData);
