@@ -10,37 +10,48 @@
     {!! breadcrumbs(['Design Hub' => 'Design Hub']) !!}
     <h1>Design Hub</h1>
 
-    <div class="card rounded mb-4">
-        <div class="card-header">
-            {!! $dh_start->title !!}
+    @if ($dh_start)
+        <div class="card rounded mb-4">
+            <div class="card-header">
+                {!! $dh_start->title !!}
+            </div>
+            <div class="card-body">
+                {!! $dh_start->text !!}
+            </div>
         </div>
-        <div class="card-body">
-            {!! $dh_start->text !!}
+    @elseif(!$dh_start && Auth::user()->isStaff)
+        <div class="alert alert-warning" role="alert">
+            Page for design hub start is missing. Please run <code>php artisan add-text-pages</code>. This message is only visible to staff.
         </div>
+    @endif
+
+    <div class="row mb-4">
+        <div class="col d-flex"><a href="#markings" class="btn btn-primary">Markings</a></div>
+        <div class="col d-flex"><a href="#traitguides" class="btn btn-primary">Trait Guides</a></div>
+        <div class="col d-flex"><a href="#importtemplates" class="btn btn-primary">Import Templates</a></div>
+        <div class="col d-flex"><a href="{{ url('design-hub/base-coats') }}" class="btn btn-primary">Base Coats</a></div>
     </div>
 
-    <div class="card rounded mb-4">
+    <div class="card rounded mb-4" id="markings">
         <div class="card-header">
             Markings
         </div>
         <div class="card-body">
-            <input type="text" placeholder="Search markings by name or code..." class="searchBar bg-dark rounded border-0 mb-4 form-control" data-id="markingSearch" />
+            <input type="text" placeholder="Search markings by name or code..." class="searchBar rounded mb-4 form-control" data-id="markingSearch" />
 
             @if ($rarity_list)
-                @foreach ($rarity_list as $rarity_item)
+                @foreach ($markings as $rarityId => $markingItems)
                     <div class="card rounded mb-4">
-                        <div class="card-header"><span class="rarity-indicator" style="background-color:#{{ $rarity_item->color }}"></span> {{ $rarity_item->name }} Markings</div>
+                        <div class="card-header"><span class="rarity-indicator" style="background-color:#{{ $rarity_list[$rarityId]->color }}"></span> {{ $rarity_list[$rarityId]->name }} Markings</div>
                         <div class="card-body">
                             <div class="d-flex flex-wrap justify-content-between searchContent" data-id="markingSearch">
-                                @foreach ($markings as $marking)
-                                    @if ($marking->rarity_id === $rarity_item->id)
-                                        @include('designhub._entry', [
-                                            'imageUrl' => file_exists($marking->imageDirectory . '/' . $marking->imageFileName) ? asset($marking->imageDirectory . '/' . $marking->imageFileName) : '/images/account.png',
-                                            'name' => $marking->name . ' (' . $marking->recessive . '/' . $marking->dominant . ')',
-                                            'description' => $marking->short_description,
-                                            'url' => 'design-hub/marking/' . $marking->slug,
-                                        ])
-                                    @endif
+                                @foreach ($markingItems as $marking)
+                                    @include('designhub._entry', [
+                                        'imageUrl' => file_exists($marking->imageDirectory . '/' . $marking->imageFileName) ? asset($marking->imageDirectory . '/' . $marking->imageFileName) : '/images/account.png',
+                                        'name' => $marking->name . ' (' . $marking->recessive . '/' . $marking->dominant . ')',
+                                        'description' => $marking->short_description,
+                                        'url' => 'design-hub/marking/' . $marking->slug,
+                                    ])
                                 @endforeach
                             </div>
                         </div>
@@ -50,12 +61,12 @@
         </div>
     </div>
 
-    <div class="card rounded mb-4">
+    <div class="card rounded mb-4" id="traitguides">
         <div class="card-header">
             Trait Guides
         </div>
         <div class="card-body">
-            <input type="text" placeholder="Search traits..." class="searchBar bg-dark rounded border-0 mb-4 form-control" data-id="traits" />
+            <input type="text" placeholder="Search traits..." class="searchBar rounded mb-4 form-control" data-id="traits" />
             <div class="card rounded mb-4">
                 <div class="card-header">Trait Guides</div>
                 <div class="card-body">
@@ -96,7 +107,7 @@
         </div>
     </div>
 
-    <div class="card rounded mb-4">
+    <div class="card rounded mb-4" id="importtemplates">
         <div class="card-header">
             Import Templates
         </div>
@@ -128,14 +139,21 @@
         </div>
     </div>
 
-    <div class="card rounded mb-4">
-        <div class="card-header">
-            {!! $dh_end->title !!}
+    @if ($dh_end)
+        <div class="card rounded mb-4">
+            <div class="card-header">
+                {!! $dh_end->title !!}
+            </div>
+            <div class="card-body">
+                {!! $dh_end->text !!}
+            </div>
         </div>
-        <div class="card-body">
-            {!! $dh_end->text !!}
+    @elseif(!$dh_end && Auth::user()->isStaff)
+        <div class="alert alert-warning" role="alert">
+            Page for design hub end is missing. Please run <code>php artisan add-text-pages</code>. This message is only visible to staff.
         </div>
-    </div>
+    @endif
+
 
 @endsection
 
@@ -146,10 +164,7 @@
             $('.searchBar').on('keyup', function(e) {
                 var sTerm = $(this).val().toLowerCase();
                 var type = $(this).attr('data-id');
-                console.log(type)
-                console.log(sTerm);
                 $('.searchContent[data-id="' + type + '"]').children().each(function() {
-                    console.log($(this))
                     $(this).toggle($(this).text().toLowerCase().indexOf(sTerm) > -1);
                 });
             });
