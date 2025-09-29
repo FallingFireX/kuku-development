@@ -77,29 +77,30 @@
                                                                 @endforeach
                                                             @endif
                                                         @break
+
                                                         @default
                                                             <div class="alert alert-danger" role="alert">
                                                                 There was an issue rendering the field.
                                                             </div>
-                                                        @endswitch
-                                                    @endif
-                                                </div>
-                                            </div>
-                                        @endforeach
-                                    @endif
-                                    @if ($lit_settings)
-                                        <div class="card mb-3">
-                                            <h5 class="card-header">Literature Word Count</h5>
-                                            <div class="card-body">
-                                                <p>Enter the word count for your work and it will automatically calculate the XP.
-                                                    @if ($lit_settings->round_to)
-                                                        Rounds to the nearest {!! $lit_settings->round_to !!}.
-                                                    @endif
-                                                </p>
-                                                {!! Form::number('word_count[]', null, ['class' => 'form-control wordCount', 'rounding' => $lit_settings->round_to ?? '', 'conversion' => $lit_settings->conversion_rate, 'placeholder' => 'Enter the exact word count']) !!}
+                                                    @endswitch
+                                                @endif
                                             </div>
                                         </div>
-                                    @endif
+                                    @endforeach
+                                @endif
+                                @if ($lit_settings)
+                                    <div class="card mb-3">
+                                        <h5 class="card-header">Literature Word Count</h5>
+                                        <div class="card-body">
+                                            <p>Enter the word count for your work and it will automatically calculate the XP.
+                                                @if ($lit_settings->round_to)
+                                                    Rounds to the nearest {!! $lit_settings->round_to !!}.
+                                                @endif
+                                            </p>
+                                            {!! Form::number('word_count[]', null, ['class' => 'form-control wordCount', 'rounding' => $lit_settings->round_to ?? '', 'conversion' => $lit_settings->conversion_rate, 'placeholder' => 'Enter the exact word count']) !!}
+                                        </div>
+                                    </div>
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -134,7 +135,7 @@
     <div class="text-right mt-4">
         {!! Form::submit('Submit Tracker Card for Review', ['class' => 'btn btn-primary']) !!}
     </div>
-    </div>
+</div>
 </div>
 {!! Form::close() !!}
 
