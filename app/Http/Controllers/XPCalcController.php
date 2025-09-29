@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\SiteOptions;
 use App\Models\User\User;
 use Illuminate\Support\Facades\Auth;
+use DB;
 
 class XPCalcController extends Controller {
     /**
@@ -24,8 +25,8 @@ class XPCalcController extends Controller {
         $user_galleries = Auth::user()->gallerySubmissions()->where('status', 'Approved')->pluck('title', 'id');
 
         // Get site options for the XP Calculator
-        $xp_calc_form = json_decode(SiteOptions::where('key', 'xp_calculator')->pluck('value')[0]) ?? null;
-        $lit_settings = json_decode(SiteOptions::where('key', 'xp_lit_conversion_options')->pluck('value')[0]) ?? null;
+        $xp_calc_form = json_decode(DB::table('site_settings')->where('key', 'xp_calculator')->pluck('value')[0]) ?? null;
+        $lit_settings = json_decode(DB::table('site_settings')->where('key', 'xp_lit_conversion_options')->pluck('value')[0]) ?? null;
 
         return view('tracker.xp_calc', [
             'users_character'   => $users_character,

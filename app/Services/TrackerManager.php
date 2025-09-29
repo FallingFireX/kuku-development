@@ -418,6 +418,8 @@ class TrackerManager extends Service {
      * @param mixed $data the data of the submission to be deleted
      */
     public function updateTrackerSettings($data) {
+        DB::beginTransaction();
+
         try {
             if (!$data) {
                 throw new \Exception('Invalid data, something went wrong.');
@@ -431,12 +433,7 @@ class TrackerManager extends Service {
                         $i++;
                     }
                 }
-
-                $manager = new SiteOptionsManager();
-                $manager->updateOption([
-                    'key'   => 'xp_levels',
-                    'value' => json_encode($levels) ?? null,
-                ]);
+                $this->updateSiteOption('xp_levels', $levels);
 
                 //Unset these after updating so we can update the calculator array
                 unset($data['level_name']);
@@ -444,13 +441,9 @@ class TrackerManager extends Service {
             }
             if (isset($data['word_count_conversion_rate'])) {
                 //Set up the word count conversion rate
-                $manager = new SiteOptionsManager();
-                $manager->updateOption([
-                    'key'   => 'xp_lit_conversion_options',
-                    'value' => json_encode([
-                        'conversion_rate' => $data['word_count_conversion_rate'],
-                        'round_to'        => $data['round_to'],
-                    ]),
+                $this->updateSiteOption('xp_lit_conversion_options', [
+                    'conversion_rate' => $data['word_count_conversion_rate'],
+                    'round_to'        => $data['round_to'],
                 ]);
 
                 //Unset after updating
@@ -458,6 +451,9 @@ class TrackerManager extends Service {
                 unset($data['round_to']);
                 unset($data['enable_rounding']);
             }
+
+            \Log::info($data);
+
             if (isset($data['field_name'])) {
                 $form_config = [];
 
@@ -474,42 +470,63 @@ class TrackerManager extends Service {
                         $field_id++;
                     }
                 }
+                \Log::info('SET UP PARENT FIELDS: -------------------------------------------- ');
+                \Log::info($form_config);
+                \Log::info('LEFTOVERS: -------------------------------------------- ');
+                \Log::info($data);
                 //Find the children and set them into 'field_options' for their parent
                 foreach ($data as $sub_name => $value) {
-                    $name_array = explode('_', $sub_name);
-                    if (array_key_exists(2, $name_array) && array_key_exists(3, $name_array) && array_key_exists(4, $name_array)) {
-                        $option_field = $name_array[2]; //ex: label
-                        $field_group = $name_array[3]; //ex: group_id
-                        $option_id = $name_array[4]; //ex: option_id
+                    if(str_contains($sub_name, 'sub_')) {
+                        $name_array = explode('_', $sub_name);
+                        if (array_key_exists(2, $name_array) && array_key_exists(3, $name_array) && array_key_exists(4, $name_array)) {
+                            $option_field = $name_array[2]; //ex: label
+                            $field_group = $name_array[3]; //ex: group_id
+                            $option_id = $name_array[4]; //ex: option_id
 
-                        $rename_fields = [
-                            'value' => 'point_value',
-                            'desc'  => 'description',
-                            'label' => 'label',
-                        ];
-                        $updateField = $rename_fields[$option_field];
-                        $value = $value[0] ?? $value ?? null;
+                            $rename_fields = [
+                                'value' => 'point_value',
+                                'desc'  => 'description',
+                                'label' => 'label',
+                            ];
+                            $updateField = $rename_fields[$option_field];
 
-                        if ($option_field) {
-                            $form_config[$field_group]['field_options'][$option_id][$updateField] = $value;
+                            \Log::info('NAME ARRAY: '.print_r($name_array, true));
+
+                            foreach($value as $i => $row) {
+                                $form_config[$field_group]['field_options'][$i][$updateField] = $row;
+                            }
+                            unset($data[$sub_name]);
                         }
-
-                        unset($data[$sub_name]);
-
-                        //Save to the DB
-                        $manager = new SiteOptionsManager();
-                        $manager->updateOption([
-                            'key'   => 'xp_calculator',
-                            'value' => json_encode($form_config),
-                        ]);
                     }
                 }
+                \Log::info('SET UP CHILD FIELDS: -------------------------------------------- ');
+                \Log::info($form_config);
+
+                $this->updateSiteOption('xp_calculator', $form_config);
             }
+
+            return $this->commitReturn(true);
         } catch (\Exception $e) {
             $this->setError('error', $e->getMessage());
         }
 
         return $this->rollbackReturn(false);
+    }
+
+    private function updateSiteOption($key, $value) {
+        if($value) {
+            $exists = DB::table('site_settings')->where('key', $key)->first();
+            $value = json_encode($value);
+            if($exists) {
+                //Update
+                if($exists->value !== $value) {
+                    DB::table('site_settings')->where('key', $key)->update(['value' => $value]);
+                }
+            } else {
+                //Create
+                DB::table('site_settings')->insert(['key' => $key, 'value' => $value, 'description' => 'Auto-Generated']);
+            }
+        }
     }
 
     /**************************************************************************************************************

@@ -53,54 +53,53 @@
                                                 <div class="card-body">
                                                     @if ($field->field_description)
                                                         <p>{!! $field->field_description !!}</p>
-                                                    @endif
-                                                    @switch($field->field_type)
-                                                        @case('number')
-                                                            {!! Form::number($field->field_name . '[]', null, ['class' => 'form-control', 'placeholder' => 'Enter a number.']) !!}
-                                                        @break
+                                                        @switch($field->field_type)
+                                                            @case('number')
+                                                                {!! Form::number($field->field_name . '[]', null, ['class' => 'form-control', 'placeholder' => 'Enter a number.']) !!}
+                                                            @break
 
-                                                        @case('radio')
+                                                            @case('radio')
+                                                                @if ($field->field_options)
+                                                                    @foreach ($field->field_options as $option)
+                                                                        <div class="list-item">
+                                                                            {!! Form::radio($field->field_name . '[]', $option->point_value, false, ['class' => 'mr-2', 'id' => $option->label]) !!} <label for="{!! $option->label !!}"><strong>{!! $option->label !!}</strong> ({!! $option->point_value !!} XP) <br>{!! $option->description !!}</label>
+                                                                        </div>
+                                                                    @endforeach
+                                                                @endif
+                                                            @break
+
+                                                            @csae('checkboxes')
                                                             @if ($field->field_options)
                                                                 @foreach ($field->field_options as $option)
                                                                     <div class="list-item">
-                                                                        {!! Form::radio($field->field_name . '[]', $option->point_value, false, ['class' => 'mr-2', 'id' => $option->label]) !!} <label for="{!! $option->label !!}"><strong>{!! $option->label !!}</strong> ({!! $option->point_value !!} XP) <br>{!! $option->description !!}</label>
+                                                                        {!! Form::checkbox($field->field_name . '[]', $option->point_value, false, ['class' => 'mr-2', 'id' => $option->label]) !!} <label for="{!! $option->label !!}"><strong>{!! $option->label !!}</strong> <br>{!! $option->description !!}</label>
                                                                     </div>
                                                                 @endforeach
                                                             @endif
                                                         @break
-
-                                                        @csae('checkboxes')
-                                                        @if ($field->field_options)
-                                                            @foreach ($field->field_options as $option)
-                                                                <div class="list-item">
-                                                                    {!! Form::checkbox($field->field_name . '[]', $option->point_value, false, ['class' => 'mr-2', 'id' => $option->label]) !!} <label for="{!! $option->label !!}"><strong>{!! $option->label !!}</strong> <br>{!! $option->description !!}</label>
-                                                                </div>
-                                                            @endforeach
-                                                        @endif
-                                                    @break
-
-                                                    @default
-                                                        <div class="alert alert-danger" role="alert">
-                                                            There was an issue rendering the field.
-                                                        </div>
-                                                @endswitch
+                                                        @default
+                                                            <div class="alert alert-danger" role="alert">
+                                                                There was an issue rendering the field.
+                                                            </div>
+                                                        @endswitch
+                                                    @endif
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                    @endif
+                                    @if ($lit_settings)
+                                        <div class="card mb-3">
+                                            <h5 class="card-header">Literature Word Count</h5>
+                                            <div class="card-body">
+                                                <p>Enter the word count for your work and it will automatically calculate the XP.
+                                                    @if ($lit_settings->round_to)
+                                                        Rounds to the nearest {!! $lit_settings->round_to !!}.
+                                                    @endif
+                                                </p>
+                                                {!! Form::number('word_count[]', null, ['class' => 'form-control wordCount', 'rounding' => $lit_settings->round_to ?? '', 'conversion' => $lit_settings->conversion_rate, 'placeholder' => 'Enter the exact word count']) !!}
                                             </div>
                                         </div>
-                                    @endforeach
-                                @endif
-                                @if ($lit_settings)
-                                    <div class="card mb-3">
-                                        <h5 class="card-header">Literature Word Count</h5>
-                                        <div class="card-body">
-                                            <p>Enter the word count for your work and it will automatically calculate the XP.
-                                                @if ($lit_settings->round_to)
-                                                    Rounds to the nearest {!! $lit_settings->round_to !!}.
-                                                @endif
-                                            </p>
-                                            {!! Form::number('word_count[]', null, ['class' => 'form-control wordCount', 'rounding' => $lit_settings->round_to ?? '', 'conversion' => $lit_settings->conversion_rate, 'placeholder' => 'Enter the exact word count']) !!}
-                                        </div>
-                                    </div>
-                                @endif
+                                    @endif
                             </div>
                         </div>
                     </div>
@@ -130,76 +129,12 @@
                     {!! Form::textarea('notes', null, ['class' => 'form-control', 'rows' => '4', 'placeholder' => 'Add optional notes to your tracker card.']) !!}
                 </div>
             </div>
-            @case('radio')
-                @if ($field->field_options)
-                    @foreach ($field->field_options as $option)
-                        <div class="list-item">
-                            {!! Form::radio($field->field_name, $option->point_value, false, ['class' => 'mr-2', 'id' => $option->label]) !!} <label for="{!! $option->label !!}"><strong>{!! $option->label !!}</strong> ({!! $option->point_value !!} XP) <br>{!! $option->description !!}</label>
-                        </div>
-                    @endforeach
-                @endif
-            @break
-
-            @csae('checkboxes')
-            @if ($field->field_options)
-                @foreach ($field->field_options as $option)
-                    <div class="list-item">
-                        {!! Form::checkbox($field->field_name, $option->point_value, false, ['class' => 'mr-2', 'id' => $option->label]) !!} <label for="{!! $option->label !!}"><strong>{!! $option->label !!}</strong> <br>{!! $option->description !!}</label>
-                    </div>
-                @endforeach
-            @endif
-        @break
-
-        @default
-            <div class="alert alert-danger" role="alert">
-                There was an issue rendering the field.
-            </div>
-    @endswitch
-</div>
-</div>
-@endforeach
-@endif
-@if ($lit_settings)
-<div class="card mb-3">
-    <h5 class="card-header">Literature Word Count</h5>
-    <div class="card-body">
-        <p>Enter the word count for your work and it will automatically calculate the XP.
-            @if ($lit_settings->round_to)
-                Rounds to the nearest {!! $lit_settings->round_to !!}.
-            @endif
-        </p>
-        {!! Form::number('word_count', null, ['class' => 'form-control wordCount', 'rounding' => $lit_settings->round_to ?? '', 'conversion' => $lit_settings->conversion_rate, 'placeholder' => 'Enter the exact word count']) !!}
+        </div>
     </div>
-</div>
-@endif
-</div>
-<div class="col-md-4">
-<div class="card rounded border border-primary">
-<div class="card-header">
-    <h3>XP Totals</h3>
-</div>
-<div class="card-body">
-    <div class="p-2 border border-secondary rounded" id="calcTotals"></div>
-    <hr />
-    {!! Form::label('Select Character') !!}
-    {!! Form::select('character', $users_character, null, ['class' => 'form-control mr-2 characterSelect', 'placeholder' => 'Select a Character...']) !!}
-    <hr />
-    {!! Form::label('Select Gallery Submission (Optional)') !!}
-    {!! Form::select('gallery', $user_galleries, null, ['class' => 'form-control mr-2 gallerySelect', 'placeholder' => 'Select a Gallery...']) !!}
-    <div class="text-center my-2">
-        <h5>OR</h5>
+    <div class="text-right mt-4">
+        {!! Form::submit('Submit Tracker Card for Review', ['class' => 'btn btn-primary']) !!}
     </div>
-    {!! Form::url('tracker_url', null, ['class' => 'form-control mb-4', 'placeholder' => 'Enter a URL for your artwork or literature']) !!}
-
-    {!! Form::label('Other Notes (Optional)') !!} {!! add_help('Let admins know any other details you may have for this card.') !!}
-    {!! Form::textarea('notes', null, ['class' => 'form-control', 'rows' => '4', 'placeholder' => 'Add optional notes to your tracker card.']) !!}
-</div>
-</div>
-
-<div class="text-right mt-4">
-{!! Form::submit('Submit Tracker Card for Review', ['class' => 'btn btn-primary']) !!}
-</div>
-</div>
+    </div>
 </div>
 {!! Form::close() !!}
 

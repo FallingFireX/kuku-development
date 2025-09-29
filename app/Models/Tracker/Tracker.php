@@ -8,6 +8,7 @@ use App\Models\Model;
 use App\Models\SiteOptions;
 use App\Models\User\User;
 use Carbon\Carbon;
+use DB;
 
 class Tracker extends Model {
     /**
@@ -332,7 +333,7 @@ class Tracker extends Model {
      * @return int
      */
     public static function getCurrentLevel($current_points = 0) {
-        $levels = json_decode(SiteOptions::where('key', 'xp_levels')->pluck('value')->first(), true);
+        $levels = json_decode(DB::table('site_settings')->where('key', 'xp_levels')->pluck('value')->first(), true);
 
         $level_names = array_keys($levels);
 
@@ -350,7 +351,7 @@ class Tracker extends Model {
     }
 
     public static function getXpProgressBar($current_points = 0, $current_level = null) {
-        $levels = json_decode(SiteOptions::where('key', 'xp_levels')->pluck('value')->first(), true);
+        $levels = json_decode(DB::table('site_settings')->where('key', 'xp_levels')->pluck('value')->first(), true);
         $level_names = array_keys($levels);
 
         $min = min(array_values($levels));

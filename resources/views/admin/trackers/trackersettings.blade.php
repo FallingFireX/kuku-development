@@ -11,6 +11,10 @@
 
     <p>Edit all of the art tracker related settings here.</p>
 
+    <pre style="background-color:#ccc" class="">
+        {{ print_r($xp_calc_data, true) }}
+    </pre>
+
     {!! Form::open(['url' => 'admin/tracker-settings', 'files' => true]) !!}
 
     <div class="card mb-4">
@@ -85,7 +89,7 @@
                                                         {!! Form::text('sub_option_label_0_1[]', $option->label, ['class' => 'form-control w-100', 'placeholder' => 'Option Name']) !!}
                                                     </div>
                                                     <div class="col-md-6 px-1 d-flex">
-                                                        {!! Form::text('sub_option_desc_0_1[]', $option->description, ['class' => 'form-control w-100', 'placeholder' => 'Option Description']) !!}
+                                                        {!! Form::text('sub_option_desc_0_1[]', gettype($option->description) === 'string' ? $option->description : null, ['class' => 'form-control w-100', 'placeholder' => 'Option Description']) !!}
                                                         <a href="#" class="remove-option ml-2 btn btn-primary" data-toggle="tooltip" title="Remove Option">-</a>
                                                     </div>
                                                 </div>

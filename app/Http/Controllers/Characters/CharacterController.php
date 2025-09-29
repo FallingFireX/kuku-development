@@ -13,7 +13,6 @@ use App\Models\Currency\Currency;
 use App\Models\Gallery\GallerySubmission;
 use App\Models\Item\Item;
 use App\Models\Item\ItemCategory;
-use App\Models\SiteOptions;
 use App\Models\Tracker\Tracker;
 use App\Models\User\User;
 use App\Models\User\UserCurrency;
@@ -25,6 +24,7 @@ use App\Services\InventoryManager;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\View;
+use DB;
 use Route;
 
 class CharacterController extends Controller {
@@ -578,7 +578,7 @@ class CharacterController extends Controller {
      */
     public function getCharacterTracker(Request $request, $slug) {
         $trackers = Tracker::renderAllCards($this->character->id);
-        $levels = json_decode(SiteOptions::where('key', 'xp_levels')->pluck('value')->first());
+        $levels = json_decode(DB::table('site_settings')->where('key', 'xp_levels')->pluck('value')->first());
 
         return view('character.tracker', [
             'character'             => $this->character,
