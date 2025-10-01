@@ -16,17 +16,15 @@
         <div class= "card py-4 px-2 flex-fill" style="text-align: center">
             <h5>Current Quest/event</h5>
             <div class="row mt-auto mb-auto">
-            <div class="col-md-6 pt-2 pb-2">
-                    <p>The leaves are turning... fall is around the corner... but something creeps through the forest. You arent alone here.</p>  
-                    <p>Get the Wisps/Wisp lantern pack in the current quest!</p>
+            <div class="col-md-10 pt-2 pb-2 m-auto">
+                
+                    <a href="https://www.kukuri-arpg.com/info/col-2025"><img src="https://www.kukuri-arpg.com/files/col_banner.png"></a>
+                    <p style="margin-top:12px;font-size:14pt;">Monthly Quest is taking a break during Carnival of Life!</p>
                     <br>
-                    <p><i>Each entry has a 50% chance to earn the item</i></p>
-                    <p>Kukuri get a +2 FP bonus per entry!</p>
-                </div>
-                <div class="col-md-5 ml-2 pt-2 pb-2">
-                <img src="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/i/074ff87a-9880-4019-abec-2fc71c1f2a2b/de4cf56-d650bc1d-6610-4af9-96c9-73e35a18a972.png">
-                <br><br><a href="https://kukuri-arpg.w3spaces.com/activities/quests.html">Read about it here</a>
-                </div>
+                    <a style="font-size:11pt;" href="https://www.kukuri-arpg.com/info/col-2025"><b>Read more about it here!</b></a>
+                    <br><br>
+                
+            </div>
                 
             </div>
         </div>
