@@ -142,6 +142,15 @@ class SubmissionController extends Controller {
 
         $promptCriteria = PromptCriterion::where('prompt_id', $submission->prompt_id)->pluck('criterion_id')->toArray();
 
+        if (config('lorekeeper.settings.allow_gallery_submissions_on_prompts')) {
+            $gallerySubmissions = GallerySubmission::where('user_id', Auth::user()->id)->where('status', 'Accepted')->orderBy('id', 'DESC')->get()->pluck('title', 'id');
+            $gallerySubmissions = $gallerySubmissions->map(function ($item, $key) {
+                return '"'.$item.'" by '.Auth::user()->name;
+            });
+        } else {
+            $gallerySubmissions = [];
+        }
+
         return view('home.edit_submission', [
             'closed'              => $closed,
             'isClaim'             => false,
@@ -160,6 +169,7 @@ class SubmissionController extends Controller {
             'selectedInventory'      => isset($submission->data['user']) ? parseAssetData($submission->data['user']) : null,
             'criteria'               => Criterion::active()->whereIn('id', $promptCriteria)->orderBy('name')->pluck('name', 'id'),
             'count'                  => Submission::where('prompt_id', $submission->prompt_id)->where('status', 'Approved')->where('user_id', $submission->user_id)->count(),
+            'userGallerySubmissions' => $gallerySubmissions,
         ]));
     }
 
@@ -194,6 +204,24 @@ class SubmissionController extends Controller {
         return view('home._prompt', [
             'prompt' => $prompt,
             'count'  => Submission::where('prompt_id', $id)->where('status', 'Approved')->where('user_id', Auth::user()->id)->count(),
+        ]);
+    }
+
+     /**
+     * Shows prompt form.
+     *
+     * @param int $id
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function getPromptForm($id) {
+        $prompt = Prompt::active()->where('id', $id)->first();
+        if (!$prompt) {
+            return response(404);
+        }
+
+        return view('home._promptform', [
+            'form' => $prompt->form,
         ]);
     }
 
@@ -394,6 +422,7 @@ class SubmissionController extends Controller {
             'raffles'             => Raffle::where('rolled_at', null)->where('is_active', 1)->orderBy('name')->pluck('name', 'id'),
             'page'                => 'submission',
             'expanded_rewards'    => config('lorekeeper.extensions.character_reward_expansion.expanded'),
+            'userGallerySubmissions' => $gallerySubmissions,
         ]));
     }
 
@@ -428,6 +457,7 @@ class SubmissionController extends Controller {
             'page'                  => 'submission',
             'expanded_rewards'      => config('lorekeeper.extensions.character_reward_expansion.expanded'),
             'selectedInventory'     => isset($submission->data['user']) ? parseAssetData($submission->data['user']) : null,
+            'userGallerySubmissions' => $gallerySubmissions,
         ]));
     }
 
