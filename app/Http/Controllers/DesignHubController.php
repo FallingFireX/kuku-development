@@ -19,8 +19,9 @@ class DesignHubController extends Controller {
 
     public function getDesignHubPage(Request $request) {
         $markings = self::getDesignHubGenetics($request);
-        $rarities = Rarity::whereIn('id', Marking::select('rarity_id')->distinct()->get())->get();
+        $rarities = Rarity::whereIn('id', $markings->keys())->get()->keyBy('id');
         $trait_categories = Settings::get('designhub_trait_categories');
+        $pages = SitePage::whereIn('key', ['dh-start', 'dh-end'])->get();
 
         if (str_contains(',', $trait_categories)) {
             $trait_categories = explode(',', $trait_categories);
@@ -29,8 +30,8 @@ class DesignHubController extends Controller {
         }
 
         return view('designhub.designhub', [
-            'dh_start'          => SitePage::where('key', 'dh-start')->first(),
-            'dh_end'            => SitePage::where('key', 'dh-end')->first(),
+            'dh_start'          => $pages->where('key', 'dh-start')->first(),
+            'dh_end'            => $pages->where('key', 'dh-end')->first(),
             'specieses'         => Species::orderBy('sort', 'DESC')->get(),
             'subtypes'          => Subtype::orderBy('sort', 'DESC')->get(),
             'markings'          => $markings,
@@ -40,13 +41,13 @@ class DesignHubController extends Controller {
     }
 
     public function getDesignHubGenetics(Request $request) {
-        $query = Marking::query();
+        $query = Marking::visible()->with('rarity');
         $data = $request->only([
             'name',
             'variant',
         ]);
 
-        return $query->orderBy('name', 'ASC')->paginate(20)->appends($request->query());
+        return $query->orderBy('name', 'ASC')->paginate(20)->appends($request->query())->sortByDesc('rarity.sort')->groupBy('rarity.id');
     }
 
     public function getDesignHubTraitByCategory(Request $request, $category_ids) {

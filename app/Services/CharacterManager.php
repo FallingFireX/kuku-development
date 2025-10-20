@@ -1490,6 +1490,7 @@ class CharacterManager extends Service {
             $characterData = Arr::only($data, [
                 'character_category_id',
                 'number', 'slug',
+                'is_chimera', 'base', 'secondary_base',
             ]);
             $characterData['is_sellable'] = isset($data['is_sellable']);
             $characterData['is_tradeable'] = isset($data['is_tradeable']);
@@ -1497,6 +1498,7 @@ class CharacterManager extends Service {
             $characterData['sale_value'] = $data['sale_value'] ?? 0;
             $characterData['kotm'] = isset($data['kotm']);
             $characterData['transferrable_at'] = $data['transferrable_at'] ?? null;
+            $characterData['base'] = (isset($data['is_chimera']) ? $data['base'].'|'.$data['secondary_base'] : $data['base']);
             if ($character->is_myo_slot) {
                 $characterData['name'] = (isset($data['name']) && $data['name']) ? $data['name'] : null;
             }
@@ -1552,6 +1554,11 @@ class CharacterManager extends Service {
                 $result[] = 'transfer cooldown';
                 $old['transferrable_at'] = $character->transferrable_at;
                 $new['transferrable_at'] = $characterData['transferrable_at'];
+            }
+            if ($characterData['base'] != $character->base) {
+                $result[] = 'base';
+                $old['base'] = $character->base;
+                $new['base'] = $characterData['base'];
             }
 
             if (count($result)) {
@@ -2622,7 +2629,7 @@ class CharacterManager extends Service {
         DB::beginTransaction();
 
         try {
-            \Log::info('all_data', $data);
+            //\Log::info('all_data', $data);
             // Clear old markings
             CharacterMarking::where('character_id', $character->id)->delete();
 
@@ -2635,14 +2642,14 @@ class CharacterManager extends Service {
 
                     $is_dominant = $data['is_dominant'][$i] ?? 0;
 
-                    \Log::info('Processing marking', [
+                    /*\Log::info('Processing marking', [
                         'loop'          => $i,
                         'markingId'     => $markingId,
                         'code'          => ($is_dominant ? $temp->dominant : $temp->recessive),
                         'order'         => $temp->order_in_genome ?? 0,
                         'is_dominant'   => $is_dominant,
                         'data'          => $data['side_id'][$i] ?? 0,
-                    ]);
+                    ]);*/
 
                     $marking = CharacterMarking::create([
                         'character_id'  => $character->id,

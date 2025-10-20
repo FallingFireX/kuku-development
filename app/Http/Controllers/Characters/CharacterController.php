@@ -266,6 +266,8 @@ class CharacterController extends Controller {
             'user'                  => Auth::user() ?? null,
             'character'             => $this->character,
             'extPrevAndNextBtnsUrl' => '/images',
+            'pheno'                 => $this->character->getMarkingLinkedArray($markings),
+            'geno'                  => $this->character->getMarkingLinkedArray($markings, 'genotype'),
         ]);
     }
 

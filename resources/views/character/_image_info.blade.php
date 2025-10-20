@@ -83,7 +83,13 @@
                 </div>
                 <div class="row">
                     <div class="col-lg-4 col-md-6 col-4"><strong>Genotype</strong></div>
-                    <div class="col-lg-8 col-md-6 col-8">{!! $image->genotype ? $image->genotype : 'None' !!}</div>
+                    <div class="col-lg-8 col-md-6 col-8">
+                        @if ($character->base)
+                            {!! $geno !!}
+                        @else
+                            {!! $image->genotype ? $image->genotype : 'None' !!}
+                        @endif
+                    </div>
                 </div>
                 <div class="row">
                     <div class="col-lg-4 col-md-6 col-4"><strong>Phenotype</strong></div>

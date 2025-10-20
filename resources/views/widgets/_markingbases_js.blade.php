@@ -9,7 +9,7 @@
     });
     $('.remove-marking').on('click', function(e) {
         e.preventDefault();
-        removeMarkingeRow($(this));
+        removeMarkingRow($(this));
     })
 
     function addMarkingRow() {
