@@ -2618,61 +2618,54 @@ class CharacterManager extends Service {
     }
 
     /**
-     * Updates a character's markings.
-     *
-     * @param array     $data
-     * @param Character $character
-     *
-     * @return bool
-     */
-    public function updateCharacterMarkings($data, $character) {
-        DB::beginTransaction();
+ * Updates a character's markings.
+ *
+ * @param array     $data
+ * @param Character $character
+ *
+ * @return bool
+ */
+public function updateCharacterMarkings($data, $character) {
+    DB::beginTransaction();
 
-        try {
-            //\Log::info('all_data', $data);
-            // Clear old markings
-            CharacterMarking::where('character_id', $character->id)->delete();
+    try {
+        // Clear old markings
+        CharacterMarking::where('character_id', $character->id)->delete();
 
-            $i = 0;
+        $i = 0;
 
-            // Attach markings
-            foreach ($data['marking_id'] as $markingId) {
-                if ($markingId) {
-                    $temp = Marking::where('id', $markingId)->first();
+        // Attach markings
+        foreach ($data['marking_id'] as $markingId) {
+            if ($markingId) {
+                $temp = Marking::where('id', $markingId)->first();
 
-                    $is_dominant = $data['is_dominant'][$i] ?? 0;
+                $is_dominant = $data['is_dominant'][$i] ?? 0;
 
-                    /*\Log::info('Processing marking', [
-                        'loop'          => $i,
-                        'markingId'     => $markingId,
-                        'code'          => ($is_dominant ? $temp->dominant : $temp->recessive),
-                        'order'         => $temp->order_in_genome ?? 0,
-                        'is_dominant'   => $is_dominant,
-                        'data'          => $data['side_id'][$i] ?? 0,
-                    ]);*/
-
-                    $marking = CharacterMarking::create([
-                        'character_id'  => $character->id,
-                        'marking_id'    => $markingId,
-                        'code'          => ($is_dominant ? $temp->dominant : $temp->recessive),
-                        'order'         => $temp->order_in_genome ?? 0,
-                        'is_dominant'   => $is_dominant,
-                        'data'          => $data['side_id'][$i] ?? 0,
-                    ]);
-                }
-                $i++;
+                $marking = CharacterMarking::create([
+                    'character_id'  => $character->id,
+                    'marking_id'    => $markingId,
+                    'code'          => ($is_dominant ? $temp->dominant : $temp->recessive),
+                    'order'         => !empty($temp->goes_before_base) ? 1 : 0, // <-- Uses your new column
+                    'is_dominant'   => $is_dominant,
+                    'data'          => $data['side_id'][$i] ?? 0,
+                    'base_id'       => $character->base, // Set the base_id field
+                ]);
             }
 
-            $character->save();
-
-            return $this->commitReturn(true);
-        } catch (\Exception $e) {
-            \Log::error('Marking error', ['error' => $e->getMessage()]);
-            $this->setError('error', $e->getMessage());
+            $i++;
         }
 
-        return $this->rollbackReturn(false);
+        $character->save();
+
+        return $this->commitReturn(true);
+    } catch (\Exception $e) {
+        \Log::error('Marking error', ['error' => $e->getMessage()]);
+        $this->setError('error', $e->getMessage());
     }
+
+    return $this->rollbackReturn(false);
+}
+
 
     /**
      * Handles character data.
@@ -3356,13 +3349,13 @@ class CharacterManager extends Service {
                     $is_dominant = $data['is_dominant'][$key];
 
                     $marking = CharacterMarking::create([
-                        'character_id'  => $character->id,
-                        'marking_id'    => $markingId,
-                        'code'          => ($is_dominant ? $temp->recessive : $temp->dominant),
-                        'order'         => $temp->order_in_genome,
-                        'is_dominant'   => $is_dominant,
-                        'data'          => $data['side_id'][$key] ?? null,
-                    ]);
+                    'character_id'  => $character->id,
+                    'marking_id'    => $markingId,
+                    'code'          => ($is_dominant ? $temp->dominant : $temp->recessive),
+                    'order'         => !empty($temp->goes_before_base) ? 1 : 0, // <-- Uses your new column
+                    'is_dominant'   => $is_dominant,
+                    'data'          => $data['side_id'][$i] ?? 0,
+                ]);
                 }
             }
 

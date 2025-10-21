@@ -61,7 +61,7 @@ class CharacterController extends Controller {
             'rarities'         => ['0' => 'Select Rarity'] + Rarity::orderBy('sort', 'DESC')->pluck('name', 'id')->toArray(),
             'specieses'        => ['0' => 'Select Species'] + Species::orderBy('sort', 'DESC')->pluck('name', 'id')->toArray(),
             'markings'         => ['' => 'Select Markings(s)'] + Marking::orderBy('name', 'DESC')->pluck('name', 'id')->toArray(),
-            'bases'       => ['' => 'Select Base(s)'] + Base::orderBy('name', 'DESC')->pluck('name', 'id')->toArray(),
+            'bases'       => ['' => 'Select Base(s)'] + Base::orderBy('name', 'DESC')->pluck('code', 'id')->toArray(),
             'subtypes'         => ['0' => 'Pick a Species First'],
             'features'         => Feature::GetDropdownItems(1),
             'transformations'  => ['0' => 'Pick a Species First'],
@@ -82,7 +82,7 @@ class CharacterController extends Controller {
             'rarities'         => ['0' => 'Select Rarity'] + Rarity::orderBy('sort', 'DESC')->pluck('name', 'id')->toArray(),
             'specieses'        => ['0' => 'Select Species'] + Species::orderBy('sort', 'DESC')->pluck('name', 'id')->toArray(),
             'markings'         => ['' => 'Select Markings(s)'] + Marking::orderBy('name', 'DESC')->pluck('name', 'id')->toArray(),
-            'bases'       => ['' => 'Select Base(s)'] + Base::orderBy('name', 'DESC')->pluck('name', 'id')->toArray(),
+            'bases'       => ['' => 'Select Base(s)'] + Base::orderBy('name', 'DESC')->pluck('code', 'id')->toArray(),
             'subtypes'         => ['0' => 'Pick a Species First'],
             'features'         => Feature::GetDropdownItems(1),
             'transformations'  => ['0' => 'Pick a Species First'],
@@ -289,7 +289,7 @@ class CharacterController extends Controller {
             'number'            => format_masterlist_number($this->character->number, config('lorekeeper.settings.character_number_digits')),
             'isMyo'             => false,
             'markings'          => ['' => 'Select Markings(s)'] + Marking::orderBy('name', 'DESC')->pluck('name', 'id')->toArray(),
-            'bases'             => ['' => 'Select Base(s)'] + Base::orderBy('name', 'DESC')->pluck('name', 'id')->toArray(),
+            'bases'             => ['' => 'Select Base(s)'] + Base::orderBy('id', 'ASC')->pluck('code', 'id')->toArray(),
             'is_chimera'        => (str_contains($this->character->base, '|') ? 1 : 0),
             'characterMarkings' => CharacterMarking::where('character_id', $this->character->id)->get(),
             'has_glint'         => $has_glint,
@@ -330,7 +330,7 @@ class CharacterController extends Controller {
             'userOptions'       => User::query()->orderBy('name')->pluck('name', 'id')->toArray(),
             'isMyo'             => true,
             'markings'          => ['' => 'Select Markings(s)'] + Marking::orderBy('name', 'DESC')->pluck('name', 'id')->toArray(),
-            'bases'             => ['' => 'Select Base(s)'] + Base::orderBy('name', 'DESC')->pluck('name', 'id')->toArray(),
+            'bases'             => ['' => 'Select Base(s)'] + Base::orderBy('id', 'ASC')->pluck('name', 'id')->toArray(),
             'is_chimera'        => (str_contains($this->character->base, '|') ? 1 : 0),
             'characterMarkings' => CharacterMarking::where('character_id', $this->character->id)->get(),
             'has_glint'         => $has_glint,
@@ -346,32 +346,46 @@ class CharacterController extends Controller {
      *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function postEditCharacterStats(Request $request, CharacterManager $service, $slug) {
-        $request->validate(Character::$updateRules);
-        $data = $request->only([
-            'character_category_id', 'number', 'slug',
-            'is_giftable', 'is_tradeable', 'is_sellable', 'sale_value',
-            'transferrable_at', 'marking_id', 'is_dominant', 'base', 'secondary_base', 'side_id',
-            'marking_color_0', 'marking_color_1',
-        ]);
-        $this->character = Character::where('slug', $slug)->first();
-        if (!$this->character) {
-            abort(404);
-        }
-        if ($service->updateCharacterStats($data, $this->character, Auth::user())) {
-            flash('Character stats updated successfully.')->success();
+    public function postEditCharacterStats(Request $request, CharacterManager $service, $slug)
+{
+    $request->validate(Character::$updateRules);
 
-            $service->updateCharacterMarkings($data, $this->character);
+    $data = $request->only([
+        'character_category_id', 'number', 'slug', 'is_giftable',
+        'is_tradeable', 'is_sellable', 'sale_value', 'transferrable_at',
+        'marking_id', 'is_dominant', 'base', 'secondary_base', 'side_id',
+        'marking_color_0', 'marking_color_1', 'is_chimera'
+    ]);
 
-            return redirect()->to($this->character->url);
+    $this->character = Character::where('slug', $slug)->firstOrFail();
+
+    $is_chimera = $request->boolean('is_chimera');
+
+    if ($is_chimera && isset($data['base']) && isset($data['secondary_base'])) {
+        // Prevent duplicate concatenation
+        if (!str_contains($this->character->base, '|')) {
+            $data['base'] = $data['base'] . '|' . $data['secondary_base'];
         } else {
-            foreach ($service->errors()->getMessages()['error'] as $error) {
-                flash($error)->error();
-            }
+            // Replace existing parts properly
+            $parts = explode('|', $this->character->base);
+            $primaryBase = $data['base'] ?? $parts[0];
+            $secondaryBase = $data['secondary_base'] ?? ($parts[1] ?? '');
+            $data['base'] = $primaryBase . '|' . $secondaryBase;
         }
-
-        return redirect()->back()->withInput();
     }
+
+    if ($service->updateCharacterStats($data, $this->character, Auth::user())) {
+        flash('Character stats updated successfully.')->success();
+        $service->updateCharacterMarkings($data, $this->character);
+        return redirect()->to($this->character->url);
+    }
+
+    foreach ($service->errors()->getMessages()['error'] as $error) {
+        flash($error)->error();
+    }
+
+    return redirect()->back()->withInput();
+}
 
 
     /**
@@ -407,6 +421,7 @@ class CharacterController extends Controller {
 
         return redirect()->back()->withInput();
     }
+
 
     /**
      * Shows the edit character description modal.

@@ -87,6 +87,12 @@
         {!! Form::checkbox('is_visible', 1, $marking->id ? $marking->is_visible : 1, ['class' => 'form-check-input', 'data-toggle' => 'toggle']) !!}
         {!! Form::label('is_visible', 'Is Visible', ['class' => 'form-check-label ml-3']) !!} {!! add_help('If turned off, the marking will not be visible in the marking list or available for selection in search and design updates. Permissioned staff will still be able to add them to characters, however.') !!}
     </div>
+    <div class="form-group">
+        <input type="hidden" name="goes_before_base" value="0">
+{!! Form::checkbox('goes_before_base', 1, $marking->goes_before_base ?? 1, ['class' => 'form-check-input', 'data-toggle' => 'toggle']) !!}
+{!! Form::label('goes_before_base', 'Before Base', ['class' => 'form-check-label ml-3']) !!}
+
+    </div>
 
     <div class="text-right">
         {!! Form::submit($marking->id ? 'Edit' : 'Create', ['class' => 'btn btn-primary']) !!}

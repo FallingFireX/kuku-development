@@ -82,7 +82,7 @@ class BaseController extends Controller {
     public function postCreateEditBase(Request $request, BaseService $service, $id = null) {
         $id ? $request->validate(Base::$updateRules) : $request->validate(Base::$createRules);
         $data = $request->only([
-            'name', 'image', 'code', 'is_visible',
+            'name', 'image', 'code', 'is_visible', 
         ]);
 
         if ($id && $service->updateBase(Base::find($id), $data, Auth::user())) {

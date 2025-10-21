@@ -11,8 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('bases', function (Blueprint $table) {
-            //
+        Schema::table('markings', function (Blueprint $table) {
+            $table->boolean('goes_before_base')->unsigned()->default(0); 
         });
     }
 
@@ -21,8 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('bases', function (Blueprint $table) {
-            //
+        Schema::table('markings', function (Blueprint $table) {
+             $table->boolean('goes_before_base')->unsigned()->default(0); 
         });
     }
 };

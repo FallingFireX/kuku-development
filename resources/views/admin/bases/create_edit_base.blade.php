@@ -18,19 +18,19 @@
     <h3>Basic Information</h3>
 
     <div class="row">
-        <div class="col-md-4">
+        <div class="col-md-3">
             <div class="form-group">
                 {!! Form::label('Name') !!}
                 {!! Form::text('name', $base->name, ['class' => 'form-control']) !!}
             </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-3">
             <div class="form-group" id="code">
                 {!! Form::label('Base Code (Optional)') !!} {!! add_help('The base code for the genotype.') !!}
                 {!! Form::text('code', $base->code, ['class' => 'form-control']) !!}
             </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-3">
             <div class="form-group">
                 {!! Form::checkbox('is_visible', 1, $base->id ? $base->is_visible : 1, ['class' => 'form-check-input', 'data-toggle' => 'toggle']) !!}
                 {!! Form::label('is_visible', 'Is Visible', ['class' => 'form-check-label ml-3']) !!} {!! add_help('If turned off, the base will not be visible in the base list or available for selection in search and design updates. Permissioned staff will still be able to add them to characters, however.') !!}

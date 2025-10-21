@@ -73,9 +73,6 @@ class BaseService extends Service {
 
         try {
             // More specific validation
-            if (Base::where('name', $data['name'])->where('id', '!=', $base->id)->exists()) {
-                throw new \Exception('The name has already been taken.');
-            }
 
             $data = $this->populateData($data);
 

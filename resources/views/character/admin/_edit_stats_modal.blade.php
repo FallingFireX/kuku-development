@@ -59,7 +59,6 @@
     <div class="collapse datepicker" id="collapsedt"></div>
 </div>
 
-<!-- Design Hub -->
 <div class="form-group">
     {!! Form::checkbox('is_chimera', 0, $is_chimera ? 1 : 0, ['class' => 'form-check-input', 'data-toggle' => 'toggle', 'id' => 'is_chimera']) !!}
     {!! Form::label('is_chimera', 'Is Chimera', ['class' => 'form-check-label ml-3']) !!} {!! add_help('If this character has the Chimera modifier, then this will give you the ability to customize both genomes.') !!}
