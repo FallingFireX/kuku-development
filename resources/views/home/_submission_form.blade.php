@@ -55,13 +55,8 @@
 </div>
 
 <div class="form-group">
-    {!! Form::label('comments', 'Comments (Optional)') !!}
-    {!! add_help('Enter a comment for your ' . ($isClaim ? 'claim' : 'submission') . '. This will be viewed by the mods when reviewing your ' . ($isClaim ? 'claim' : 'submission') . '.') !!}
-
-    {!! Form::textarea('comments',
-        isset($submission->comments) ? $submission->comments : old('comments') ?? Request::get('comments'),
-        ['class' => 'form-control wysiwyg', 'id' => 'comments']
-    ) !!}
+    {!! Form::label('comments', 'Comments (Optional)') !!} {!! add_help('Enter a comment for your ' . ($isClaim ? 'claim' : 'submission') . '. This will be viewed by the mods when reviewing your ' . ($isClaim ? 'claim' : 'submission') . '.') !!}
+    {!! Form::textarea('comments', isset($submission->comments) ? $submission->comments : old('comments') ?? Request::get('comments'), ['class' => 'form-control wysiwyg', 'id' => 'prompt-form']) !!}
 </div>
 
 

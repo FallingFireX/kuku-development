@@ -62,7 +62,7 @@
         </div>
         <h2>Submission Comments</h2>
         <div class="card mb-3">
-            <div class="card-body"> {!! preg_replace('/\s*style=("|\')(.*?)\1/', '', nl2br($submission->comments)) !!}</div>
+            <div class="card-body">{!! $submission->comments !!}</div>
         </div>
 
         @if (Auth::check() && $submission->staff_comments && ($submission->user_id == Auth::user()->id || Auth::user()->hasPower('manage_submissions')))
