@@ -29,7 +29,7 @@
     </div>
      <h3 class="mt-4">Application contents</h3>
     <div class="card mb-3">
-        <div class="card-body">{!! nl2br(htmlentities($applications->application)) !!}</div>
+        <div class="card-body">{!! $applications->application !!}</div>
     </div>
 
 <!-- I make comments read only here under the assumption that most groups dont want sad or upset players replying to them about denied applications.
@@ -42,5 +42,5 @@
                 'read_only' => $is_read_only,
             ])
     </div>
-    </div>     
+     
 @endsection

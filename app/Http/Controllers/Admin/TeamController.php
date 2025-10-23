@@ -4,7 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Team;
-use Illuminate\Http\Request;
+use App\Models\User\User;
+use Illuminate\Support\Facades\Auth;
 
 class TeamController extends Controller {
     /*
@@ -90,4 +91,47 @@ class TeamController extends Controller {
 
         return redirect()->back();
     }
+
+    /**
+     * Gets the team deletion modal.
+     *
+     * @param int $id
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function getDeleteTeam($id) {
+        $team = Team::find($id);
+
+        return view('admin.team._delete_team', [
+            'teams' => $team,
+        ]);
+    }
+
+    /**
+ * Deletes a team.
+ *
+ * @param  \Illuminate\Http\Request  $request
+ * @param  int  $id
+ * @return \Illuminate\Http\RedirectResponse
+ */
+public function postDeleteTeam(Request $request, $id)
+{
+    $team = Team::find($id);
+
+    if (!$team) {
+        flash('Invalid team selected.')->error();
+        return redirect()->to('admin/teams');
+    }
+
+    try {
+        $team->delete();
+        flash('Team deleted successfully.')->success();
+    } catch (\Exception $e) {
+        flash('An error occurred while deleting the team: ' . $e->getMessage())->error();
+    }
+
+    return redirect()->to('admin/teams');
+}
+
+   
 }

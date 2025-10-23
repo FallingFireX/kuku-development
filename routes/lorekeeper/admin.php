@@ -598,11 +598,12 @@ Route::group(['prefix' => 'data', 'namespace' => 'Data', 'middleware' => 'power:
 
 Route::group(['prefix' => 'teams', 'middleware' => 'power:edit_teams'], function () {
     Route::get('/', 'TeamController@getIndex');
-    Route::get('/create', 'TeamController@getCreateTeam');
-    Route::get('/edit/{id}', 'TeamController@getEditTeam');
-    Route::get('/delete/{id}', 'TeamController@getDeletePrompt');
-    Route::post('/create', 'TeamController@postCreateEditTeam');
-    Route::post('/edit/{id?}', 'TeamController@postCreateEditTeam');
+    Route::get('create', 'TeamController@getCreateTeam');
+    Route::get('edit/{id}', 'TeamController@getEditTeam');
+    Route::get('delete/{id}', 'TeamController@getDeleteTeam');
+    Route::post('create', 'TeamController@postCreateEditTeam');
+    Route::post('edit/{id?}', 'TeamController@postCreateEditTeam');
+    Route::post('delete/{id}', 'TeamController@postDeleteTeam');
 });
 
 // PAGES

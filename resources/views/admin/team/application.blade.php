@@ -34,7 +34,7 @@
               
         <h2>Application</h2>
         <div class="card mb-3">
-            <div class="card-body">{!! nl2br(htmlentities($applications->application)) !!}</div>
+            <div class="card-body">{!! $applications->application !!}</div>
         </div>
         @if (Auth::check() && $applications->admin_message && ($applications->user_id == Auth::user()->id || Auth::user()->hasPower('edit_teams')))
             <h2>Admin Message ({!! $applications->staff->displayName !!})</h2>
@@ -105,7 +105,7 @@
               
         <h2>Application</h2>
         <div class="card mb-3">
-            <div class="card-body">{!! nl2br(htmlentities($applications->application)) !!}</div>
+            <div class="card-body">{!! $applications->application !!}</div>
         </div>
     @endif
 @endsection

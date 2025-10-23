@@ -36,5 +36,9 @@ return [
         'title' => 'Design Hub End',
         'text'  => 'This page contains the end of the Design Hub page.',
     ],
+    'app-intro' => [
+        'title' => 'Team Info Into',
+        'text'  => 'This page contains the starting content of the team information page. Its a good idea to put application forms, information, staff exceptions, etc here! ',
+    ],
 
 ];

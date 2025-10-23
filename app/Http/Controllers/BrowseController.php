@@ -734,9 +734,7 @@ class BrowseController extends Controller {
     /**
      * Get all teams and their members.
      * Each member is sorted by priority of their role. members will only ever appear on the page ONCE
-     * unless they are on a leadership team.
-     * 
-     * Im not the smartest with Laravel so this is probably pretty ugly but it functions.
+     * unless they are on a leadership team. 
      */
     public function getTeamsIndex() { 
         $users = User::with(['teams'])->get(); //Roles are sorted by priority with lead being highest, trainee being lowest. Null is assumed to be a "primary" member. 
@@ -782,7 +780,7 @@ class BrowseController extends Controller {
     }
  
     /**
-     * supports the team info page and join the team page
+     * Shows the team info page
      */
     public function getJoinTeam (){
         return view('browse.teams_info', [

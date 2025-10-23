@@ -603,7 +603,11 @@
         <div class="col-sm-6">
                 <div class="card mb-3">
                     <div class="card-body">
-                        <h5 class="card-title">Team Applications</h5>
+                        <h5 class="card-title">Team applications
+                            @if ($AppCount)
+                                <span class="badge badge-primary">{{ $AppCount }}</span>
+                            @endif
+                        </h5>
                         <p class="card-text">
                             @if ($AppCount)
                                 {{ $AppCount }} application{{ $AppCount == 1 ? '' : 's' }} awaiting review.
@@ -620,9 +624,17 @@
         </div>
         @endif
     <h3>Team responsibilities</h3>
-    <div class="card p-3">
-        @foreach ($teams as $team)
-            <p><b>{{ $team->name }}</b>: {!! $team->responsibilities !!}</p>
-        @endforeach
-    </div>
+    
+        <div class="row">
+            @foreach ($teams as $team)
+                @if($team->responsibilities)
+                    <div class="col-md-3">
+                        <div class="card p-3">
+                            <h4>{{ $team->name }}</h4>
+                            <p>{!! $team->responsibilities !!}</p>
+                        </div>
+                    </div>
+                @endif
+            @endforeach
+        </div>
 @endsection

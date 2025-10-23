@@ -17,7 +17,7 @@
         {{-- Application text --}}
         <div class="form-group">
             {!! Form::label('application', 'Your Application') !!}
-            {!! Form::textarea('application', null, ['class' => 'form-control', 'rows' => 5, 'required']) !!}
+            {!! Form::textarea('application', null, ['class' => 'form-control wysiwyg']) !!}
         </div>
 
         <button type="submit" class="btn btn-primary">Submit</button>

@@ -54,11 +54,12 @@ class AdminApplicationController extends Controller {
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function getNewApplication(Request $request) {
-        // Get all teams that are open to applications
-        $openTeams = Team::where('apps_open', true)
-            ->orderBy('name', 'asc') // or whichever column makes sense
-            ->get();
+    public function getNewApplication(Request $request)
+        {
+            // Get all teams that are open to applications
+            $openTeams = Team::where('apps_open', true)
+                ->orderBy('name', 'asc') 
+                ->get();
 
         return view('home.create_admin_application', [
             'teams' => $openTeams,
@@ -72,12 +73,11 @@ class AdminApplicationController extends Controller {
         ]);
 
         $application = AdminApplication::create([
-            'user_id'       => auth()->id(),
-            'admin_id'      => null,
-            'team_id'       => $request->input('team_id'),
-            'application'   => $request->input('application'),
-            'admin_message' => null,
-            'status'        => 'pending',
+            'user_id' => auth()->id(),
+            'admin_id' => null,
+            'team_id' => $request->input('team_id'),
+            'application' => $request->input('application'),
+            'status' => 'pending',
         ]);
 
         return redirect()->to('applications/'.$application->id);
