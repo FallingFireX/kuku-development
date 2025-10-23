@@ -28,7 +28,6 @@
                     @endforeach
                 </div>
             </div>
-</div>
         @endforeach
 
         <!--Normal teams sort by role priority-->
