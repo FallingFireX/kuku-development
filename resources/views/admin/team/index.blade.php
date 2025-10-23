@@ -15,20 +15,6 @@
         <a class="btn btn-primary" href="{{ url('admin/teams/create') }}"><i class="fas fa-plus"></i> Create New Team</a>
     </div>
 
-    <div>
-        {!! Form::open(['method' => 'GET', 'class' => 'form-inline justify-content-end']) !!}
-        <div class="form-group mr-sm-3 mb-3">
-            {!! Form::text('name', Request::get('name'), ['class' => 'form-control']) !!}
-        </div>
-        
-        
-        <div class="form-group mb-3">
-            {!! Form::submit('Search', ['class' => 'btn btn-primary']) !!}
-        </div>
-        {!! Form::close() !!}
-    </div>
-
-   
     <div class="mb-4 logs-table">
         <div class="logs-table-header">
             <div class="row">

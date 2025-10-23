@@ -62,7 +62,7 @@ class AdminApplicationController extends Controller {
         {
             // Get all teams that are open to applications
             $openTeams = Team::where('apps_open', true)
-                ->orderBy('name', 'asc') // or whichever column makes sense
+                ->orderBy('name', 'asc') 
                 ->get();
 
             return view('home.create_admin_application', [
@@ -83,7 +83,6 @@ class AdminApplicationController extends Controller {
             'admin_id' => null,
             'team_id' => $request->input('team_id'),
             'application' => $request->input('application'),
-            'admin_message' => null,
             'status' => 'pending',
         ]);
     

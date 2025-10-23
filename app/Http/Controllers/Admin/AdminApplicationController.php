@@ -69,7 +69,6 @@ class AdminApplicationController extends Controller {
     {
         $application = AdminApplication::findOrFail($id);
 
-        // Only allow valid statuses
         if (!in_array($request->input('status'), ['accepted', 'denied'])) {
             return redirect()->back()->with('error', 'Invalid status.');
         }
