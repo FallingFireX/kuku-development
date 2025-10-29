@@ -185,10 +185,10 @@ return [
                 'name' => 'Create Character',
                 'url'  => 'admin/masterlist/create-character',
             ],
-            // [
-            //     'name' => 'Create MYO Slot',
-            //     'url'  => 'admin/masterlist/create-myo',
-            // ],
+            [
+                'name' => 'Create MYO Slot',
+                'url'  => 'admin/masterlist/create-myo',
+            ],
             [
                 'name' => 'Character Transfers',
                 'url'  => 'admin/masterlist/transfers/incoming',
@@ -215,10 +215,6 @@ return [
                 'url'  => 'admin/data/adoption-center',
             ],
             [
-                'name' => 'Galleries',
-                'url'  => 'admin/data/galleries',
-            ],
-            [
                 'name' => 'Character Categories',
                 'url'  => 'admin/data/character-categories',
             ],
@@ -238,16 +234,16 @@ return [
                 'name' => 'Markings',
                 'url'  => 'admin/data/markings',
             ],
-            [
-                'name' => 'Carriers',
-                'url'  => 'admin/data/carriers',
-            ],
+            // [
+            //     'name' => 'Carriers',
+            //     'url'  => 'admin/data/carriers',
+            // ],
             [
                 'name' => 'Bases',
                 'url'  => 'admin/data/bases',
             ],
             [
-                'name' => 'Status Effects',
+                'name' => 'Illnesses',
                 'url'  => 'admin/data/status-effects',
             ],
             [
@@ -360,51 +356,13 @@ return [
                 'name' => 'Concepts',
                 'url'  => 'admin/world/concepts',
             ],
-        ],
-    ],
-
-    'Claymores' => [
-        'power' => 'edit_claymores',
-        'links' => [
-            // [
-            //     'name' => 'Gear',
-            //     'url'  => 'admin/gear',
-            // ],
-            // [
-            //     'name' => 'Weapons',
-            //     'url'  => 'admin/weapons',
-            // ],
-            // [
-            //     'name' => 'Attacks',
-            //     'url'  => 'admin/attacks',
-            // ],
-            // [
-            //     'name' => 'Character Classes',
-            //     'url'  => 'admin/character-classes',
-            // ],
-            // [
-            //     'name' => 'Character Skills',
-            //     'url'  => 'admin/data/skills',
-            // ],
-            // [
-            //     'name' => 'Stats',
-            //     'url'  => 'admin/stats',
-            // ],
-            [
-                'name' => 'Character Levels',
-                'url'  => 'admin/levels/character',
-            ],
-            // [
-            //     'name' => 'User Levels',
-            //     'url'  => 'admin/levels/user',
-            // ],
-            [
-                'name' => 'Elements',
-                'url'  => 'admin/data/elements',
-            ],
             [
                 'name' => 'Criteria Rewards',
                 'url'  => 'admin/data/criteria',
+            ],
+            [
+                'name' => 'Elements',
+                'url'  => 'admin/data/elements',
             ],
         ],
     ],
