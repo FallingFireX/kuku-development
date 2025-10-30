@@ -31,10 +31,20 @@
             <div class="col-md-6">
                 <h5>Ingredients</h5>
                 @foreach($recipe->ingredients as $ingredient)
-                    <div class="alert alert-secondary">
-                        @include('home.crafting._recipe_ingredient_entry', ['ingredient' => $ingredient])
-                    </div>
-                @endforeach
+    @php
+        $data = json_decode($ingredient->ingredient_data, true);
+        $itemId = (int) ($data[0] ?? 0); // grab the first ID
+        $needed = $ingredient->quantity;
+        $owned = $inventoryItems[$itemId] ?? 0;
+    @endphp
+
+    <div class="alert {{ $owned >= $needed ? 'alert-success' : 'alert-danger' }}">
+        @include('home.crafting._recipe_ingredient_entry', ['ingredient' => $ingredient])
+        <div><small>You own: {{ $owned }} / Need: {{ $needed }}</small></div>
+    </div>
+@endforeach
+
+
             </div>
             <div class="col-md-6">
                 <h5>Rewards</h5>
