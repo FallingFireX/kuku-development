@@ -24,7 +24,7 @@ class CharacterController extends Controller {
     |
     */
 
-    /**
+     /**
      * Shows the user's characters.
      *
      * @return \Illuminate\Contracts\Support\Renderable
@@ -34,7 +34,6 @@ class CharacterController extends Controller {
 
         return view('home.characters', [
             'characters' => $characters,
-            'folders'    => ['None' => 'None'] + Auth::user()->folders()->pluck('name', 'id')->toArray(),
         ]);
     }
 
@@ -59,7 +58,7 @@ class CharacterController extends Controller {
      * @return \Illuminate\Http\RedirectResponse
      */
     public function postSortCharacters(Request $request, CharacterManager $service) {
-        if ($service->sortCharacters($request->only(['sort', 'folder_ids']), Auth::user())) {
+        if ($service->sortCharacters($request->only(['sort']), Auth::user())) {
             flash('Characters sorted successfully.')->success();
 
             return redirect()->back();

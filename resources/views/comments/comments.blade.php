@@ -79,36 +79,6 @@
     @parent
     <script>
         $(document).ready(function() {
-<<<<<<< HEAD
-            tinymce.init({
-                selector: '.comment-wysiwyg',
-                height: 250,
-                menubar: false,
-                convert_urls: false,
-                
-                plugins: [
-                    'advlist autolink lists link image charmap print preview anchor',
-                    'searchreplace visualblocks code fullscreen spoiler',
-                    'insertdatetime media table paste code help wordcount',
-                    'code'
-                ],
-                mobile: {
-                    theme: 'silver',
-                    toolbar_mode: 'floating',
-                    height: 300,
-                    toolbar: [
-                        'bold italic underline | forecolor backcolor | selectdropdown',
-                        'alignleft aligncenter alignright | numlist bullist'
-                    ],
-                },
-                toolbar: 'undo redo | formatselect | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | spoiler-add spoiler-remove | removeformat | code',
-                content_css: [
-                    '{{ asset('css/app.css') }}',
-                    '{{ asset('css/lorekeeper.css') }}'
-                ],
-                spoiler_caption: 'View Details',
-                target_list: false
-=======
             function sortComments() {
                 $('#{{ $commentType }}-comments').fadeOut();
                 $.ajax({
@@ -144,7 +114,6 @@
 
             $('#{{ $commentType }}-sort').change(function() {
                 sortComments();
->>>>>>> f45d71933bf0b38f4e918e1b63391f9bd17fa0c8
             });
 
             $('#{{ $commentType }}-perPage').change(function() {

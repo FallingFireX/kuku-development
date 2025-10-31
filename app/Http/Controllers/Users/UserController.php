@@ -161,16 +161,10 @@ class UserController extends Controller {
         if (!Auth::check() || !(Auth::check() && Auth::user()->hasPower('manage_characters'))) {
             $query->visible();
         }
-        $query = $query->orderBy('sort', 'DESC')->get()
-        // group query folder, getting the name from the id
-            ->groupBy(function ($item) {
-                return $item->folder ? $item->folder->name : 'Unsorted';
-            });
 
         return view('user.characters', [
             'user'       => $this->user,
-            'characters' => $query,
-            'sublists'   => Sublist::orderBy('sort', 'DESC')->get(),
+            'characters' => $query->orderBy('sort', 'DESC')->get(),
         ]);
     }
 

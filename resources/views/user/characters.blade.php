@@ -10,8 +10,6 @@
     <h1>
         {!! $user->displayName !!}'s Characters
     </h1>
-    <div class="text-right mb-2">
-        <a class="btn btn-primary create-folder mx-1" href="{{ url('characters') }}"><i class="fas fa-edit"></i> Sort/Manage Kukuri</a>
-    </div>
-    @include('user._characters', ['characters' => $characters, 'myo' => false])
+
+    @include('user._characters', ['characters' => $characters, 'myo' => false, 'owner' => true, 'userpage_exts' => true])
 @endsection
