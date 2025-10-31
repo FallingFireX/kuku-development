@@ -62,9 +62,13 @@
                         @if ($gallery->submissions_count > 4)
                             <div class="text-right"><a href="{{ url('gallery/' . $gallery->id) }}">See More...</a></div>
                         @endif
+<<<<<<< HEAD
                     @elseif(
                         $gallery->children_count &&
                             $gallery->through('children')->has('submissions')->where('is_visible', 1)->where('status', 'Accepted')->count())
+=======
+                    @elseif($gallery->children_count && $gallery->through('children')->has('submissions')->where('is_visible', 1)->where('status', 'Accepted')->count())
+>>>>>>> f45d71933bf0b38f4e918e1b63391f9bd17fa0c8
                         <div class="row">
                             @foreach ($gallery->through('children')->has('submissions')->where('is_visible', 1)->where('status', 'Accepted')->orderBy('created_at', 'DESC')->get()->take(4) as $submission)
                                 <div class="col-md-3 text-center align-self-center">

@@ -258,35 +258,18 @@
 @endsection
 
 @section('scripts')
-@parent
-<script>
-$( document ).ready(function() {
-    $('.delete-feature-button').on('click', function(e) {
-        e.preventDefault();
-        loadModal("{{ url('admin/data/traits/delete') }}/{{ $feature->id }}", 'Delete Trait');
-    });
-
-    $('#add-type').on('click', function(e) {
-            e.preventDefault();
-            addTypeRow();
-        });
-        $('.remove-type').on('click', function(e) {
-            e.preventDefault();
-            removeTypeRow($(this));
-        })
-        function addTypeRow() {
-            var $clone = $('.type-row').clone();
-            $('#typeList').append($clone);
-            $clone.removeClass('hide type-row');
-            $clone.find('.remove-type').on('click', function(e) {
+    @parent
+    @include('js._tinymce_wysiwyg')
+    <script>
+        $(document).ready(function() {
+            $('.delete-feature-button').on('click', function(e) {
                 e.preventDefault();
                 removeTypeRow($(this));
             })
         }
         function removeTypeRow($trigger) {
             $trigger.parent().parent().parent().parent().remove();
-        }
-});
+        });
 
 </script>
 @endsection

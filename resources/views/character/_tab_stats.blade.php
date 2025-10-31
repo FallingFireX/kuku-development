@@ -47,6 +47,8 @@
         <div class="small">
             {!! $parent->parent->image->species_id ? $parent->parent->image->species->displayName : 'No Species' !!} ・ {!! $parent->parent->image->rarity_id ? $parent->parent->image->rarity->displayName : 'No Rarity' !!} ・ {!! $parent->parent->displayOwner !!}
         </div>
+        <div class="col-lg-9 col-7 pl-1">
+            {{ config('lorekeeper.settings.currency_symbol') }}{{ $character->sale_value }}
         </div>
     </div>
 @endif

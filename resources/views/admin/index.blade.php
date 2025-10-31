@@ -503,13 +503,15 @@
                 <div class="col-sm-3">
                     <div class="card mb-3">
                         <div class="card-body">
-                            <h5 class="card-title">Character Transfers @if ($transferCount + $tradeCount)
-                                    <span class="badge badge-primary">{{ $transferCount + $tradeCount }}</span>
+                            <h5 class="card-title">
+                                Character Transfers
+                                @if ($transferCount)
+                                    <span class="badge badge-primary">{{ $transferCount }}</span>
                                 @endif
                             </h5>
                             <p class="card-text">
-                                @if ($transferCount + $tradeCount)
-                                    {{ $transferCount + $tradeCount }} character transfer{{ $transferCount + $tradeCount == 1 ? '' : 's' }} and/or trade{{ $transferCount + $tradeCount == 1 ? '' : 's' }} awaiting processing.
+                                @if ($transferCount)
+                                    {{ $transferCount }} character transfer{{ $transferCount == 1 ? '' : 's' }} awaiting processing.
                                 @else
                                     The character transfer/trade queue is clear. Hooray!
                                 @endif
@@ -521,8 +523,59 @@
                     </div>
                 </div>
             @endif
+            @if ($openTradesQueue)
+                <div class="col-sm-6">
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                Trades
+                                @if ($tradeCount)
+                                    <span class="badge badge-primary">{{ $tradeCount }}</span>
+                                @endif
+                            </h5>
+                            <p class="card-text">
+                                @if ($tradeCount)
+                                    {{ $tradeCount }} trade{{ $tradeCount == 1 ? '' : 's' }} awaiting processing.
+                                @else
+                                    The trade queue is clear. Hooray!
+                                @endif
+                            </p>
+                            <div class="text-right">
+                                <a href="{{ url('admin/trades/incoming') }}" class="card-link">View Queue <span class="fas fa-caret-right ml-1"></span></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @endif
         
-        
+        @if (Auth::user()->hasPower('manage_reports'))
+            <div class="col-sm-6">
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">Reports @if ($reportCount || $assignedReportCount)
+                                <span class="badge badge-primary">{{ $reportCount + $assignedReportCount }}</span>
+                            @endif
+                        </h5>
+                        <p class="card-text">
+                            @if ($reportCount || $assignedReportCount)
+                                @if ($reportCount)
+                                    {{ $reportCount }} report{{ $reportCount == 1 ? '' : 's' }} awaiting assignment.
+                                @endif
+                                {!! $reportCount && $assignedReportCount ? '<br/>' : '' !!}
+                                @if ($assignedReportCount)
+                                    {{ $assignedReportCount }} report{{ $assignedReportCount == 1 ? '' : 's' }} awaiting processing.
+                                @endif
+                            @else
+                                The report queue is clear. Hooray!
+                            @endif
+                        </p>
+                        <div class="text-right">
+                            <a href="{{ url('admin/reports/pending') }}" class="card-link">View Queue <span class="fas fa-caret-right ml-1"></span></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        @endif
         @if (!Auth::user()->hasPower('manage_submissions') && !Auth::user()->hasPower('manage_characters') && !Auth::user()->hasPower('manage_reports'))
             <div class="card p-4 col-12">
                 <h5 class="card-title">You do not have a rank that allows you to access any queues.</h5>

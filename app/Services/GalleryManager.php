@@ -105,24 +105,9 @@ class GalleryManager extends Service {
 
             $data = $this->populateData($data);
 
-            $withCriteriaSelected = isset($currencyFormData) && $currencyFormData && isset($currencyFormData['criterion']) ? array_filter($currencyFormData['criterion'], function ($obj) {
-                return isset($obj['id']);
-            }) : [];
-            if (count($withCriteriaSelected) > 0) {
-                $currencyFormData['criterion'] = $withCriteriaSelected;
-            } else {
-                $currencyFormData['criterion'] = null;
-            }
-
-            if (isset($currencyFormData) && $currencyFormData && isset($currencyFormData['criterion'])) {
-                $data['data']['criterion'] = $currencyFormData['criterion'];
-                $total = 0;
-                foreach ($currencyFormData['criterion'] as $criteria) {
-                    $calc = Criterion::where('id', $criteria['id'])->first();
-                    $total += $calc->calculateReward($criteria);
-                }
-                $data['data']['total'] = $total;
-                $data['data'] = collect($data['data'])->toJson();
+            if (isset($currencyFormData) && $currencyFormData) {
+                $data['data']['currencyData'] = $currencyFormData;
+                $data['data']['total'] = calculateGroupCurrency($currencyFormData);
             }
 
             $submission->update($data);
@@ -442,10 +427,10 @@ class GalleryManager extends Service {
 
             // Get existing vote data if it exists, remove any existing vote data for the user,
             // add the new vote data, and json encode it
-            $voteData = (isset($submission->attributes['vote_data']) ? collect(json_decode($submission->attributes['vote_data'], true)) : collect([]));
+            $voteData = (isset($submission->vote_data) ? collect($submission->vote_data, true) : collect([]));
             $voteData->get($user->id) ? $voteData->pull($user->id) : null;
             $voteData->put($user->id, $vote);
-            $submission->vote_data = $voteData->toJson();
+            $submission->vote_data = $voteData;
 
             $submission->save();
 
@@ -650,11 +635,16 @@ class GalleryManager extends Service {
                 // }
 
                 // Collect and json encode existing as well as new data for storage
-                $valueData = collect([
-                    'criterion'     => $data['criterion'] ?? null,
-                    'awardQuantity' => $awardQuantity,
-                    'staff'         => $user->id,
-                ])->toJson();
+                if (isset($submission->data['total'])) {
+                    $valueData = collect([
+                        'currencyData' => $submission->data['currencyData'],
+                        'total'        => $submission->data['total'],
+                        'value'        => $data['value'],
+                        'staff'        => $user->id,
+                    ]);
+                } else {
+                    $valueData = ['value' => $data['value'], 'staff' => $user->id];
+                }
 
                 // Update the submission with the new data and mark it as processed
                 $submission->update([
@@ -679,13 +669,13 @@ class GalleryManager extends Service {
                 // Collect and json encode existing as well as new data for storage
                 if (isset($submission->data['total'])) {
                     $valueData = collect([
-                        'criterion'  => $submission->data['criterion'] ?? null,
-                        'total'      => $submission->data['total'],
-                        'ineligible' => 1,
-                        'staff'      => $user->id,
-                    ])->toJson();
+                        'currencyData' => $submission->data['currencyData'],
+                        'total'        => $submission->data['total'],
+                        'ineligible'   => 1,
+                        'staff'        => $user->id,
+                    ]);
                 } else {
-                    $valueData = collect(['ineligible' => 1, 'staff' => $user->id])->toJson();
+                    $valueData = ['ineligible' => 1, 'staff' => $user->id];
                 }
 
                 // Update the submission, including marking it as processed

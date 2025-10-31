@@ -224,6 +224,16 @@
             </div>
             <div>
                 <button class="btn btn-danger delete-calc" type="button"><i class="fas fa-trash"></i></button>
+    @if ($prompt->id)
+        @include('widgets._add_limits', [
+            'object' => $prompt,
+            'hideAutoUnlock' => true,
+        ])
+
+        <h3>Preview</h3>
+        <div class="card mb-3">
+            <div class="card-body">
+                @include('prompts._prompt_entry', ['prompt' => $prompt])
             </div>
         </div>
         <div id="collapsable-" class="form collapse">Select a criterion to populate this area.</div>
@@ -245,6 +255,7 @@
     @parent
     @include('js._loot_js', ['showLootTables' => true, 'showRaffles' => true])
     @include('widgets._datetimepicker_js')
+    @include('js._tinymce_wysiwyg')
     <script>
         $(document).ready(function() {
 

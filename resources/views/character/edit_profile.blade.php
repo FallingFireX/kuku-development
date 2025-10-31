@@ -4,10 +4,6 @@
     Editing {{ $character->fullName }}'s Profile
 @endsection
 
-@section('meta-img')
-    {{ $character->image->thumbnailUrl }}
-@endsection
-
 @section('profile-content')
 
     @if ($character->is_myo_slot)
@@ -153,5 +149,6 @@
 @section('scripts')
     
     @include('widgets._datetimepicker_js')
-    
+    @parent
+    @include('js._tinymce_wysiwyg')
 @endsection

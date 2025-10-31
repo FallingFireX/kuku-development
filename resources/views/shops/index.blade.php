@@ -12,17 +12,15 @@
     </h1>
 
     <div class="row shops-row">
-    @foreach ($shops as $shop)
-    @if ($shop->is_visible)
-        @if ($shop->is_staff)
-            @if (Auth::check() && Auth::user()->isstaff)
+   @foreach ($shops as $shop)
+            @if ($shop->is_staff)
+                @if (Auth::check() && Auth::user()->isstaff)
+                    @include('shops._shop')
+                @endif
+            @else
                 @include('shops._shop')
             @endif
-        @else
-            @include('shops._shop')
-        @endif
-    @endif
-@endforeach
+        @endforeach
 
         <div class="col-md-3 col-6 mb-3 text-center">
         <div class="shop-image">

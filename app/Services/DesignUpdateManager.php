@@ -8,6 +8,7 @@ use App\Models\Character\CharacterDesignUpdate;
 use App\Models\Character\CharacterFeature;
 use App\Models\Character\CharacterImage;
 use App\Models\Character\CharacterTransformation as Transformation;
+use App\Models\Character\CharacterImageSubtype;
 use App\Models\Currency\Currency;
 use App\Models\Feature\Feature;
 use App\Models\Rarity;
@@ -64,7 +65,7 @@ class DesignUpdateManager extends Service {
                 // Set some data based on the character's existing stats
                 'rarity_id'                  => $character->image->rarity_id,
                 'species_id'                 => $character->image->species_id,
-                'subtype_id'                 => $character->image->subtype_id,
+                'subtype_ids'                => $character->image->subtypes()->pluck('subtype_id'),
                 'transformation_id'          => $image->transformation_id,
                 'transformation_info'        => $image->transformation_info,
                 'transformation_description' => $image->transformation_description,
@@ -342,10 +343,10 @@ class DesignUpdateManager extends Service {
             }
 
             $request->has_addons = 1;
-            $request->data = json_encode([
+            $request->data = [
                 'user'      => Arr::only(getDataReadyAssets($userAssets), ['user_items', 'currencies']),
                 'character' => Arr::only(getDataReadyAssets($characterAssets), ['currencies']),
-            ]);
+            ];
             $request->save();
 
             return $this->commitReturn(true);
@@ -377,10 +378,25 @@ class DesignUpdateManager extends Service {
 
             $rarity = ($request->character->is_myo_slot && $request->character->image->rarity_id) ? $request->character->image->rarity : Rarity::find($data['rarity_id']);
             $species = ($request->character->is_myo_slot && $request->character->image->species_id) ? $request->character->image->species : Species::find($data['species_id']);
-            if (isset($data['subtype_id']) && $data['subtype_id']) {
-                $subtype = ($request->character->is_myo_slot && $request->character->image->subtype_id) ? $request->character->image->subtype : Subtype::find($data['subtype_id']);
+
+            if (($request->character->is_myo_slot && count($request->character->image->subtypes))) {
+                $subtypes = $request->character->image->subtypes()->pluck('subtype_id')->toArray();
             } else {
-                $subtype = null;
+                if (isset($data['subtype_ids']) && $data['subtype_ids']) {
+                    if (count($data['subtype_ids']) > config('lorekeeper.extensions.multiple_subtype_limit')) {
+                        throw new \Exception('Too many subtypes selected.');
+                    }
+                    $subtypes = $data['subtype_ids'];
+                    foreach ($data['subtype_ids'] as $subtypeId) {
+                        $subtype = Subtype::find($subtypeId);
+                        if (!$subtype) {
+                            throw new \Exception('Invalid subtype selected.');
+                        }
+                        if ($subtype && $subtype->species_id != $species->id) {
+                            throw new \Exception('Subtype does not match the species.');
+                        }
+                    }
+                }
             }
             if (isset($data['transformation_id']) && $data['transformation_id']) {
                 $transformation = ($request->character->is_myo_slot && $request->character->image->transformation_id) ? $request->character->image->transformation : Transformation::find($data['transformation_id']);
@@ -434,7 +450,7 @@ class DesignUpdateManager extends Service {
             // Update other stats
             $request->species_id = $species->id;
             $request->rarity_id = $rarity->id;
-            $request->subtype_id = $subtype ? $subtype->id : null;
+             $request->subtype_ids = $subtypes ?? null;
             $request->transformation_id = $transformation ? $transformation->id : null;
             $request->transformation_info = $transformation_info;
             $request->transformation_description = $transformation_description;
@@ -583,25 +599,42 @@ class DesignUpdateManager extends Service {
 
             // Create a new image with the request data
             $image = CharacterImage::create([
-                'character_id'               => $request->character_id,
-                'is_visible'                 => 1,
-                'hash'                       => $request->hash,
-                'fullsize_hash'              => $request->fullsize_hash ? $request->fullsize_hash : randomString(15),
-                'extension'                  => $extension,
-                'fullsize_extension'         => config('lorekeeper.settings.masterlist_fullsizes_format') != null ? config('lorekeeper.settings.masterlist_fullsizes_format') : $request->extension,
-                'use_cropper'                => $request->use_cropper,
-                'x0'                         => $request->x0,
-                'x1'                         => $request->x1,
-                'y0'                         => $request->y0,
-                'y1'                         => $request->y1,
-                'species_id'                 => $request->species_id,
-                'subtype_id'                 => ($request->character->is_myo_slot && isset($request->character->image->subtype_id)) ? $request->character->image->subtype_id : $request->subtype_id,
+                'character_id'       => $request->character_id,
+                'is_visible'         => 1,
+                'hash'               => $request->hash,
+                'fullsize_hash'      => $request->fullsize_hash ? $request->fullsize_hash : randomString(15),
+                'extension'          => config('lorekeeper.settings.masterlist_image_format') != null ? config('lorekeeper.settings.masterlist_image_format') : $request->extension,
+                'fullsize_extension' => config('lorekeeper.settings.masterlist_fullsizes_format') != null ? config('lorekeeper.settings.masterlist_fullsizes_format') : $request->extension,
+                'use_cropper'        => $request->use_cropper,
+                'x0'                 => $request->x0,
+                'x1'                 => $request->x1,
+                'y0'                 => $request->y0,
+                'y1'                 => $request->y1,
+                'species_id'         => $request->species_id,
+                'rarity_id'          => $request->rarity_id,
+                'sort'               => 0,
                 'transformation_id'          => ($request->character->is_myo_slot && isset($request->character->image->transformation_id)) ? $request->character->image->transformation_id : $request->transformation_id,
                 'transformation_info'        => ($request->character->is_myo_slot && isset($request->character->image->transformation_info)) ? $request->character->image->transformation_info : $request->transformation_info,
                 'transformation_description' => ($request->character->is_myo_slot && isset($request->character->image->transformation_description)) ? $request->character->image->transformation_description : $request->transformation_description,
-                'rarity_id'                  => $request->rarity_id,
-                'sort'                       => 0,
+                
             ]);
+
+            // do subtype stuff
+            if ($request->character->is_myo_slot && count($request->character->image->subtypes)) {
+                foreach ($request->character->image->subtypes as $subtype) {
+                    CharacterImageSubtype::create([
+                        'character_image_id' => $image->id,
+                        'subtype_id'         => $subtype->subtype_id,
+                    ]);
+                }
+            } elseif ($request->subtype_ids) {
+                foreach ($request->subtypes() as $subtypeId) {
+                    CharacterImageSubtype::create([
+                        'character_image_id' => $image->id,
+                        'subtype_id'         => $subtypeId,
+                    ]);
+                }
+            }
 
             // Shift the image credits over to the new image
             $request->designers()->update(['character_type' => 'Character', 'character_image_id' => $image->id]);
@@ -989,10 +1022,10 @@ class DesignUpdateManager extends Service {
                     break;
             }
 
-            $voteData = (isset($request->vote_data) ? collect(json_decode($request->vote_data, true)) : collect([]));
+            $voteData = (isset($request->vote_data) ? collect($request->vote_data, true) : collect([]));
             $voteData->get($user->id) ? $voteData->pull($user->id) : null;
             $voteData->put($user->id, $vote);
-            $request->vote_data = $voteData->toJson();
+            $request->vote_data = $voteData;
 
             $request->save();
 

@@ -14,7 +14,7 @@ use App\Models\Gallery\GallerySubmission;
 use App\Models\Report\Report;
 use App\Models\Submission\Submission;
 use App\Models\Team;
-use App\Models\Trade;
+use App\Models\Trade\Trade;
 use App\Models\User\User;
 use App\Models\Submission\AdminApplication;
 use Illuminate\Http\Request;
@@ -29,6 +29,7 @@ class HomeController extends Controller {
      */
     public function getIndex() {
         $openTransfersQueue = Settings::get('open_transfers_queue');
+        $openTradesQueue = Settings::get('open_trades_queue');
         $galleryRequireApproval = Settings::get('gallery_submissions_require_approval');
 
         return view('admin.index', [
@@ -63,6 +64,7 @@ class HomeController extends Controller {
             'affiliateCount'                => Affiliate::where('status', 'Pending')->count(),
             'teams'                  => Team::orderBy('id')->get(),
             'AppCount'               => AdminApplication::where('status', 'Pending')->count(),
+            'openTradesQueue'        => $openTradesQueue,
         ]);
     }
 

@@ -2,8 +2,6 @@
 
 @section('profile-title') {{ $character->fullName }} @endsection
 
-@section('meta-img') {{ $character->image->thumbnailUrl }} @endsection
-
 @section('profile-content')
 
 
@@ -43,8 +41,8 @@ strlen($character->character_warning) > 1 || isset($character->character_warning
                     <a href="{{ $character->image->canViewFull(Auth::user() ?? null) && file_exists(public_path($character->image->imageDirectory . '/' . $character->image->fullsizeFileName)) ? $character->image->fullsizeUrl : $character->image->imageUrl }}"
                         data-lightbox="entry" data-title="{{ $character->fullName }}">
                         <img src="{{ $character->image->canViewFull(Auth::user() ?? null) && file_exists(public_path($character->image->imageDirectory . '/' . $character->image->fullsizeFileName)) ? $character->image->fullsizeUrl : $character->image->imageUrl }}"
-                            class="image" alt="{{ $character->fullName }}" />
-                        </a>
+                            class="image {{ $character->image->showContentWarnings(Auth::user() ?? null) ? 'content-warning' : '' }}" alt="{{ $character->fullName }}" />
+                    </a>
                 </div>
             </div>
             @if ($character->image->canViewFull(Auth::user() ?? null) && file_exists(public_path($character->image->imageDirectory . '/' . $character->image->fullsizeFileName)))

@@ -13,4 +13,5 @@ return [
     'App\Models\Submission\Submission',
     'App\Models\Submission\AdminApplication',
 
+    'App\Models\Trade\TradeListing',
 ];

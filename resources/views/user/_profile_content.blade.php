@@ -59,6 +59,7 @@
                 <div class="col-lg-3 col-md-3 col-4">
                     <h5>Rank</h5>
                 </div>
+<<<<<<< HEAD
                 <div class="col-lg-9 col-md-9 col-8">{!! $user->rank->displayName !!} {!! add_help($user->rank->parsed_description) !!}</div>
                 @if(count($teams)>0)
                     <div class="col-lg-3 col-md-3 col-4">
@@ -70,6 +71,9 @@
                         @endforeach
                     </div>
                 @endif
+=======
+                <div class="col-lg-9 col-md-9 col-8">{!! $user->rank->displayName !!} {!! $user->rank->parsed_description ? add_help($user->rank->parsed_description) : '' !!}</div>
+>>>>>>> f45d71933bf0b38f4e918e1b63391f9bd17fa0c8
             </div>
             @if ($user->birthdayDisplay && isset($user->birthday))
                 <div class="row col-sm-6">
@@ -101,9 +105,24 @@
         </div>
     </div>
 @endif
+<<<<<<< HEAD
 <div class="row">
     <div class="col-md-6">
         @include('widgets._selected_character', ['character' => $user->settings->selectedCharacter, 'user' => $user, 'fullImage' => false])
+=======
+
+<div class="card-deck mb-4 profile-assets" style="clear:both;">
+    <div class="card profile-currencies profile-assets-card">
+        <div class="card-body text-center">
+            <h5 class="card-title">Bank</h5>
+            <div class="profile-assets-content">
+                @foreach ($user->getCurrencies(false, false, Auth::user() ?? null) as $currency)
+                    <div>{!! $currency->display($currency->quantity) !!}</div>
+                @endforeach
+            </div>
+            <div class="text-right"><a href="{{ $user->url . '/bank' }}">View all...</a></div>
+        </div>
+>>>>>>> f45d71933bf0b38f4e918e1b63391f9bd17fa0c8
     </div>
     <div class="col-md-6 mb-4 profile-assets" style="clear:both;">
         <div class="card profile-currencies profile-assets-card mb-4">
@@ -159,6 +178,7 @@
         @foreach($chunk as $character)
             <div class="col-md-3 col-6 text-center">
                 <div>
+<<<<<<< HEAD
                         @if(Auth::check() && (Auth::user()->settings->warning_visibility == 0) && isset($character->character_warning) || isset($character->character_warning) && !Auth::check())
                         <a href="{{ $character->url }}"><img class="img-thumbnail" src="{{ asset('/images/content_warning.png') }}" alt="Content Warning"/></a>
                         @else    
@@ -172,7 +192,26 @@
                          <p><span class="text-danger"><strong>Character Warning:</strong></span> {!! nl2br(htmlentities($character->character_warning)) !!}</p>
                          </div>
                          @endif
+=======
+                    @if ((Auth::check() && Auth::user()->settings->content_warning_visibility == 0 && isset($character->character_warning)) || (isset($character->character_warning) && !Auth::check()))
+                        <a href="{{ $character->url }}"><img src="{{ asset('images/content-warning.png') }}" class="img-thumbnail" alt="Content Warning - {{ $character->fullName }}" /></a>
+                    @else
+                        <a href="{{ $character->url }}"><img src="{{ $character->image->thumbnailUrl }}" class="img-thumbnail" alt="{{ $character->fullName }}" /></a>
+                    @endif
                 </div>
+                <div class="mt-1">
+                    <a href="{{ $character->url }}" class="h5 mb-0">
+                        @if (!$character->is_visible)
+                            <i class="fas fa-eye-slash"></i>
+                        @endif {{ Illuminate\Support\Str::limit($character->fullName, 20, $end = '...') }}
+                    </a>
+>>>>>>> f45d71933bf0b38f4e918e1b63391f9bd17fa0c8
+                </div>
+                @if ((Auth::check() && Auth::user()->settings->content_warning_visibility < 2 && isset($character->character_warning)) || (isset($character->character_warning) && !Auth::check()))
+                    <div class="small">
+                        <p><span class="text-danger"><strong>Character Warning:</strong></span> {!! nl2br(htmlentities($character->character_warning)) !!}</p>
+                    </div>
+                @endif
             </div>
         @endforeach
     </div>
@@ -210,6 +249,7 @@
 </div>
 </div>
 <div class="row col-12">
+<<<<<<< HEAD
     <div class="col-md-8">
         @comments(['model' => $user->profile, 'perPage' => 5])
     </div>
@@ -217,8 +257,19 @@
         <div class="card mb-4">
             <div class="card-header">
                 <div class="mb-0 h5">Mention This User</div>
+=======
+    @if ($user->settings->allow_profile_comments)
+        <div class="col-md-8">
+            @comments(['model' => $user->profile, 'perPage' => 5])
+        </div>
+    @endif
+    <div class="col-md-{{ $user->settings->allow_profile_comments ? 4 : 12 }}">
+        <div class="card mb-4">
+            <div class="card-header" data-toggle="collapse" data-target="#mentionHelp" aria-expanded="{{ $user->settings->allow_profile_comments ? 'true' : 'false' }}">
+                <h5>Mention This User</h5>
+>>>>>>> f45d71933bf0b38f4e918e1b63391f9bd17fa0c8
             </div>
-            <div class="card-body">
+            <div class="card-body collapse {{ $user->settings->allow_profile_comments ? 'show' : '' }}" id="mentionHelp">
                 In the rich text editor:
                 <div class="alert alert-secondary">
                     {{ '@' . $user->name }}

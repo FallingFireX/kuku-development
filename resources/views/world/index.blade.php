@@ -25,6 +25,9 @@
                     @if (config('lorekeeper.extensions.visual_trait_index.enable_universal_index'))
                         <li class="list-group-item"><a href="{{ url('world/universaltraits') }}">Universal Trait Index</a></li>
                     @endif
+                    @if (config('lorekeeper.extensions.visual_trait_index.enable_all_trait_index'))
+                        <li class="list-group-item"><a href="{{ url('world/all-traits-index') }}">All Traits Index</a></li>
+                    @endif
                     <li class="list-group-item"><a href="{{ url('world/character-categories') }}">Character Categories</a></li>
                     <li class="list-group-item"><a href="{{ url('world/'.__('transformations.transformations')) }}">{{ ucfirst(__('transformations.transformations')) }}</a></li>
                     <li class="list-group-item"><a href="{{ url('world/character-classes') }}">Character Classes</a></li>

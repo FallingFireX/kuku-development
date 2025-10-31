@@ -10,7 +10,7 @@
         });
         $('.edit-notes').on('click', function(e) {
             e.preventDefault();
-            $("div.imagenoteseditingparse").load("{{ url('admin/character/image') }}/" + $(this).data('id') + "/notes", function() {
+            $("div.imagenoteseditingparse").load("{{ url('admin/character/image') }}/" + $(this).data('id') + "/notes"), function() {
                 tinymce.init({
                     selector: '.imagenoteseditingparse .wysiwyg',
                     height: 500,

@@ -19,43 +19,41 @@
         {!! RecaptchaV3::initJs() !!}
     @endif
 
-    <title>{{ config('lorekeeper.settings.site_name', 'Lorekeeper') }} -@yield('title')</title>
+    <title>{{ config('lorekeeper.settings.site_name', 'Lorekeeper') }}{!! View::hasSection('title') ? ' - ' . trim(View::getSection('title')) : '' !!}</title>
 
     <!-- Primary Meta Tags -->
-    <meta name="title" content="{{ config('lorekeeper.settings.site_name', 'Lorekeeper') }} -@yield('title')">
-    <meta name="description" content="@if (View::hasSection('meta-desc')) @yield('meta-desc') @else {{ config('lorekeeper.settings.site_desc', 'A Lorekeeper ARPG') }} @endif">
+    <meta name="title" content="{{ config('lorekeeper.settings.site_name', 'Lorekeeper') }}{!! View::hasSection('title') ? ' - ' . trim(View::getSection('title')) : '' !!}">
+    <meta name="description" content="{!! View::hasSection('meta-desc') ? trim(strip_tags(View::getSection('meta-desc'))) : config('lorekeeper.settings.site_desc', 'A Lorekeeper ARPG') !!}">
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="{{ config('app.url', 'http://localhost') }}">
-    <meta property="og:image" content="@if (View::hasSection('meta-img')) @yield('meta-img') @else {{ asset('images/meta-image.png') }} @endif">
-    <meta property="og:title" content="{{ config('lorekeeper.settings.site_name', 'Lorekeeper') }} -@yield('title')">
-    <meta property="og:description" content="@if (View::hasSection('meta-desc')) @yield('meta-desc') @else {{ config('lorekeeper.settings.site_desc', 'A Lorekeeper ARPG') }} @endif">
+    <meta property="og:image" content="{{ View::hasSection('meta-img') ? View::getSection('meta-img') : asset('images/meta-image.png') }}">
+    <meta property="og:title" content="{{ config('lorekeeper.settings.site_name', 'Lorekeeper') }}{!! View::hasSection('title') ? ' - ' . trim(View::getSection('title')) : '' !!}">
+    <meta property="og:description" content="{!! View::hasSection('meta-desc') ? trim(strip_tags(View::getSection('meta-desc'))) : config('lorekeeper.settings.site_desc', 'A Lorekeeper ARPG') !!}">
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="{{ config('app.url', 'http://localhost') }}">
-    <meta property="twitter:image" content="@if (View::hasSection('meta-img')) @yield('meta-img') @else {{ asset('images/meta-image.png') }} @endif">
-    <meta property="twitter:title" content="{{ config('lorekeeper.settings.site_name', 'Lorekeeper') }} -@yield('title')">
-    <meta property="twitter:description" content="@if (View::hasSection('meta-desc')) @yield('meta-desc') @else {{ config('lorekeeper.settings.site_desc', 'A Lorekeeper ARPG') }} @endif">
+    <meta property="twitter:image" content="{{ View::hasSection('meta-img') ? View::getSection('meta-img') : asset('images/meta-image.png') }}">
+    <meta property="twitter:title" content="{{ config('lorekeeper.settings.site_name', 'Lorekeeper') }}{!! View::hasSection('title') ? ' - ' . trim(View::getSection('title')) : '' !!}">
+    <meta property="twitter:description" content="{!! View::hasSection('meta-desc') ? trim(strip_tags(View::getSection('meta-desc'))) : config('lorekeeper.settings.site_desc', 'A Lorekeeper ARPG') !!}">
 
     <!-- No AI scraping directives -->
     <meta name="robots" content="noai">
     <meta name="robots" content="noimageai">
 
     <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}"></script>
-    <script src="{{ asset('js/site.js') }}"></script>
-    <script src="{{ asset('js/jquery-ui.min.js') }}"></script>
-    <script src="{{ asset('js/bootstrap4-toggle.min.js') }}"></script>
+    <script src="{{ mix('js/app.js') }}"></script>
+    <script defer src="{{ mix('js/app-secondary.js') }}"></script>
+    <script defer src="{{ asset('js/site.js') }}"></script>
     <script src="{{ asset('js/tinymce.min.js') }}"></script>
     <script src="{{ asset('js/jquery.tinymce.min.js') }}"></script>
-    <script src="{{ asset('js/lightbox.min.js') }}"></script>
-    <script src="{{ asset('js/bootstrap-colorpicker.min.js') }}"></script>
+    <script defer src="{{ asset('js/bootstrap-colorpicker.min.js') }}"></script>
     <script src="{{ asset('js/bs-custom-file-input.min.js') }}"></script>
-    <script src="{{ asset('js/selectize.min.js') }}"></script>
-    <script src="{{ asset('js/jquery-ui-timepicker-addon.js') }}"></script>
-    <script src="{{ asset('js/croppie.min.js') }}"></script>
+    <script defer src="{{ asset('js/jquery-ui-timepicker-addon.js') }}"></script>
+    <script defer src="{{ asset('js/croppie.min.js') }}"></script>
+    <script src="{{ asset('js/jquery.ui.touch-punch.min.js') }}"></script>
 
     <!-- Scripts for wheel of fortune dailies -->
     <script src="{{ asset('js/winwheel.min.js') }}"></script>
@@ -66,24 +64,23 @@
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet" type="text/css">
 
     <!-- Styles -->
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link href="{{ mix('css/app.css') }}" rel="stylesheet">
     <link href="{{ asset('css/lorekeeper.css?v=' . filemtime(public_path('css/lorekeeper.css'))) }}" rel="stylesheet">
 
     {{-- Font Awesome --}}
-    <link href="{{ asset('css/all.min.css') }}" rel="stylesheet">
+    <link defer href="{{ faVersion() }}" rel="stylesheet">
 
     {{-- jQuery UI --}}
-    <link href="{{ asset('css/jquery-ui.min.css') }}" rel="stylesheet">
+    <link defer href="{{ asset('css/jquery-ui.min.css') }}" rel="stylesheet">
 
     {{-- Bootstrap Toggle --}}
-    <link href="{{ asset('css/bootstrap4-toggle.min.css') }}" rel="stylesheet">
+    <link defer href="{{ asset('css/bootstrap4-toggle.min.css') }}" rel="stylesheet">
 
-
-    <link href="{{ asset('css/lightbox.min.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/bootstrap-colorpicker.min.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/jquery-ui-timepicker-addon.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/croppie.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/selectize.bootstrap4.css') }}" rel="stylesheet">
+    <link defer href="{{ asset('css/lightbox.min.css') }}" rel="stylesheet">
+    <link defer href="{{ asset('css/bootstrap-colorpicker.min.css') }}" rel="stylesheet">
+    <link defer href="{{ asset('css/jquery-ui-timepicker-addon.css') }}" rel="stylesheet">
+    <link defer href="{{ asset('css/croppie.css') }}" rel="stylesheet">
+    <link defer href="{{ asset('css/selectize.bootstrap4.css') }}" rel="stylesheet">
 
     @if (file_exists(public_path() . '/css/custom.css'))
         <link href="{{ asset('css/custom.css') . '?v=' . filemtime(public_path('css/custom.css')) }}" rel="stylesheet">
@@ -137,6 +134,8 @@
     @endif
 
     @include('feed::links')
+
+    @yield('head')
 </head>
 
 
@@ -259,10 +258,11 @@
                 }
             });
 
-            $(function() {
+            $(document).ready(function() {
                 $('[data-toggle="tooltip"]').tooltip({
                     html: true
                 });
+<<<<<<< HEAD
 
                 class BlurValid extends $.colorpicker.Extension {
                     constructor(colorpicker, options = {}) {
@@ -328,6 +328,10 @@
                     spoiler_caption: 'View Details',
                     target_list: false
                 });
+=======
+                $('.cp').colorpicker();
+
+>>>>>>> f45d71933bf0b38f4e918e1b63391f9bd17fa0c8
                 bsCustomFileInput.init();
                 var $mobileMenuButton = $('#mobileMenuButton');
                 var $sidebar = $('#sidebar');

@@ -40,6 +40,10 @@
                             If you aren't certain that you are ready, consider saving as a draft instead.
                             Click the Confirm button to complete the {{ $isClaim ? 'claim' : 'submission' }}.
                         </p>
+                        @if (!$isClaim)
+                            <div id="requirementsWarning">
+                            </div>
+                        @endif
                         <div class="text-right">
                             <a href="#" id="confirmSubmit" class="btn btn-primary">Confirm</a>
                         </div>
@@ -75,7 +79,7 @@
             @include('js._loot_js', ['showLootTables' => false, 'showRaffles' => false])
         @endif
         @include('js._character_select_js')
-        @include('widgets._inventory_select_js', ['readOnly' => true])
+        @include('widgets._inventory_select_js')
         @include('widgets._bank_select_row', ['owners' => [Auth::user()]])
         @include('widgets._bank_select_js', [])
 
@@ -97,6 +101,7 @@
                 @if (!$isClaim)
                     var $prompt = $('#prompt');
                     var $rewards = $('#rewards');
+<<<<<<< HEAD
                     var $form = $('#prompt-form');
                     if ($prompt.val() != '') {
                         $.get('{{ url('submissions/new/form') }}/' + $prompt.val(), function(data) {
@@ -105,6 +110,9 @@
                             });
                         });
                     }
+=======
+                    var $requirementsWarning = $('#requirementsWarning');
+>>>>>>> f45d71933bf0b38f4e918e1b63391f9bd17fa0c8
 
                     $prompt.selectize();
                     $prompt.on('change', function(e) {
@@ -116,7 +124,13 @@
                             });
                         }
                         $rewards.load('{{ url('submissions/new/prompt') }}/' + $(this).val());
+                        $requirementsWarning.load('{{ url('submissions/new/prompt') }}/' + $(this).val() + '/requirements');
                     });
+
+                    if ($prompt.val()) {
+                        $rewards.load('{{ url('submissions/new/prompt') }}/' + $prompt.val());
+                        $requirementsWarning.load('{{ url('submissions/new/prompt') }}/' + $prompt.val() + '/requirements');
+                    }
                 @endif
 
             // Load initial form and initialize TinyMCE after it loads
@@ -124,7 +138,20 @@
                 initWysiwyg();
             });
 
+<<<<<<< HEAD
             $prompt.selectize();
+=======
+                $confirmSubmit.on('click', function(e) {
+                    e.preventDefault();
+                    let $confirm = $('#requirementsWarning').find('#confirm').length ? $('#requirementsWarning').find('#confirm').is(':checked') : true;
+                    if ("{{ !$isClaim }}" && !$confirm) {
+                        alert('You must confirm that you understand that you will not be able to edit this submission after it has been made.');
+                        return;
+                    }
+                    $submissionForm.attr('action', '{{ url()->current() }}');
+                    $submissionForm.submit();
+                });
+>>>>>>> f45d71933bf0b38f4e918e1b63391f9bd17fa0c8
 
             $prompt.on('change', function(e) {
                 var promptId = $(this).val();

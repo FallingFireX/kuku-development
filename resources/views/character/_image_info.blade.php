@@ -1,6 +1,20 @@
 {{-- Image Data --}}
 <div class="col-md-5 d-flex">
     <div class="card character-bio w-100">
+        @if ((isset($image->content_warnings) && !Auth::check()) || (Auth::check() && Auth::user()->settings->content_warning_visibility < 2 && isset($image->content_warnings)))
+            <div class="alert alert-danger text-center">
+                <span class="float-right">
+                    <a href="#" data-dismiss="alert" class="close">
+                        <i class="fas fa-times" aria-hidden="true"></i>
+                    </a>
+                </span>
+                <img src="{{ asset('images/content-warning.png') }}" class="mb-1" alt="Content Warning" style="height: 10vh;" />
+                <h5>
+                    <i class="fa fa-exclamation-triangle mr-2"></i>Character Warnings<i class="fa fa-exclamation-triangle ml-2"></i>
+                </h5>
+                <div>{!! implode(', ', $image->content_warnings) !!}</div>
+            </div>
+        @endif
         <div class="card-header">
             <ul class="nav nav-tabs card-header-tabs">
                 <li class="nav-item">
@@ -270,31 +284,39 @@
                 
             </div>
 
-            @if (Auth::check() && Auth::user()->hasPower('manage_characters'))
-                <div class="tab-pane fade" id="settings-{{ $image->id }}">
-                    {!! Form::open(['url' => 'admin/character/image/' . $image->id . '/settings']) !!}
-                    <div class="form-group">
-                        {!! Form::checkbox('is_visible', 1, $image->is_visible, ['class' => 'form-check-input', 'data-toggle' => 'toggle']) !!}
-                        {!! Form::label('is_visible', 'Is Viewable', ['class' => 'form-check-label ml-3']) !!} {!! add_help('If this is turned off, the image will not be visible by anyone without the Manage Masterlist power.') !!}
+                @if (Auth::check() && Auth::user()->hasPower('manage_characters'))
+                    <div class="tab-pane fade" id="settings-{{ $image->id }}">
+                        {!! Form::open(['url' => 'admin/character/image/' . $image->id . '/settings']) !!}
+                        <div class="form-group">
+                            {!! Form::checkbox('is_visible', 1, $image->is_visible, ['class' => 'form-check-input', 'data-toggle' => 'toggle']) !!}
+                            {!! Form::label('is_visible', 'Is Viewable', ['class' => 'form-check-label ml-3']) !!} {!! add_help('If this is turned off, the image will not be visible by anyone without the Manage Masterlist power.') !!}
+                        </div>
+                        <div class="form-group">
+                            {!! Form::checkbox('is_valid', 1, $image->is_valid, ['class' => 'form-check-input', 'data-toggle' => 'toggle']) !!}
+                            {!! Form::label('is_valid', 'Is Valid', ['class' => 'form-check-label ml-3']) !!} {!! add_help('If this is turned off, the image will still be visible, but displayed with a note that the image is not a valid reference.') !!}
+                        </div>
+                        @if (config('lorekeeper.settings.enable_character_content_warnings'))
+                            <div class="form-group">
+                                {!! Form::label('Content Warnings') !!} {!! add_help('These warnings will be displayed on the character\'s page. They are not required, but are recommended if the character contains sensitive content.') !!}
+                                {!! Form::text('content_warnings', null, ['class' => 'form-control', 'id' => 'warningList', 'data-init-value' => $image->editWarnings]) !!}
+                            </div>
+                        @endif
+                        <div class="text-right">
+                            {!! Form::submit('Edit', ['class' => 'btn btn-primary mb-3']) !!}
+                        </div>
+                        {!! Form::close() !!}
+
+                        <div class="text-right">
+                            @if ($character->character_image_id != $image->id)
+                                <a href="#" class="btn btn-outline-info btn-sm active-image" data-id="{{ $image->id }}">Set Active</a>
+                            @endif <a href="#" class="btn btn-outline-info btn-sm reupload-image" data-id="{{ $image->id }}">Reupload Image</a> <a href="#" class="btn btn-outline-danger btn-sm delete-image"
+                                data-id="{{ $image->id }}">Delete</a>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        {!! Form::checkbox('is_valid', 1, $image->is_valid, ['class' => 'form-check-input', 'data-toggle' => 'toggle']) !!}
-                        {!! Form::label('is_valid', 'Is Valid', ['class' => 'form-check-label ml-3']) !!} {!! add_help('If this is turned off, the image will still be visible, but displayed with a note that the image is not a valid reference.') !!}
-                    </div>
-                    <div class="text-right">
-                        {!! Form::submit('Edit', ['class' => 'btn btn-primary']) !!}
-                    </div>
-                    {!! Form::close() !!}
-                    <hr />
-                    <div class="text-right">
-                        @if ($character->character_image_id != $image->id)
-                            <a href="#" class="btn btn-outline-info btn-sm active-image" data-id="{{ $image->id }}">Set Active</a>
-                        @endif <a href="#" class="btn btn-outline-info btn-sm reupload-image" data-id="{{ $image->id }}">Reupload Image</a> <a href="#" class="btn btn-outline-danger btn-sm delete-image"
-                            data-id="{{ $image->id }}">Delete</a>
-                    </div>
-                </div>
-            @endif
+                @endif
+            </div>
         </div>
     </div>
-
 </div>
+
+@include('widgets._character_warning_js')
