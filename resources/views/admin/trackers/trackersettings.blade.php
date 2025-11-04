@@ -61,7 +61,7 @@
         </div>
         <div class="card-body">
             <div class="form-group">
-                {!! Form::label( __('art_tracker.xp') . ' Calculator Options') !!}
+                {!! Form::label(__('art_tracker.xp') . ' Calculator Options') !!}
                 @if ($xp_calc_data)
                     <div id="calcList">
                         @foreach ($xp_calc_data as $field)

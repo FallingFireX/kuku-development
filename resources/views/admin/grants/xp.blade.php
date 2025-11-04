@@ -19,7 +19,8 @@
     </div>
 
     <div class="form-group">
-        <p>Grant the {{ __('art_tracker.experience_points') }} to all characters here. You can either select a status and it will award the minimum amount for that status OR you can enter in a custom amount. If you enter in both the amount will be added together.</p>
+        <p>Grant the {{ __('art_tracker.experience_points') }} to all characters here. You can either select a status and it will award the minimum amount for that status OR you can enter in a custom amount. If you enter in both the amount will be added
+            together.</p>
         <div class="row">
             <div class="col-md-6">
                 {!! Form::label('levels', 'Levels(s)') !!} {!! add_help('Select a level to set the selected character(s) to.') !!}
@@ -27,7 +28,7 @@
             </div>
             <div class="col-md-6">
                 {!! Form::label('static_xp', 'Add Static ' . __('art_tracker.xp')) !!} {!! add_help('Enter in an amount to grant to the selected character(s).') !!}
-                {!! Form::number('static_xp', 0, ['class' => 'form-control w-100', 'placeholder' => 'Amount of '.__('art_tracker.xp').' to add']) !!}
+                {!! Form::number('static_xp', 0, ['class' => 'form-control w-100', 'placeholder' => 'Amount of ' . __('art_tracker.xp') . ' to add']) !!}
             </div>
         </div>
         <div class="card mt-3">

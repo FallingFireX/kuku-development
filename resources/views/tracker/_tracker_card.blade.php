@@ -1,20 +1,20 @@
 @if ($tracker)
 
     <?php
-        if ($tracker->gallery_id) {
-            $image_data = [
-                'url'   => $tracker->gallery->getUrlAttribute(),
-                'image' => $tracker->gallery->getThumbnailUrlAttribute() ?? url('/').'/images/tracker_fallback.png',
-                'alt'   => $tracker->gallery->title,
-            ];
-        } else {
-            $image_data = [
-                'url'   => $tracker->url,
-                'image' => $tracker->url ?? url('/').'/images/tracker_fallback.png',
-                'alt'   => 'Tracker Card Image (#'.$tracker->id.')',
-            ];
-        }
-        $image_html = '<a href="'.$image_data['url'].'"><img class="img-fluid mr-3" src="'.$image_data['image'].'" alt="'.$image_data['alt'].'"/></a>';
+    if ($tracker->gallery_id) {
+        $image_data = [
+            'url' => $tracker->gallery->getUrlAttribute(),
+            'image' => $tracker->gallery->getThumbnailUrlAttribute() ?? url('/') . '/images/tracker_fallback.png',
+            'alt' => $tracker->gallery->title,
+        ];
+    } else {
+        $image_data = [
+            'url' => $tracker->url,
+            'image' => $tracker->url ?? url('/') . '/images/tracker_fallback.png',
+            'alt' => 'Tracker Card Image (#' . $tracker->id . ')',
+        ];
+    }
+    $image_html = '<a href="' . $image_data['url'] . '"><img class="img-fluid mr-3" src="' . $image_data['image'] . '" alt="' . $image_data['alt'] . '"/></a>';
     ?>
 
     <div class="card">
@@ -26,9 +26,9 @@
                 </div>
                 <div class="col-md-9">
                     <?php
-                        $data = $tracker->getDataAttribute();
-                        $cards = [];
-                        $total = 0;
+                    $data = $tracker->getDataAttribute();
+                    $cards = [];
+                    $total = 0;
                     ?>
                     @foreach ($data as $title => $value)
                         @if (gettype($value) === 'array')

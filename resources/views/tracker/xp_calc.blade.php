@@ -5,7 +5,7 @@
 @endsection
 
 @section('content')
-    {!! breadcrumbs([ {{ __('art_tracker.xp') }} . ' Calculator' => '/submit-xp']) !!}
+    {!! breadcrumbs([{{ __('art_tracker.xp') }} . ' Calculator' => '/submit-xp']) !!}
     <h1>Submit Tracker</h1>
     <p>Fill out the corresponding options for your artwork/literature. Ensure to double check your points on the totals box and select a character. An admin will process your tracker card for approval. Leave fields blank if they do not apply to your
         submission.</p>
@@ -62,7 +62,8 @@
                                                                 @if ($field->field_options)
                                                                     @foreach ($field->field_options as $option)
                                                                         <div class="list-item">
-                                                                            {!! Form::radio($field->field_name . '[]', $option->point_value, false, ['class' => 'mr-2', 'id' => $option->label]) !!} <label for="{!! $option->label !!}"><strong>{!! $option->label !!}</strong> ({!! $option->point_value !!} {{ __('art_tracker.xp') }}) <br>{!! $option->description !!}</label>
+                                                                            {!! Form::radio($field->field_name . '[]', $option->point_value, false, ['class' => 'mr-2', 'id' => $option->label]) !!} <label for="{!! $option->label !!}"><strong>{!! $option->label !!}</strong> ({!! $option->point_value !!} {{ __('art_tracker.xp') }})
+                                                                                <br>{!! $option->description !!}</label>
                                                                         </div>
                                                                     @endforeach
                                                                 @endif

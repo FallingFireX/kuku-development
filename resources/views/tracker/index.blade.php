@@ -6,7 +6,7 @@
 
 @section('content')
     {!! breadcrumbs(['Admin Panel' => 'admin', 'Tracker Queue' => 'admin/trackers/', 'Tracker (#' . $tracker->id . ')' => $tracker->viewUrl]) !!}
-    @if ($tracker->status == 'Pending' && $tracker->staff_id && $tracker->updated_at )
+    @if ($tracker->status == 'Pending' && $tracker->staff_id && $tracker->updated_at)
         <div class="alert alert-info">You've requested an edit to this card.</div>
     @endif
     <h1>
@@ -62,7 +62,7 @@
         @endif
     </div>
 
-    @if ($tracker->status !== 'Pending' && Auth::user()->id === $tracker->user->id )
+    @if ($tracker->status !== 'Pending' && Auth::user()->id === $tracker->user->id)
         {!! Form::open(['url' => url()->current(), 'id' => 'trackerForm']) !!}
 
         <div class="text-right">

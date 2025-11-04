@@ -50,7 +50,7 @@
                     <div class="col-md-3">
                         <!-- Gallery or optional image src here -->
                         @if ($gallery)
-                        <h5>Gallery</h5>
+                            <h5>Gallery</h5>
                             <a href="{{ $gallery->url }}">
                                 <img src="{{ $gallery->getThumbnailUrlAttribute() }}" class="img-fluid mb-2" />
                                 <br>
@@ -86,12 +86,12 @@
                                         @foreach ($value as $title => $sub_val)
                                             <?php $si = 0; ?>
                                             <div class="line-item w-100 d-inline-flex align-items-center justify-content-between p-2">
-                                                {!! Form::text('card__' . $i . '_sub_card__'.$si.'_title', $title, ['class' => 'form-control']) !!}
-                                                {!! Form::number('card__' . $i . '_sub_card__'.$si.'_value', $sub_val, ['class' => 'form-control w-25 ml-2']) !!} <span class="badge ml-2">{{ __('art_tracker.xp') }}</span>
+                                                {!! Form::text('card__' . $i . '_sub_card__' . $si . '_title', $title, ['class' => 'form-control']) !!}
+                                                {!! Form::number('card__' . $i . '_sub_card__' . $si . '_value', $sub_val, ['class' => 'form-control w-25 ml-2']) !!} <span class="badge ml-2">{{ __('art_tracker.xp') }}</span>
                                             </div>
-                                            <?php 
-                                                $total += $sub_val;
-                                                $si++;
+                                            <?php
+                                            $total += $sub_val;
+                                            $si++;
                                             ?>
                                         @endforeach
                                     </div>
@@ -103,7 +103,7 @@
                                     <?php $total += $value; ?>
                                 @endif
                                 <?php
-                                    $i++;
+                                $i++;
                                 ?>
                             @endforeach
                         </div>
