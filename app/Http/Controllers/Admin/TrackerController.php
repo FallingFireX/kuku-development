@@ -69,9 +69,9 @@ class TrackerController extends Controller {
     /**
      * Creates a new tracker.
      *
-     * @param App\Services\TrackerManager   $service
-     * @param int                            $id
-     * @param string                         $action
+     * @param App\Services\TrackerManager $service
+     * @param int                         $id
+     * @param string                      $action
      *
      * @return \Illuminate\Http\RedirectResponse
      */

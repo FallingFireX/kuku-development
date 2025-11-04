@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Admin\Users;
 
-use DB;
 use App\Http\Controllers\Controller;
 use App\Models\Character\Character;
 use App\Models\Character\CharacterDesignUpdate;
@@ -16,6 +15,7 @@ use App\Models\User\UserItem;
 use App\Services\CurrencyManager;
 use App\Services\InventoryManager;
 use App\Services\TrackerManager;
+use DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 

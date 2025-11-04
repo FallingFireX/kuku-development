@@ -8,7 +8,7 @@ return [
     |--------------------------------------------------------------------------
     |
     | The following language lines are used by the Art Tracker to rename 'XP' to
-    | the desired wording. 
+    | the desired wording.
     |
     */
 

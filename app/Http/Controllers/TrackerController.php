@@ -2,16 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-use App\Models\Character\Character;
 use App\Models\Tracker\Tracker;
-use App\Services\TrackerManager;
-use DB;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class TrackerController extends Controller {
-
     /**
      * Shows an individual tracker card.
      *
@@ -22,12 +16,12 @@ class TrackerController extends Controller {
     public function getTrackerCard($id) {
         $tracker = Tracker::where('id', $id)->first();
 
-        if(!$tracker){
+        if (!$tracker) {
             abort(404);
         }
 
         return view('tracker.index', [
-            'tracker'      => $tracker,
+            'tracker'          => $tracker,
             'cardData'         => $tracker->getDataAttribute(),
         ]);
     }
@@ -42,14 +36,13 @@ class TrackerController extends Controller {
     public function getTrackerCardEditRequest($id) {
         $tracker = Tracker::where('id', $id)->first();
 
-        if(!$tracker){
+        if (!$tracker) {
             abort(404);
         }
 
         return view('tracker.index_edit', [
-            'tracker'      => $tracker,
+            'tracker'          => $tracker,
             'cardData'         => $tracker->getDataAttribute(),
         ]);
     }
-
 }

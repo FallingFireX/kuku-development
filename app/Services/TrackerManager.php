@@ -131,9 +131,9 @@ class TrackerManager extends Service {
                 ]);
 
                 Notifications::create('TRACKER_SUBMISSION_CANCELLED', $tracker->user, [
-                    'staff_url'     => $user->url,
-                    'staff_name'    => $user->name,
-                    'tracker_id'    => $tracker->id,
+                    'staff_url'         => $user->url,
+                    'staff_name'        => $user->name,
+                    'tracker_id'        => $tracker->id,
                     'character_name'    => $tracker->character->fullName,
                 ]);
             } else {
@@ -194,9 +194,9 @@ class TrackerManager extends Service {
             ]);
 
             Notifications::create('TRACKER_SUBMISSION_REJECTED', $tracker->user, [
-                'staff_url'     => $user->url,
-                'staff_name'    => $user->name,
-                'tracker_id'    => $tracker->id,
+                'staff_url'         => $user->url,
+                'staff_name'        => $user->name,
+                'tracker_id'        => $tracker->id,
                 'character_name'    => $tracker->character->fullName,
             ]);
 
@@ -248,9 +248,9 @@ class TrackerManager extends Service {
             ]);
 
             Notifications::create('TRACKER_SUBMISSION_APPROVED', $tracker->user, [
-                'staff_url'     => $user->url,
-                'staff_name'    => $user->name,
-                'tracker_id'    => $tracker->id,
+                'staff_url'         => $user->url,
+                'staff_name'        => $user->name,
+                'tracker_id'        => $tracker->id,
                 'character_name'    => $tracker->character->fullName,
             ]);
 
