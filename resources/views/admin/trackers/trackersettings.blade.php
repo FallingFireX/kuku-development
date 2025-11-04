@@ -56,12 +56,12 @@
 
     <div class="card">
         <div class="card-header">
-            <h3>XP Calculator Settings</h3>
-            <p>Configure the XP points here. You can group items to allow only one option in a group to be selected.</p>
+            <h3>{{ __('art_tracker.xp') }} Calculator Settings</h3>
+            <p>Configure the {{ __('art_tracker.xp') }} points here. You can group items to allow only one option in a group to be selected.</p>
         </div>
         <div class="card-body">
             <div class="form-group">
-                {!! Form::label('XP Calculator Options') !!}
+                {!! Form::label( __('art_tracker.xp') . ' Calculator Options') !!}
                 @if ($xp_calc_data)
                     <div id="calcList">
                         @foreach ($xp_calc_data as $field)
@@ -175,13 +175,13 @@
 
     <div class="card mt-4">
         <div class="card-header">
-            <h3>Literature XP Calculator Settings</h3>
-            <p>Configure the XP points for literature here. Note that this ONLY applies to word count, the rest is shared with the general XP calculator settings. Leave all blank to disable.</p>
+            <h3>Literature {{ __('art_tracker.xp') }} Calculator Settings</h3>
+            <p>Configure the {{ __('art_tracker.xp') }} points for literature here. Note that this ONLY applies to word count, the rest is shared with the general {{ __('art_tracker.xp') }} calculator settings. Leave all blank to disable.</p>
         </div>
         <div class="card-body">
             <div class="form-group">
                 {!! Form::label('Word Count Options') !!}
-                <p>This is the rate at which word count is converted to XP. To enter the conversion use "Points|Word Count". Example: 1|100 would be 1 XP every 100 words.</p>
+                <p>This is the rate at which word count is converted to {{ __('art_tracker.xp') }}. To enter the conversion use "Points|Word Count". Example: 1|100 would be 1 {{ __('art_tracker.xp') }} every 100 words.</p>
                 <div class="d-flex mb-2">
                     {!! Form::text('word_count_conversion_rate', $lit_settings->conversion_rate, ['class' => 'form-control mr-2', 'placeholder' => 'Word Count Conversion Rate']) !!}
                     {!! Form::number('round_to', $lit_settings->round_to, ['class' => 'form-control mr-2 roundTo', 'style' => $lit_settings->round_to ? '' : 'display:none;', 'placeholder' => 'Round to the Nearest']) !!}

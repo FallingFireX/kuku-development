@@ -1,7 +1,7 @@
 @extends('character.layout', ['isMyo' => $character->is_myo_slot])
 
 @section('profile-title')
-    {{ $character->fullName }}'s XP Logs
+    {{ $character->fullName }}'s {{ __('art_tracker.xp') }} Logs
 @endsection
 
 @section('meta-img')
@@ -12,13 +12,13 @@
     {!! breadcrumbs([
         $character->category->masterlist_sub_id ? $character->category->sublist->name . ' Masterlist' : 'Character masterlist' => $character->category->masterlist_sub_id ? 'sublist/' . $character->category->sublist->key : 'masterlist',
         $character->fullName => $character->url,
-        'XP Tracker' => $character->url . '/tracker',
+        __('art_tracker.xp') . ' Tracker' => $character->url . '/tracker',
         'Logs' => $character->url . '/xp-logs',
     ]) !!}
 
     @include('character._header', ['character' => $character])
 
-    <h3>XP Logs</h3>
+    <h3>{{ __('art_tracker.xp') }} Logs</h3>
 
     {!! $logs->render() !!}
 
@@ -32,7 +32,7 @@
                     <div class="logs-table-cell">Recipient</div>
                 </div>
                 <div class="col-6 col-md-2">
-                    <div class="logs-table-cell">XP</div>
+                    <div class="logs-table-cell">{{ __('art_tracker.xp') }}</div>
                 </div>
                 <div class="col-6 col-md-4">
                     <div class="logs-table-cell">Log</div>

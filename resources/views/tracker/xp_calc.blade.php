@@ -1,11 +1,11 @@
 @extends('layouts.app')
 
 @section('title')
-    Submit XP Tracker
+    Submit {{ __('art_tracker.xp') }} Tracker
 @endsection
 
 @section('content')
-    {!! breadcrumbs(['XP Calculator' => '/submit-xp']) !!}
+    {!! breadcrumbs([ {{ __('art_tracker.xp') }} . ' Calculator' => '/submit-xp']) !!}
     <h1>Submit Tracker</h1>
     <p>Fill out the corresponding options for your artwork/literature. Ensure to double check your points on the totals box and select a character. An admin will process your tracker card for approval. Leave fields blank if they do not apply to your
         submission.</p>
@@ -62,7 +62,7 @@
                                                                 @if ($field->field_options)
                                                                     @foreach ($field->field_options as $option)
                                                                         <div class="list-item">
-                                                                            {!! Form::radio($field->field_name . '[]', $option->point_value, false, ['class' => 'mr-2', 'id' => $option->label]) !!} <label for="{!! $option->label !!}"><strong>{!! $option->label !!}</strong> ({!! $option->point_value !!} XP) <br>{!! $option->description !!}</label>
+                                                                            {!! Form::radio($field->field_name . '[]', $option->point_value, false, ['class' => 'mr-2', 'id' => $option->label]) !!} <label for="{!! $option->label !!}"><strong>{!! $option->label !!}</strong> ({!! $option->point_value !!} {{ __('art_tracker.xp') }}) <br>{!! $option->description !!}</label>
                                                                         </div>
                                                                     @endforeach
                                                                 @endif
@@ -92,7 +92,7 @@
                                     <div class="card mb-3">
                                         <h5 class="card-header">Literature Word Count</h5>
                                         <div class="card-body">
-                                            <p>Enter the word count for your work and it will automatically calculate the XP.
+                                            <p>Enter the word count for your work and it will automatically calculate the {{ __('art_tracker.xp') }}.
                                                 @if ($lit_settings->round_to)
                                                     Rounds to the nearest {!! $lit_settings->round_to !!}.
                                                 @endif
@@ -111,7 +111,7 @@
         <div class="col-md-4">
             <div class="card rounded border border-primary">
                 <div class="card-header">
-                    <h3>XP Totals</h3>
+                    <h3>{{ __('art_tracker.xp') }} Totals</h3>
                 </div>
                 <div class="card-body">
                     <div class="p-2 border border-secondary rounded" id="calcTotals"></div>

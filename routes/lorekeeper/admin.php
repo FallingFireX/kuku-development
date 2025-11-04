@@ -451,6 +451,7 @@ Route::group(['prefix' => 'trackers', 'middleware' => 'power:manage_submissions'
     Route::get('/', 'TrackerController@getTrackerIndex');
     Route::get('/trackers/{status}', 'TrackerController@getTrackerIndex')->where('status', 'pending|approved|rejected');
     Route::get('edit/{id}', 'TrackerController@getTrackerCard');
+    Route::post('edit/{id}/{action}', 'TrackerController@postTrackerCard')->where('action', 'approve|reject|cancel');
 });
 Route::group(['prefix' => 'tracker-settings', 'middleware' => 'power:edit_data'], function () {
     Route::get('/', 'TrackerController@getTrackerSettingsPage');

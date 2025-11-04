@@ -134,6 +134,7 @@ class TrackerManager extends Service {
                     'staff_url'     => $user->url,
                     'staff_name'    => $user->name,
                     'tracker_id'    => $tracker->id,
+                    'character_name'    => $tracker->character->fullName,
                 ]);
             } else {
                 // This is when a user cancels their own submission back into draft form
@@ -196,6 +197,7 @@ class TrackerManager extends Service {
                 'staff_url'     => $user->url,
                 'staff_name'    => $user->name,
                 'tracker_id'    => $tracker->id,
+                'character_name'    => $tracker->character->fullName,
             ]);
 
             if (!$this->logAdminAction($user, 'Tracker Rejected', 'Rejected tracker <a href="'.$tracker->viewurl.'">#'.$tracker->id.'</a>')) {
@@ -249,6 +251,7 @@ class TrackerManager extends Service {
                 'staff_url'     => $user->url,
                 'staff_name'    => $user->name,
                 'tracker_id'    => $tracker->id,
+                'character_name'    => $tracker->character->fullName,
             ]);
 
             if (!$this->logAdminAction($user, 'Tracker Approved', 'Approved submission <a href="'.$tracker->viewurl.'">#'.$tracker->id.'</a>')) {

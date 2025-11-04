@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\Admin\Users;
 
+use DB;
 use App\Http\Controllers\Controller;
 use App\Models\Character\Character;
 use App\Models\Character\CharacterDesignUpdate;
 use App\Models\Character\CharacterItem;
 use App\Models\Currency\Currency;
 use App\Models\Item\Item;
-use App\Models\SiteOptions;
 use App\Models\Submission\Submission;
 use App\Models\Trade;
 use App\Models\User\User;
@@ -126,7 +126,7 @@ class GrantController extends Controller {
      * @return \Illuminate\Contracts\Support\Renderable
      */
     public function getXP() {
-        $levels = SiteOptions::where('key', 'xp_levels')->pluck('value');
+        $levels = DB::table('site_settings')->where('key', 'xp_levels')->pluck('value');
 
         return view('admin.grants.xp', [
             'users'      => User::orderBy('id')->pluck('name', 'id'),

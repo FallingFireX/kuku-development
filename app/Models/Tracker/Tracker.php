@@ -197,16 +197,16 @@ class Tracker extends Model {
     }
 
     /**
-     * Get the viewing URL of the tracker/claim.
+     * Get the viewing URL of the tracker.
      *
      * @return string
      */
     public function getViewUrlAttribute() {
-        return url('trackers/view/'.$this->id);
+        return url('tracker/'.$this->id);
     }
 
     /**
-     * Get the admin URL (for processing purposes) of the tracker/claim.
+     * Get the admin URL (for processing purposes) of the tracker.
      *
      * @return string
      */
@@ -301,7 +301,7 @@ class Tracker extends Model {
 
         $card_html = '
             <div class="card">
-                <h4 class="card-header justify-content-between d-flex">Tracker Card (#'.$this->id.') '.$card_badge.'</h4>
+                <h4 class="card-header justify-content-between d-flex"><a href="'.$this->getViewUrlAttribute().'">Tracker Card (#'.$this->id.')</a>'.$card_badge.'</h4>
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-3">

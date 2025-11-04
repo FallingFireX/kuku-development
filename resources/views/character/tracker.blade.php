@@ -10,12 +10,12 @@
 
 @section('profile-content')
     @if ($character->is_myo_slot)
-        {!! breadcrumbs(['MYO Slot Masterlist' => 'myos', $character->fullName => $character->url, 'XP Tracker' => $character->url . '/tracker']) !!}
+        {!! breadcrumbs(['MYO Slot Masterlist' => 'myos', $character->fullName => $character->url,  __('art_tracker.xp') . ' Tracker' => $character->url . '/tracker']) !!}
     @else
         {!! breadcrumbs([
             $character->category->masterlist_sub_id ? $character->category->sublist->name . ' Masterlist' : 'Character masterlist' => $character->category->masterlist_sub_id ? 'sublist/' . $character->category->sublist->key : 'masterlist',
             $character->fullName => $character->url,
-            'XP Tracker' => $character->url . '/tracker',
+            __('art_tracker.xp') . ' Tracker' => $character->url . '/tracker',
         ]) !!}
     @endif
 
@@ -23,13 +23,13 @@
 
     <div class="w-100 d-inline-flex justify-content-between">
         <div class="text-left">
-            <h3>XP Progress</h3>
+            <h3>{{ __('art_tracker.xp') }} Progress</h3>
             <p><strong>Current Rank: </strong>{!! $current_level !!}</p>
         </div>
         <div class="text-right">
-            <h5 class="font-weight-bold">{!! $total_accepted !!} XP</h5>
+            <h5 class="font-weight-bold">{!! $total_accepted !!} {{ __('art_tracker.xp') }}</h5>
             @if ($total_xp !== $total_accepted)
-                {!! $total_xp - $total_accepted !!} XP Pending
+                {!! $total_xp - $total_accepted !!} {{ __('art_tracker.xp') }} Pending
             @endif
         </div>
     </div>

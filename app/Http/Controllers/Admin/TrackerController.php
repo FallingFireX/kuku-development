@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Auth;
 
 class TrackerController extends Controller {
     /**
-     * Shows the submission index page.
+     * Shows the tracker index page.
      *
      * @param string $status
      *
@@ -41,12 +41,11 @@ class TrackerController extends Controller {
 
         return view('admin.trackers.index', [
             'trackers'      => $trackers->paginate(30),
-            //'categories'    => ['none' => 'Any Category'] + PromptCategory::orderBy('sort', 'DESC')->pluck('name', 'id')->toArray(),
         ]);
     }
 
     /**
-     * Shows the submission detail page.
+     * Shows the tracker detail page.
      *
      * @param int $id
      *
@@ -61,30 +60,34 @@ class TrackerController extends Controller {
         return view('admin.trackers.tracker', [
             'tracker'          => $tracker,
             'cardData'         => $tracker->getDataAttribute(),
+            'gallery'          => $tracker->gallery ?? null,
             'characters'       => Character::visible(Auth::check() ? Auth::user() : null)->myo(0)->orderBy('slug', 'DESC')->get()->pluck('fullName', 'slug')->toArray(),
         ] + ($tracker->status == 'Pending' ? [
         ] : []));
     }
 
     /**
-     * Creates a new submission.
+     * Creates a new tracker.
      *
-     * @param App\Services\SubmissionManager $service
+     * @param App\Services\TrackerManager   $service
      * @param int                            $id
      * @param string                         $action
      *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function postTrackerCard(Request $request, SubmissionManager $service, $id, $action) {
-        $data = $request->only(['slug',  'character_rewardable_quantity', 'character_rewardable_id',  'character_rewardable_type', 'character_currency_id', 'rewardable_type', 'rewardable_id', 'quantity', 'staff_comments']);
-        if ($action == 'reject' && $service->rejectSubmission($request->only(['staff_comments']) + ['id' => $id], Auth::user())) {
-            flash('Submission rejected successfully.')->success();
-        } elseif ($action == 'cancel' && $service->cancelSubmission($request->only(['staff_comments']) + ['id' => $id], Auth::user())) {
-            flash('Submission canceled successfully.')->success();
+    public function postTrackerCard(Request $request, TrackerManager $service, $id, $action) {
+        $data = $request->all();
 
-            return redirect()->to('admin/submissions');
-        } elseif ($action == 'approve' && $service->approveSubmission($data + ['id' => $id], Auth::user())) {
-            flash('Submission approved successfully.')->success();
+        \Log::info($data);
+
+        if ($action == 'reject' && $service->rejectTrackerCard($request->only(['staff_comments']) + ['id' => $id], Auth::user())) {
+            flash('Tracker card rejected successfully.')->success();
+        } elseif ($action == 'cancel' && $service->cancelTrackerCard($request->only(['staff_comments']) + ['id' => $id], Auth::user())) {
+            flash('Tracker card canceled successfully.')->success();
+
+            return redirect()->to('admin/trackers');
+        } elseif ($action == 'approve' && $service->approveTrackerCard($data + ['id' => $id], Auth::user())) {
+            flash('Tracker card approved successfully.')->success();
         } else {
             foreach ($service->errors()->getMessages()['error'] as $error) {
                 flash($error)->error();

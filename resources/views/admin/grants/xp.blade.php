@@ -1,13 +1,13 @@
 @extends('admin.layout')
 
 @section('admin-title')
-    Grant Character XP
+    Grant Character {{ __('art_tracker.xp') }}
 @endsection
 
 @section('admin-content')
-    {!! breadcrumbs(['Admin Panel' => 'admin', 'Grant XP' => 'admin/grants/xp']) !!}
+    {!! breadcrumbs(['Admin Panel' => 'admin', 'Grant ' . __('art_tracker.xp') => 'admin/grants/xp']) !!}
 
-    <h1>Grant XP</h1>
+    <h1>Grant {{ __('art_tracker.xp') }}</h1>
 
     {!! Form::open(['url' => 'admin/grants/xp']) !!}
 
@@ -19,19 +19,19 @@
     </div>
 
     <div class="form-group">
-        <p>Grant the XP to all characters here. You can either select a status and it will award the minimum amount for that status OR you can enter in a custom amount. If you enter in both the amount will be added together.</p>
+        <p>Grant the {{ __('art_tracker.experience_points') }} to all characters here. You can either select a status and it will award the minimum amount for that status OR you can enter in a custom amount. If you enter in both the amount will be added together.</p>
         <div class="row">
             <div class="col-md-6">
                 {!! Form::label('levels', 'Levels(s)') !!} {!! add_help('Select a level to set the selected character(s) to.') !!}
                 {!! Form::select('levels', array_flip((array) $levels), null, ['id' => 'levelList', 'class' => 'form-control']) !!}
             </div>
             <div class="col-md-6">
-                {!! Form::label('static_xp', 'Add Static XP') !!} {!! add_help('Enter in an amount to grant to the selected character(s).') !!}
-                {!! Form::number('static_xp', 0, ['class' => 'form-control w-100', 'placeholder' => 'Amount of XP to add']) !!}
+                {!! Form::label('static_xp', 'Add Static ' . __('art_tracker.xp')) !!} {!! add_help('Enter in an amount to grant to the selected character(s).') !!}
+                {!! Form::number('static_xp', 0, ['class' => 'form-control w-100', 'placeholder' => 'Amount of '.__('art_tracker.xp').' to add']) !!}
             </div>
         </div>
         <div class="card mt-3">
-            <div class="card-body">Selected Character(s) will gain <span id="total">0</span> XP.</div>
+            <div class="card-body">Selected Character(s) will gain <span id="total">0</span> {{ __('art_tracker.xp') }}.</div>
         </div>
     </div>
 

@@ -163,7 +163,7 @@
                                 Submit Report
                             </a>
                             <a class="dropdown-item" href="{{ url('submit-xp') }}">
-                                Submit XP
+                                Submit {{ __('art_tracker.xp') }}
                             </a>
                         </div>
                     </li>

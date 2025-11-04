@@ -42,13 +42,24 @@
                 background-color: var(--gray-800);
             }
         </style>
+
         <div class="card my-3">
             <h4 class="card-header">Tracker Card Count</h4>
             <div class="card-body">
                 <div class="row">
                     <div class="col-md-3">
                         <!-- Gallery or optional image src here -->
-                        <img src="/images/account.png" class="img-fluid" />
+                        @if ($gallery)
+                        <h5>Gallery</h5>
+                            <a href="{{ $gallery->url }}">
+                                <img src="{{ $gallery->getThumbnailUrlAttribute() }}" class="img-fluid mb-2" />
+                                <br>
+                                {!! $gallery->displayName !!}
+                            </a>
+                        @else
+                            <h5>External Submission</h5>
+                            <a href="{{ $tracker->url }}" target="_blank"><img src="/images/account.png" class="img-fluid" /></a>
+                        @endif
                         <hr />
                         <img src="{!! $tracker->character->image->thumbnailUrl !!}" alt="{!! $tracker->character->fullName !!}" class="img-fluid mt-3" />
                         <div class="row">
@@ -62,34 +73,46 @@
                         <div class="px-4 line-rows">
                             <?php
                             $total = 0;
+                            $i = 0;
                             ?>
                             @foreach ($cardData as $title => $value)
                                 @if (gettype($value) === 'array')
                                     <div class="line-group border border-secondary my-2">
-                                        <h4 class="line-header text-uppercase font-weight-bold p-2">{!! $title !!}</h4>
+                                        <div class="line-header p-2">
+                                            <h5>Group</h5>
+                                            {!! Form::text('card__' . $i . '_title', $title, ['class' => 'form-control']) !!}
+                                            <hr class="my-1" />
+                                        </div>
                                         @foreach ($value as $title => $sub_val)
-                                            <div class="line-item w-100 d-inline-flex justify-content-between p-2">
-                                                <h5 style="line-height:1;" class="m-0">{!! $title !!}</h5>
-                                                <p class="lh-1 m-0">{!! $sub_val !!} XP</p>
+                                            <?php $si = 0; ?>
+                                            <div class="line-item w-100 d-inline-flex align-items-center justify-content-between p-2">
+                                                {!! Form::text('card__' . $i . '_sub_card__'.$si.'_title', $title, ['class' => 'form-control']) !!}
+                                                {!! Form::number('card__' . $i . '_sub_card__'.$si.'_value', $sub_val, ['class' => 'form-control w-25 ml-2']) !!} <span class="badge ml-2">{{ __('art_tracker.xp') }}</span>
                                             </div>
-                                            <?php $total += $sub_val; ?>
+                                            <?php 
+                                                $total += $sub_val;
+                                                $si++;
+                                            ?>
                                         @endforeach
                                     </div>
                                 @else
-                                    <div class="line-item w-100 d-inline-flex justify-content-between p-2">
-                                        <h5 class="lh-1 m-0">{!! $title !!}</h5>
-                                        <p class="lh-1 m-0">{!! $value !!} XP</p>
+                                    <div class="line-item w-100 d-inline-flex align-items-center justify-content-between p-2">
+                                        {!! Form::text('card__' . $i . '_title', $title, ['class' => 'form-control']) !!}
+                                        {!! Form::number('card__' . $i . '_value', $sub_val, ['class' => 'form-control w-25 ml-2']) !!} <span class="badge ml-2">{{ __('art_tracker.xp') }}</span>
                                     </div>
                                     <?php $total += $value; ?>
                                 @endif
+                                <?php
+                                    $i++;
+                                ?>
                             @endforeach
                         </div>
                     </div>
                 </div>
                 <div class="card-footer mt-3">
                     <div class="w-100 d-inline-flex justify-content-between p-2">
-                        <h5 class="lh-1">Total XP</h5>
-                        <p class="lh-1">{!! $total !!} XP</p>
+                        <h5 class="lh-1">Total {{ __('art_tracker.xp') }}</h5>
+                        <p class="lh-1"><span class="xp-total">{!! $total !!}</span> {{ __('art_tracker.xp') }}</p>
                     </div>
                 </div>
             </div>
@@ -119,7 +142,7 @@
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
                     </div>
                     <div class="modal-body">
-                        <p>This will approve the {{ $tracker->prompt_id ? 'tracker' : 'claim' }} and distribute the above rewards to the user.</p>
+                        <p>This will approve the card and update the character.</p>
                         <div class="text-right">
                             <a href="#" id="approvalSubmit" class="btn btn-success">Approve</a>
                         </div>
@@ -131,7 +154,7 @@
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
                     </div>
                     <div class="modal-body">
-                        <p>This will cancel the {{ $tracker->prompt_id ? 'tracker' : 'claim' }} and send it back to drafts. Make sure to include a staff comment if you do this!</p>
+                        <p>This will cancel the card and send it back to drafts. Make sure to include a staff comment if you do this!</p>
                         <div class="text-right">
                             <a href="#" id="cancelSubmit" class="btn btn-secondary">Cancel</a>
                         </div>
@@ -143,7 +166,7 @@
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
                     </div>
                     <div class="modal-body">
-                        <p>This will reject the {{ $tracker->prompt_id ? 'tracker' : 'claim' }}.</p>
+                        <p>This will reject the card.</p>
                         <div class="text-right">
                             <a href="#" id="rejectionSubmit" class="btn btn-danger">Reject</a>
                         </div>
@@ -153,7 +176,52 @@
         </div>
     @else
         <div class="alert alert-danger">This card has already been processed.</div>
-        @include('home._tracker_content', ['tracker' => $tracker])
+        <h1>
+            Tracker Card (#{{ $tracker->id }})
+            <span class="float-right badge badge-{{ $tracker->status == 'Pending' || $tracker->status == 'Draft' ? 'secondary' : ($tracker->status == 'Approved' ? 'success' : 'danger') }}">
+                {{ $tracker->status }}
+            </span>
+        </h1>
+
+        <div class="mb-1">
+            <div class="row">
+                <div class="col-md-2 col-4">
+                    <h5>User</h5>
+                </div>
+                <div class="col-md-10 col-8">{!! $tracker->user->displayName !!}</div>
+            </div>
+            <div class="row">
+                <div class="col-md-2 col-4">
+                    <h5>URL</h5>
+                </div>
+                <div class="col-md-10 col-8"><a href="{{ $tracker->url }}">{{ $tracker->url }}</a></div>
+            </div>
+            <div class="row">
+                <div class="col-md-2 col-4">
+                    <h5>Submitted</h5>
+                </div>
+                <div class="col-md-10 col-8">{!! format_date($tracker->created_at) !!} ({{ $tracker->created_at->diffForHumans() }})</div>
+            </div>
+        </div>
+        @include('tracker._tracker_card', ['tracker' => $tracker])
+
+        <div class="card my-3">
+            <div class="card-header h2">Comments</div>
+            <div class="card-body">
+                {!! nl2br(htmlentities($tracker->staff_comments)) !!}
+            </div>
+
+            @if (Auth::check() && $tracker->staff_comments && ($tracker->user_id == Auth::user()->id || Auth::user()->hasPower('manage_submissions')))
+                <div class="card-header h2">Staff Comments</div>
+                <div class="card-body">
+                    @if (isset($tracker->staff_comments))
+                        {!! $tracker->staff_comments !!}
+                    @else
+                        {!! $tracker->staff_comments !!}
+                    @endif
+                </div>
+            @endif
+        </div>
     @endif
 
 @endsection
@@ -161,11 +229,13 @@
 @section('scripts')
     @parent
     @if ($tracker->status == 'Pending')
-        @include('js._loot_js', ['showLootTables' => true, 'showRaffles' => true])
         @include('js._character_select_js')
 
         <script>
             $(document).ready(function() {
+
+
+
                 var $confirmationModal = $('#confirmationModal');
                 var $trackerForm = $('#trackerForm');
 

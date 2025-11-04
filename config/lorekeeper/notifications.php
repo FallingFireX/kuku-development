@@ -440,21 +440,21 @@ return [
 
     // TRACKER_SUBMISSION_CREATED
     781 => [
-        'name'    => 'Tracker Submission Approved',
-        'message' => 'Your tracker submission <strong>Tracker Card #{tracker_id}</strong> has been created. (<a href="{url}">View Card</a>)',
-        'url'     => 'tracker/view/{tracker_id}',
+        'name'    => 'Tracker Card Approved',
+        'message' => 'Your tracker card <strong>Tracker Card #{tracker_id}</strong> for {character_name} has been approved. (<a href="{url}">View Card</a>)',
+        'url'     => 'tracker/{tracker_id}',
     ],
 
     782 => [
         'name'    => 'Tracker Card Rejected',
-        'message' => 'Your tracker card <strong>Tracker Card #{tracker_id}</strong> has been rejected. (<a href="{url}">View Card</a>)',
-        'url'     => 'tracker/view/{tracker_id}',
+        'message' => 'Your tracker card <strong>Tracker Card #{tracker_id}</strong> for {character_name} has been rejected. (<a href="{url}">View Card</a>)',
+        'url'     => 'tracker/{tracker_id}',
     ],
 
     783 => [
         'name'    => 'Tracker Card Cancelled',
-        'message' => 'Your tracker card <strong>Tracker Card #{tracker_id}</strong> has been cancelled. (<a href="{url}">View Card</a>)',
-        'url'     => 'tracker/view/{tracker_id}',
+        'message' => 'Your tracker card <strong>Tracker Card #{tracker_id}</strong> for {character_name} has been cancelled. (<a href="{url}">View Card</a>)',
+        'url'     => 'tracker/{tracker_id}',
     ],
     // TRACKER_GRANT
     784 => [
