@@ -16,11 +16,13 @@ use App\Models\Species\Species;
 use App\Models\Species\Subtype;
 use App\Models\User\User;
 use App\Models\User\UserItem;
+use App\Services\LimitManager;
 use Carbon\Carbon;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Intervention\Image\Facades\Image;
+use Auth;
 
 class DesignUpdateManager extends Service {
     /*
@@ -40,61 +42,73 @@ class DesignUpdateManager extends Service {
      *
      * @return bool|CharacterDesignUpdate
      */
-    public function createDesignUpdateRequest($character, $user) {
-        DB::beginTransaction();
+    public function createDesignUpdateRequest($character, $user, $image = null, $isImage = false) {
+    DB::beginTransaction();
 
-        try {
-            if ($character->user_id != $user->id) {
-                throw new \Exception('You do not own this character.');
-            }
-            if (CharacterDesignUpdate::where('character_id', $character->id)->active()->exists()) {
-                throw new \Exception('This '.($character->is_myo_slot ? 'MYO slot' : 'character').' already has an existing request. Please update that one, or delete it before creating a new one.');
-            }
-            if (!$character->isAvailable) {
-                throw new \Exception('This '.($character->is_myo_slot ? 'MYO slot' : 'character').' is currently in an open trade or transfer. Please cancel the trade or transfer before creating a design update.');
-            }
-
-            $data = [
-                'user_id'       => $user->id,
-                'character_id'  => $character->id,
-                'status'        => 'Draft',
-                'hash'          => randomString(10),
-                'fullsize_hash' => randomString(15),
-                'update_type'   => $character->is_myo_slot ? 'MYO' : 'Character',
-
-                // Set some data based on the character's existing stats
-                'rarity_id'                  => $character->image->rarity_id,
-                'species_id'                 => $character->image->species_id,
-                'subtype_ids'                => $character->image->subtypes()->pluck('subtype_id'),
-                'transformation_id'          => $image->transformation_id,
-                'transformation_info'        => $image->transformation_info,
-                'transformation_description' => $image->transformation_description,
-            ];
-
-            $request = CharacterDesignUpdate::create($data);
-
-            // If the character is not a MYO slot, make a copy of the previous image's traits
-            // as presumably, we will not want to make major modifications to them.
-            // This is skipped for MYO slots as it complicates things later on - we don't want
-            // users to edit compulsory traits, so we'll only add them when the design is approved.
-            if (!$character->is_myo_slot) {
-                foreach ($character->image->features as $feature) {
-                    $request->features()->create([
-                        'character_image_id' => $request->id,
-                        'character_type'     => 'Update',
-                        'feature_id'         => $feature->feature_id,
-                        'data'               => $feature->data,
-                    ]);
-                }
-            }
-
-            return $this->commitReturn($request);
-        } catch (\Exception $e) {
-            $this->setError('error', $e->getMessage());
+    try {
+        // --- Dynamic limits check ---
+        $limitManager = new \App\Services\LimitManager;
+        $user = Auth::user(); 
+        if (!$limitManager->checkDynamicLimit('test', $user)) {
+            throw new \Exception('You have reached your monthly design update limit.');
         }
 
-        return $this->rollbackReturn(false);
+        // === existing logic ===
+        if($isImage){
+            $image = $image;
+        }else{
+            $image = $character->image;
+        }
+
+        if ($character->user_id != $user->id) {
+            throw new \Exception('You do not own this character.');
+        }
+
+        if (CharacterDesignUpdate::where('character_id', $character->id)->active()->exists()) {
+            throw new \Exception('This '.($character->is_myo_slot ? 'MYO slot' : 'character').' already has an existing request. Please update that one, or delete it before creating a new one.');
+        }
+
+        if (!$character->isAvailable) {
+            throw new \Exception('This '.($character->is_myo_slot ? 'MYO slot' : 'character').' is currently in an open trade or transfer. Please cancel the trade or transfer before creating a design update.');
+        }
+
+        $data = [
+            'user_id'       => $user->id,
+            'character_id'  => $character->id,
+            'status'        => 'Draft',
+            'hash'          => randomString(10),
+            'fullsize_hash' => randomString(15),
+            'update_type'   => $character->is_myo_slot ? 'MYO' : 'Character',
+            'rarity_id'     => $image->rarity_id,
+            'species_id'    => $image->species_id,
+            'subtype_id'    => $image->subtype_id,
+            'transformation_id' => $image->transformation_id,
+            'transformation_info' => $image->transformation_info,
+            'transformation_description' => $image->transformation_description
+        ];
+
+        $request = CharacterDesignUpdate::create($data);
+
+        if (!$character->is_myo_slot) {
+            foreach ($image->features as $feature) {
+                $request->features()->create([
+                    'character_image_id' => $request->id,
+                    'character_type'     => 'Update',
+                    'feature_id'         => $feature->feature_id,
+                    'data'               => $feature->data,
+                ]);
+            }
+        }
+
+        return $this->commitReturn($request);
+    } catch (\Exception $e) {
+        $this->setError('error', $e->getMessage());
     }
+
+    return $this->rollbackReturn(false);
+}
+
+
 
     /**
      * Saves the comment section of a character design update request.
@@ -392,9 +406,6 @@ class DesignUpdateManager extends Service {
                         if (!$subtype) {
                             throw new \Exception('Invalid subtype selected.');
                         }
-                        if ($subtype && $subtype->species_id != $species->id) {
-                            throw new \Exception('Subtype does not match the species.');
-                        }
                     }
                 }
             }
@@ -412,9 +423,6 @@ class DesignUpdateManager extends Service {
             }
             if (!$species) {
                 throw new \Exception('Invalid species selected.');
-            }
-            if ($subtype && $subtype->species_id != $species->id) {
-                throw new \Exception('Subtype does not match the species.');
             }
             if ($transformation && $transformation->species_id != null) {
                 if ($transformation->species_id != $species->id) {
@@ -472,35 +480,46 @@ class DesignUpdateManager extends Service {
      *
      * @return bool
      */
-    public function submitRequest($request) {
-        DB::beginTransaction();
+public function submitRequest($request) {
+    DB::beginTransaction();
 
-        try {
-            if ($request->status != 'Draft') {
-                throw new \Exception('This request cannot be resubmitted to the queue.');
-            }
-
-            // Recheck and set update type, as insurance/in case of pre-existing drafts
-            if ($request->character->is_myo_slot) {
-                $request->update_type = 'MYO';
-            } else {
-                $request->update_type = 'Character';
-            }
-            // We've done validation and all section by section,
-            // so it's safe to simply set the status to Pending here
-            $request->status = 'Pending';
-            if (!$request->submitted_at) {
-                $request->submitted_at = Carbon::now();
-            }
-            $request->save();
-
-            return $this->commitReturn(true);
-        } catch (\Exception $e) {
-            $this->setError('error', $e->getMessage());
+    try {
+        if ($request->status != 'Draft') {
+            throw new \Exception('This request cannot be resubmitted to the queue.');
         }
 
-        return $this->rollbackReturn(false);
+        // 🔒 Limit check — stop if user has exceeded their allowed submissions
+        $limitManager = new \App\Services\LimitManager;
+
+        // The limit is attached to the 'design update' object type — pass the request itself or its type reference
+        if (!$limitManager->checkLimits($request)) {
+            foreach ($limitManager->errors()->getMessages()['error'] as $error) {
+                flash($error)->error();
+            }
+            throw new \Exception('You have reached your monthly design update submission limit.');
+        }
+
+        // Recheck and set update type
+        if ($request->character->is_myo_slot) {
+            $request->update_type = 'MYO';
+        } else {
+            $request->update_type = 'Character';
+        }
+
+        // Mark as pending
+        $request->status = 'Pending';
+        if (!$request->submitted_at) {
+            $request->submitted_at = \Carbon\Carbon::now();
+        }
+        $request->save();
+
+        return $this->commitReturn(true);
+    } catch (\Exception $e) {
+        $this->setError('error', $e->getMessage());
     }
+
+    return $this->rollbackReturn(false);
+}
 
     /**
      * Approves a character design update request and processes it.

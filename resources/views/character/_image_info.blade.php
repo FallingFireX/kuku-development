@@ -317,6 +317,6 @@
             </div>
         </div>
     </div>
-</div>
+
 
 @include('widgets._character_warning_js')

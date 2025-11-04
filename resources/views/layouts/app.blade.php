@@ -262,76 +262,8 @@
                 $('[data-toggle="tooltip"]').tooltip({
                     html: true
                 });
-<<<<<<< HEAD
-
-                class BlurValid extends $.colorpicker.Extension {
-                    constructor(colorpicker, options = {}) {
-                        super(colorpicker, options);
-
-                        if (this.colorpicker.inputHandler.hasInput()) {
-                            const onBlur = function(colorpicker, fallback) {
-                                return () => {
-                                    colorpicker.setValue(colorpicker.blurFallback._original.color);
-                                }
-                            };
-                            this.colorpicker.inputHandler.input[0].addEventListener('blur', onBlur(this.colorpicker));
-                        }
-                    }
-
-                    onInvalid(e) {
-                        const color = this.colorpicker.colorHandler.getFallbackColor();
-                        if (color._original.valid)
-                            this.colorpicker.blurFallback = color;
-                    }
-                }
-
-                $.colorpicker.extensions.blurvalid = BlurValid;
-                console.log($['colorpicker'].extensions);
-
-                $('.cp').colorpicker({
-                    'autoInputFallback': false,
-                    'autoHexInputFallback': false,
-                    'format': 'auto',
-                    'useAlpha': true,
-                    extensions: [{
-                        name: 'blurValid'
-                    }]
-                });
-
-                tinymce.init({
-                    selector: '.wysiwyg',
-                    height: 500,
-                    menubar: false,
-                    convert_urls: false,
-                    
-                    plugins: [
-                        'advlist autolink lists link image charmap print preview anchor',
-                        'searchreplace visualblocks code fullscreen spoiler',
-                        'insertdatetime media table paste code help wordcount',
-                        "code"
-                    ],
-                    toolbar: 'undo redo | formatselect | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | spoiler-add spoiler-remove | removeformat | code',
-                    content_css: [
-                        '{{ asset('css/app.css') }}',
-                        '{{ asset('css/lorekeeper.css') }}',
-                        '{{ asset('css/custom.css') }}',
-                        '{{ asset($theme?->cssUrl) }}',
-                        '{{ asset($conditionalTheme?->cssUrl) }}',
-                        '{{ asset($decoratorTheme?->cssUrl) }}',
-                        '{{ asset('css/all.min.css') }}' //fontawesome
-                    ],
-                    content_style: `
-                    {{ str_replace(['<style>', '</style>'], '', view('layouts.editable_theme', ['theme' => $theme])) }}
-                    {{ str_replace(['<style>', '</style>'], '', view('layouts.editable_theme', ['theme' => $conditionalTheme])) }}
-                    {{ str_replace(['<style>', '</style>'], '', view('layouts.editable_theme', ['theme' => $decoratorTheme])) }}
-                    `,
-                    spoiler_caption: 'View Details',
-                    target_list: false
-                });
-=======
                 $('.cp').colorpicker();
 
->>>>>>> f45d71933bf0b38f4e918e1b63391f9bd17fa0c8
                 bsCustomFileInput.init();
                 var $mobileMenuButton = $('#mobileMenuButton');
                 var $sidebar = $('#sidebar');

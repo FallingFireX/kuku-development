@@ -139,7 +139,7 @@ class LimitManager extends Service {
      * @param mixed $limit
      * @param mixed $user
      */
-    private function checkDynamicLimit($limit, $user) {
+    public function checkDynamicLimit($limit, $user) {
         try {
             return $limit->limit->evaluate();
         } catch (\Exception $e) {

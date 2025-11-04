@@ -194,7 +194,7 @@ strlen($character->character_warning) > 1 || isset($character->character_warning
         <br>
         
     </div>
-        </div>
+    </div>
         
         @include('character._image_info', ['image' => $character->image])
     </div>
@@ -259,7 +259,7 @@ strlen($character->character_warning) > 1 || isset($character->character_warning
                 @include('character._tab_notes', ['character' => $character])
             </div>
         </div>
-    </div>
+   
     <br>
     <p></p>
         
