@@ -100,7 +100,8 @@ Route::group(['prefix' => 'myo', 'namespace' => 'Characters'], function () {
 
 Route::group(['prefix' => 'tracker'], function () {
     Route::get('/{id}', 'TrackerController@getTrackerCard');
-    Route::get('/{id}/request-edit', 'TrackerController@getTrackerCardEditRequest');
+    Route::get('/{id}/edit', 'TrackerController@getEditableTrackerCard');
+    Route::post('/{id}/request-edit', 'TrackerController@postTrackerCardEditRequest');
 });
 
 /**************************************************************************************************

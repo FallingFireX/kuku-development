@@ -18,7 +18,7 @@ class Tracker extends Model {
     protected $fillable = [
         'character_id', 'user_id', 'staff_id', 'gallery_id',
         'image_url', 'url', 'staff_comments',
-        'status', 'data',
+        'status', 'data', 'data_temp'
     ];
 
     /**
@@ -48,6 +48,7 @@ class Tracker extends Model {
         'url'           => 'nullable|url',
         'staff_comments'=> 'nullable',
         'data'          => 'nullable',
+        'data_temp'     => 'nullable',
     ];
 
     /**
@@ -64,6 +65,7 @@ class Tracker extends Model {
         'url'           => 'nullable|url',
         'staff_comments'=> 'nullable',
         'data'          => 'nullable',
+        'data_temp'     => 'required',
     ];
 
     /**********************************************************************************************

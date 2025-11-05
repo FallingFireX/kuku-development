@@ -22,6 +22,7 @@ return new class extends Migration {
             $table->dateTime('created_at');
             $table->dateTime('updated_at')->nullable();
             $table->string('data', 1024)->nullable();
+            $table->string('data_temp', 1024)->nullable();
             $table->text('staff_comments')->nullable();
         });
     }

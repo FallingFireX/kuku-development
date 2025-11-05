@@ -5,7 +5,7 @@
 @endsection
 
 @section('content')
-    {!! breadcrumbs([{{ __('art_tracker.xp') }} . ' Calculator' => '/submit-xp']) !!}
+    {!! breadcrumbs([ __('art_tracker.xp') . ' Calculator' => '/submit-xp']) !!}
     <h1>Submit Tracker</h1>
     <p>Fill out the corresponding options for your artwork/literature. Ensure to double check your points on the totals box and select a character. An admin will process your tracker card for approval. Leave fields blank if they do not apply to your
         submission.</p>
@@ -53,6 +53,7 @@
                                                 <div class="card-body">
                                                     @if ($field->field_description)
                                                         <p>{!! $field->field_description !!}</p>
+
                                                         @switch($field->field_type)
                                                             @case('number')
                                                                 {!! Form::number($field->field_name . '[]', null, ['class' => 'form-control', 'placeholder' => 'Enter a number.']) !!}
@@ -69,7 +70,7 @@
                                                                 @endif
                                                             @break
 
-                                                            @csae('checkboxes')
+                                                            @case('checkboxes')
                                                             @if ($field->field_options)
                                                                 @foreach ($field->field_options as $option)
                                                                     <div class="list-item">
@@ -126,6 +127,7 @@
                         <h5>OR</h5>
                     </div>
                     {!! Form::url('tracker_url', null, ['class' => 'form-control mb-4', 'placeholder' => 'Enter a URL for your artwork or literature']) !!}
+                    {!! Form::url('tracker_url_image', null, ['class' => 'form-control mb-4', 'placeholder' => 'Enter an image URL if you have artwork.']) !!}
 
                     {!! Form::label('Other Notes (Optional)') !!} {!! add_help('Let admins know any other details you may have for this card.') !!}
                     {!! Form::textarea('notes', null, ['class' => 'form-control', 'rows' => '4', 'placeholder' => 'Add optional notes to your tracker card.']) !!}

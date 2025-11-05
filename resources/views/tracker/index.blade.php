@@ -42,7 +42,9 @@
             <div class="col-md-10 col-8">{!! $tracker->character->getDisplayNameAttribute() !!}</div>
         </div>
     </div>
-    @include('tracker._tracker_card', ['tracker' => $tracker])
+    {!! Form::open(['url' => url()->current(), 'id' => 'trackerForm']) !!}
+    {!! Form::hidden('tracker_id', $tracker->id, ['class' => 'form-control']) !!}
+    @include('tracker._tracker_card', ['tracker' => $tracker, 'editable' => $editable])
 
     <div class="card my-3">
         <div class="card-header h2">Comments</div>
@@ -62,15 +64,10 @@
         @endif
     </div>
 
-    @if ($tracker->status !== 'Pending' && Auth::user()->id === $tracker->user->id)
-        {!! Form::open(['url' => url()->current(), 'id' => 'trackerForm']) !!}
-
+    @if ($tracker->status !== 'Pending' && Auth::user()->id === $tracker->user->id && $editable)
         <div class="text-right">
-            <a href="#" class="btn btn-secondary mr-2" id="requestButton">Request an Edit</a>
+            <a href="#" class="btn btn-secondary mr-2" id="requestButton">Submit Edit</a>
         </div>
-
-        {!! Form::close() !!}
-
 
         <div class="modal fade" id="confirmationModal" tabindex="-1" role="dialog">
             <div class="modal-dialog" role="document">
@@ -87,6 +84,14 @@
                     </div>
                 </div>
             </div>
+        </div>
+    @endif
+
+    {!! Form::close() !!}
+
+    @if (!$editable && $tracker->status === 'Approved' && Auth::user()->id === $tracker->user->id)
+        <div class="text-right">
+            <a class="btn btn-warning" href="{{ url()->current() . '/edit' }}">Request an Edit</a>
         </div>
     @endif
 
@@ -117,7 +122,7 @@
 
                 $requestSubmit.on('click', function(e) {
                     e.preventDefault();
-                    $trackerForm.attr('action', '{{ url()->current() }}/request-edit');
+                    $trackerForm.attr('action', '{{ url("tracker/". $tracker->id) }}/request-edit');
                     $trackerForm.submit();
                 });
 
