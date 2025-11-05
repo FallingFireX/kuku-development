@@ -3,15 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Models\Tracker\Tracker;
-use Illuminate\Http\Request;
 use App\Services\TrackerManager;
 use Auth;
+use Illuminate\Http\Request;
 
 class TrackerController extends Controller {
     /**
      * Shows an individual tracker card.
      *
      * @param mixed $id
+     * @param mixed $editable
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
@@ -28,7 +29,7 @@ class TrackerController extends Controller {
             'editable'         => $editable,
         ]);
     }
-    
+
     /**
      * Shows the editable version of an individual tracker card.
      *
@@ -37,11 +38,10 @@ class TrackerController extends Controller {
      * @return \Illuminate\Contracts\Support\Renderable
      */
     public function getEditableTrackerCard($id) {
-
         $tracker = Tracker::where('id', $id)->first();
-        if($tracker->user->id !== Auth::user()->id && !Auth::user()->isStaff ) {
+        if ($tracker->user->id !== Auth::user()->id && !Auth::user()->isStaff) {
             return redirect()->route('tracker.index', ['id' => $id])
-            ->with('error', 'You do not have permission to edit this tracker card.');
+                ->with('error', 'You do not have permission to edit this tracker card.');
         }
 
         return $this->getTrackerCard($id, true);
@@ -51,7 +51,6 @@ class TrackerController extends Controller {
      * Sends the tracker card back to the queue for an edit.
      *
      * @param App\Services\TrackerManager $service
-     * @param mixed                          $draft
      *
      * @return \Illuminate\Http\RedirectResponse
      */
@@ -73,7 +72,7 @@ class TrackerController extends Controller {
             'tracker'   => $tracker,
             'cardData'  => $tracker->getDataAttribute(),
             'editable'  => false,
-            ])
+        ])
             ->with('info', 'Tracker card has been resubmitted for an edit.');
     }
 }

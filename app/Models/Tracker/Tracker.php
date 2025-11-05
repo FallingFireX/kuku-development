@@ -18,7 +18,7 @@ class Tracker extends Model {
     protected $fillable = [
         'character_id', 'user_id', 'staff_id', 'gallery_id',
         'image_url', 'url', 'staff_comments',
-        'status', 'data', 'data_temp'
+        'status', 'data', 'data_temp',
     ];
 
     /**
