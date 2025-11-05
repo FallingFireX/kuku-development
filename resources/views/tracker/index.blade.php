@@ -122,7 +122,7 @@
 
                 $requestSubmit.on('click', function(e) {
                     e.preventDefault();
-                    $trackerForm.attr('action', '{{ url("tracker/". $tracker->id) }}/request-edit');
+                    $trackerForm.attr('action', '{{ url('tracker/' . $tracker->id) }}/request-edit');
                     $trackerForm.submit();
                 });
 
