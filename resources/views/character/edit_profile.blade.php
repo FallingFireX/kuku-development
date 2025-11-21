@@ -125,22 +125,22 @@
     @endif
 
     @if (Auth::check() && Auth::user()->hasPower('manage_characters'))
-    This labels a kuku as being currently or formerly a Kukuri of the month. Only turn on if theyve won!
-    <br>
-                <div class="col-md form-group">
-                    {!! Form::label('kotm', 'kotm', ['class' => 'form-check-label mb-3']) !!} 
-                    {!! Form::checkbox('kotm', 1, $character->kotm, ['class' => 'form-check-input', 'data-toggle' => 'toggle']) !!}
-                </div>
-                <div class="row">
-                <div class="col-md form-group">
-                {!! Form::label('Date of character adoption') !!}
-                {!! Form::text('adoption', $character->adoption ?? '', ['class' => 'form-control datepicker', 'placeholder' => 'Enter adoption date']) !!}
-                </div>
-            <div class="col-md form-group">
-            {!! Form::label('Date of character donation') !!}
-            {!! Form::text('donation', $character->donation ?? '', ['class' => 'form-control datepicker', 'placeholder' => 'Enter donation date']) !!}
-            </div>
-        </div>
+        This labels a kuku as being currently or formerly a Kukuri of the month. Only turn on if theyve won!
+        <br>
+                    <div class="col-md form-group">
+                        {!! Form::label('kotm', 'kotm', ['class' => 'form-check-label mb-3']) !!} 
+                        {!! Form::checkbox('kotm', 1, $character->kotm, ['class' => 'form-check-input', 'data-toggle' => 'toggle']) !!}
+                    </div>
+                    <div class="row">
+                        <div class="col-md form-group">
+                            {!! Form::label('Date of character adoption') !!}
+                            {!! Form::text('adoption', $character->adoption ?? '', ['class' => 'form-control datepicker', 'placeholder' => 'Enter adoption date']) !!}
+                        </div>
+                        <div class="col-md form-group">
+                            {!! Form::label('Date of character donation') !!}
+                            {!! Form::text('donation', $character->donation ?? '', ['class' => 'form-control datepicker', 'placeholder' => 'Enter donation date']) !!}
+                        </div>
+                    </div>
     @endif
 
     <div class="text-right">

@@ -1211,4 +1211,27 @@ class CharacterController extends Controller {
 
         return redirect()->back();
     }
+
+    
+    public function getFeaturedCharacter()
+{
+    $featuredId = SiteSetting::where('key', 'featured_character')->value('value');
+
+    if (!$featuredId) {
+        return response()->json(['error' => 'No featured character set'], 404);
+    }
+
+    $character = Character::find($featuredId);
+
+    if (!$character) {
+        return response()->json(['error' => 'Character not found'], 404);
+    }
+
+    return response()->json([
+        'id' => $character->id,
+        'slug' => $character->slug,
+        'name' => $character->name,
+        'image_url' => $character->image_url,
+    ]);
+}
 }
