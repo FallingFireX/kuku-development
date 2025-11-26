@@ -456,15 +456,15 @@ class TrackerManager extends Service {
             }
 
             $form = [];
-            if($data['field']) {
+            if ($data['field']) {
                 $nI = 0;
-                foreach($data['field'] as $i => $field) {
+                foreach ($data['field'] as $i => $field) {
                     // Clean up empty options
-                    if($i !== 'INDEX' && $data['field'][$i]['field_options']) {
+                    if ($i !== 'INDEX' && $data['field'][$i]['field_options']) {
                         $sI = 0;
                         $sub_options = [];
-                        foreach($data['field'][$i]['field_options'] as $j => $option) {
-                            if(!str_contains($j, 'SUB_')) {
+                        foreach ($data['field'][$i]['field_options'] as $j => $option) {
+                            if (!str_contains($j, 'SUB_')) {
                                 $sub_options[$sI] = $option;
                             }
                             $sI++;
