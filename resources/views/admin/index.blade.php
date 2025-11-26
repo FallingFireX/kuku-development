@@ -205,7 +205,7 @@
             <div class="col-sm-6">
                 <div class="card mb-3">
                     <div class="card-body">
-                        <h5 class="card-title">Tracker Submissions 
+                        <h5 class="card-title">Tracker Submissions
                             @if ($trackerCount)
                                 <span class="badge badge-primary">{{ $trackerCount }}</span>
                             @endif

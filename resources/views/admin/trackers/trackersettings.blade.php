@@ -63,13 +63,13 @@
                         @foreach ($xp_calc_data as $i => $field)
                             <div class="option-row mb-2 p-2 border border-secondary rounded d-flex flex-column" field-id="{{ $i }}">
                                 <div class="row-parent mb-2 d-flex">
-                                    {!! Form::text('field['.$i.'][field_name]', $field->field_name, ['class' => 'form-control mr-2', 'style' => 'width:40%', 'placeholder' => 'Field Name']) !!}
-                                    {!! Form::select('field['.$i.'][field_type]', ['radio' => 'Radio Buttons', 'checkboxes' => 'Checkboxes', 'number' => 'Number'], $field->field_type, [
+                                    {!! Form::text('field[' . $i . '][field_name]', $field->field_name, ['class' => 'form-control mr-2', 'style' => 'width:40%', 'placeholder' => 'Field Name']) !!}
+                                    {!! Form::select('field[' . $i . '][field_type]', ['radio' => 'Radio Buttons', 'checkboxes' => 'Checkboxes', 'number' => 'Number'], $field->field_type, [
                                         'class' => 'form-control mr-2 ftype',
                                         'style' => 'width:40%',
                                         'placeholder' => 'Please select a Field Type...',
                                     ]) !!}
-                                    {!! Form::text('field['.$i.'][field_description]', $field->field_description, ['class' => 'form-control mr-2', 'placeholder' => 'Description']) !!}
+                                    {!! Form::text('field[' . $i . '][field_description]', $field->field_description, ['class' => 'form-control mr-2', 'placeholder' => 'Description']) !!}
                                     <a href="#" class="remove-field btn btn-primary" data-toggle="tooltip" title="Remove Field">-</a>
                                 </div>
                                 <div class="optionsList mb-2 {!! $field->field_options ? '' : 'hide' !!} ml-3 border-left pl-3">
@@ -79,13 +79,13 @@
                                             @foreach ($field->field_options as $option)
                                                 <div class="child-row row mb-2 px-3">
                                                     <div class="col-md-2 px-1">
-                                                        {!! Form::number('field['.$i.'][field_options]['.$i.'][point_value]', $option->point_value, ['class' => 'form-control w-100', 'placeholder' => 'Point Value']) !!}
+                                                        {!! Form::number('field[' . $i . '][field_options][' . $i . '][point_value]', $option->point_value, ['class' => 'form-control w-100', 'placeholder' => 'Point Value']) !!}
                                                     </div>
                                                     <div class="col-md-4 px-1">
-                                                        {!! Form::text('field['.$i.'][field_options]['.$i.'][label]', $option->label, ['class' => 'form-control w-100', 'placeholder' => 'Option Name']) !!}
+                                                        {!! Form::text('field[' . $i . '][field_options][' . $i . '][label]', $option->label, ['class' => 'form-control w-100', 'placeholder' => 'Option Name']) !!}
                                                     </div>
                                                     <div class="col-md-6 px-1 d-flex">
-                                                        {!! Form::text('field['.$i.'][field_options]['.$i.'][description]', gettype($option->description) === 'string' ? $option->description : null, ['class' => 'form-control w-100', 'placeholder' => 'Option Description']) !!}
+                                                        {!! Form::text('field[' . $i . '][field_options][' . $i . '][description]', gettype($option->description) === 'string' ? $option->description : null, ['class' => 'form-control w-100', 'placeholder' => 'Option Description']) !!}
                                                         <a href="#" class="remove-option ml-2 btn btn-primary" data-toggle="tooltip" title="Remove Option">-</a>
                                                     </div>
                                                 </div>
@@ -139,7 +139,11 @@
                 <div class="option-row template hide mb-2 p-2 border border-secondary rounded d-flex flex-column">
                     <div class="row-parent mb-2 d-flex">
                         {!! Form::text('field[INDEX][field_name]', null, ['class' => 'form-control mr-2', 'style' => 'width:40%', 'placeholder' => 'Field Name']) !!}
-                        {!! Form::select('field[INDEX][field_type]', ['radio' => 'Radio Buttons', 'checkboxes' => 'Checkboxes', 'number' => 'Number'], null, ['class' => 'form-control mr-2 ftype', 'style' => 'width:40%', 'placeholder' => 'Please select a Field Type...']) !!}
+                        {!! Form::select('field[INDEX][field_type]', ['radio' => 'Radio Buttons', 'checkboxes' => 'Checkboxes', 'number' => 'Number'], null, [
+                            'class' => 'form-control mr-2 ftype',
+                            'style' => 'width:40%',
+                            'placeholder' => 'Please select a Field Type...',
+                        ]) !!}
                         {!! Form::text('field[INDEX][field_description]', null, ['class' => 'form-control mr-2', 'placeholder' => 'Description']) !!}
                         <a href="#" class="remove-field btn btn-primary" data-toggle="tooltip" title="Remove Field">-</a>
                     </div>

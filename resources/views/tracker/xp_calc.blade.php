@@ -56,14 +56,14 @@
 
                                                         @switch($field->field_type)
                                                             @case('number')
-                                                                {!! Form::number('tracker['.$field->field_name.'][]', null, ['class' => 'form-control', 'placeholder' => 'Enter a number.']) !!}
+                                                                {!! Form::number('tracker[' . $field->field_name . '][]', null, ['class' => 'form-control', 'placeholder' => 'Enter a number.']) !!}
                                                             @break
 
                                                             @case('radio')
                                                                 @if ($field->field_options)
                                                                     @foreach ($field->field_options as $option)
                                                                         <div class="list-item">
-                                                                            {!! Form::radio('tracker['.$field->field_name.'][]', $option->point_value, false, ['class' => 'mr-2', 'id' => $option->label]) !!} <label for="{!! $option->label !!}"><strong>{!! $option->label !!}</strong> ({!! $option->point_value !!} {{ __('art_tracker.xp') }})
+                                                                            {!! Form::radio('tracker[' . $field->field_name . '][]', $option->point_value, false, ['class' => 'mr-2', 'id' => $option->label]) !!} <label for="{!! $option->label !!}"><strong>{!! $option->label !!}</strong> ({!! $option->point_value !!} {{ __('art_tracker.xp') }})
                                                                                 <br>{!! $option->description !!}</label>
                                                                         </div>
                                                                     @endforeach
@@ -74,7 +74,7 @@
                                                                 @if ($field->field_options)
                                                                     @foreach ($field->field_options as $option)
                                                                         <div class="list-item">
-                                                                            {!! Form::checkbox('tracker['.$field->field_name.'][]', $option->point_value, false, ['class' => 'mr-2', 'id' => $option->label]) !!} <label for="{!! $option->label !!}"><strong>{!! $option->label !!}</strong> <br>{!! $option->description !!}</label>
+                                                                            {!! Form::checkbox('tracker[' . $field->field_name . '][]', $option->point_value, false, ['class' => 'mr-2', 'id' => $option->label]) !!} <label for="{!! $option->label !!}"><strong>{!! $option->label !!}</strong> <br>{!! $option->description !!}</label>
                                                                         </div>
                                                                     @endforeach
                                                                 @endif
