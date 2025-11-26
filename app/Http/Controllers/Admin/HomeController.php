@@ -12,6 +12,7 @@ use App\Models\Gallery\GallerySubmission;
 use App\Models\Report\Report;
 use App\Models\Submission\Submission;
 use App\Models\Trade;
+use App\Models\Tracker\Tracker;
 use App\Models\User\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -42,6 +43,7 @@ class HomeController extends Controller {
             'galleryCurrencyAwards'  => $galleryCurrencyAwards,
             'gallerySubmissionCount' => GallerySubmission::collaboratorApproved()->where('status', 'Pending')->count(),
             'galleryAwardCount'      => GallerySubmission::requiresAward()->where('is_valued', 0)->count(),
+            'trackerCount'           => Tracker::where('status', 'Pending')->whereNotNull('character_id')->count(),
         ]);
     }
 

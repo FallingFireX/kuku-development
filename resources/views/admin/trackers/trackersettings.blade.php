@@ -11,10 +11,6 @@
 
     <p>Edit all of the art tracker related settings here.</p>
 
-    <pre style="background-color:#ccc" class="">
-        {{ print_r($xp_calc_data, true) }}
-    </pre>
-
     {!! Form::open(['url' => 'admin/tracker-settings', 'files' => true]) !!}
 
     <div class="card mb-4">
@@ -64,32 +60,32 @@
                 {!! Form::label(__('art_tracker.xp') . ' Calculator Options') !!}
                 @if ($xp_calc_data)
                     <div id="calcList">
-                        @foreach ($xp_calc_data as $field)
-                            <div class="option-row mb-2 p-2 border border-secondary rounded d-flex flex-column" field-id="0">
+                        @foreach ($xp_calc_data as $i => $field)
+                            <div class="option-row mb-2 p-2 border border-secondary rounded d-flex flex-column" field-id="{{ $i }}">
                                 <div class="row-parent mb-2 d-flex">
-                                    {!! Form::text('field_name[]', $field->field_name, ['class' => 'form-control mr-2', 'style' => 'width:40%', 'placeholder' => 'Field Name']) !!}
-                                    {!! Form::select('field_type[]', ['radio' => 'Radio Buttons', 'checkboxes' => 'Checkboxes', 'number' => 'Number'], $field->field_type, [
+                                    {!! Form::text('field['.$i.'][field_name]', $field->field_name, ['class' => 'form-control mr-2', 'style' => 'width:40%', 'placeholder' => 'Field Name']) !!}
+                                    {!! Form::select('field['.$i.'][field_type]', ['radio' => 'Radio Buttons', 'checkboxes' => 'Checkboxes', 'number' => 'Number'], $field->field_type, [
                                         'class' => 'form-control mr-2 ftype',
                                         'style' => 'width:40%',
                                         'placeholder' => 'Please select a Field Type...',
                                     ]) !!}
-                                    {!! Form::text('field_desc[]', $field->field_description, ['class' => 'form-control mr-2', 'placeholder' => 'Description']) !!}
+                                    {!! Form::text('field['.$i.'][field_description]', $field->field_description, ['class' => 'form-control mr-2', 'placeholder' => 'Description']) !!}
                                     <a href="#" class="remove-field btn btn-primary" data-toggle="tooltip" title="Remove Field">-</a>
                                 </div>
-                                <div class="mb-2 {!! $field->field_options ? '' : 'hide' !!} ml-3 border-left pl-3">
+                                <div class="optionsList mb-2 {!! $field->field_options ? '' : 'hide' !!} ml-3 border-left pl-3">
                                     <h5>Field Options</h5>
                                     <div class="row-children">
                                         @if ($field->field_options)
                                             @foreach ($field->field_options as $option)
                                                 <div class="child-row row mb-2 px-3">
                                                     <div class="col-md-2 px-1">
-                                                        {!! Form::number('sub_option_value_0_1[]', $option->point_value, ['class' => 'form-control w-100', 'placeholder' => 'Point Value']) !!}
+                                                        {!! Form::number('field['.$i.'][field_options]['.$i.'][point_value]', $option->point_value, ['class' => 'form-control w-100', 'placeholder' => 'Point Value']) !!}
                                                     </div>
                                                     <div class="col-md-4 px-1">
-                                                        {!! Form::text('sub_option_label_0_1[]', $option->label, ['class' => 'form-control w-100', 'placeholder' => 'Option Name']) !!}
+                                                        {!! Form::text('field['.$i.'][field_options]['.$i.'][label]', $option->label, ['class' => 'form-control w-100', 'placeholder' => 'Option Name']) !!}
                                                     </div>
                                                     <div class="col-md-6 px-1 d-flex">
-                                                        {!! Form::text('sub_option_desc_0_1[]', gettype($option->description) === 'string' ? $option->description : null, ['class' => 'form-control w-100', 'placeholder' => 'Option Description']) !!}
+                                                        {!! Form::text('field['.$i.'][field_options]['.$i.'][description]', gettype($option->description) === 'string' ? $option->description : null, ['class' => 'form-control w-100', 'placeholder' => 'Option Description']) !!}
                                                         <a href="#" class="remove-option ml-2 btn btn-primary" data-toggle="tooltip" title="Remove Option">-</a>
                                                     </div>
                                                 </div>
@@ -108,23 +104,23 @@
                     <div id="calcList">
                         <div class="option-row mb-2 p-2 border border-secondary rounded d-flex flex-column" field-id="0">
                             <div class="row-parent mb-2 d-flex">
-                                {!! Form::text('field_name[]', null, ['class' => 'form-control mr-2', 'style' => 'width:40%', 'placeholder' => 'Field Name']) !!}
-                                {!! Form::select('field_type[]', ['radio' => 'Radio Buttons', 'checkboxes' => 'Checkboxes', 'number' => 'Number'], null, ['class' => 'form-control mr-2 ftype', 'style' => 'width:40%', 'placeholder' => 'Please select a Field Type...']) !!}
-                                {!! Form::text('field_desc[]', null, ['class' => 'form-control mr-2', 'placeholder' => 'Description']) !!}
+                                {!! Form::text('field[0][field_name]', null, ['class' => 'form-control mr-2', 'style' => 'width:40%', 'placeholder' => 'Field Name']) !!}
+                                {!! Form::select('field[0][field_type]', ['radio' => 'Radio Buttons', 'checkboxes' => 'Checkboxes', 'number' => 'Number'], null, ['class' => 'form-control mr-2 ftype', 'style' => 'width:40%', 'placeholder' => 'Please select a Field Type...']) !!}
+                                {!! Form::text('field[0][field_description]', null, ['class' => 'form-control mr-2', 'placeholder' => 'Description']) !!}
                                 <a href="#" class="remove-field btn btn-primary" data-toggle="tooltip" title="Remove Field">-</a>
                             </div>
-                            <div class="mb-2 ml-3 border-left pl-3">
+                            <div class="optionsList mb-2 ml-3 border-left pl-3">
                                 <h5>Field Options</h5>
                                 <div class="row-children">
                                     <div class="child-row row mb-2 px-3">
                                         <div class="col-md-2 px-1">
-                                            {!! Form::number('sub_option_value_0_1[]', null, ['class' => 'form-control w-100', 'placeholder' => 'Point Value']) !!}
+                                            {!! Form::number('field[0][field_options][0][value]', null, ['class' => 'form-control w-100', 'placeholder' => 'Point Value']) !!}
                                         </div>
                                         <div class="col-md-4 px-1">
-                                            {!! Form::text('sub_option_label_0_1[]', null, ['class' => 'form-control w-100', 'placeholder' => 'Option Name']) !!}
+                                            {!! Form::text('field[0][field_options][0][label]', null, ['class' => 'form-control w-100', 'placeholder' => 'Option Name']) !!}
                                         </div>
                                         <div class="col-md-6 px-1 d-flex">
-                                            {!! Form::text('sub_option_desc_0_1[]', null, ['class' => 'form-control w-100', 'placeholder' => 'Option Description']) !!}
+                                            {!! Form::text('field[0][field_options][0][description]', null, ['class' => 'form-control w-100', 'placeholder' => 'Option Description']) !!}
                                             <a href="#" class="remove-option ml-2 btn btn-primary" data-toggle="tooltip" title="Remove Option">-</a>
                                         </div>
                                     </div>
@@ -142,9 +138,9 @@
                 <!-- Field Template Start -->
                 <div class="option-row template hide mb-2 p-2 border border-secondary rounded d-flex flex-column">
                     <div class="row-parent mb-2 d-flex">
-                        {!! Form::text('field_name[]', null, ['class' => 'form-control mr-2', 'style' => 'width:40%', 'placeholder' => 'Field Name']) !!}
-                        {!! Form::select('field_type[]', ['radio' => 'Radio Buttons', 'checkboxes' => 'Checkboxes', 'number' => 'Number'], null, ['class' => 'form-control mr-2 ftype', 'style' => 'width:40%', 'placeholder' => 'Please select a Field Type...']) !!}
-                        {!! Form::text('field_desc[]', null, ['class' => 'form-control mr-2', 'placeholder' => 'Description']) !!}
+                        {!! Form::text('field[INDEX][field_name]', null, ['class' => 'form-control mr-2', 'style' => 'width:40%', 'placeholder' => 'Field Name']) !!}
+                        {!! Form::select('field[INDEX][field_type]', ['radio' => 'Radio Buttons', 'checkboxes' => 'Checkboxes', 'number' => 'Number'], null, ['class' => 'form-control mr-2 ftype', 'style' => 'width:40%', 'placeholder' => 'Please select a Field Type...']) !!}
+                        {!! Form::text('field[INDEX][field_description]', null, ['class' => 'form-control mr-2', 'placeholder' => 'Description']) !!}
                         <a href="#" class="remove-field btn btn-primary" data-toggle="tooltip" title="Remove Field">-</a>
                     </div>
                     <div class="optionsList hide mb-2 ml-3 border-left pl-3">
@@ -152,13 +148,13 @@
                         <div class="row-children">
                             <div class="child-row hide row mb-2 px-3">
                                 <div class="col-md-2 px-1">
-                                    {!! Form::number('sub_option_value[]', null, ['class' => 'form-control w-100', 'placeholder' => 'Point Value']) !!}
+                                    {!! Form::number('field[INDEX][field_options][SUB_INDEX][point_value]', null, ['class' => 'form-control w-100', 'placeholder' => 'Point Value']) !!}
                                 </div>
                                 <div class="col-md-4 px-1">
-                                    {!! Form::text('sub_option_label[]', null, ['class' => 'form-control w-100', 'placeholder' => 'Option Name']) !!}
+                                    {!! Form::text('field[INDEX][field_options][SUB_INDEX][label]', null, ['class' => 'form-control w-100', 'placeholder' => 'Option Name']) !!}
                                 </div>
                                 <div class="col-md-6 px-1 d-flex">
-                                    {!! Form::text('sub_option_desc[]', null, ['class' => 'form-control w-100', 'placeholder' => 'Option Description']) !!}
+                                    {!! Form::text('field[INDEX][field_options][SUB_INDEX][description]', null, ['class' => 'form-control w-100', 'placeholder' => 'Option Description']) !!}
                                     <a href="#" class="remove-option ml-2 btn btn-primary" data-toggle="tooltip" title="Remove Option">-</a>
                                 </div>
                             </div>
@@ -207,7 +203,7 @@
     <script>
         $(document).ready(function() {
 
-            $field_count = 1;
+            $field_count = {{ count($xp_calc_data) ?? 1 }};
 
             $('.enable-rounding').on('change', function() {
                 console.log('rounding changed');
@@ -259,19 +255,25 @@
 
             function addOption($parent) {
                 var $clone = $('.template .child-row.hide').clone();
-                $childLength = $parent.children('.child-row').length;
+                $childLength = $parent.children('.child-row').length + 1;
+                console.log('Child Length: ' + $childLength);
                 $field_id = $parent.parents('.option-row').attr('field-id');
                 $unique_row_id = $field_id + '_' + $childLength;
+
+                //Update the field option indexes
+                $clone.html($clone.html().replace(/SUB_INDEX/g, $childLength));
+                $clone.html($clone.html().replace(/INDEX/g, $field_id));
+
                 $parent.append($clone);
                 $clone.removeClass('hide');
                 $clone.attr('count', $i);
                 //Rename the fields
-                $inputs = $clone.find('input, select');
-                $inputs.each(function(i, input) {
-                    $old_name = $(input).attr('name');
-                    $new_name = $old_name.replace('[]', '_') + $unique_row_id + '[]';
-                    $(input).attr('name', $new_name);
-                });
+                // $inputs = $clone.find('input, select');
+                // $inputs.each(function(i, input) {
+                //     $old_name = $(input).attr('name');
+                //     $new_name = $old_name.replace('[]', '_') + $unique_row_id + '[]';
+                //     $(input).attr('name', $new_name);
+                // });
                 $clone.find('.child-row').on('click', function(e) {
                     e.preventDefault();
                     removeOption($(this));
@@ -295,6 +297,14 @@
                 $clone.removeClass('hide');
                 $clone.removeClass('template');
                 $clone.attr('field-id', $field_count);
+
+                console.log('Adding field with count ' + $field_count);
+
+
+                // Replace "INDEX" with "0" in the cloned HTML
+                $clone.html($clone.html().replace(/INDEX/g, $field_count));
+                $clone.html($clone.html().replace(/SUB_INDEX/g, 0));
+
                 $clone.children('.child-row').first().attr('row-id', 0);
                 if ($c !== null) {
                     $inputs = $clone.find('input, select');
@@ -304,11 +314,13 @@
                         $(input).attr('name', $new_name);
                     });
                 }
-                $clone.find('.remove-field').on('click', function(e) {
-                    e.preventDefault();
-                    removeField($(this));
-                });
+                $field_count++;
             }
+
+            $(document).on('click', '.remove-field', function(e) {
+                e.preventDefault();
+                removeField($(this));
+            });
 
             function removeField($trigger) {
                 $trigger.parents('.option-row').remove();
@@ -317,7 +329,9 @@
             //On Field Change
             $('#calcList').on('change', 'select.ftype', function() {
                 var val = $(this).val();
+                console.log('Field type changed to ' + val);
                 if (val == 'radio' || val == 'checkboxes') {
+                    console.log('show options');
                     $(this).parents('.option-row').find('.optionsList').removeClass('hide');
                 } else {
                     $(this).parents('.option-row').find('.optionsList').addClass('hide');

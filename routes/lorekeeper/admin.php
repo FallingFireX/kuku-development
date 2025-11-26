@@ -449,7 +449,7 @@ Route::get('{type}/{status}', 'DesignController@getDesignIndex')->where('type', 
 // ART TRACKER
 Route::group(['prefix' => 'trackers', 'middleware' => 'power:manage_submissions'], function () {
     Route::get('/', 'TrackerController@getTrackerIndex');
-    Route::get('/trackers/{status}', 'TrackerController@getTrackerIndex')->where('status', 'pending|approved|rejected');
+    Route::get('/{status}', 'TrackerController@getTrackerIndex')->where('status', 'pending|approved|rejected');
     Route::get('edit/{id}', 'TrackerController@getTrackerCard');
     Route::post('edit/{id}/{action}', 'TrackerController@postTrackerCard')->where('action', 'approve|reject|cancel');
 });

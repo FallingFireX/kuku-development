@@ -48,7 +48,7 @@
                                 <div class="card-body">
                                     @if ($xp_calc_form)
                                         @foreach ($xp_calc_form as $field)
-                                            <div class="card mb-3">
+                                            <div class="card mb-3" data-name="{{ $field->field_name }}">
                                                 <h5 class="card-header">{{ $field->field_name }}</h5>
                                                 <div class="card-body">
                                                     @if ($field->field_description)
@@ -56,14 +56,14 @@
 
                                                         @switch($field->field_type)
                                                             @case('number')
-                                                                {!! Form::number($field->field_name . '[]', null, ['class' => 'form-control', 'placeholder' => 'Enter a number.']) !!}
+                                                                {!! Form::number('tracker['.$field->field_name.'][]', null, ['class' => 'form-control', 'placeholder' => 'Enter a number.']) !!}
                                                             @break
 
                                                             @case('radio')
                                                                 @if ($field->field_options)
                                                                     @foreach ($field->field_options as $option)
                                                                         <div class="list-item">
-                                                                            {!! Form::radio($field->field_name . '[]', $option->point_value, false, ['class' => 'mr-2', 'id' => $option->label]) !!} <label for="{!! $option->label !!}"><strong>{!! $option->label !!}</strong> ({!! $option->point_value !!} {{ __('art_tracker.xp') }})
+                                                                            {!! Form::radio('tracker['.$field->field_name.'][]', $option->point_value, false, ['class' => 'mr-2', 'id' => $option->label]) !!} <label for="{!! $option->label !!}"><strong>{!! $option->label !!}</strong> ({!! $option->point_value !!} {{ __('art_tracker.xp') }})
                                                                                 <br>{!! $option->description !!}</label>
                                                                         </div>
                                                                     @endforeach
@@ -74,7 +74,7 @@
                                                                 @if ($field->field_options)
                                                                     @foreach ($field->field_options as $option)
                                                                         <div class="list-item">
-                                                                            {!! Form::checkbox($field->field_name . '[]', $option->point_value, false, ['class' => 'mr-2', 'id' => $option->label]) !!} <label for="{!! $option->label !!}"><strong>{!! $option->label !!}</strong> <br>{!! $option->description !!}</label>
+                                                                            {!! Form::checkbox('tracker['.$field->field_name.'][]', $option->point_value, false, ['class' => 'mr-2', 'id' => $option->label]) !!} <label for="{!! $option->label !!}"><strong>{!! $option->label !!}</strong> <br>{!! $option->description !!}</label>
                                                                         </div>
                                                                     @endforeach
                                                                 @endif
@@ -198,6 +198,9 @@
             //On checkbox input changes
             $('#pointValues input[type="checkbox"][name]').change(function() {
                 var selected = $(this).val();
+
+                console.log(selected);
+
                 var option_name = $(this).attr('id');
                 var group = $(this).attr('name');
 

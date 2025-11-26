@@ -19,7 +19,7 @@ class TrackerController extends Controller {
      * @return \Illuminate\Contracts\Support\Renderable
      */
     public function getTrackerIndex(Request $request, $status = null) {
-        $trackers = Tracker::with('character')->where('status', $status ? ucfirst($status) : 'Pending')->whereNotNull('character_id');
+        $trackers = Tracker::where('status', $status ? ucfirst($status) : 'Pending')->whereNotNull('character_id');
         $data = $request->only(['character_id', 'sort']);
         if (isset($data['character_id']) && $data['character_id'] != null) {
             $trackers->whereHas('character', function ($query) use ($data) {

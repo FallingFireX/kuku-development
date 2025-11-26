@@ -455,57 +455,27 @@ class TrackerManager extends Service {
                 unset($data['enable_rounding']);
             }
 
-            \Log::info($data);
-
-            if (isset($data['field_name'])) {
-                $form_config = [];
-
-                //Set up the parent fields
-                $field_id = 0;
-                foreach ($data['field_name'] as $field_name) {
-                    if ($field_name !== null) {
-                        $form_config[$field_id] = [
-                            'field_name'        => $field_name,
-                            'field_type'        => $data['field_type'][$field_id],
-                            'field_description' => $data['field_desc'][$field_id],
-                            'field_options'     => [],
-                        ];
-                        $field_id++;
-                    }
-                }
-                \Log::info('SET UP PARENT FIELDS: -------------------------------------------- ');
-                \Log::info($form_config);
-                \Log::info('LEFTOVERS: -------------------------------------------- ');
-                \Log::info($data);
-                //Find the children and set them into 'field_options' for their parent
-                foreach ($data as $sub_name => $value) {
-                    if (str_contains($sub_name, 'sub_')) {
-                        $name_array = explode('_', $sub_name);
-                        if (array_key_exists(2, $name_array) && array_key_exists(3, $name_array) && array_key_exists(4, $name_array)) {
-                            $option_field = $name_array[2]; //ex: label
-                            $field_group = $name_array[3]; //ex: group_id
-                            $option_id = $name_array[4]; //ex: option_id
-
-                            $rename_fields = [
-                                'value' => 'point_value',
-                                'desc'  => 'description',
-                                'label' => 'label',
-                            ];
-                            $updateField = $rename_fields[$option_field];
-
-                            \Log::info('NAME ARRAY: '.print_r($name_array, true));
-
-                            foreach ($value as $i => $row) {
-                                $form_config[$field_group]['field_options'][$i][$updateField] = $row;
+            $form = [];
+            if($data['field']) {
+                $nI = 0;
+                foreach($data['field'] as $i => $field) {
+                    // Clean up empty options
+                    if($i !== 'INDEX' && $data['field'][$i]['field_options']) {
+                        $sI = 0;
+                        $sub_options = [];
+                        foreach($data['field'][$i]['field_options'] as $j => $option) {
+                            if(!str_contains($j, 'SUB_')) {
+                                $sub_options[$sI] = $option;
                             }
-                            unset($data[$sub_name]);
+                            $sI++;
                         }
+                        $form[$nI] = $field;
+                        $form[$nI]['field_options'] = $sub_options;
                     }
+                    $nI++;
                 }
-                \Log::info('SET UP CHILD FIELDS: -------------------------------------------- ');
-                \Log::info($form_config);
-
-                $this->updateSiteOption('xp_calculator', $form_config);
+                \Log::info($form);
+                $this->updateSiteOption('xp_calculator', $form);
             }
 
             return $this->commitReturn(true);
