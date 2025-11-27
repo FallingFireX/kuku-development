@@ -130,73 +130,73 @@ strlen($character->character_warning) > 1 || isset($character->character_warning
                 </h5>
                 <div class="card-body">
                     @php
-                        $pets = \App\Models\Pet\Pet::orderBy('name')->pluck('name', 'id');
-                    @endphp
-                @if (count($character->image->character->pets))
-                    <div class="row justify-content-center text-center">
-                        {{-- get one random pet --}} 
-                        @php
-                            $pets = $character->image->character->pets()->orderBy('sort', 'DESC')->limit(config('lorekeeper.pets.display_pet_count'))->get();
-                        @endphp
-                        @foreach ($pets as $pet)
-                            @if (config('lorekeeper.pets.pet_bonding_enabled'))
-                                @include('character._pet_bonding_info', ['pet' => $pet])
-                            @else
-                                <div class="col">
-                                    <img src="{{ $pet->pet->variantImage($pet->id) }}" style="max-width: 100%;" />
-                                    <br>
-                                    <span class="text-light" style="font-size:95%;">{!! $pet->pet_name !!}</span>
-                                    <br>
-                                    <span class="text-dark" style="font-size:95%;">{!! $pet->pet->displayName !!}</span>
-                                </div>
-                            @endif
-                        @endforeach
-                        
-                    </div>
-                    <div class="ml-auto float-right mr-3">
-                            <a href="{{ $character->url . '/pets' }}" class="btn btn-outline-info btn-sm">View All</a>
+                         $pets = \App\Models\Pet\Pet::orderBy('name')->pluck('name', 'id');
+                     @endphp
+                    @if (count($character->image->character->pets))
+                        <div class="row justify-content-center text-center">
+                            {{-- get one random pet --}} 
+                            @php
+                                $pets = $character->image->character->pets()->orderBy('sort', 'DESC')->limit(config('lorekeeper.pets.display_pet_count'))->get();
+                            @endphp
+                            @foreach ($pets as $pet)
+                                @if (config('lorekeeper.pets.pet_bonding_enabled'))
+                                    @include('character._pet_bonding_info', ['pet' => $pet])
+                                @else
+                                    <div class="col">
+                                        <img src="{{ $pet->pet->variantImage($pet->id) }}" style="max-width: 100%;" />
+                                        <br>
+                                        <span class="text-light" style="font-size:95%;">{!! $pet->pet_name !!}</span>
+                                        <br>
+                                        <span class="text-dark" style="font-size:95%;">{!! $pet->pet->displayName !!}</span>
+                                    </div>
+                                @endif
+                            @endforeach
+                                
                         </div>
-                @endif
+                    <div class="ml-auto float-right mr-3">
+                        <a href="{{ $character->url . '/pets' }}" class="btn btn-outline-info btn-sm">View All</a>
+                    </div>
+                    @endif
                 </div>
             </div>
 
             <div class="my-3 card">
                 <h5 class="card-header">
-                                Award Wall
-                            </h5>
-                            
+                    Award Wall
+                </h5>
+                                
                 @include('widgets._awardcase_feature', ['target' => $character, 'count' => Config::get('lorekeeper.extensions.awards.character_featured'), 'float' => true])
-                    <div class="ml-auto float-right mr-3">
-                        <a href="{{ $character->slug . '/'.__('awards.awardcase') }}" class="btn btn-outline-info btn-sm mb-2">View All</a>
-                    </div>  
-                    
+                <div class="ml-auto float-right mr-3">
+                    <a href="{{ $character->slug . '/'.__('awards.awardcase') }}" class="btn btn-outline-info btn-sm mb-2">View All</a>
+                </div>  
+                        
             </div> 
-            
+                
 
 
-            
-    {{-- Info --}}
-    <div class="card character-bio flex-fill">
-        <h5 class="card-header">
-                                Lineage
-                            </h5>
-        <div class="ml-auto mr-auto mt-3">
-            <p><i>This is your kukuri's immediate family tree, you can compare this to other kukuri to see who they are safe to breed to.</i></p>
-            <br>
-                @include('character._tab_lineage', ['character' => $character]) 
-                <br>
-                View Offspring here:
-                <br><div class="text-left mb-2">
-                    <a class="btn btn-primary create-folder mx-1" href="{{ $character->url . '/lineage' }}" class="{{ set_active('character/' . $character->slug . '/lineage') }}"><i class="fas fa-code-branch"></i> Descendants</a>
+                
+            {{-- Info --}}
+            <div class="card character-bio flex-fill">
+                <h5 class="card-header">
+                                        Lineage
+                                    </h5>
+                <div class="mx-auto mt-3">
+                    <p><i>This is your kukuri's immediate family tree, you can compare this to other kukuri to see who they are safe to breed to.</i></p>
+                    <br>
+                        @include('character._tab_lineage', ['character' => $character]) 
+                        <br>
+                        View Offspring here:
+                        <br><div class="text-left mb-2">
+                            <a class="btn btn-primary create-folder mx-1" href="{{ $character->url . '/lineage' }}" class="{{ set_active('character/' . $character->slug . '/lineage') }}"><i class="fas fa-code-branch"></i> Descendants</a>
+                        </div>
                 </div>
+                
+                <br>
+                
+            </div>
         </div>
-        
-        <br>
-        
-    </div>
-    </div>
-        
-        @include('character._image_info', ['image' => $character->image])
+            
+            @include('character._image_info', ['image' => $character->image])
     </div>
         
        
@@ -223,42 +223,44 @@ strlen($character->character_warning) > 1 || isset($character->character_warning
         </div>
         <div class="card-body tab-content">
             <!-- PERSONALITY -->
-        <div class="tab-pane fade  show active" id="personality">
-            @if (Auth::check() && Auth::user()->hasPower('manage_characters'))
-                <div class="text-right mb-2">
-                    <a class="btn btn-primary create-folder mx-1" href="{{ $character->url . '/profile/edit' }}" class="{{ set_active('character/' . $character->slug . '/profile/edit') }}"><i class="fas fa-edit"></i> Edit personality</a>
-                </div>
-            @endif
-                @if ($character->profile->parsed_text)
-                            {!! $character->profile->parsed_text !!}
+            <div class="tab-pane fade  show active" id="personality">
+                @if (Auth::check() && Auth::user()->hasPower('manage_characters'))
+                    <div class="text-right mb-2">
+                        <a class="btn btn-primary create-folder mx-1" href="{{ $character->url . '/profile/edit' }}" class="{{ set_active('character/' . $character->slug . '/profile/edit') }}"><i class="fas fa-edit"></i> Edit personality</a>
+                    </div>
                 @endif
-            </div>
-
-          
-            <br>
-           
-            @if (Auth::check() && Auth::user()->hasPower('manage_characters'))
-                <div class="tab-pane fade" id="settings-{{ $character->slug }}">
-                    {!! Form::open(['url' => $character->is_myo_slot ? 'admin/myo/' . $character->id . '/settings' : 'admin/character/' . $character->slug . '/settings']) !!}
-                    <div class="form-group">
-                        {!! Form::checkbox('is_visible', 1, $character->is_visible, ['class' => 'form-check-input', 'data-toggle' => 'toggle']) !!}
-                        {!! Form::label('is_visible', 'Is Visible', ['class' => 'form-check-label ml-3']) !!} {!! add_help('Turn this off to hide the character. Only mods with the Manage Masterlist power (that\'s you!) can view it - the owner will also not be able to see the character\'s page.') !!}
-                    </div>
-                    <div class="text-right">
-                        {!! Form::submit('Edit', ['class' => 'btn btn-primary']) !!}
-                    </div>
-                    {!! Form::close() !!}
-                    <hr />
-                    <div class="text-right">
-                        <a href="#" class="btn btn-outline-danger btn-sm delete-character" data-slug="{{ $character->slug }}">Delete</a>
-                    </div>
+                    @if ($character->profile->parsed_text)
+                                {!! $character->profile->parsed_text !!}
+                    @endif
                 </div>
-            @endif
-            <!-- DA Data -->
-            <div class="tab-pane fade" id="notes">
-                @include('character._tab_notes', ['character' => $character])
+
+            
+                <br>
+            
+                @if (Auth::check() && Auth::user()->hasPower('manage_characters'))
+                    <div class="tab-pane fade" id="settings-{{ $character->slug }}">
+                        {!! Form::open(['url' => $character->is_myo_slot ? 'admin/myo/' . $character->id . '/settings' : 'admin/character/' . $character->slug . '/settings']) !!}
+                        <div class="form-group">
+                            {!! Form::checkbox('is_visible', 1, $character->is_visible, ['class' => 'form-check-input', 'data-toggle' => 'toggle']) !!}
+                            {!! Form::label('is_visible', 'Is Visible', ['class' => 'form-check-label ml-3']) !!} {!! add_help('Turn this off to hide the character. Only mods with the Manage Masterlist power (that\'s you!) can view it - the owner will also not be able to see the character\'s page.') !!}
+                        </div>
+                        <div class="text-right">
+                            {!! Form::submit('Edit', ['class' => 'btn btn-primary']) !!}
+                        </div>
+                        {!! Form::close() !!}
+                        <hr />
+                        <div class="text-right">
+                            <a href="#" class="btn btn-outline-danger btn-sm delete-character" data-slug="{{ $character->slug }}">Delete</a>
+                        </div>
+                    </div>
+                @endif
+                <!-- DA Data -->
+                <div class="tab-pane fade" id="notes">
+                    @include('character._tab_notes', ['character' => $character])
+                </div>
             </div>
         </div>
+    </div>
    
     <br>
     <p></p>

@@ -1154,3 +1154,20 @@ tr.accountbound {
 #ace-code-editor-wrapper .editor-btn:hover {
     background: buttonface;
 }
+
+
+.status-badge {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    background: var(--danger);
+    color: white;
+    border-width: 2px;
+    border-color: white;
+    border-style: solid;
+    padding: 6px 9px;
+    font-size: 1rem;
+    font-weight: bold;
+    border-radius: 50%;
+    z-index: 10;
+}

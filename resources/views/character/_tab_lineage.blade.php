@@ -1,3 +1,42 @@
+
+    @php
+        $traitgroup = $image->features()->get()->groupBy('feature_category_id');
+    @endphp
+
+    @if ($image->features()->count())
+        {{-- Handle Category 1 --}}
+        @if ($traitgroup->has(1))
+            <div class="mb-2" style="font-size: 0.85rem">
+                <strong>Special origin:</strong>
+                @foreach ($traitgroup[1] as $feature)
+
+                    {{-- Check if trait name contains "admin" --}}
+                    @php
+                        $name = $feature->feature->displayName;
+                    @endphp
+
+                    @if (stripos($name, 'admin') !== false)
+                        <span  data-toggle="tooltip" title="This kukuri cant be sold, traded, or gifted. Only donated to the adoption center!">
+                            <i class="fas fa-dragon"> </i>
+                        </span>
+                    @else (stripos($name, 'raffle') !== false)
+                        <span  data-toggle="tooltip" title="This kukuri cant be sold, traded, or gifted. Only donated to the adoption center!">
+                            <i class="fas fa-ticket"></i>
+                        </span>
+                    @endif
+
+                    {!! $name !!}
+
+                    @if ($feature->data)
+                        ({{ $feature->data }})
+                    @endif
+
+                @endforeach
+            </div>
+        @endif
+    @endif
+
+
 @if($character->lineage !== null)
     <?php $line = $character->lineage; ?>
     @include('character._tab_lineage_tree', [
@@ -36,6 +75,9 @@
             'dam_dam_dam' => "Unknown",
         ]])
 @endif
+
+
+
 @if(Auth::check() && Auth::user()->hasPower('manage_characters'))
     <div class="mt-3">
         <a href="#" class="btn btn-outline-info btn-sm edit-lineage" data-{{ $character->is_myo_slot ? 'id' : 'slug' }}="{{ $character->is_myo_slot ? $character->id : $character->slug }}"><i class="fas fa-cog"></i> Edit</a>

@@ -12,12 +12,7 @@
                 {!! Form::select('species_id', $specieses, Request::get('species_id'), ['class' => 'form-control']) !!}
             </div>
         </div>
-        <div class="form-group mb-3 mr-1">
-            {!! Form::select('rarity_id', $rarities, Request::get('rarity_id'), ['class' => 'form-control mr-2']) !!}
-        </div>
-        <div class="form-group mb-3">
-            {!! Form::select('species_id', $specieses, Request::get('species_id'), ['class' => 'form-control']) !!}
-        </div>
+       
     </div>
     <div class="text-right mb-3"><a href="#advancedSearch" class="btn btn-sm btn-outline-info" data-toggle="collapse">Show Advanced Search Options <i class="fas fa-caret-down"></i></a></div>
     <div class="card bg-light mb-3 collapse" id="advancedSearch">
@@ -142,14 +137,22 @@
 
 {!! $characters->render() !!}
 <div id="gridView" class="hide">
-    @foreach($characters->chunk(4) as $chunk)
+    @foreach ($characters->chunk(4) as $chunk)
         <div class="row">
             @foreach ($chunk as $character)
                 <div class="col-md-3 col-6 text-center mb-3">
-                    <div>
+                    <div class="position-relative d-inline-block">
                         <a href="{{ $character->url }}">
-                            <img src="{{ $character->image->thumbnailUrl }}" class="img-thumbnail {{ $character->image->showContentWarnings(Auth::user() ?? null) ? 'content-warning' : '' }}" alt="Thumbnail for {{ $character->fullName }}" />
+                            <img 
+                                src="{{ $character->image->thumbnailUrl }}" 
+                                class="img-thumbnail {{ $character->image->showContentWarnings(Auth::user() ?? null) ? 'content-warning' : '' }}" 
+                                alt="Thumbnail for {{ $character->fullName }}"
+                            />
                         </a>
+
+                        @if($character->has_status_effect)
+                            <span class="status-badge" data-toggle="tooltip" title="This Kukuri is injured or Ill"><i class="fas fa-biohazard"></i></span>
+                        @endif
                     </div>
                     <div class="mt-1">
                         <a href="{{ $character->url }}" class="h5 mb-0">
@@ -165,13 +168,6 @@
                         @endif
                     </div>
                 </div>
-                <div class="mt-1">
-                    <a href="{{ $character->url }}" class="h5 mb-0">@if(!$character->is_visible) <i class="fas fa-eye-slash"></i> @endif {{ $character->fullName }}</a>
-                </div>
-                <div class="small">
-                    {!! $character->image->species_id ? $character->image->species->displayName : 'No Species' !!} ・ {!! $character->image->rarity_id ? $character->image->rarity->displayName : 'No Rarity' !!} ・ {!! $character->displayOwner !!}
-                </div>
-            </div>
             @endforeach
         </div>
     @endforeach
@@ -188,10 +184,14 @@
             </tr>
         </thead>
         <tbody>
-            @foreach($characters as $character)
+            @foreach ($characters as $character)
                 <tr>
                     <td>{!! $character->displayOwner !!}</td>
-                    <td>@if(!$character->is_visible) <i class="fas fa-eye-slash"></i> @endif {!! $character->displayName !!}</td>
+                    <td>
+                        @if (!$character->is_visible)
+                            <i class="fas fa-eye-slash"></i>
+                        @endif {!! $character->displayName !!}
+                    </td>
                     <td>{!! $character->image->rarity_id ? $character->image->rarity->displayName : 'None' !!}</td>
                     <td>{!! $character->image->species_id ? $character->image->species->displayName : 'None' !!}</td>
                     <td>{!! format_date($character->created_at) !!}</td>
@@ -203,6 +203,3 @@
 {!! $characters->render() !!}
 
 <div class="text-center mt-4 small text-muted">{{ $characters->total() }} result{{ $characters->total() == 1 ? '' : 's' }} found.</div>
-
-
-            

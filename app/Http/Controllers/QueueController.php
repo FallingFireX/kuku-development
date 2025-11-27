@@ -37,7 +37,7 @@ class QueueController extends Controller {
                     break;
             }
         } else {
-            $submissions->sortOldest();
+            $submissions->oldest();
         }
 
         return view('queues.queues', [

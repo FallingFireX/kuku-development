@@ -8,6 +8,7 @@ use App\Models\Character\Character;
 use App\Models\Character\CharacterCategory;
 use App\Models\Character\CharacterImage;
 use App\Models\Character\CharacterMarking;
+use App\Models\Status\StatusEffect;
 use App\Models\Character\Sublist;
 use App\Models\Feature\Feature;
 use App\Models\Marking\Marking;
@@ -171,6 +172,9 @@ class BrowseController extends Controller {
      */
     public function getCharacters(Request $request) {
         $query = Character::with('user.rank', 'image.features', 'rarity', 'image.species', 'image.rarity')->myo(0);
+        $query->withExists(['statusEffects as has_status_effect' => function ($q) {
+            $q->where('quantity', '>', 0);
+        }]);
         $imageQuery = CharacterImage::images(Auth::user() ?? null)->with('features', 'rarity', 'species');
 
         if ($sublists = Sublist::where('show_main', 0)->get()) {
@@ -230,6 +234,7 @@ class BrowseController extends Controller {
             'markings'     => Marking::getDropdownItems(),
             'bases'        => ['' => 'Select Base(s)'] + Base::orderBy('name', 'DESC')->pluck('name', 'id')->toArray(),
             'contentWarnings' => $contentWarnings,
+            
         ]);
     }
 

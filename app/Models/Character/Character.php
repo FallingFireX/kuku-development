@@ -925,6 +925,11 @@ class Character extends Model {
         }
     }
 
+    public function statusEffects()
+    {
+        return $this->hasMany(CharacterStatusEffect::class, 'character_id');
+    }
+
     /**
      * Get the character's item logs.
      *

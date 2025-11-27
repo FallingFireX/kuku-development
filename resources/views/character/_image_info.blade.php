@@ -119,14 +119,17 @@
                 <br>
                 
                
-                <div class="mb-2">
+               <div class="mb-2">
                     <div>
                         @php
                             $traitgroup = $image->features()->get()->groupBy('feature_category_id');
                         @endphp
+
                         @if ($image->features()->count())
                             @foreach ($traitgroup as $key => $group)
-                                @if ($key) {{-- Skip if no category (Rank) --}}
+
+                                {{-- Skip category null (rank) and category 1 --}}
+                                @if ($key && $key != 1)
                                     <div class="mb-2">
                                         <strong>{!! $group->first()->feature->category->displayName !!}:</strong>
                                         @foreach ($group as $feature)
@@ -137,12 +140,14 @@
                                         @endforeach
                                     </div>
                                 @endif
+
                             @endforeach
                         @else
-                            <div>Your kukuri doesnt have traits added! Please submit a import error prompt to get this fixed!</div>
+                            <div>Your kukuri doesnt have traits added! Please submit an import error prompt to get this fixed!</div>
                         @endif
                     </div>
                 </div>
+
 
                 <div class="row pt-3">
                     <div class="col-lg-4 col-md-6 col-4"><strong>Biorhythm </strong></div>
@@ -162,11 +167,14 @@
 
 
                 <!--rank-->
-                    <div class="mt-4">
+                <div class="mt-4">
                         @php
                             $traitgroup = $image->features()->get()->groupBy('feature_category_id');
                         @endphp
+
                         @if ($image->features()->count())
+
+                            {{-- Handle Rank (null category) --}}
                             @if ($traitgroup->has(null))
                                 <div class="mb-2">
                                     <strong>Rank:</strong>
@@ -178,12 +186,14 @@
                                     @endforeach
                                 </div>
                             @else
-                                <div><b>Rank: </b> None</div>
+                                <div><b>Rank:</b> None</div>
                             @endif
+
                         @else
                             <div>No traits listed.</div>
                         @endif
                     </div>
+
                
 
 

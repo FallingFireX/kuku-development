@@ -261,7 +261,7 @@ class Feature extends Model {
         }
 
         // Only show rarity if it exists and its name is not "rank"
-        $rarityDisplay = ($this->rarity && strtolower($this->rarity->name) !== 'rank')
+        $rarityDisplay = ($this->rarity && strtolower($this->rarity->name) !== 'rank' && strtolower($this->rarity->name) !== 'misc')
             ? ' ('.$this->rarity->displayName.')'
             : '';
 

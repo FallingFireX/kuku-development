@@ -141,6 +141,7 @@ class CharacterController extends Controller {
      */
     public function getCharacter($slug) {
         $markings = $this->character->getMarkingFinalArray();
+        $image = $this->character->image;
 
         return view('character.character', [
             'character'             => $this->character,
@@ -152,6 +153,7 @@ class CharacterController extends Controller {
             'extPrevAndNextBtnsUrl' => '',
             'parent'                => CharacterLink::where('child_id', $this->character->id)->orderBy('parent_id', 'ASC')->first(),
             'children'              => CharacterLink::where('parent_id', $this->character->id)->orderBy('child_id', 'ASC')->get(),
+            'image'                 => $image,
         ]);
     }
 
