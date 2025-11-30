@@ -63,9 +63,13 @@
                                                                 @if ($field->field_options)
                                                                     @foreach ($field->field_options as $option)
                                                                         <div class="list-item">
-                                                                            {!! Form::radio('tracker[0][' . $field->field_name . ']['.$option->label.'][value]', $option->point_value, false, ['class' => 'mr-2', 'label' => $option->label, 'id' => 'tracker[' . $field->field_name . ']['.$option->label.'][value]']) !!}
-                                                                            {!! Form::hidden('tracker[0][' . $field->field_name . ']['.$option->label.'][label]', $option->label) !!}
-                                                                            <label for="{!! 'tracker[][' . $field->field_name . ']['.$option->label.'][value]' !!}"><strong>{!! $option->label !!}</strong> ({!! $option->point_value !!} {{ __('art_tracker.xp') }})
+                                                                            {!! Form::radio('tracker[0][' . $field->field_name . '][' . $option->label . '][value]', $option->point_value, false, [
+                                                                                'class' => 'mr-2',
+                                                                                'label' => $option->label,
+                                                                                'id' => 'tracker[' . $field->field_name . '][' . $option->label . '][value]',
+                                                                            ]) !!}
+                                                                            {!! Form::hidden('tracker[0][' . $field->field_name . '][' . $option->label . '][label]', $option->label) !!}
+                                                                            <label for="{!! 'tracker[][' . $field->field_name . '][' . $option->label . '][value]' !!}"><strong>{!! $option->label !!}</strong> ({!! $option->point_value !!} {{ __('art_tracker.xp') }})
                                                                                 <br>{!! $option->description !!}</label>
                                                                         </div>
                                                                     @endforeach
@@ -76,9 +80,13 @@
                                                                 @if ($field->field_options)
                                                                     @foreach ($field->field_options as $option)
                                                                         <div class="list-item">
-                                                                            {!! Form::checkbox('tracker[0][' . $field->field_name . ']['.$option->label.'][value]', $option->point_value, false, ['class' => 'mr-2', 'label' => $option->label, 'id' => 'tracker[' . $field->field_name . ']['.$option->label.'][value]']) !!} 
-                                                                            {!! Form::hidden('tracker[0][' . $field->field_name . ']['.$option->label.'][label]', $option->label) !!}
-                                                                            <label for="{!! 'tracker[0][' . $field->field_name . ']['.$option->label.'][value]' !!}"><strong>{!! $option->label !!}</strong> <br>{!! $option->description !!}</label>
+                                                                            {!! Form::checkbox('tracker[0][' . $field->field_name . '][' . $option->label . '][value]', $option->point_value, false, [
+                                                                                'class' => 'mr-2',
+                                                                                'label' => $option->label,
+                                                                                'id' => 'tracker[' . $field->field_name . '][' . $option->label . '][value]',
+                                                                            ]) !!}
+                                                                            {!! Form::hidden('tracker[0][' . $field->field_name . '][' . $option->label . '][label]', $option->label) !!}
+                                                                            <label for="{!! 'tracker[0][' . $field->field_name . '][' . $option->label . '][value]' !!}"><strong>{!! $option->label !!}</strong> <br>{!! $option->description !!}</label>
                                                                         </div>
                                                                     @endforeach
                                                                 @endif
@@ -186,7 +194,7 @@
                 var index = $($group).closest('.tracker-item').attr('data-index');
 
                 var selected = $($group).find('input[type="' + $type + '"]:checked');
-                if(selected.length === 0) {
+                if (selected.length === 0) {
                     delete totals[index][group];
                 } else {
                     var $temp_selected = [];
@@ -196,7 +204,7 @@
                     totals[index] = [];
                     totals[index][group] = $temp_selected;
                 }
-                
+
 
                 updateTotals();
             }
@@ -246,7 +254,7 @@
                 $clone.find('button').attr('data-target', '#collapse-' + i).attr('aria-controls', 'collapse-' + i).text('Tracker #' + i);
                 $clone.find('#collapse-0').attr('id', 'collapse-' + i).attr('aria-labelledby', i);
                 $clone.find('.remove-tracker').removeClass('hide').show();
-                $clone.html($clone.html().replace(/tracker\[0\]/g, 'tracker['+i+']'));
+                $clone.html($clone.html().replace(/tracker\[0\]/g, 'tracker[' + i + ']'));
 
                 parent.append($clone);
             }
@@ -258,11 +266,11 @@
 
                 $.each(totals, function(i, card) {
                     var item;
-                    item = '<h3>Tracker #'+i+'</h3>';
+                    item = '<h3>Tracker #' + i + '</h3>';
                     //Trackers
                     Object.entries(card).forEach(([group, value]) => {
                         //Sub tracker groups
-                        if(typeof value === 'object') {
+                        if (typeof value === 'object') {
                             item = item + `<div class="mb-2 pb-2 border-bottom border-seconday" ><h5>${group}</h5>`;
                             Object.entries(value).forEach(([k, v]) => {
                                 //Sub tracker sub lines

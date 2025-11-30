@@ -7,7 +7,7 @@
 @section('admin-content')
     {!! breadcrumbs(['Admin Panel' => 'admin', 'Tracker Queue' => 'admin/trackers/', 'Tracker (#' . $tracker->id . ')' => $tracker->viewUrl]) !!}
 
-    
+
 
     @if ($tracker->status == 'Pending')
         <h1>
@@ -16,7 +16,7 @@
                 {{ $tracker->status }}
             </span>
         </h1>
-        @if($tracker->data_temp)
+        @if ($tracker->data_temp)
             <div class="text-right mt-2">
                 <h3><span class="badge badge-info">Edit Requested</span></h3>
             </div>
@@ -54,7 +54,7 @@
 
         <div class="card my-3">
             <h4 class="card-header">Tracker Card Count
-                @if($tracker->data_temp)
+                @if ($tracker->data_temp)
                     <a href="{{ $tracker->viewUrl }}" class="btn float-right btn-sm btn-secondary">Original Card</a>
                 @endif
             </h4>
@@ -96,14 +96,14 @@
                                                 <h5>Group</h5>
                                                 <a href="#" class="remove-group btn btn-sm btn-danger ml-2">-</a>
                                             </div>
-                                            {!! Form::text('card['.$i.'][title]', $title, ['class' => 'form-control']) !!}
+                                            {!! Form::text('card[' . $i . '][title]', $title, ['class' => 'form-control']) !!}
                                         </div>
-                                        <hr class="my-1 border border-secondary"/>
+                                        <hr class="my-1 border border-secondary" />
                                         <?php $si = 0; ?>
                                         @foreach ($value as $title => $sub_val)
                                             <div class="line-item w-100 d-inline-flex align-items-center justify-content-between p-2">
-                                                {!! Form::text('card['.$i.'][sub_card]['.$si.'][title]', $title, ['class' => 'form-control']) !!}
-                                                {!! Form::number('card['.$i.'][sub_card]['.$si.'][value]', $sub_val, ['class' => 'form-control w-25 ml-2']) !!} <span class="badge ml-2">{{ __('art_tracker.xp') }}</span>
+                                                {!! Form::text('card[' . $i . '][sub_card][' . $si . '][title]', $title, ['class' => 'form-control']) !!}
+                                                {!! Form::number('card[' . $i . '][sub_card][' . $si . '][value]', $sub_val, ['class' => 'form-control w-25 ml-2']) !!} <span class="badge ml-2">{{ __('art_tracker.xp') }}</span>
                                                 <a href="#" class="remove-line btn btn-sm btn-danger ml-2">-</a>
                                             </div>
                                             <?php
@@ -117,8 +117,8 @@
                                     </div>
                                 @else
                                     <div class="line-item w-100 d-inline-flex align-items-center justify-content-between p-2">
-                                        {!! Form::text('card['.$i.'][title]', $title, ['class' => 'form-control']) !!}
-                                        {!! Form::number('card['.$i.'][value]', $value, ['class' => 'form-control w-25 ml-2']) !!} <span class="badge ml-2">{{ __('art_tracker.xp') }}</span>
+                                        {!! Form::text('card[' . $i . '][title]', $title, ['class' => 'form-control']) !!}
+                                        {!! Form::number('card[' . $i . '][value]', $value, ['class' => 'form-control w-25 ml-2']) !!} <span class="badge ml-2">{{ __('art_tracker.xp') }}</span>
                                         <a href="#" class="remove-line btn btn-sm btn-danger ml-2">-</a>
                                     </div>
                                     <?php $total += $value; ?>
@@ -226,7 +226,7 @@
                 <div class="col-md-10 col-8">{!! format_date($tracker->created_at) !!} ({{ $tracker->created_at->diffForHumans() }})</div>
             </div>
         </div>
-        @include('tracker._tracker_card', ['tracker' => $tracker, 'editable' => ($tracker->status == 'Pending' ? true : false)])
+        @include('tracker._tracker_card', ['tracker' => $tracker, 'editable' => $tracker->status == 'Pending' ? true : false])
 
         <div class="card my-3">
             @if (Auth::check() && $tracker->staff_comments && ($tracker->user_id == Auth::user()->id || Auth::user()->hasPower('manage_submissions')))
@@ -252,7 +252,7 @@
                 </div>
                 {!! Form::text('card[__INDEX__][title]', null, ['class' => 'form-control']) !!}
             </div>
-            <hr class="my-1 border border-secondary"/>
+            <hr class="my-1 border border-secondary" />
             <div class="line-item w-100 d-inline-flex align-items-center justify-content-between p-2">
                 {!! Form::text('card[__INDEX__][sub_card][__SUB_INDEX__][title]', null, ['class' => 'form-control']) !!}
                 {!! Form::number('card[__INDEX__][sub_card][__SUB_INDEX__][value]', 1, ['class' => 'form-control w-25 ml-2']) !!} <span class="badge ml-2">{{ __('art_tracker.xp') }}</span>

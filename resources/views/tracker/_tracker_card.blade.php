@@ -36,7 +36,7 @@
                                 <div class="line-group border border-secondary my-2">
                                     <h4 class="line-header text-uppercase font-weight-bold p-2">{{ $title }}</h4>
                                     @foreach ($value as $sub_title => $sub_val)
-                                        @if($sub_title === 'sub_card')
+                                        @if ($sub_title === 'sub_card')
                                             @foreach ($sub_val as $sub_sub_title => $sub_sub_val)
                                                 <div class="line-item w-100 d-inline-flex justify-content-between p-2">
                                                     <h5 class="lh-1 m-0">{{ $sub_sub_title }}</h5>
@@ -76,14 +76,14 @@
                                                 <h5>Group</h5>
                                                 <a href="#" class="remove-group btn btn-sm btn-danger ml-2">-</a>
                                             </div>
-                                            {!! Form::text('card['.$i.'][title]', $title, ['class' => 'form-control']) !!}
+                                            {!! Form::text('card[' . $i . '][title]', $title, ['class' => 'form-control']) !!}
                                         </div>
-                                        <hr class="my-1 border border-secondary"/>
+                                        <hr class="my-1 border border-secondary" />
                                         <?php $si = 0; ?>
                                         @foreach ($value as $title => $sub_val)
                                             <div class="line-item w-100 d-inline-flex align-items-center justify-content-between p-2">
-                                                {!! Form::text('card['.$i.'][sub_card]['.$si.'][title]', $title, ['class' => 'form-control']) !!}
-                                                {!! Form::number('card['.$i.'][sub_card]['.$si.'][value]', $sub_val, ['class' => 'form-control w-25 ml-2']) !!} <span class="badge ml-2">{{ __('art_tracker.xp') }}</span>
+                                                {!! Form::text('card[' . $i . '][sub_card][' . $si . '][title]', $title, ['class' => 'form-control']) !!}
+                                                {!! Form::number('card[' . $i . '][sub_card][' . $si . '][value]', $sub_val, ['class' => 'form-control w-25 ml-2']) !!} <span class="badge ml-2">{{ __('art_tracker.xp') }}</span>
                                                 <a href="#" class="remove-line btn btn-sm btn-danger ml-2">-</a>
                                             </div>
                                             <?php
@@ -97,8 +97,8 @@
                                     </div>
                                 @else
                                     <div class="line-item w-100 d-inline-flex align-items-center justify-content-between p-2" data-id="{{ $i }}">
-                                        {!! Form::text('card['.$i.'][title]', $title, ['class' => 'form-control']) !!}
-                                        {!! Form::number('card['.$i.'][value]', $value, ['class' => 'form-control w-25 ml-2']) !!} <span class="badge ml-2">{{ __('art_tracker.xp') }}</span>
+                                        {!! Form::text('card[' . $i . '][title]', $title, ['class' => 'form-control']) !!}
+                                        {!! Form::number('card[' . $i . '][value]', $value, ['class' => 'form-control w-25 ml-2']) !!} <span class="badge ml-2">{{ __('art_tracker.xp') }}</span>
                                         <a href="#" class="remove-line btn btn-sm btn-danger ml-2">-</a>
                                     </div>
                                     <?php $total += $value; ?>
@@ -122,33 +122,33 @@
     </div>
 
     @if ($editable)
-    <div class="template hide">
-        <!-- Grouped Template -->
-        <div class="line-group border border-secondary my-2" data-id="__INDEX__">
-            <div class="line-header p-2">
-                <div class="d-flex justify-content-between mb-2">
-                    <h5>Group</h5>
-                    <a href="#" class="remove-group btn btn-sm btn-danger ml-2">-</a>
+        <div class="template hide">
+            <!-- Grouped Template -->
+            <div class="line-group border border-secondary my-2" data-id="__INDEX__">
+                <div class="line-header p-2">
+                    <div class="d-flex justify-content-between mb-2">
+                        <h5>Group</h5>
+                        <a href="#" class="remove-group btn btn-sm btn-danger ml-2">-</a>
+                    </div>
+                    {!! Form::text('card[__INDEX__][title]', null, ['class' => 'form-control']) !!}
                 </div>
-                {!! Form::text('card[__INDEX__][title]', null, ['class' => 'form-control']) !!}
+                <hr class="my-1 border border-secondary" />
+                <div class="line-item w-100 d-inline-flex align-items-center justify-content-between p-2">
+                    {!! Form::text('card[__INDEX__][sub_card][__SUB_INDEX__][title]', null, ['class' => 'form-control']) !!}
+                    {!! Form::number('card[__INDEX__][sub_card][__SUB_INDEX__][value]', 1, ['class' => 'form-control w-25 ml-2']) !!} <span class="badge ml-2">{{ __('art_tracker.xp') }}</span>
+                    <a href="#" class="remove-line btn btn-sm btn-danger ml-2">-</a>
+                </div>
+                <div class="text-right">
+                    <a href="#" id="addSubLine" class="btn btn-sm btn-primary m-2">Add Sub Line</a>
+                </div>
             </div>
-            <hr class="my-1 border border-secondary"/>
-            <div class="line-item w-100 d-inline-flex align-items-center justify-content-between p-2">
-                {!! Form::text('card[__INDEX__][sub_card][__SUB_INDEX__][title]', null, ['class' => 'form-control']) !!}
-                {!! Form::number('card[__INDEX__][sub_card][__SUB_INDEX__][value]', 1, ['class' => 'form-control w-25 ml-2']) !!} <span class="badge ml-2">{{ __('art_tracker.xp') }}</span>
+            <!-- Single Line Template -->
+            <div class="line-item w-100 d-inline-flex align-items-center justify-content-between p-2" data-id="__INDEX__">
+                {!! Form::text('card[__INDEX__][title]', null, ['class' => 'form-control']) !!}
+                {!! Form::number('card[__INDEX__][value]', 1, ['class' => 'form-control w-25 ml-2']) !!} <span class="badge ml-2">{{ __('art_tracker.xp') }}</span>
                 <a href="#" class="remove-line btn btn-sm btn-danger ml-2">-</a>
             </div>
-            <div class="text-right">
-                <a href="#" id="addSubLine" class="btn btn-sm btn-primary m-2">Add Sub Line</a>
-            </div>
         </div>
-        <!-- Single Line Template -->
-        <div class="line-item w-100 d-inline-flex align-items-center justify-content-between p-2" data-id="__INDEX__">
-            {!! Form::text('card[__INDEX__][title]', null, ['class' => 'form-control']) !!}
-            {!! Form::number('card[__INDEX__][value]', 1, ['class' => 'form-control w-25 ml-2']) !!} <span class="badge ml-2">{{ __('art_tracker.xp') }}</span>
-            <a href="#" class="remove-line btn btn-sm btn-danger ml-2">-</a>
-        </div>
-    </div>
     @endif
 @endif
 @section('scripts')
