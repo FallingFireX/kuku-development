@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User\User;
-use DB;
-use Auth;
-use Illuminate\Http\Request;
 use App\Models\Tracker\Tracker;
+use App\Models\User\User;
 use App\Services\TrackerManager;
+use Auth;
+use DB;
+use Illuminate\Http\Request;
 
 class XPCalcController extends Controller {
     /**

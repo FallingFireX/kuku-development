@@ -35,10 +35,10 @@ class TrackerManager extends Service {
             if (!isset($data['character'])) {
                 throw new \Exception('Please select a character.');
             }
-            if(!isset($data['tracker']) && count($data['tracker']) == 0) {
+            if (!isset($data['tracker']) && count($data['tracker']) == 0) {
                 throw new \Exception('There must be at least one line for the tracker card.');
             }
-            if((!isset($data['tracker_url']) && !isset($data['tracker_url_image'])) || (!isset($data['gallery']))) {
+            if ((!isset($data['tracker_url']) && !isset($data['tracker_url_image'])) || (!isset($data['gallery']))) {
                 throw new \Exception('There must be a linked gallery or external image/url.');
             }
 
@@ -46,22 +46,22 @@ class TrackerManager extends Service {
             $tracker_data = [];
 
             //Set the tracker limits
-            if($data['tracker_type'] === 'single') {
+            if ($data['tracker_type'] === 'single') {
                 $limit = 1;
             } else {
                 $limit = 10;
             }
 
             //Create the tracker array
-            foreach($data['tracker'] as $i => $tracker) {
-                foreach($tracker as $name => $value) {
-                    if($limit > $i) {
+            foreach ($data['tracker'] as $i => $tracker) {
+                foreach ($tracker as $name => $value) {
+                    if ($limit > $i) {
                         break;
                     }
-                    if(gettype($value) == 'array') {
+                    if (gettype($value) == 'array') {
                         $sub_cards = [];
-                        foreach($value as $sub_name => $sub_value) {
-                            if($sub_value['value'] && $sub_value['label']) {
+                        foreach ($value as $sub_name => $sub_value) {
+                            if ($sub_value['value'] && $sub_value['label']) {
                                 $sub_cards[$sub_value['label']] = floatval($sub_value['value']) ?? 0;
                                 $xp += floatval($sub_value['value']) ?? 0;
                             }
@@ -77,7 +77,6 @@ class TrackerManager extends Service {
             }
 
             \Log::info($tracker_data);
-            
 
             // Create the tracker card itself.
             // $tracker = Tracker::create([
@@ -285,7 +284,7 @@ class TrackerManager extends Service {
             }
 
             $card_data = [];
-            foreach($data['card'] as $i => $card) {
+            foreach ($data['card'] as $i => $card) {
                 if (isset($card['sub_card']) && is_array($card['sub_card']) && count($card['sub_card']) > 0) {
                     $sub_cards = [];
                     foreach ($card['sub_card'] as $j => $sub_card) {
@@ -315,7 +314,7 @@ class TrackerManager extends Service {
             // 1. staff comments
             // 2. staff ID
             // 3. status
-            if($tracker->data_temp) {
+            if ($tracker->data_temp) {
                 $tracker->update([
                     'staff_comments'        => $data['parsed_staff_comments'] ?? null,
                     'staff_id'              => $user->id,
@@ -576,29 +575,11 @@ class TrackerManager extends Service {
         return $this->rollbackReturn(false);
     }
 
-    private function updateSiteOption($key, $value) {
-        if ($value) {
-            $exists = DB::table('site_settings')->where('key', $key)->first();
-            $value = json_encode($value);
-            if ($exists) {
-                //Update
-                if ($exists->value !== $value) {
-                    DB::table('site_settings')->where('key', $key)->update(['value' => $value]);
-                }
-            } else {
-                //Create
-                DB::table('site_settings')->insert(['key' => $key, 'value' => $value, 'description' => 'Auto-Generated']);
-            }
-        }
-    }
-
     /**
      * Checks for the character's current level and updates it if needed.
      *
-     * @param int    $characterId
-     * @param string $data
-     * @param float  $xp
-     * @param mixed  $characterId
+     * @param int   $characterId
+     * @param mixed $characterId
      *
      * @return float
      */
@@ -633,6 +614,22 @@ class TrackerManager extends Service {
         }
 
         return false;
+    }
+
+    private function updateSiteOption($key, $value) {
+        if ($value) {
+            $exists = DB::table('site_settings')->where('key', $key)->first();
+            $value = json_encode($value);
+            if ($exists) {
+                //Update
+                if ($exists->value !== $value) {
+                    DB::table('site_settings')->where('key', $key)->update(['value' => $value]);
+                }
+            } else {
+                //Create
+                DB::table('site_settings')->insert(['key' => $key, 'value' => $value, 'description' => 'Auto-Generated']);
+            }
+        }
     }
 
     /**************************************************************************************************************

@@ -192,6 +192,8 @@ class Tracker extends Model {
     /**
      * Get the data attribute as an associative array.
      *
+     * @param mixed $temp
+     *
      * @return array
      */
     public function getDataAttribute($temp = false) {

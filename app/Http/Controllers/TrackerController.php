@@ -64,9 +64,9 @@ class TrackerController extends Controller {
             if ($i === '__INDEX__') {
                 continue;
             }
-            if(isset($item['sub_card']) && $item['sub_card']) {
+            if (isset($item['sub_card']) && $item['sub_card']) {
                 $sub_items = [];
-                foreach($item['sub_card'] as $sub_i => $sub_item) {
+                foreach ($item['sub_card'] as $sub_i => $sub_item) {
                     $sub_items[$sub_item['title']] = $sub_item['value'];
                 }
                 $temp_data[$item['title']] = $sub_items;
