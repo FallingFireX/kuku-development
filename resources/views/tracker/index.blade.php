@@ -47,11 +47,6 @@
     @include('tracker._tracker_card', ['tracker' => $tracker, 'editable' => $editable])
 
     <div class="card my-3">
-        <div class="card-header h2">Comments</div>
-        <div class="card-body">
-            {!! nl2br(htmlentities($tracker->staff_comments)) !!}
-        </div>
-
         @if (Auth::check() && $tracker->staff_comments && ($tracker->user_id == Auth::user()->id || Auth::user()->hasPower('manage_submissions')))
             <div class="card-header h2">Staff Comments</div>
             <div class="card-body">

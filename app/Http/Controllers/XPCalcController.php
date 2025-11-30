@@ -4,7 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\User\User;
 use DB;
-use Illuminate\Support\Facades\Auth;
+use Auth;
+use Illuminate\Http\Request;
+use App\Models\Tracker\Tracker;
+use App\Services\TrackerManager;
 
 class XPCalcController extends Controller {
     /**
@@ -33,5 +36,33 @@ class XPCalcController extends Controller {
             'xp_calc_form'      => $xp_calc_form,
             'lit_settings'      => $lit_settings,
         ]);
+    }
+
+    /**
+     * Creates a new tracker card from the xp calculator form.
+     *
+     * @param App\Services\TrackerManager $service
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function postXPForm(Request $request, TrackerManager $service) {
+        $data = $request->all();
+        \Log::info($data);
+
+        // if ($data && $service->createTrackerCard($data, $request->user())) {
+        //     flash('Created tracker card successfully.')->success();
+        // } else {
+        //     if (isset($service->errors()->getMessages()['error'])) {
+        //         foreach ($service->errors()->getMessages()['error'] as $error) {
+        //             flash($error)->error();
+        //         }
+        //     }
+        // }
+
+        // if (!$tracker) {
+        //     abort(404);
+        // }
+
+        return redirect()->back();
     }
 }

@@ -59,7 +59,7 @@ class TrackerController extends Controller {
 
         return view('admin.trackers.tracker', [
             'tracker'          => $tracker,
-            'cardData'         => $tracker->getDataAttribute(),
+            'cardData'         => ($tracker->data_temp ? $tracker->getDataAttribute(true) : $tracker->getDataAttribute()),
             'gallery'          => $tracker->gallery ?? null,
             'characters'       => Character::visible(Auth::check() ? Auth::user() : null)->myo(0)->orderBy('slug', 'DESC')->get()->pluck('fullName', 'slug')->toArray(),
         ] + ($tracker->status == 'Pending' ? [
@@ -77,8 +77,6 @@ class TrackerController extends Controller {
      */
     public function postTrackerCard(Request $request, TrackerManager $service, $id, $action) {
         $data = $request->all();
-
-        \Log::info($data);
 
         if ($action == 'reject' && $service->rejectTrackerCard($request->only(['staff_comments']) + ['id' => $id], Auth::user())) {
             flash('Tracker card rejected successfully.')->success();

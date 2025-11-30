@@ -40,7 +40,7 @@
             <div class="col-md-8">
                 <!-- Calculator Options -->
                 <div id="pointValues" class="accordion mb-4">
-                    <div class="tracker_0 tracker-item">
+                    <div class="tracker_0 tracker-item" data-index="0">
                         <div class="card rounded bg-transparent border border-secondary">
                             <div class="card-header bg-dark d-flex justify-content-between align-items-center" id="0"><button class="btn h2 btn-link btn-block text-left" style="text-decoration:none;" type="button" data-toggle="collapse"
                                     data-target="#collapse-0" aria-expanded="true" aria-controls="collapse-0">Tracker #0</button><a href="#" class="remove-tracker multi-only hide btn btn-danger">-</a></div>
@@ -63,7 +63,9 @@
                                                                 @if ($field->field_options)
                                                                     @foreach ($field->field_options as $option)
                                                                         <div class="list-item">
-                                                                            {!! Form::radio('tracker[' . $field->field_name . '][]', $option->point_value, false, ['class' => 'mr-2', 'id' => $option->label]) !!} <label for="{!! $option->label !!}"><strong>{!! $option->label !!}</strong> ({!! $option->point_value !!} {{ __('art_tracker.xp') }})
+                                                                            {!! Form::radio('tracker[0][' . $field->field_name . ']['.$option->label.'][value]', $option->point_value, false, ['class' => 'mr-2', 'label' => $option->label, 'id' => 'tracker[' . $field->field_name . ']['.$option->label.'][value]']) !!}
+                                                                            {!! Form::hidden('tracker[0][' . $field->field_name . ']['.$option->label.'][label]', $option->label) !!}
+                                                                            <label for="{!! 'tracker[][' . $field->field_name . ']['.$option->label.'][value]' !!}"><strong>{!! $option->label !!}</strong> ({!! $option->point_value !!} {{ __('art_tracker.xp') }})
                                                                                 <br>{!! $option->description !!}</label>
                                                                         </div>
                                                                     @endforeach
@@ -74,7 +76,9 @@
                                                                 @if ($field->field_options)
                                                                     @foreach ($field->field_options as $option)
                                                                         <div class="list-item">
-                                                                            {!! Form::checkbox('tracker[' . $field->field_name . '][]', $option->point_value, false, ['class' => 'mr-2', 'id' => $option->label]) !!} <label for="{!! $option->label !!}"><strong>{!! $option->label !!}</strong> <br>{!! $option->description !!}</label>
+                                                                            {!! Form::checkbox('tracker[0][' . $field->field_name . ']['.$option->label.'][value]', $option->point_value, false, ['class' => 'mr-2', 'label' => $option->label, 'id' => 'tracker[' . $field->field_name . ']['.$option->label.'][value]']) !!} 
+                                                                            {!! Form::hidden('tracker[0][' . $field->field_name . ']['.$option->label.'][label]', $option->label) !!}
+                                                                            <label for="{!! 'tracker[0][' . $field->field_name . ']['.$option->label.'][value]' !!}"><strong>{!! $option->label !!}</strong> <br>{!! $option->description !!}</label>
                                                                         </div>
                                                                     @endforeach
                                                                 @endif
@@ -99,7 +103,7 @@
                                                         Rounds to the nearest {!! $lit_settings->round_to !!}.
                                                     @endif
                                                 </p>
-                                                {!! Form::number('word_count[]', null, ['class' => 'form-control wordCount', 'rounding' => $lit_settings->round_to ?? '', 'conversion' => $lit_settings->conversion_rate, 'placeholder' => 'Enter the exact word count']) !!}
+                                                {!! Form::number('tracker[0][word_count]', null, ['class' => 'form-control wordCount', 'rounding' => $lit_settings->round_to ?? '', 'conversion' => $lit_settings->conversion_rate, 'placeholder' => 'Enter the exact word count']) !!}
                                             </div>
                                         </div>
                                     @endif
@@ -158,9 +162,10 @@
             //On lit word count change
             $('#pointValues .wordCount').on('change', function() {
                 var wc = $(this).val();
+                var index = $(this).closest('.tracker-item').attr('data-index');
 
                 if (wc === 0 || wc === '') {
-                    delete totals['Word Count'];
+                    delete totals[index]['Word Count'];
                     updateTotals();
                     return;
                 }
@@ -171,51 +176,38 @@
                 var raw = (cr[0] * (Math.round(wc / ro) * ro)) / cr[1];
                 var total = Math.round(raw * ro) / ro;
 
-                totals['Word Count'] = total;
+                totals[index]['Word Count'] = total;
                 updateTotals();
             });
 
-            //On radio input changes
-            $('#pointValues input[type="radio"][name]').change(function() {
-                var selected = $(this).val();
-                var option_name = $(this).attr('id');
-                var group = $(this).attr('name');
+            //Update groups on checkbox/radio changes
+            function updateCheckRadioGroup($group, $type) {
+                var group = $($group).attr('data-name');
+                var index = $($group).closest('.tracker-item').attr('data-index');
 
-                //Find if this option already exists
-                var totalKeys = Object.keys(totals);
-                var matching = totalKeys.filter(key => key.toLowerCase().includes(group.toLowerCase()));
-                if (matching.length > 0) {
-                    //One already exists!
-                    $.each(matching, function(k, v) {
-                        delete totals[v];
+                var selected = $($group).find('input[type="' + $type + '"]:checked');
+                if(selected.length === 0) {
+                    delete totals[index][group];
+                } else {
+                    var $temp_selected = [];
+                    selected.each(function(i, element) {
+                        $temp_selected[$(this).attr('label')] = $(this).val();
                     });
+                    totals[index] = [];
+                    totals[index][group] = $temp_selected;
                 }
+                
 
-                totals[group + ' - ' + option_name] = selected;
                 updateTotals();
-            });
+            }
 
             //On checkbox input changes
             $('#pointValues input[type="checkbox"][name]').change(function() {
-                var selected = $(this).val();
-
-                console.log(selected);
-
-                var option_name = $(this).attr('id');
-                var group = $(this).attr('name');
-
-                //Find if this option already exists
-                var totalKeys = Object.keys(totals);
-                var matching = totalKeys.filter(key => key.toLowerCase().includes(group.toLowerCase()));
-                if (matching.length > 0) {
-                    //One already exists!
-                    $.each(matching, function(k, v) {
-                        delete totals[v];
-                    });
-                }
-
-                totals[group + ' - ' + option_name] = selected;
-                updateTotals();
+                updateCheckRadioGroup($(this).closest('.card')[0], 'checkbox');
+            });
+            //On radio input changes
+            $('#pointValues input[type="radio"][name]').change(function() {
+                updateCheckRadioGroup($(this).closest('.card')[0], 'radio');
             });
 
             //On type change
@@ -225,6 +217,7 @@
                 if (t === 'multi') {
                     $('.multi-only').show().removeClass('hide');
                 } else {
+                    $('.tracker-item:not([data-index="0"])').remove();
                     $('.multi-only').hide().addClass('hide');
                 }
             });
@@ -247,11 +240,13 @@
 
             function addTracker() {
                 var $clone = trackerTemplate.clone();
-                $clone.find('.tracker_0').removeClass('tracker_0').addClass('tracker_' + i);
+                $clone.removeClass('tracker_0').addClass('tracker_' + i);
                 $clone.find('#0').attr('id', i);
+                $clone.attr('data-index', i);
                 $clone.find('button').attr('data-target', '#collapse-' + i).attr('aria-controls', 'collapse-' + i).text('Tracker #' + i);
                 $clone.find('#collapse-0').attr('id', 'collapse-' + i).attr('aria-labelledby', i);
                 $clone.find('.remove-tracker').removeClass('hide').show();
+                $clone.html($clone.html().replace(/tracker\[0\]/g, 'tracker['+i+']'));
 
                 parent.append($clone);
             }
@@ -259,10 +254,40 @@
             function updateTotals() {
                 target.empty();
 
-                $.each(totals, function(key, value) {
-                    var item = `<div class="d-flex justify-content-between"><strong>${key}:</strong> <span>${value}</span></div>`;
-                    target.append(item);
+                //console.log(totals);
+
+                $.each(totals, function(i, card) {
+                    var item;
+                    item = '<h3>Tracker #'+i+'</h3>';
+                    //Trackers
+                    Object.entries(card).forEach(([group, value]) => {
+                        //Sub tracker groups
+                        if(typeof value === 'object') {
+                            item = item + `<div class="mb-2 pb-2 border-bottom border-seconday" ><h5>${group}</h5>`;
+                            Object.entries(value).forEach(([k, v]) => {
+                                //Sub tracker sub lines
+                                item = item + `<div><strong>${k}:</strong> <span>${v}</span></div>`;
+                            });
+                            item = item + `</div>`;
+                        } else {
+                            item = item + `<div class="d-flex justify-content-between"><strong>${group}:</strong> <span>${value}</span></div>`;
+                        }
+                        target.append(item);
+                    });
                 });
+
+                // $.each(card, function(key, value) {
+                //     if(typeof value === 'object') {
+                //         item = `<div class="mb-2 pb-2 border-bottom border-seconday" ><h5>${key}</h5>`;
+                //         Object.entries(value).forEach(([k, v]) => {
+                //             item = item + `<div><strong>${k}:</strong> <span>${v}</span></div>`;
+                //         });
+                //         item = item + `</div>`;
+                //     } else {
+                //         item = `<div class="d-flex justify-content-between"><strong>${key}:</strong> <span>${value}</span></div>`;
+                //     }
+                //     target.append(item);
+                // });
             }
         });
     </script>

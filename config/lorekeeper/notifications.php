@@ -462,4 +462,10 @@ return [
         'message' => '{character_name} was granted a total of {xp_points} XP by <a href="{staff_url}">{staff_name}</a>. (<a href="{url}">View Character</a>)',
         'url'     => 'character/{slug}',
     ],
+    // CHARACTER_LEVEL_UP
+    785 => [
+        'name'    => 'Character Level Up',
+        'message' => '{character_name} has leveled up to Level {new_level}! (<a href="{url}">View Character</a>)',
+        'url'     => 'character/{slug}',
+    ],
 ];

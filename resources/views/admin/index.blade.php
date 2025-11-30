@@ -221,7 +221,7 @@
                             @endif
                         </p>
                         <div class="text-right">
-                            <a href="{{ url('admin/tracker/pending') }}" class="card-link">View Queue <span class="fas fa-caret-right ml-1"></span></a>
+                            <a href="{{ url('admin/trackers/pending') }}" class="card-link">View Queue <span class="fas fa-caret-right ml-1"></span></a>
                         </div>
                     </div>
                 </div>

@@ -36,10 +36,19 @@
                                 <div class="line-group border border-secondary my-2">
                                     <h4 class="line-header text-uppercase font-weight-bold p-2">{{ $title }}</h4>
                                     @foreach ($value as $sub_title => $sub_val)
-                                        <div class="line-item w-100 d-inline-flex justify-content-between p-2">
-                                            <h5 class="lh-1 m-0">{{ $sub_title }}</h5>
-                                            <p class="lh-1 m-0">{{ $sub_val }} {{ __('art_tracker.xp') }}</p>
-                                        </div>
+                                        @if($sub_title === 'sub_card')
+                                            @foreach ($sub_val as $sub_sub_title => $sub_sub_val)
+                                                <div class="line-item w-100 d-inline-flex justify-content-between p-2">
+                                                    <h5 class="lh-1 m-0">{{ $sub_sub_title }}</h5>
+                                                    <p class="lh-1 m-0">{{ $sub_sub_val }} {{ __('art_tracker.xp') }}</p>
+                                                </div>
+                                            @endforeach
+                                        @else
+                                            <div class="line-item w-100 d-inline-flex justify-content-between p-2">
+                                                <h5 class="lh-1 m-0">{{ $sub_title }}</h5>
+                                                <p class="lh-1 m-0">{{ $sub_val }} {{ __('art_tracker.xp') }}</p>
+                                            </div>
+                                        @endif
                                     @endforeach
                                 </div>
                             @else
@@ -54,37 +63,55 @@
                         $total = 0;
                         $i = 0;
                         ?>
-                        @foreach ($cardData as $title => $value)
-                            @if (gettype($value) === 'array')
-                                <div class="line-group border border-secondary my-2">
-                                    <div class="line-header p-2">
-                                        <h5>Group</h5>
-                                        {!! Form::text('card__' . $i . '_title', $title, ['class' => 'form-control']) !!}
-                                        <hr class="my-1" />
-                                    </div>
-                                    @foreach ($value as $title => $sub_val)
-                                        <?php $si = 0; ?>
-                                        <div class="line-item w-100 d-inline-flex align-items-center justify-content-between p-2">
-                                            {!! Form::text('card__' . $i . '_sub_card__' . $si . '_title', $title, ['class' => 'form-control']) !!}
-                                            {!! Form::number('card__' . $i . '_sub_card__' . $si . '_value', $sub_val, ['class' => 'form-control w-25 ml-2']) !!} <span class="badge ml-2">{{ __('art_tracker.xp') }}</span>
-                                        </div>
-                                        <?php
-                                        $total += $sub_val;
-                                        $si++;
-                                        ?>
-                                    @endforeach
-                                </div>
-                            @else
-                                <div class="line-item w-100 d-inline-flex align-items-center justify-content-between p-2">
-                                    {!! Form::text('card__' . $i . '_title', $title, ['class' => 'form-control']) !!}
-                                    {!! Form::number('card__' . $i . '_value', $sub_val, ['class' => 'form-control w-25 ml-2']) !!} <span class="badge ml-2">{{ __('art_tracker.xp') }}</span>
-                                </div>
-                                <?php $total += $value; ?>
-                            @endif
+                        <div class="line-rows">
                             <?php
-                            $i++;
+                            $total = 0;
+                            $i = 0;
                             ?>
-                        @endforeach
+                            @foreach ($cardData as $title => $value)
+                                @if (gettype($value) === 'array')
+                                    <div class="line-group border border-secondary my-2" data-id="{{ $i }}">
+                                        <div class="line-header p-2">
+                                            <div class="d-flex justify-content-between mb-2">
+                                                <h5>Group</h5>
+                                                <a href="#" class="remove-group btn btn-sm btn-danger ml-2">-</a>
+                                            </div>
+                                            {!! Form::text('card['.$i.'][title]', $title, ['class' => 'form-control']) !!}
+                                        </div>
+                                        <hr class="my-1 border border-secondary"/>
+                                        <?php $si = 0; ?>
+                                        @foreach ($value as $title => $sub_val)
+                                            <div class="line-item w-100 d-inline-flex align-items-center justify-content-between p-2">
+                                                {!! Form::text('card['.$i.'][sub_card]['.$si.'][title]', $title, ['class' => 'form-control']) !!}
+                                                {!! Form::number('card['.$i.'][sub_card]['.$si.'][value]', $sub_val, ['class' => 'form-control w-25 ml-2']) !!} <span class="badge ml-2">{{ __('art_tracker.xp') }}</span>
+                                                <a href="#" class="remove-line btn btn-sm btn-danger ml-2">-</a>
+                                            </div>
+                                            <?php
+                                            $total += $sub_val;
+                                            $si++;
+                                            ?>
+                                        @endforeach
+                                        <div class="text-right">
+                                            <a href="#" id="addSubLine" class="btn btn-sm btn-primary m-2">Add Sub Line</a>
+                                        </div>
+                                    </div>
+                                @else
+                                    <div class="line-item w-100 d-inline-flex align-items-center justify-content-between p-2" data-id="{{ $i }}">
+                                        {!! Form::text('card['.$i.'][title]', $title, ['class' => 'form-control']) !!}
+                                        {!! Form::number('card['.$i.'][value]', $value, ['class' => 'form-control w-25 ml-2']) !!} <span class="badge ml-2">{{ __('art_tracker.xp') }}</span>
+                                        <a href="#" class="remove-line btn btn-sm btn-danger ml-2">-</a>
+                                    </div>
+                                    <?php $total += $value; ?>
+                                @endif
+                                <?php
+                                $i++;
+                                ?>
+                            @endforeach
+                        </div>
+                        <div class="text-right">
+                            <a href="#" id="addGroup" class="btn btn-sm btn-primary mt-2">Add Group</a>
+                            <a href="#" id="addLine" class="btn btn-sm btn-primary mt-2">Add Line</a>
+                        </div>
                     @endif
                 </div>
             </div>
@@ -93,4 +120,79 @@
             <h5>Total</h5><span class="font-weight-bold bg-primary text-white p-2 rounded">TOTAL {{ __('art_tracker.xp') }}</span>
         </div>
     </div>
+
+    @if ($editable)
+    <div class="template hide">
+        <!-- Grouped Template -->
+        <div class="line-group border border-secondary my-2" data-id="__INDEX__">
+            <div class="line-header p-2">
+                <div class="d-flex justify-content-between mb-2">
+                    <h5>Group</h5>
+                    <a href="#" class="remove-group btn btn-sm btn-danger ml-2">-</a>
+                </div>
+                {!! Form::text('card[__INDEX__][title]', null, ['class' => 'form-control']) !!}
+            </div>
+            <hr class="my-1 border border-secondary"/>
+            <div class="line-item w-100 d-inline-flex align-items-center justify-content-between p-2">
+                {!! Form::text('card[__INDEX__][sub_card][__SUB_INDEX__][title]', null, ['class' => 'form-control']) !!}
+                {!! Form::number('card[__INDEX__][sub_card][__SUB_INDEX__][value]', 1, ['class' => 'form-control w-25 ml-2']) !!} <span class="badge ml-2">{{ __('art_tracker.xp') }}</span>
+                <a href="#" class="remove-line btn btn-sm btn-danger ml-2">-</a>
+            </div>
+            <div class="text-right">
+                <a href="#" id="addSubLine" class="btn btn-sm btn-primary m-2">Add Sub Line</a>
+            </div>
+        </div>
+        <!-- Single Line Template -->
+        <div class="line-item w-100 d-inline-flex align-items-center justify-content-between p-2" data-id="__INDEX__">
+            {!! Form::text('card[__INDEX__][title]', null, ['class' => 'form-control']) !!}
+            {!! Form::number('card[__INDEX__][value]', 1, ['class' => 'form-control w-25 ml-2']) !!} <span class="badge ml-2">{{ __('art_tracker.xp') }}</span>
+            <a href="#" class="remove-line btn btn-sm btn-danger ml-2">-</a>
+        </div>
+    </div>
+    @endif
 @endif
+@section('scripts')
+    @parent
+    @if ($editable)
+        <script>
+            $(document).ready(function() {
+                // Tracker editor JS
+                $('#addLine').on('click', function(e) {
+                    e.preventDefault();
+                    var index = $('.line-rows .line-item, .line-rows .line-group').length;
+                    var template = $('.template > .line-item').prop('outerHTML').replace(/__INDEX__/g, index);
+                    $('.line-rows').append(template);
+                });
+
+                $('#addGroup').on('click', function(e) {
+                    e.preventDefault();
+                    var index = $('.line-rows .line-item, .line-rows .line-group').length;
+                    var template = $('.template > .line-group').prop('outerHTML').replace(/__INDEX__/g, index).replace(/__SUB_INDEX__/g, 0);
+                    $('.line-rows').append(template);
+                });
+
+                $(document).on('click', '#addSubLine', function(e) {
+                    e.preventDefault();
+                    var $group = $(this).closest('.line-group');
+                    var index = $(this).closest('.line-group').data('id');
+                    var subIndex = $group.find('.line-item').length;
+                    var template = $('.template .line-group .line-item').prop('outerHTML')
+                        .replace(/__INDEX__/g, index)
+                        .replace(/__SUB_INDEX__/g, subIndex);
+                    $group.find('.text-right').before(template);
+                });
+
+                $(document).on('click', '.remove-line', function(e) {
+                    e.preventDefault();
+                    $(this).closest('.line-item').remove();
+                });
+
+                $(document).on('click', '.remove-group', function(e) {
+                    e.preventDefault();
+                    $(this).closest('.line-group').remove();
+                });
+
+            });
+        </script>
+    @endif
+@endsection

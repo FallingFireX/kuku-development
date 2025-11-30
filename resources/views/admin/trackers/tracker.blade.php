@@ -7,6 +7,8 @@
 @section('admin-content')
     {!! breadcrumbs(['Admin Panel' => 'admin', 'Tracker Queue' => 'admin/trackers/', 'Tracker (#' . $tracker->id . ')' => $tracker->viewUrl]) !!}
 
+    
+
     @if ($tracker->status == 'Pending')
         <h1>
             Tracker Card (#{{ $tracker->id }})
@@ -14,6 +16,11 @@
                 {{ $tracker->status }}
             </span>
         </h1>
+        @if($tracker->data_temp)
+            <div class="text-right mt-2">
+                <h3><span class="badge badge-info">Edit Requested</span></h3>
+            </div>
+        @endif
 
         <div class="mb-1">
             <div class="row">
@@ -43,8 +50,14 @@
             }
         </style>
 
+        {!! Form::open(['url' => url()->current(), 'id' => 'trackerForm']) !!}
+
         <div class="card my-3">
-            <h4 class="card-header">Tracker Card Count</h4>
+            <h4 class="card-header">Tracker Card Count
+                @if($tracker->data_temp)
+                    <a href="{{ $tracker->viewUrl }}" class="btn float-right btn-sm btn-secondary">Original Card</a>
+                @endif
+            </h4>
             <div class="card-body">
                 <div class="row">
                     <div class="col-md-3">
@@ -79,26 +92,34 @@
                                 @if (gettype($value) === 'array')
                                     <div class="line-group border border-secondary my-2">
                                         <div class="line-header p-2">
-                                            <h5>Group</h5>
-                                            {!! Form::text('card__' . $i . '_title', $title, ['class' => 'form-control']) !!}
-                                            <hr class="my-1" />
+                                            <div class="d-flex justify-content-between mb-2">
+                                                <h5>Group</h5>
+                                                <a href="#" class="remove-group btn btn-sm btn-danger ml-2">-</a>
+                                            </div>
+                                            {!! Form::text('card['.$i.'][title]', $title, ['class' => 'form-control']) !!}
                                         </div>
+                                        <hr class="my-1 border border-secondary"/>
+                                        <?php $si = 0; ?>
                                         @foreach ($value as $title => $sub_val)
-                                            <?php $si = 0; ?>
                                             <div class="line-item w-100 d-inline-flex align-items-center justify-content-between p-2">
-                                                {!! Form::text('card__' . $i . '_sub_card__' . $si . '_title', $title, ['class' => 'form-control']) !!}
-                                                {!! Form::number('card__' . $i . '_sub_card__' . $si . '_value', $sub_val, ['class' => 'form-control w-25 ml-2']) !!} <span class="badge ml-2">{{ __('art_tracker.xp') }}</span>
+                                                {!! Form::text('card['.$i.'][sub_card]['.$si.'][title]', $title, ['class' => 'form-control']) !!}
+                                                {!! Form::number('card['.$i.'][sub_card]['.$si.'][value]', $sub_val, ['class' => 'form-control w-25 ml-2']) !!} <span class="badge ml-2">{{ __('art_tracker.xp') }}</span>
+                                                <a href="#" class="remove-line btn btn-sm btn-danger ml-2">-</a>
                                             </div>
                                             <?php
                                             $total += $sub_val;
                                             $si++;
                                             ?>
                                         @endforeach
+                                        <div class="text-right">
+                                            <a href="#" id="addSubLine" class="btn btn-sm btn-primary m-2">Add Sub Line</a>
+                                        </div>
                                     </div>
                                 @else
                                     <div class="line-item w-100 d-inline-flex align-items-center justify-content-between p-2">
-                                        {!! Form::text('card__' . $i . '_title', $title, ['class' => 'form-control']) !!}
-                                        {!! Form::number('card__' . $i . '_value', $sub_val, ['class' => 'form-control w-25 ml-2']) !!} <span class="badge ml-2">{{ __('art_tracker.xp') }}</span>
+                                        {!! Form::text('card['.$i.'][title]', $title, ['class' => 'form-control']) !!}
+                                        {!! Form::number('card['.$i.'][value]', $value, ['class' => 'form-control w-25 ml-2']) !!} <span class="badge ml-2">{{ __('art_tracker.xp') }}</span>
+                                        <a href="#" class="remove-line btn btn-sm btn-danger ml-2">-</a>
                                     </div>
                                     <?php $total += $value; ?>
                                 @endif
@@ -106,6 +127,10 @@
                                 $i++;
                                 ?>
                             @endforeach
+                        </div>
+                        <div class="text-right">
+                            <a href="#" id="addGroup" class="btn btn-sm btn-primary mt-2">Add Group</a>
+                            <a href="#" id="addLine" class="btn btn-sm btn-primary mt-2">Add Line</a>
                         </div>
                     </div>
                 </div>
@@ -117,8 +142,6 @@
                 </div>
             </div>
         </div>
-
-        {!! Form::open(['url' => url()->current(), 'id' => 'trackerForm']) !!}
 
         <div class="form-group">
             {!! Form::label('staff_comments', 'Staff Comments (Optional)') !!}
@@ -203,14 +226,9 @@
                 <div class="col-md-10 col-8">{!! format_date($tracker->created_at) !!} ({{ $tracker->created_at->diffForHumans() }})</div>
             </div>
         </div>
-        @include('tracker._tracker_card', ['tracker' => $tracker])
+        @include('tracker._tracker_card', ['tracker' => $tracker, 'editable' => ($tracker->status == 'Pending' ? true : false)])
 
         <div class="card my-3">
-            <div class="card-header h2">Comments</div>
-            <div class="card-body">
-                {!! nl2br(htmlentities($tracker->staff_comments)) !!}
-            </div>
-
             @if (Auth::check() && $tracker->staff_comments && ($tracker->user_id == Auth::user()->id || Auth::user()->hasPower('manage_submissions')))
                 <div class="card-header h2">Staff Comments</div>
                 <div class="card-body">
@@ -224,6 +242,34 @@
         </div>
     @endif
 
+    <div class="template hide">
+        <!-- Grouped Template -->
+        <div class="line-group border border-secondary my-2">
+            <div class="line-header p-2">
+                <div class="d-flex justify-content-between mb-2">
+                    <h5>Group</h5>
+                    <a href="#" class="remove-group btn btn-sm btn-danger ml-2">-</a>
+                </div>
+                {!! Form::text('card[__INDEX__][title]', null, ['class' => 'form-control']) !!}
+            </div>
+            <hr class="my-1 border border-secondary"/>
+            <div class="line-item w-100 d-inline-flex align-items-center justify-content-between p-2">
+                {!! Form::text('card[__INDEX__][sub_card][__SUB_INDEX__][title]', null, ['class' => 'form-control']) !!}
+                {!! Form::number('card[__INDEX__][sub_card][__SUB_INDEX__][value]', 1, ['class' => 'form-control w-25 ml-2']) !!} <span class="badge ml-2">{{ __('art_tracker.xp') }}</span>
+                <a href="#" class="remove-line btn btn-sm btn-danger ml-2">-</a>
+            </div>
+            <div class="text-right">
+                <a href="#" id="addSubLine" class="btn btn-sm btn-primary m-2">Add Sub Line</a>
+            </div>
+        </div>
+        <!-- Single Line Template -->
+        <div class="line-item w-100 d-inline-flex align-items-center justify-content-between p-2">
+            {!! Form::text('card[__INDEX__][title]', null, ['class' => 'form-control']) !!}
+            {!! Form::number('card[__INDEX__][value]', 1, ['class' => 'form-control w-25 ml-2']) !!} <span class="badge ml-2">{{ __('art_tracker.xp') }}</span>
+            <a href="#" class="remove-line btn btn-sm btn-danger ml-2">-</a>
+        </div>
+    </div>
+
 @endsection
 
 @section('scripts')
@@ -233,9 +279,6 @@
 
         <script>
             $(document).ready(function() {
-
-
-
                 var $confirmationModal = $('#confirmationModal');
                 var $trackerForm = $('#trackerForm');
 
@@ -292,6 +335,43 @@
                     $trackerForm.attr('action', '{{ url()->current() }}/cancel');
                     $trackerForm.submit();
                 });
+
+                // Tracker editor JS
+                $('#addLine').on('click', function(e) {
+                    e.preventDefault();
+                    var index = $('.line-rows .line-item, .line-rows .line-group').length;
+                    var template = $('.template > .line-item').prop('outerHTML').replace(/__INDEX__/g, index);
+                    $('.line-rows').append(template);
+                });
+
+                $('#addGroup').on('click', function(e) {
+                    e.preventDefault();
+                    var index = $('.line-rows .line-item, .line-rows .line-group').length;
+                    var template = $('.template > .line-group').prop('outerHTML').replace(/__INDEX__/g, index).replace(/__SUB_INDEX__/g, 0);
+                    $('.line-rows').append(template);
+                });
+
+                $(document).on('click', '#addSubLine', function(e) {
+                    e.preventDefault();
+                    var $group = $(this).closest('.line-group');
+                    var index = $('.line-rows .line-item, .line-rows .line-group').length;
+                    var subIndex = $group.find('.line-item').length;
+                    var template = $('.template > .line-item').prop('outerHTML')
+                        .replace(/__INDEX__/g, index)
+                        .replace(/__SUB_INDEX__/g, subIndex);
+                    $group.find('.text-right').before(template);
+                });
+
+                $(document).on('click', '.remove-line', function(e) {
+                    e.preventDefault();
+                    $(this).closest('.line-item').remove();
+                });
+
+                $(document).on('click', '.remove-group', function(e) {
+                    e.preventDefault();
+                    $(this).closest('.line-group').remove();
+                });
+
             });
         </script>
     @endif

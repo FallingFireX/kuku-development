@@ -21,7 +21,7 @@ class TrackerManager extends Service {
     */
 
     /**
-     * Creates a new tracker card..
+     * Creates a new tracker card.
      *
      * @param array                 $data
      * @param \App\Models\User\User $user
@@ -32,20 +32,68 @@ class TrackerManager extends Service {
         DB::beginTransaction();
 
         try {
-            if (!isset($data['character_id'])) {
+            if (!isset($data['character'])) {
                 throw new \Exception('Please select a character.');
             }
+            if(!isset($data['tracker']) && count($data['tracker']) == 0) {
+                throw new \Exception('There must be at least one line for the tracker card.');
+            }
+            if((!isset($data['tracker_url']) && !isset($data['tracker_url_image'])) || (!isset($data['gallery']))) {
+                throw new \Exception('There must be a linked gallery or external image/url.');
+            }
+
+            $xp = 0;
+            $tracker_data = [];
+
+            //Set the tracker limits
+            if($data['tracker_type'] === 'single') {
+                $limit = 1;
+            } else {
+                $limit = 10;
+            }
+
+            //Create the tracker array
+            foreach($data['tracker'] as $i => $tracker) {
+                foreach($tracker as $name => $value) {
+                    if($limit > $i) {
+                        break;
+                    }
+                    if(gettype($value) == 'array') {
+                        $sub_cards = [];
+                        foreach($value as $sub_name => $sub_value) {
+                            if($sub_value['value'] && $sub_value['label']) {
+                                $sub_cards[$sub_value['label']] = floatval($sub_value['value']) ?? 0;
+                                $xp += floatval($sub_value['value']) ?? 0;
+                            }
+                        }
+                        $tracker_data[$name] = [
+                            'sub_card'  => $sub_cards,
+                        ];
+                    } else {
+                        $tracker_data[$name] = floatval($value) ?? 0;
+                        $xp += floatval($value) ?? 0;
+                    }
+                }
+            }
+
+            \Log::info($tracker_data);
+            
 
             // Create the tracker card itself.
-            $tracker = Tracker::create([
-                'user_id'       => $user->id,
-                'character_id'  => $data['character_id'],
-                'gallery_id'    => $data['gallery_id'] ?? null,
-                'url'           => $data['url'] ?? null,
-                'status'        => $isDraft ? 'Draft' : 'Pending',
-                'comments'      => $data['comments'],
-                'data'          => null,
-            ]);
+            // $tracker = Tracker::create([
+            //     'user_id'       => $user->id,
+            //     'character_id'  => $data['character'],
+            //     'gallery_id'    => $data['gallery'] ?? null,
+            //     'image_url'     => $data['tracker_url_image'] ?? null,
+            //     'url'           => $data['tracker_url'] ?? null,
+            //     'status'        => 'Pending',
+            //     'comments'      => $data['notes'],
+            //     'data'          => json_encode($tracker_data),
+            // ]);
+
+            if (!$this->createLog($user ? $user->id : null, $data['character'] ?? null, 'Pending Tracker Card', $xp)) {
+                throw new \Exception('Failed to create log.');
+            }
 
             return $this->commitReturn($tracker);
         } catch (\Exception $e) {
@@ -128,6 +176,7 @@ class TrackerManager extends Service {
                     'updated_at'            => Carbon::now(),
                     'staff_id'              => $user->id,
                     'status'                => 'Draft',
+                    'comments'              => null,
                 ]);
 
                 Notifications::create('TRACKER_SUBMISSION_CANCELLED', $tracker->user, [
@@ -191,6 +240,7 @@ class TrackerManager extends Service {
                 'staff_comments'        => $data['staff_comments'],
                 'staff_id'              => $user->id,
                 'status'                => 'Rejected',
+                'comments'              => null,
             ]);
 
             Notifications::create('TRACKER_SUBMISSION_REJECTED', $tracker->user, [
@@ -230,22 +280,62 @@ class TrackerManager extends Service {
             if (!$tracker) {
                 throw new \Exception('Invalid tracker card.');
             }
+            if (!$data['card'] || !is_array($data['card']) || count($data['card']) == 0) {
+                throw new \Exception('There must be at least one line for the tracker card.');
+            }
 
-            // Logging data
-            $promptLogType = $tracker->prompt_id ? 'Prompt Rewards' : 'Claim Rewards';
-            $promptData = [
-                'data' => 'Received rewards for '.($tracker->prompt_id ? 'submission' : 'claim').' (<a href="'.$tracker->viewUrl.'">#'.$tracker->id.'</a>)',
-            ];
+            $card_data = [];
+            foreach($data['card'] as $i => $card) {
+                if (isset($card['sub_card']) && is_array($card['sub_card']) && count($card['sub_card']) > 0) {
+                    $sub_cards = [];
+                    foreach ($card['sub_card'] as $j => $sub_card) {
+                        if (isset($sub_card['title']) && $sub_card['title'] != '') {
+                            $sub_cards[$sub_card['title']] = floatval($sub_card['value']) ?? 0;
+                        }
+                    }
+                    if (count($sub_cards) > 0) {
+                        $card_data[$card['title']] = [
+                            'sub_card'  => $sub_cards,
+                        ];
+                    }
+                } else {
+                    if (isset($card['title']) && $card['title'] != '') {
+                        $card_data[$card['title']] = floatval($card['value']) ?? 0;
+                    }
+                }
+            }
+
+            if (isset($data['staff_comments']) && $data['staff_comments']) {
+                $data['parsed_staff_comments'] = parse($data['staff_comments']);
+            } else {
+                $data['parsed_staff_comments'] = null;
+            }
 
             // Finally, set:
             // 1. staff comments
             // 2. staff ID
             // 3. status
-            $tracker->update([
-                'staff_comments'        => $data['staff_comments'],
-                'staff_id'              => $user->id,
-                'status'                => 'Approved',
-            ]);
+            if($tracker->data_temp) {
+                $tracker->update([
+                    'staff_comments'        => $data['parsed_staff_comments'] ?? null,
+                    'staff_id'              => $user->id,
+                    'status'                => 'Approved',
+                    'data'                  => json_encode($card_data),
+                    'data_temp'             => null,
+                    'comments'              => null,
+                ]);
+            } else {
+                $tracker->update([
+                    'staff_comments'        => $data['parsed_staff_comments'] ?? null,
+                    'staff_id'              => $user->id,
+                    'status'                => 'Approved',
+                    'data'                  => json_encode($card_data),
+                    'comments'              => null,
+                ]);
+            }
+
+            //Check the current character level and update if needed
+            $this->checkCharacterLevel($tracker->character_id);
 
             Notifications::create('TRACKER_SUBMISSION_APPROVED', $tracker->user, [
                 'staff_url'         => $user->url,
@@ -500,6 +590,49 @@ class TrackerManager extends Service {
                 DB::table('site_settings')->insert(['key' => $key, 'value' => $value, 'description' => 'Auto-Generated']);
             }
         }
+    }
+
+    /**
+     * Checks for the character's current level and updates it if needed.
+     *
+     * @param int    $characterId
+     * @param string $data
+     * @param float  $xp
+     * @param mixed  $characterId
+     *
+     * @return float
+     */
+    public function checkCharacterLevel($characterId) {
+        $character = Character::where('id', $characterId)->first();
+        if (!$character) {
+            return false;
+        }
+
+        $currentLevel = $character->level;
+        $levels = Settings::get('xp_levels', []);
+        ksort($levels);
+
+        $newLevel = $currentLevel;
+        foreach ($levels as $levelName => $threshold) {
+            if ($character->total_xp >= $threshold) {
+                $newLevel = $levelName;
+            }
+        }
+
+        if ($newLevel != $currentLevel) {
+            $character->update(['level' => $newLevel]);
+
+            Notifications::create('CHARACTER_LEVEL_UP', $character, [
+                'new_level'         => $newLevel,
+                'url'               => $character->url,
+                'slug'              => $character->slug,
+                'character_name'    => $character->fullName,
+            ]);
+
+            return true;
+        }
+
+        return false;
     }
 
     /**************************************************************************************************************

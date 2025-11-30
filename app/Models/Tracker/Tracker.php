@@ -17,7 +17,7 @@ class Tracker extends Model {
      */
     protected $fillable = [
         'character_id', 'user_id', 'staff_id', 'gallery_id',
-        'image_url', 'url', 'staff_comments',
+        'image_url', 'url', 'comments', 'staff_comments',
         'status', 'data', 'data_temp',
     ];
 
@@ -65,7 +65,7 @@ class Tracker extends Model {
         'url'           => 'nullable|url',
         'staff_comments'=> 'nullable',
         'data'          => 'nullable',
-        'data_temp'     => 'required',
+        'data_temp'     => 'nullable',
     ];
 
     /**********************************************************************************************
@@ -194,8 +194,8 @@ class Tracker extends Model {
      *
      * @return array
      */
-    public function getDataAttribute() {
-        return json_decode($this->attributes['data'], true);
+    public function getDataAttribute($temp = false) {
+        return json_decode(($temp ? $this->attributes['data_temp'] : $this->attributes['data']), true);
     }
 
     /**

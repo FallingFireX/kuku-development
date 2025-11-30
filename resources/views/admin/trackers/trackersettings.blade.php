@@ -271,13 +271,7 @@
                 $parent.append($clone);
                 $clone.removeClass('hide');
                 $clone.attr('count', $i);
-                //Rename the fields
-                // $inputs = $clone.find('input, select');
-                // $inputs.each(function(i, input) {
-                //     $old_name = $(input).attr('name');
-                //     $new_name = $old_name.replace('[]', '_') + $unique_row_id + '[]';
-                //     $(input).attr('name', $new_name);
-                // });
+
                 $clone.find('.child-row').on('click', function(e) {
                     e.preventDefault();
                     removeOption($(this));

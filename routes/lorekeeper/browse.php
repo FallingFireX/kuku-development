@@ -189,3 +189,4 @@ Route::group(['prefix' => 'reports', 'namespace' => 'Users'], function () {
     XP Calculator
 **************************************************************************************************/
 Route::get('/submit-xp', 'XPCalcController@getXPCalc');
+Route::post('/submit-xp', 'XPCalcController@postXPForm');
