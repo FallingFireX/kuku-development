@@ -18,24 +18,31 @@ class AdminApplicationController extends Controller {
      * @return \Illuminate\Contracts\Support\Renderable
      */
     public function getApplicationIndex(Request $request, $status = null) {
-        $applications = AdminApplication::with('team')->where('status', $status ? ucfirst($status) : 'Pending');
+        // Removed undefined $id, and corrected query to get all applications
+        $applications = AdminApplication::where('status', $status ? ucfirst($status) : 'Pending')
+            ->orderBy('updated_at', 'desc');
 
+        // Handle sorting
+        $data = $request->all();
         if (isset($data['sort'])) {
             switch ($data['sort']) {
                 case 'newest':
-                    $applications->sortNewest();
+                    $applications->orderBy('created_at', 'desc');
                     break;
                 case 'oldest':
-                    $applications->sortOldest();
+                    $applications->orderBy('created_at', 'asc');
                     break;
             }
         } else {
-            $applications->sortOldest();
+            $applications->orderBy('created_at', 'asc');
         }
 
+        $applications = $applications->paginate(30)->appends($request->query());
+
+        // ✅ Fix: grab all relevant teams by their IDs, not just one
         return view('admin.team.application_index', [
-            'applications' => $applications->paginate(30)->appends($request->query()),
-            'teams'        => Team::orderBy('id')->first(),
+            'applications' => $applications,
+            'teams'        => Team::whereIn('id', $applications->pluck('team_id'))->get(),
         ]);
     }
 
@@ -47,21 +54,24 @@ class AdminApplicationController extends Controller {
      * @return \Illuminate\Contracts\Support\Renderable
      */
     public function getApplication($id) {
-        $applications = AdminApplication::where('id', $id)->first();
+        $applications = AdminApplication::where('id', $id)
+            ->where('status', '!=', 'Draft')
+            ->first();
 
         if (!$applications) {
             abort(404);
         }
 
         return view('admin.team.application', [
-            'applications'       => $applications,
-            'teams'              => Team::orderBy('id')->first(),
-            'settings'           => Settings::get('notify_staff_applicants'),
+            'applications' => $applications,
+            // ✅ Fix: fetch the single related team properly
+            'teams'        => Team::where('id', $applications->team_id)->first(),
+            'settings'     => Settings::get('notify_staff_applicants'),
         ]);
     }
 
     /**
-     * Accept or deny a application.
+     * Accept or deny an application.
      *
      * @param mixed|null $id
      */
@@ -73,7 +83,7 @@ class AdminApplicationController extends Controller {
         }
 
         $data = [
-            'id'            => $application->id,
+            'id' => $application->id,
         ];
 
         $userId = auth()->id();

@@ -488,15 +488,10 @@ public function submitRequest($request) {
             throw new \Exception('This request cannot be resubmitted to the queue.');
         }
 
-        // 🔒 Limit check — stop if user has exceeded their allowed submissions
-        $limitManager = new \App\Services\LimitManager;
-
-        // The limit is attached to the 'design update' object type — pass the request itself or its type reference
-        if (!$limitManager->checkLimits($request)) {
-            foreach ($limitManager->errors()->getMessages()['error'] as $error) {
-                flash($error)->error();
-            }
-            throw new \Exception('You have reached your monthly design update submission limit.');
+       $limitManager = new \App\Services\LimitManager;
+        $user = Auth::user(); 
+        if (!$limitManager->checkDynamicLimit('test', $user)) {
+            throw new \Exception('You have reached your monthly design update limit.');
         }
 
         // Recheck and set update type
