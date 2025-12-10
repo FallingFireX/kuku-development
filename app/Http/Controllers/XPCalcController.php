@@ -52,6 +52,7 @@ class XPCalcController extends Controller {
 
         if ($data && $trackerCard) {
             flash('Created tracker card successfully.')->success();
+
             return redirect()->to($trackerCard->viewUrl);
         } else {
             if (isset($service->errors()->getMessages()['error'])) {
@@ -59,6 +60,7 @@ class XPCalcController extends Controller {
                     flash($error)->error();
                 }
             }
+
             return redirect()->back();
         }
     }
