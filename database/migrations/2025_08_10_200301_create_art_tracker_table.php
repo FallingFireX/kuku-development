@@ -13,7 +13,7 @@ return new class extends Migration {
             $table->engine = 'InnoDB';
             $table->increments('id');
             $table->integer('user_id');
-            $table->integer('staff_id');
+            $table->integer('staff_id')->nullable();
             $table->string('status', 96);
             $table->integer('character_id');
             $table->integer('gallery_id')->nullable();

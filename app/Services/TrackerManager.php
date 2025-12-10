@@ -32,18 +32,19 @@ class TrackerManager extends Service {
         DB::beginTransaction();
 
         try {
-            if (!isset($data['character'])) {
+            if (!isset($data['character_id'])) {
                 throw new \Exception('Please select a character.');
             }
             if (!isset($data['tracker']) && count($data['tracker']) == 0) {
                 throw new \Exception('There must be at least one line for the tracker card.');
             }
-            if ((!isset($data['tracker_url']) && !isset($data['tracker_url_image'])) || (!isset($data['gallery']))) {
+            if ( !isset($data['gallery_id']) && !isset($data['url']) && !isset($data['image_url'])) {
                 throw new \Exception('There must be a linked gallery or external image/url.');
             }
 
             $xp = 0;
             $tracker_data = [];
+            $ci = 0;
 
             //Set the tracker limits
             if ($data['tracker_type'] === 'single') {
@@ -54,43 +55,44 @@ class TrackerManager extends Service {
 
             //Create the tracker array
             foreach ($data['tracker'] as $i => $tracker) {
+                if ($limit < $ci) {
+                    break;
+                }
                 foreach ($tracker as $name => $value) {
-                    if ($limit > $i) {
-                        break;
-                    }
                     if (gettype($value) == 'array') {
                         $sub_cards = [];
                         foreach ($value as $sub_name => $sub_value) {
-                            if ($sub_value['value'] && $sub_value['label']) {
+                            if (array_key_exists('value', $sub_value) && array_key_exists('label', $sub_value)) {
                                 $sub_cards[$sub_value['label']] = floatval($sub_value['value']) ?? 0;
                                 $xp += floatval($sub_value['value']) ?? 0;
                             }
                         }
-                        $tracker_data[$name] = [
-                            'sub_card'  => $sub_cards,
-                        ];
+                        if($sub_cards) {
+                            $tracker_data[$ci][$name] = $sub_cards;
+                        }
                     } else {
-                        $tracker_data[$name] = floatval($value) ?? 0;
-                        $xp += floatval($value) ?? 0;
+                        if($value) {
+                            $tracker_data[$name] = floatval($value) ?? 0;
+                            $xp += floatval($value) ?? 0;
+                        }
                     }
                 }
+                $ci++;
             }
 
-            \Log::info($tracker_data);
-
             // Create the tracker card itself.
-            // $tracker = Tracker::create([
-            //     'user_id'       => $user->id,
-            //     'character_id'  => $data['character'],
-            //     'gallery_id'    => $data['gallery'] ?? null,
-            //     'image_url'     => $data['tracker_url_image'] ?? null,
-            //     'url'           => $data['tracker_url'] ?? null,
-            //     'status'        => 'Pending',
-            //     'comments'      => $data['notes'],
-            //     'data'          => json_encode($tracker_data),
-            // ]);
+            $tracker = Tracker::create([
+                'user_id'       => $user->id,
+                'character_id'  => $data['character_id'],
+                'gallery_id'    => $data['gallery_id'] ?? null,
+                'image_url'     => $data['image_url'] ?? null,
+                'url'           => $data['url'] ?? null,
+                'status'        => 'Pending',
+                'comments'      => $data['comments'],
+                'data'          => json_encode($tracker_data),
+            ]);
 
-            if (!$this->createLog($user ? $user->id : null, $data['character'] ?? null, 'Pending Tracker Card', $xp)) {
+            if (!$this->createLog($user ? $user->id : null, $data['character_id'] ?? null, 'Pending Tracker Card', $xp)) {
                 throw new \Exception('Failed to create log.');
             }
 

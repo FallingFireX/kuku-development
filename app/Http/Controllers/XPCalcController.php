@@ -47,22 +47,19 @@ class XPCalcController extends Controller {
      */
     public function postXPForm(Request $request, TrackerManager $service) {
         $data = $request->all();
-        \Log::info($data);
 
-        // if ($data && $service->createTrackerCard($data, $request->user())) {
-        //     flash('Created tracker card successfully.')->success();
-        // } else {
-        //     if (isset($service->errors()->getMessages()['error'])) {
-        //         foreach ($service->errors()->getMessages()['error'] as $error) {
-        //             flash($error)->error();
-        //         }
-        //     }
-        // }
+        $trackerCard = $service->createTrackerCard($data, $request->user());
 
-        // if (!$tracker) {
-        //     abort(404);
-        // }
-
-        return redirect()->back();
+        if ($data && $trackerCard) {
+            flash('Created tracker card successfully.')->success();
+            return redirect()->to($trackerCard->viewUrl);
+        } else {
+            if (isset($service->errors()->getMessages()['error'])) {
+                foreach ($service->errors()->getMessages()['error'] as $error) {
+                    flash($error)->error();
+                }
+            }
+            return redirect()->back();
+        }
     }
 }

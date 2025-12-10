@@ -20,7 +20,7 @@
             <div class="col-md-8">
                 <div class="tracker_type d-flex mb-4">
                     <div class="card w-100 p-3 rounded border border-secondary mr-3">
-                        <input type="radio" checked id="single" name="tracker_type" value="single">
+                        <input type="radio" checked id="single" name="tracker_type" value="single" selected>
                         <label for="single">
                             <h5>Single Tracker</h5>
                             <p class="mb-0">For tracker cards that contain singular data. Such as artwork with a single image or literature with one stories.</p>
@@ -131,18 +131,18 @@
                         <div class="p-2 border border-secondary rounded" id="calcTotals"></div>
                         <hr />
                         {!! Form::label('Select Character') !!}
-                        {!! Form::select('character', $users_character, null, ['class' => 'form-control mr-2 characterSelect', 'placeholder' => 'Select a Character...']) !!}
+                        {!! Form::select('character_id', $users_character, null, ['class' => 'form-control mr-2 characterSelect', 'placeholder' => 'Select a Character...']) !!}
                         <hr />
                         {!! Form::label('Select Gallery Submission (Optional)') !!}
-                        {!! Form::select('gallery', $user_galleries, null, ['class' => 'form-control mr-2 gallerySelect', 'placeholder' => 'Select a Gallery...']) !!}
+                        {!! Form::select('gallery_id', $user_galleries, null, ['class' => 'form-control mr-2 gallerySelect', 'placeholder' => 'Select a Gallery...']) !!}
                         <div class="text-center my-2">
                             <h5>OR</h5>
                         </div>
-                        {!! Form::url('tracker_url', null, ['class' => 'form-control mb-4', 'placeholder' => 'Enter a URL for your artwork or literature']) !!}
-                        {!! Form::url('tracker_url_image', null, ['class' => 'form-control mb-4', 'placeholder' => 'Enter an image URL if you have artwork.']) !!}
+                        {!! Form::url('url', null, ['class' => 'form-control mb-4', 'placeholder' => 'Enter a URL for your artwork or literature']) !!}
+                        {!! Form::url('image_url', null, ['class' => 'form-control mb-4', 'placeholder' => 'Enter an image URL if you have artwork.']) !!}
 
                         {!! Form::label('Other Notes (Optional)') !!} {!! add_help('Let admins know any other details you may have for this card.') !!}
-                        {!! Form::textarea('notes', null, ['class' => 'form-control', 'rows' => '4', 'placeholder' => 'Add optional notes to your tracker card.']) !!}
+                        {!! Form::textarea('comments', null, ['class' => 'form-control', 'rows' => '4', 'placeholder' => 'Add optional notes to your tracker card.']) !!}
                     </div>
                 </div>
             </div>
