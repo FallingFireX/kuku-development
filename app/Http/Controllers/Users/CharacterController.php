@@ -34,6 +34,7 @@ class CharacterController extends Controller {
 
         return view('home.characters', [
             'characters' => $characters,
+            'folders' => ['None' => 'None'] + Auth::user()->folders()->pluck('name', 'id')->toArray(),
         ]);
     }
 
