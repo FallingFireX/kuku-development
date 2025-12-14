@@ -18,10 +18,10 @@
             <div class="row mt-auto mb-auto">
             <div class="col-md-10 pt-2 pb-2 m-auto">
                 
-                    <a href="https://www.kukuri-arpg.com/info/col-2025"><img src="https://www.kukuri-arpg.com/files/col_banner.png"></a>
-                    <p style="margin-top:12px;font-size:14pt;">Monthly Quest is taking a break during Carnival of Life!</p>
+                    <a href="https://www.deviantart.com/momma-kuku/art/Present-717910237"><img src="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/074ff87a-9880-4019-abec-2fc71c1f2a2b/dbvfb31-71db40c0-59f6-4f80-84a0-5f681e71acf8.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiIvZi8wNzRmZjg3YS05ODgwLTQwMTktYWJlYy0yZmM3MWMxZjJhMmIvZGJ2ZmIzMS03MWRiNDBjMC01OWY2LTRmODAtODRhMC01ZjY4MWU3MWFjZjgucG5nIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.UaTiDy6rfptQZbsgaKiys5bKZpcnSFzek1zYaccoBHc" width=50%></a>
+                    <p style="margin-top:12px;font-size:14pt;">The Annual gift giving Monthly Quest has arrived!</p>
                     <br>
-                    <a style="font-size:11pt;" href="https://www.kukuri-arpg.com/info/col-2025"><b>Read more about it here!</b></a>
+                    <a style="font-size:11pt;" href="https://kukuri-arpg.w3spaces.com/activities/quests.html"><b>Read more about it here!</b></a>
                     <br><br>
                 
             </div>

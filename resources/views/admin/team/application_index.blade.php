@@ -46,33 +46,37 @@
         </div>
         <div class="logs-table-body">
             @foreach ($applications as $application)
-                <div class="logs-table-row">
-                    <div class="row flex-wrap">
-                        <div class="col-12 col-md-3 ">
-                            <div class="logs-table-cell">{!! $application->user->displayName !!}</a></div>
-                        </div>
-                        <div class="col-12 col-md-2 ">
-                            <div class="logs-table-cell">{{ $teams->name }}</a></div>
-                        </div>
-                        <div class="col-12 col-md-2 ">
-                            <div class="logs-table-cell">
-                                <span class="btn btn-{{ $application->status == 'pending' ? 'secondary' : ($application->status == 'accepted' ? 'success' : 'danger') }} btn-sm py-0 px-1">
-                                    {{ ucfirst($application->status) }}
-                                </span>
-                            </div>
-                        </div>
-                        <div class="col-3 col-md-2">
-                            <div class="logs-table-cell"><a href="{{ $application->adminUrl }}" class="btn btn-primary btn-sm py-0 px-1">Details</a></div>
-                        </div>
-                        <div class="col-3 col-md-3">
-                            <div class="logs-table-cell">
-                                {!! pretty_date($application->created_at) !!}
-                            </div>
-                        </div>
-                        
-                    </div>
+    <div class="logs-table-row">
+        <div class="row flex-wrap">
+            <div class="col-12 col-md-3">
+                <div class="logs-table-cell">{!! $application->user->displayName !!}</div>
+            </div>
+            <div class="col-12 col-md-2">
+                <div class="logs-table-cell">
+                    {{ optional($teams->firstWhere('id', $application->team_id))->name ?? 'Unknown Team' }}
                 </div>
-            @endforeach
+            </div>
+            <div class="col-12 col-md-2">
+                <div class="logs-table-cell">
+                    <span class="btn btn-{{ $application->status == 'pending' ? 'secondary' : ($application->status == 'accepted' ? 'success' : 'danger') }} btn-sm py-0 px-1">
+                        {{ ucfirst($application->status) }}
+                    </span>
+                </div>
+            </div>
+            <div class="col-3 col-md-2">
+                <div class="logs-table-cell">
+                    <a href="{{ $application->adminUrl }}" class="btn btn-primary btn-sm py-0 px-1">Details</a>
+                </div>
+            </div>
+            <div class="col-3 col-md-3">
+                <div class="logs-table-cell">
+                    {!! pretty_date($application->created_at) !!}
+                </div>
+            </div>
+        </div>
+    </div>
+@endforeach
+
         </div>
     </div>
     

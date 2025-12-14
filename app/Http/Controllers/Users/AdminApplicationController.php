@@ -23,7 +23,8 @@ class AdminApplicationController extends Controller {
 
         return view('home.admin_applications', [
             'applications' => $applications,
-            'teams'        => Team::orderBy('id')->first(),
+            // 👇 Fix: use the team_id from the application, not the first team
+            'teams'        => Team::whereIn('id', $applications->pluck('team_id'))->get(),
         ]);
     }
 
@@ -35,7 +36,9 @@ class AdminApplicationController extends Controller {
      * @return \Illuminate\Contracts\Support\Renderable
      */
     public function getApplication($id) {
-        $applications = AdminApplication::where('id', $id)->where('status', '!=', 'Draft')->first();
+        $applications = AdminApplication::where('id', $id)
+            ->where('status', '!=', 'Draft')
+            ->first();
 
         if (!$applications) {
             abort(404);
@@ -44,7 +47,8 @@ class AdminApplicationController extends Controller {
         return view('home.admin_application', [
             'applications'   => $applications,
             'user'           => $applications->user,
-            'teams'          => Team::orderBy('id')->first(),
+            // 👇 Fix: fetch the specific team by its team_id
+            'teams'          => Team::where('id', $applications->team_id)->first(),
             'is_read_only'   => Settings::get('is_applications_comment_read_only'),
         ]);
     }
@@ -55,11 +59,11 @@ class AdminApplicationController extends Controller {
      * @return \Illuminate\Contracts\Support\Renderable
      */
     public function getNewApplication(Request $request)
-        {
-            // Get all teams that are open to applications
-            $openTeams = Team::where('apps_open', true)
-                ->orderBy('name', 'asc') 
-                ->get();
+    {
+        // Get all teams that are open to applications
+        $openTeams = Team::where('apps_open', true)
+            ->orderBy('name', 'asc') 
+            ->get();
 
         return view('home.create_admin_application', [
             'teams' => $openTeams,

@@ -47,7 +47,14 @@
     </div>
 
     <div class="form-group">
-        {!! Form::checkbox('apps_open', 1, $teams->id ? $teams->apps_open : 0, ['class' => 'form-check-input', 'data-toggle' => 'toggle']) !!}
+        <input type="hidden" name="apps_open" value="0">
+
+{!! Form::checkbox(
+    'apps_open',
+    1,
+    $teams->apps_open ?? 0,
+    ['class' => 'form-check-input', 'data-toggle' => 'toggle']
+) !!}
         {!! Form::label('apps_open', 'Applications Open?', ['class' => 'form-check-label ml-3']) !!} {!! add_help('Turning this on will open applications for this team. This does not create any announcement or news, you must do that yourself. This simply opens the queue.') !!}
     </div>
 

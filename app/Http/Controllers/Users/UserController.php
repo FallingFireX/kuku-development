@@ -50,27 +50,35 @@ class UserController extends Controller {
      * Create a new controller instance.
      */
     public function __construct() {
-        parent::__construct();
-        $name = Route::current()->parameter('name');
-        $this->user = User::where('name', $name)->first();
-        // check previous usernames (only grab the latest change)
-        if (!$this->user) {
-            $this->user = UserUpdateLog::whereIn('type', ['Username Changed', 'Name/Rank Change'])->where('data', 'like', '%"old_name":"'.$name.'"%')->orderBy('id', 'DESC')->first()->user ?? null;
-        }
-        if (!$this->user) {
-            abort(404);
-        }
+    parent::__construct();
 
-        View::share('sublists', Sublist::orderBy('sort', 'DESC')->get());
+    // <<< Add this line
+    if (app()->runningInConsole() || !Route::current()) return;
 
-        $this->user->updateCharacters();
-        $this->user->updateArtDesignCredits();
-        if (!$this->user->level) {
-            $this->user->level()->create([
-                'user_id' => $this->user->id,
-            ]);
-        }
+    $name = Route::current()->parameter('name');
+    $this->user = User::where('name', $name)->first();
+    // check previous usernames (only grab the latest change)
+    if (!$this->user) {
+        $this->user = UserUpdateLog::whereIn('type', ['Username Changed', 'Name/Rank Change'])
+            ->where('data', 'like', '%"old_name":"'.$name.'"%')
+            ->orderBy('id', 'DESC')
+            ->first()
+            ->user ?? null;
     }
+    if (!$this->user) {
+        abort(404);
+    }
+
+    View::share('sublists', Sublist::orderBy('sort', 'DESC')->get());
+
+    $this->user->updateCharacters();
+    $this->user->updateArtDesignCredits();
+    if (!$this->user->level) {
+        $this->user->level()->create([
+            'user_id' => $this->user->id,
+        ]);
+    }
+}
 
     /**
      * Shows a user's profile.
