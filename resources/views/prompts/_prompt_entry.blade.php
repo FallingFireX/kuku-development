@@ -93,15 +93,22 @@
         </div>
         <div class="text-right mt-1">
             @if ($prompt->level_req)
-                <p class="text-danger">This prompt requires you to be at least level {{ $prompt->level_req }}</p>
+                <p class="text-danger">
+                    This prompt requires you to be at least level {{ $prompt->level_req }}
+                </p>
             @endif
+
             @if ($prompt->end_at && $prompt->end_at->isPast())
                 <span class="text-secondary">This prompt has ended.</span>
-            @elseif($prompt->start_at && $prompt->start_at->isFuture())
+            @elseif ($prompt->start_at && $prompt->start_at->isFuture())
                 <span class="text-secondary">This prompt is not open for submissions yet.</span>
             @else
-                <a href="{{ url('submissions/new?prompt_id=' . $prompt->id) }}" class="btn btn-primary">Submit Prompt</a>
-            @endunless
+                <a href="{{ url('submissions/new?prompt_id=' . $prompt->id) }}"
+                class="btn btn-primary">
+                    Submit Prompt
+                </a>
+            @endif
+        </div>
     </div>
-</div>
+    @endif
 </div>
