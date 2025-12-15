@@ -88,45 +88,39 @@
                             $total = 0;
                             $i = 0;
                             ?>
-                            @foreach ($cardData as $title => $value)
-                                @if (gettype($value) === 'array')
-                                    <div class="line-group border border-secondary my-2">
-                                        <div class="line-header p-2">
-                                            <div class="d-flex justify-content-between mb-2">
-                                                <h5>Group</h5>
-                                                <a href="#" class="remove-group btn btn-sm btn-danger ml-2">-</a>
+                            @if (count($cardData) > 1)
+                                <div class="accordion" id="MultiTracker">
+                                <?php $sb = 0; ?>
+                                @foreach ($cardData as $title => $value)
+                                    @if (gettype($value) === 'array')
+                                        <?php $ssb = 0; ?>
+                                        @foreach($value as $sub_title => $sub_value)
+                                            <div class="card">
+                                                <div class="card-header" id="subHeading-{{ $sb }}">
+                                                    <h4 class="mb-0">
+                                                        <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapse-{{ $sb }}" aria-expanded="true" aria-controls="collapse-{{ $sb }}">Sub-Tracker #{{ $sb }}</button>
+                                                    </h4>
+                                                </div>
+                                                <div id="collapse-{{ $sb }}" class="collapse {{ $sb === 0 ? 'show' : '' }}" aria-labelledby="subHeading-{{ $sb }}" data-parent="#MultiTracker">
+                                                    <div class="card-body">
+                                                         @include('tracker._tracker_group', ['title' => $sub_title, 'cardData' => $sub_value, 'i' => $i])
+                                                    </div>
+                                                </div>
                                             </div>
-                                            {!! Form::text('card[' . $i . '][title]', $title, ['class' => 'form-control']) !!}
-                                        </div>
-                                        <hr class="my-1 border border-secondary" />
-                                        <?php $si = 0; ?>
-                                        @foreach ($value as $title => $sub_val)
-                                            <div class="line-item w-100 d-inline-flex align-items-center justify-content-between p-2">
-                                                {!! Form::text('card[' . $i . '][sub_card][' . $si . '][title]', $title, ['class' => 'form-control']) !!}
-                                                {!! Form::number('card[' . $i . '][sub_card][' . $si . '][value]', $sub_val, ['class' => 'form-control w-25 ml-2']) !!} <span class="badge ml-2">{{ __('art_tracker.xp') }}</span>
-                                                <a href="#" class="remove-line btn btn-sm btn-danger ml-2">-</a>
-                                            </div>
-                                            <?php
-                                            $total += $sub_val;
-                                            $si++;
-                                            ?>
+                                            <?php $ssb++; ?>
                                         @endforeach
-                                        <div class="text-right">
-                                            <a href="#" id="addSubLine" class="btn btn-sm btn-primary m-2">Add Sub Line</a>
-                                        </div>
-                                    </div>
-                                @else
-                                    <div class="line-item w-100 d-inline-flex align-items-center justify-content-between p-2">
-                                        {!! Form::text('card[' . $i . '][title]', $title, ['class' => 'form-control']) !!}
-                                        {!! Form::number('card[' . $i . '][value]', $value, ['class' => 'form-control w-25 ml-2']) !!} <span class="badge ml-2">{{ __('art_tracker.xp') }}</span>
-                                        <a href="#" class="remove-line btn btn-sm btn-danger ml-2">-</a>
-                                    </div>
-                                    <?php $total += $value; ?>
-                                @endif
-                                <?php
-                                $i++;
-                                ?>
-                            @endforeach
+                                    @endif
+                                    <?php $sb++; ?>
+                                @endforeach
+                                </div>
+                            @else
+                                @foreach ($cardData as $title => $value)
+                                    @include('tracker._tracker_group', ['title' => $title, 'value' => $value, 'i' => $i])
+                                    <?php
+                                    $i++;
+                                    ?>
+                                @endforeach
+                            @endif
                         </div>
                         <div class="text-right">
                             <a href="#" id="addGroup" class="btn btn-sm btn-primary mt-2">Add Group</a>

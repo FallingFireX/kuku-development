@@ -260,66 +260,101 @@ class Tracker extends Model {
 
         $line_template = '<div class="line-item w-100 d-inline-flex justify-content-between p-2"><h5 class="lh-1 m-0">$title</h5><p class="lh-1 m-0">$value XP</p></div>';
 
-        foreach ($data as $title => $value) {
-            if (gettype($value) === 'array') {
-                $sub_line = [];
-                //If this is a group rather than a single line
-                foreach ($value as $sub_title => $sub_val) {
-                    $sub_line[] = str_replace(['$card_id', '$title', '$value'], [$this->id, $sub_title, $sub_val], $line_template);
+        if(count($data) > 1) {
+            //Multi-card
+            $accordion = true;
+        } else {
+            //Sinle-card
+            $accordion = false;
+        }
+
+        //Format each multi-level card - this also applies to single though it won't create an accordion
+        foreach($data as  $i => $card) {
+            $ci = 0;
+            foreach ($card as $title => $value) {
+                if (gettype($value) === 'array') {
+                    $sub_line = [];
+                    //If this is a group rather than a single line
+                    foreach ($value as $sub_title => $sub_val) {
+                        $sub_line[] = str_replace(['$card_id', '$title', '$value'], [$this->id, $sub_title, $sub_val], $line_template);
+                        if ($this->status === 'Approved') {
+                            $accepted_points += $sub_val;
+                            $total += $sub_val;
+                        } else {
+                            $total += $sub_val;
+                        }
+                    }
+                    $hContent = '<div class="line-group border border-secondary my-2"> <h4 class="line-header text-uppercase font-weight-bold p-2">'.$title.'</h4>'.implode('', $sub_line).'</div>';
+                    if($accordion) {
+                        $hContent = '
+                        <div class="card">
+                            <div class="card-header" id="card-'.$this->id.'-'.$i.'-heading">
+                                <h4 class="m-0">
+                                    <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapse-card-'.$this->id.'-'.$i.'" aria-expanded="'.($i === 0 ? 'true' : 'false').'" aria-controls="collapse-card-'.$this->id.'-'.$i.'">
+                                        Sub-Tracker #'.($i + 1).'
+                                    </button>
+                                </h4>
+                            </div>
+                            <div id="collapse-card-'.$this->id.'-'.$i.'" class="collapse'.($i === 0 ? ' show' : '').'" aria-labelledby="card-'.$this->id.'-'.$i.'-heading" data-parent="#card-'.$this->id.'-accordion">
+                                <div class="card-body p-0">
+                                    '.$hContent.'
+                                </div>
+                            </div>
+                        </div>
+                        ';
+                    }
+
+                    $cards[] = $hContent;
+                } else {
+                    $cards[] = str_replace(['$title', '$value'], [$title, $value], $line_template);
                     if ($this->status === 'Approved') {
-                        $accepted_points += $sub_val;
-                        $total += $sub_val;
+                        $accepted_points += $value;
+                        $total += $value;
                     } else {
-                        $total += $sub_val;
+                        $total += $value;
                     }
                 }
-                $cards[] = '<div class="line-group border border-secondary my-2"> <h4 class="line-header text-uppercase font-weight-bold p-2">'.$title.'</h4>'.implode('', $sub_line).'</div>';
-            } else {
-                $cards[] = str_replace(['$title', '$value'], [$title, $value], $line_template);
-                if ($this->status === 'Approved') {
-                    $accepted_points += $sub_val;
-                    $total += $sub_val;
-                } else {
-                    $total += $sub_val;
-                }
+                $ci++;
             }
-        }
 
-        $card_badge = '<span class="badge badge-pill badge-'.($this->status === 'Pending' ? 'warning' : 'success').'">'.$this->status.'</span>';
+            $card_badge = '<span class="badge badge-pill badge-'.($this->status === 'Pending' ? 'warning' : 'success').'">'.$this->status.'</span>';
 
-        if ($this->gallery_id) {
-            $image_data = [
-                'url'   => $this->gallery->getUrlAttribute(),
-                'image' => $this->gallery->getThumbnailUrlAttribute() ?? url('/').'/images/tracker_fallback.png',
-                'alt'   => $this->gallery->title,
-            ];
-        } else {
-            $image_data = [
-                'url'   => $this->url,
-                'image' => $this->url ?? url('/').'/images/tracker_fallback.png',
-                'alt'   => 'Tracker Card Image (#'.$this->id.')',
-            ];
-        }
+            if ($this->gallery_id) {
+                $image_data = [
+                    'url'   => $this->gallery->getUrlAttribute(),
+                    'image' => $this->gallery->getThumbnailUrlAttribute() ?? url('/').'/images/tracker_fallback.png',
+                    'alt'   => $this->gallery->title,
+                ];
+            } else {
+                $image_data = [
+                    'url'   => $this->url,
+                    'image' => $this->url ?? url('/').'/images/tracker_fallback.png',
+                    'alt'   => 'Tracker Card Image (#'.$this->id.')',
+                ];
+            }
 
-        $image_html = '<a href="'.$image_data['url'].'"><img class="img-fluid mr-3" src="'.$image_data['image'].'" alt="'.$image_data['alt'].'"/></a>';
+            $image_html = '<a href="'.$image_data['url'].'"><img class="img-fluid mr-3" src="'.$image_data['image'].'" alt="'.$image_data['alt'].'"/></a>';
 
-        $card_html = '
-            <div class="card">
-                <h4 class="card-header justify-content-between d-flex"><a href="'.$this->getViewUrlAttribute().'">Tracker Card (#'.$this->id.')</a>'.$card_badge.'</h4>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-3">
-                            '.$image_html.'
-                        </div>
-                        <div class="col-md-9">
-                            '.implode('', $cards).'
+            $card_html = '
+                <div class="card my-4">
+                    <h4 class="card-header justify-content-between d-flex"><a href="'.$this->getViewUrlAttribute().'">Tracker Card (#'.$this->id.')</a>'.$card_badge.'</h4>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-3">
+                                '.$image_html.'
+                            </div>
+                            <div class="col-md-9">
+                                '.($accordion ? '<div class="accordion sub-tracker" id="card-'.$this->id.'-accordion">' : '').'
+                                '.implode('', $cards).'
+                                '.($accordion ? '</div>' : '').'
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="card-footer d-flex justify-content-between">
-                    <h5>Total</h5><span class="font-weight-bold bg-primary text-white p-2 rounded">'.$total.' XP</span>
-                </div>
-            </div>';
+                    <div class="card-footer d-flex justify-content-between">
+                        <h5>Total</h5><span class="font-weight-bold bg-primary text-white p-2 rounded">'.$total.' XP</span>
+                    </div>
+                </div>';
+        }
 
         return [
             'accepted_points' => $accepted_points,

@@ -31,33 +31,65 @@
                     $total = 0;
                     ?>
                     @if ($tracker->status === 'Pending' || !$editable)
-                        @foreach ($data as $title => $value)
-                            @if (gettype($value) === 'array')
-                                <div class="line-group border border-secondary my-2">
-                                    <h4 class="line-header text-uppercase font-weight-bold p-2">{{ $title }}</h4>
-                                    @foreach ($value as $sub_title => $sub_val)
-                                        @if ($sub_title === 'sub_card')
-                                            @foreach ($sub_val as $sub_sub_title => $sub_sub_val)
-                                                <div class="line-item w-100 d-inline-flex justify-content-between p-2">
-                                                    <h5 class="lh-1 m-0">{{ $sub_sub_title }}</h5>
-                                                    <p class="lh-1 m-0">{{ $sub_sub_val }} {{ __('art_tracker.xp') }}</p>
-                                                </div>
+                        @if(count($data) > 1)
+                            @foreach($data as $i => $card)
+                                @foreach ($card as $title => $value)
+                                    @if (gettype($value) === 'array')
+                                        <div class="line-group border border-secondary my-2">
+                                            <h4 class="line-header text-uppercase font-weight-bold p-2">{{ $title }}</h4>
+                                            @foreach ($value as $sub_title => $sub_val)
+                                                @if ($sub_title === 'sub_card')
+                                                    @foreach ($sub_val as $sub_sub_title => $sub_sub_val)
+                                                        <div class="line-item w-100 d-inline-flex justify-content-between p-2">
+                                                            <h5 class="lh-1 m-0">{{ $sub_sub_title }}</h5>
+                                                            <p class="lh-1 m-0">{{ $sub_sub_val }} {{ __('art_tracker.xp') }}</p>
+                                                        </div>
+                                                    @endforeach
+                                                @else
+                                                    <div class="line-item w-100 d-inline-flex justify-content-between p-2">
+                                                        <h5 class="lh-1 m-0">{{ $sub_title }}</h5>
+                                                        <p class="lh-1 m-0">{{ $sub_val }} {{ __('art_tracker.xp') }}</p>
+                                                    </div>
+                                                @endif
                                             @endforeach
-                                        @else
-                                            <div class="line-item w-100 d-inline-flex justify-content-between p-2">
-                                                <h5 class="lh-1 m-0">{{ $sub_title }}</h5>
-                                                <p class="lh-1 m-0">{{ $sub_val }} {{ __('art_tracker.xp') }}</p>
-                                            </div>
-                                        @endif
+                                        </div>
+                                    @else
+                                        <div class="line-item w-100 d-inline-flex justify-content-between p-2">
+                                            <h5 class="lh-1 m-0">{{ $title }}</h5>
+                                            <p class="lh-1 m-0">{{ $value }} {{ __('art_tracker.xp') }}</p>
+                                        </div>
+                                    @endif
+                                @endforeach
+                            @endforeach
+                        @else
+                            @foreach($data as $i => $subcard)
+                                @if (gettype($subcard) === 'array')
+                                    @foreach($subcard as $group_title => $lines)
+                                        <div class="line-group border border-secondary my-2">
+                                            <h4 class="line-header text-uppercase font-weight-bold p-2">{{ $group_title }}</h4>
+                                            @if(gettype($lines) === 'array')
+                                                @foreach($lines as $sub_title => $sub_val)
+                                                    <div class="line-item w-100 d-inline-flex justify-content-between p-2">
+                                                        <h5 class="lh-1 m-0">{{ $sub_title }}</h5>
+                                                        <p class="lh-1 m-0">{{ $sub_val }} {{ __('art_tracker.xp') }}</p>
+                                                    </div>
+                                                @endforeach
+                                            @else
+                                                <div class="line-item w-100 d-inline-flex justify-content-between p-2">
+                                                    <h5 class="lh-1 m-0">{{ $group_title }}</h5>
+                                                    <p class="lh-1 m-0">{{ $lines }} {{ __('art_tracker.xp') }}</p>
+                                                </div>
+                                            @endif
+                                        </div>
                                     @endforeach
-                                </div>
-                            @else
-                                <div class="line-item w-100 d-inline-flex justify-content-between p-2">
-                                    <h5 class="lh-1 m-0">{{ $title }}</h5>
-                                    <p class="lh-1 m-0">{{ $value }} {{ __('art_tracker.xp') }}</p>
-                                </div>
-                            @endif
-                        @endforeach
+                                @else
+                                    <div class="line-item w-100 d-inline-flex justify-content-between p-2">
+                                        <h5 class="lh-1 m-0">{{ $i }}</h5>
+                                        <p class="lh-1 m-0">{{ $subcard }} {{ __('art_tracker.xp') }}</p>
+                                    </div>
+                                @endif
+                            @endforeach
+                        @endif
                     @else
                         <?php
                         $total = 0;
