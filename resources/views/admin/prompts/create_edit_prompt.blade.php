@@ -118,11 +118,11 @@
     </div>
     
 
-<h3>Submission Limits</h3>
-<p>Limit the number of times a user can submit. Leave blank to allow endless submissions.</p>
-<p>Set a number into number of submissions. This will be applied for all time if you leave period blank, or per time period (ex: once a month, twice a week) if selected.</p>
-<p>If you turn 'per character' on, then the number of submissions multiplies per character (ex: if you can submit twice a month per character and you own three characters, that's 6 submissions) HOWEVER it will not keep track of which characters are being submitted due to conflicts arising in character cameos. A user will be able to submit those full 6 times with just one character...!</p>
-<div class="row">
+    <h3>Submission Limits</h3>
+    <p>Limit the number of times a user can submit. Leave blank to allow endless submissions.</p>
+    <p>Set a number into number of submissions. This will be applied for all time if you leave period blank, or per time period (ex: once a month, twice a week) if selected.</p>
+    <p>If you turn 'per character' on, then the number of submissions multiplies per character (ex: if you can submit twice a month per character and you own three characters, that's 6 submissions) HOWEVER it will not keep track of which characters are being submitted due to conflicts arising in character cameos. A user will be able to submit those full 6 times with just one character...!</p>
+    <div class="row">
     <div class="col-md-4">
         <div class="form-group">
             {!! Form::label('limit', 'Number of Submissions (Optional)') !!} {!! add_help('Enter a number to limit how many times a user can submit. Leave blank to allow endless submissions.') !!}
@@ -135,13 +135,13 @@
             {!! Form::select('limit_period', $limit_periods, $prompt->limit_period, ['class' => 'form-control', 'data-name' => 'limit_period']) !!}
         </div>
     </div>
-</div>
-<div class="form-group">
+    </div>
+    <div class="form-group">
             {!! Form::checkbox('limit_character', 1, $prompt->limit_character, ['class' => 'form-check-input', 'data-toggle' => 'toggle']) !!}
             {!! Form::label('limit_character', 'Per Character', ['class' => 'form-check-label ml-3']) !!} {!! add_help('If turned on, they can submit once per character they own on the masterlist.') !!}
         </div>
 
-<h3>Rewards</h3>
+    <h3>Rewards</h3>
     @include('criteria._default_selector', ['type' => 'prompt'])
 
     <h3 class="my-5">
@@ -229,6 +229,7 @@
             'object' => $prompt,
             'hideAutoUnlock' => true,
         ])
+    @endif
 
         <h3>Preview</h3>
         <div class="card mb-3">
@@ -241,14 +242,14 @@
 
     @include('widgets._loot_select_row', ['showLootTables' => true, 'showRaffles' => true])
 
-@if ($prompt->id)
+    @if ($prompt->id)
     <h3>Preview</h3>
     <div class="card mb-3">
         <div class="card-body">
             @include('prompts._prompt_entry', ['prompt' => $prompt])
         </div>
     </div>
-@endif
+    @endif
 @endsection
 
 @section('scripts')
@@ -338,5 +339,5 @@
 
             $('.criterion-select').on('change', loadForm);
         });
-</script>
+    </script>
 @endsection
