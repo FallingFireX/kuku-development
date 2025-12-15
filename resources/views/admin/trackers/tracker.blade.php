@@ -90,28 +90,29 @@
                             ?>
                             @if (count($cardData) > 1)
                                 <div class="accordion" id="MultiTracker">
-                                <?php $sb = 0; ?>
-                                @foreach ($cardData as $title => $value)
-                                    @if (gettype($value) === 'array')
-                                        <?php $ssb = 0; ?>
-                                        @foreach($value as $sub_title => $sub_value)
-                                            <div class="card">
-                                                <div class="card-header" id="subHeading-{{ $sb }}">
-                                                    <h4 class="mb-0">
-                                                        <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapse-{{ $sb }}" aria-expanded="true" aria-controls="collapse-{{ $sb }}">Sub-Tracker #{{ $sb }}</button>
-                                                    </h4>
-                                                </div>
-                                                <div id="collapse-{{ $sb }}" class="collapse {{ $sb === 0 ? 'show' : '' }}" aria-labelledby="subHeading-{{ $sb }}" data-parent="#MultiTracker">
-                                                    <div class="card-body">
-                                                         @include('tracker._tracker_group', ['title' => $sub_title, 'cardData' => $sub_value, 'i' => $i])
+                                    <?php $sb = 0; ?>
+                                    @foreach ($cardData as $title => $value)
+                                        @if (gettype($value) === 'array')
+                                            <?php $ssb = 0; ?>
+                                            @foreach ($value as $sub_title => $sub_value)
+                                                <div class="card">
+                                                    <div class="card-header" id="subHeading-{{ $sb }}">
+                                                        <h4 class="mb-0">
+                                                            <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapse-{{ $sb }}" aria-expanded="true"
+                                                                aria-controls="collapse-{{ $sb }}">Sub-Tracker #{{ $sb }}</button>
+                                                        </h4>
+                                                    </div>
+                                                    <div id="collapse-{{ $sb }}" class="collapse {{ $sb === 0 ? 'show' : '' }}" aria-labelledby="subHeading-{{ $sb }}" data-parent="#MultiTracker">
+                                                        <div class="card-body">
+                                                            @include('tracker._tracker_group', ['title' => $sub_title, 'cardData' => $sub_value, 'i' => $i])
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <?php $ssb++; ?>
-                                        @endforeach
-                                    @endif
-                                    <?php $sb++; ?>
-                                @endforeach
+                                                <?php $ssb++; ?>
+                                            @endforeach
+                                        @endif
+                                        <?php $sb++; ?>
+                                    @endforeach
                                 </div>
                             @else
                                 @foreach ($cardData as $title => $value)

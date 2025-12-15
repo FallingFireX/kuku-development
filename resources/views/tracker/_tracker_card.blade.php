@@ -31,8 +31,8 @@
                     $total = 0;
                     ?>
                     @if ($tracker->status === 'Pending' || !$editable)
-                        @if(count($data) > 1)
-                            @foreach($data as $i => $card)
+                        @if (count($data) > 1)
+                            @foreach ($data as $i => $card)
                                 @foreach ($card as $title => $value)
                                     @if (gettype($value) === 'array')
                                         <div class="line-group border border-secondary my-2">
@@ -62,13 +62,13 @@
                                 @endforeach
                             @endforeach
                         @else
-                            @foreach($data as $i => $subcard)
+                            @foreach ($data as $i => $subcard)
                                 @if (gettype($subcard) === 'array')
-                                    @foreach($subcard as $group_title => $lines)
+                                    @foreach ($subcard as $group_title => $lines)
                                         <div class="line-group border border-secondary my-2">
                                             <h4 class="line-header text-uppercase font-weight-bold p-2">{{ $group_title }}</h4>
-                                            @if(gettype($lines) === 'array')
-                                                @foreach($lines as $sub_title => $sub_val)
+                                            @if (gettype($lines) === 'array')
+                                                @foreach ($lines as $sub_title => $sub_val)
                                                     <div class="line-item w-100 d-inline-flex justify-content-between p-2">
                                                         <h5 class="lh-1 m-0">{{ $sub_title }}</h5>
                                                         <p class="lh-1 m-0">{{ $sub_val }} {{ __('art_tracker.xp') }}</p>
