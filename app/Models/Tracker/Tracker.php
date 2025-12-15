@@ -260,7 +260,7 @@ class Tracker extends Model {
 
         $line_template = '<div class="line-item w-100 d-inline-flex justify-content-between p-2"><h5 class="lh-1 m-0">$title</h5><p class="lh-1 m-0">$value XP</p></div>';
 
-        if(count($data) > 1) {
+        if (count($data) > 1) {
             //Multi-card
             $accordion = true;
         } else {
@@ -269,7 +269,7 @@ class Tracker extends Model {
         }
 
         //Format each multi-level card - this also applies to single though it won't create an accordion
-        foreach($data as  $i => $card) {
+        foreach ($data as $i => $card) {
             $ci = 0;
             foreach ($card as $title => $value) {
                 if (gettype($value) === 'array') {
@@ -285,7 +285,7 @@ class Tracker extends Model {
                         }
                     }
                     $hContent = '<div class="line-group border border-secondary my-2"> <h4 class="line-header text-uppercase font-weight-bold p-2">'.$title.'</h4>'.implode('', $sub_line).'</div>';
-                    if($accordion) {
+                    if ($accordion) {
                         $hContent = '
                         <div class="card">
                             <div class="card-header" id="card-'.$this->id.'-'.$i.'-heading">
