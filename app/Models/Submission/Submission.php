@@ -4,8 +4,8 @@ namespace App\Models\Submission;
 
 use App\Models\Model;
 use App\Models\Prompt\Prompt;
-use App\Models\User\User;
 use App\Models\Tracker\Tracker;
+use App\Models\User\User;
 use Carbon\Carbon;
 
 class Submission extends Model {
@@ -17,7 +17,7 @@ class Submission extends Model {
     protected $fillable = [
         'prompt_id', 'user_id', 'staff_id', 'url',
         'comments', 'staff_comments', 'parsed_staff_comments',
-        'status', 'data', 'tracker_id'
+        'status', 'data', 'tracker_id',
     ];
 
     /**

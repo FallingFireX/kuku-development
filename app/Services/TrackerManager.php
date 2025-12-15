@@ -38,7 +38,7 @@ class TrackerManager extends Service {
             if (!isset($data['tracker']) && count($data['tracker']) == 0) {
                 throw new \Exception('There must be at least one line for the tracker card.');
             }
-            if ( !isset($data['gallery_id']) && !isset($data['url']) && !isset($data['image_url'])) {
+            if (!isset($data['gallery_id']) && !isset($data['url']) && !isset($data['image_url'])) {
                 throw new \Exception('There must be a linked gallery or external image/url.');
             }
 
@@ -67,11 +67,11 @@ class TrackerManager extends Service {
                                 $xp += floatval($sub_value['value']) ?? 0;
                             }
                         }
-                        if($sub_cards) {
+                        if ($sub_cards) {
                             $tracker_data[$ci][$name] = $sub_cards;
                         }
                     } else {
-                        if($value) {
+                        if ($value) {
                             $tracker_data[$name] = floatval($value) ?? 0;
                             $xp += floatval($value) ?? 0;
                         }

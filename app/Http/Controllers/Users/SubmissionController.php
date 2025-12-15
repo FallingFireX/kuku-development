@@ -11,9 +11,9 @@ use App\Models\Item\ItemCategory;
 use App\Models\Prompt\Prompt;
 use App\Models\Raffle\Raffle;
 use App\Models\Submission\Submission;
+use App\Models\Tracker\Tracker;
 use App\Models\User\User;
 use App\Models\User\UserItem;
-use App\Models\Tracker\Tracker;
 use App\Services\SubmissionManager;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -88,8 +88,8 @@ class SubmissionController extends Controller {
         $inventory = UserItem::with('item')->whereNull('deleted_at')->where('count', '>', '0')->where('user_id', Auth::user()->id)->get();
         $trackers = Tracker::where('user_id', Auth::user()->id)->where('status', 'Pending')->get();
         $trackers_formatted = [];
-        foreach($trackers as $tracker) {
-            $trackers_formatted[$tracker->id] = 'Tracker Card #'. $tracker->id. ' - '. $tracker->character->fullName;
+        foreach ($trackers as $tracker) {
+            $trackers_formatted[$tracker->id] = 'Tracker Card #'.$tracker->id.' - '.$tracker->character->fullName;
         }
 
         return view('home.create_submission', [
@@ -127,8 +127,8 @@ class SubmissionController extends Controller {
         }
         $trackers = Tracker::where('user_id', Auth::user()->id)->where('status', 'Pending')->get();
         $trackers_formatted = [];
-        foreach($trackers as $tracker) {
-            $trackers_formatted[$tracker->id] = 'Tracker Card #'. $tracker->id. ' - '. $tracker->character->fullName;
+        foreach ($trackers as $tracker) {
+            $trackers_formatted[$tracker->id] = 'Tracker Card #'.$tracker->id.' - '.$tracker->character->fullName;
         }
 
         return view('home.edit_submission', [
