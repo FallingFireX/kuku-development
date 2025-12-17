@@ -110,5 +110,4 @@
             @endif
         </div>
     </div>
-    @endif
 </div>
