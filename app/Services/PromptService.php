@@ -211,10 +211,18 @@ class PromptService extends Service {
                 $this->handleImage($image, $prompt->imagePath, $prompt->imageFileName);
             }
 
-            $this->populateRewards(Arr::only($data, ['rewardable_type', 'rewardable_id', 'quantity']), $prompt);
-            (new CriterionService)->populateCriteria(Arr::only($data, ['criterion_id', 'criterion', 'criterion_currency_id', 'default_criteria']), $prompt, PromptCriterion::class);
-
-            $this->populateSkills(Arr::only($data, ['skill_id', 'skill_quantity']), $prompt);
+            $rewardService = new RewardService;
+            if (!$rewardService->populateRewards(
+                get_class($prompt),
+                $prompt->id,
+                Arr::only($data, ['rewardable_type', 'rewardable_id', 'quantity', 'rewardable_recipient']),
+                false
+            )) {
+                foreach ($rewardService->errors()->getMessages()['error'] as $error) {
+                    flash($error)->error();
+                }
+                throw new \Exception('Failed to create rewards.');
+            }
 
             return $this->commitReturn($prompt);
         } catch (\Exception $e) {
@@ -273,10 +281,18 @@ class PromptService extends Service {
                 $this->handleImage($image, $prompt->imagePath, $prompt->imageFileName);
             }
 
-            $this->populateRewards(Arr::only($data, ['rewardable_type', 'rewardable_id', 'quantity']), $prompt);
-            (new CriterionService)->populateCriteria(Arr::only($data, ['criterion_id', 'criterion', 'criterion_currency_id', 'default_criteria']), $prompt, PromptCriterion::class);
-
-            $this->populateSkills(Arr::only($data, ['skill_id', 'skill_quantity']), $prompt);
+            $rewardService = new RewardService;
+            if (!$rewardService->populateRewards(
+                get_class($prompt),
+                $prompt->id,
+                Arr::only($data, ['rewardable_type', 'rewardable_id', 'quantity', 'rewardable_recipient']),
+                false
+            )) {
+                foreach ($rewardService->errors()->getMessages()['error'] as $error) {
+                    flash($error)->error();
+                }
+                throw new \Exception('Failed to create rewards.');
+            }
 
             return $this->commitReturn($prompt);
         } catch (\Exception $e) {
@@ -387,51 +403,5 @@ class PromptService extends Service {
         }
 
         return $data;
-    }
-
-    /**
-     * Processes user input for creating/updating prompt rewards.
-     *
-     * @param array  $data
-     * @param Prompt $prompt
-     */
-    private function populateRewards($data, $prompt) {
-        // Clear the old rewards...
-        $prompt->rewards()->delete();
-
-        if (isset($data['rewardable_type'])) {
-            foreach ($data['rewardable_type'] as $key => $type) {
-                if ($data['rewardable_id'][$key] == 'none') {
-                    $data['rewardable_id'][$key] = null;
-                }
-                PromptReward::create([
-                    'prompt_id'       => $prompt->id,
-                    'rewardable_type' => $type,
-                    'rewardable_id'   => $data['rewardable_id'][$key] ?? null,
-                    'quantity'        => $data['quantity'][$key],
-                ]);
-            }
-        }
-    }
-
-    /**
-     * Processes user input for creating/updating prompt skill rewards.
-     *
-     * @param array  $data
-     * @param Prompt $prompt
-     */
-    private function populateSkills($data, $prompt) {
-        // Clear the old skills...
-        $prompt->skills()->delete();
-
-        if (isset($data['skill_id'])) {
-            foreach ($data['skill_id'] as $key => $type) {
-                PromptSkill::create([
-                    'prompt_id'       => $prompt->id,
-                    'skill_id'        => $type,
-                    'quantity'        => $data['skill_quantity'][$key],
-                ]);
-            }
-        }
     }
 }

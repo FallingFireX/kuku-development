@@ -60,8 +60,8 @@
             {!! Form::select('species_id', $specieses, $feature->species_id, ['class' => 'form-control', 'id' => 'species']) !!}
         </div>
         <div class="col-md-4 form-group" id="subtypes">
-            {!! Form::label('Subtype (Optional)') !!} {!! add_help('This is cosmetic and does not limit choice of traits in selections.') !!}
-            {!! Form::select('subtype_id', $subtypes, $feature->subtype_id, ['class' => 'form-control', 'id' => 'subtype']) !!}
+            {!! Form::label('Subtypes (Optional)') !!} {!! add_help('This is cosmetic and does not limit choice of traits in selections.') !!}
+            {!! Form::select('subtype_ids[]', $subtypes, $feature->subtypes, ['class' => 'form-control', 'id' => 'subtype', 'multiple', 'placeholder' => 'Pick a species first.']) !!}
         </div>
     </div>
     
@@ -271,5 +271,25 @@
             $trigger.parent().parent().parent().parent().remove();
         });
 
-</script>
+        $("#species").change(function() {
+            refreshSubtype();
+        });
+
+        function refreshSubtype() {
+            var species = $('#species').val();
+            var subtype_ids = @json($feature->subtypes->pluck('id')->toArray());
+            $.ajax({
+                type: "GET",
+                url: "{{ url('admin/data/traits/check-subtype') }}?species=" + species + "&subtype_ids=" + subtype_ids,
+                dataType: "text"
+            }).done(function(res) {
+                $("#subtypes").html(res);
+                $("#subtype").selectize();
+            }).fail(function(jqXHR, textStatus, errorThrown) {
+                alert("AJAX call failed: " + textStatus + ", " + errorThrown);
+            });
+        };
+
+        $('#subtype').selectize();
+    </script>
 @endsection

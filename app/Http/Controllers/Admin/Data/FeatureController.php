@@ -313,9 +313,11 @@ class FeatureController extends Controller {
         }
         if (isset($data['subtype_id']) && $data['subtype_id'] != 'none') {
             if ($data['subtype_id'] == 'withoutOption') {
-                $query->whereNull('subtype_id');
+                $query->subtypes->isEmpty();
             } else {
-                $query->where('subtype_id', $data['subtype_id']);
+                $query->whereHas('subtypes', function ($query) use ($data) {
+                    $query->where('subtype_id', $data['subtype_id']);
+                });
             }
         }
         if (isset($data['name'])) {
@@ -380,12 +382,11 @@ class FeatureController extends Controller {
      */
     public function getCreateFeature() {
         return view('admin.features.create_edit_feature', [
-            'feature'       => new Feature,
-            'rarities'      => ['none' => 'Select a Rarity'] + Rarity::orderBy('sort', 'DESC')->pluck('name', 'id')->toArray(),
-            'specieses'     => ['none' => 'No restriction'] + Species::orderBy('sort', 'DESC')->pluck('name', 'id')->toArray(),
-            'subtypes'      => ['none' => 'No subtype'] + Subtype::orderBy('sort', 'DESC')->pluck('name', 'id')->toArray(),
-            'categories'    => ['none' => 'No category'] + FeatureCategory::orderBy('sort', 'DESC')->pluck('name', 'id')->toArray(),
-            'subcategories' => ['none' => 'No subcategory'] + FeatureSubcategory::orderBy('sort', 'DESC')->pluck('name', 'id')->toArray(),
+            'feature'    => new Feature,
+            'rarities'   => ['none' => 'Select a Rarity'] + Rarity::orderBy('sort', 'DESC')->pluck('name', 'id')->toArray(),
+            'specieses'  => ['none' => 'No restriction'] + Species::orderBy('sort', 'DESC')->pluck('name', 'id')->toArray(),
+            'subtypes'   => Subtype::orderBy('sort', 'DESC')->pluck('name', 'id')->toArray(),
+            'categories' => ['none' => 'No category'] + FeatureCategory::orderBy('sort', 'DESC')->pluck('name', 'id')->toArray(),
         ]);
     }
 
@@ -403,12 +404,11 @@ class FeatureController extends Controller {
         }
 
         return view('admin.features.create_edit_feature', [
-            'feature'       => $feature,
-            'rarities'      => ['none' => 'Select a Rarity'] + Rarity::orderBy('sort', 'DESC')->pluck('name', 'id')->toArray(),
-            'specieses'     => ['none' => 'No restriction'] + Species::orderBy('sort', 'DESC')->pluck('name', 'id')->toArray(),
-            'subtypes'      => ['none' => 'No subtype'] + Subtype::orderBy('sort', 'DESC')->pluck('name', 'id')->toArray(),
-            'categories'    => ['none' => 'No category'] + FeatureCategory::orderBy('sort', 'DESC')->pluck('name', 'id')->toArray(),
-            'subcategories' => ['none' => 'No subcategory'] + FeatureSubcategory::orderBy('sort', 'DESC')->pluck('name', 'id')->toArray(),
+            'feature'    => $feature,
+            'rarities'   => ['none' => 'Select a Rarity'] + Rarity::orderBy('sort', 'DESC')->pluck('name', 'id')->toArray(),
+            'specieses'  => ['none' => 'No restriction'] + Species::orderBy('sort', 'DESC')->pluck('name', 'id')->toArray(),
+            'subtypes'   => Subtype::orderBy('sort', 'DESC')->pluck('name', 'id')->toArray(),
+            'categories' => ['none' => 'No category'] + FeatureCategory::orderBy('sort', 'DESC')->pluck('name', 'id')->toArray(),
         ]);
     }
 
@@ -423,7 +423,7 @@ class FeatureController extends Controller {
     public function postCreateEditFeature(Request $request, FeatureService $service, $id = null) {
         $id ? $request->validate(Feature::$updateRules) : $request->validate(Feature::$createRules);
         $data = $request->only([
-            'name', 'species_id', 'subtype_id', 'rarity_id', 'feature_category_id', 'description', 'image', 'remove_image', 'alt', 'display_mode', 'is_visible', 'feature_subcategory_id', 'full_page',
+            'name', 'species_id', 'subtype_ids', 'rarity_id', 'feature_category_id', 'description', 'image', 'remove_image', 'is_visible',
         ]);
         if ($id && $service->updateFeature(Feature::find($id), $data, Auth::user())) {
             flash('Trait updated successfully.')->success();
@@ -523,11 +523,11 @@ class FeatureController extends Controller {
     */
     public function getCreateEditFeatureSubtype(Request $request) {
         $species = $request->input('species');
-        $subtype_id = $request->input('subtype_id');
+        $subtype_ids = $request->input('subtype_ids');
 
         return view('admin.features._create_edit_feature_subtype', [
-            'subtypes'   => ['0' => 'Select Subtype'] + Subtype::where('species_id', '=', $species)->orderBy('sort', 'DESC')->pluck('name', 'id')->toArray(),
-            'subtype_id' => $subtype_id,
+            'subtypes'    => Subtype::where('species_id', '=', $species)->orderBy('sort', 'DESC')->pluck('name', 'id')->toArray(),
+            'subtype_ids' => $subtype_ids,
         ]);
     }
 }

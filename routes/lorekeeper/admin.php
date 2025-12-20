@@ -756,19 +756,8 @@ Route::group(['prefix' => 'grants', 'namespace' => 'Users', 'middleware' => 'pow
 
     Route::get('item-search', 'GrantController@getItemSearch');
 
-    Route::get('awards', 'GrantController@getAwards');
-    Route::post('awards', 'GrantController@postAwards');
-
-    Route::get('recipes', 'GrantController@getRecipes');
-    Route::post('recipes', 'GrantController@postRecipes');
-
-    Route::get('borders', 'GrantController@getBorders');
-    Route::post('borders', 'GrantController@postBorders');
-});
-
-// PETS
-Route::group(['prefix' => 'pets', 'middleware' => 'power:edit_inventories'], function () {
-    Route::post('pet/{id}', 'Data\PetController@postEditPetDrop');
+    Route::get('loot-tables', 'GrantController@getLootTables');
+    Route::post('loot-tables', 'GrantController@postLootTables');
 });
 
 // TRADES
@@ -1200,4 +1189,9 @@ Route::group(['prefix' => 'world',  'namespace' => 'World', 'middleware' => 'pow
     Route::group(['prefix' => 'limits', 'middleware' => 'power:manage_data'], function () {
         Route::post('/', 'LimitController@postCreateEditLimits');
     });
+});
+
+// REWARDS
+Route::group(['prefix' => 'rewards', 'middleware' => 'power:manage_data'], function () {
+    Route::post('/', 'RewardController@postPopulateRewards');
 });

@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Admin\Data;
 
 use App\Http\Controllers\Controller;
-use App\Models\Currency\Currency;
 use App\Models\Item\Item;
 use App\Models\Pet\Pet;
 use App\Models\Shop\Shop;
@@ -47,7 +46,6 @@ class ShopController extends Controller {
 
         return view('admin.shops.create_edit_shop', [
             'shop'    => new Shop,
-            'items'   => Item::orderBy('name')->pluck('name', 'id'),
             'coupons' => $coupons,
         ]);
     }
@@ -72,9 +70,6 @@ class ShopController extends Controller {
 
         return view('admin.shops.create_edit_shop', [
             'shop'       => $shop,
-            'items'      => Item::orderBy('name')->pluck('name', 'id'),
-            'pets'       => Pet::orderBy('name')->pluck('name', 'id'),
-            'currencies' => Currency::orderBy('name')->pluck('name', 'id'),
             'coupons'    => $coupons,
         ]);
     }
@@ -121,7 +116,6 @@ class ShopController extends Controller {
 
         return view('admin.shops._stock_modal', [
             'shop'       => $shop,
-            'currencies' => Currency::orderBy('name')->pluck('name', 'id'),
             'stock'      => new ShopStock,
         ]);
     }

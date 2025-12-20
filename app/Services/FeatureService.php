@@ -365,24 +365,26 @@ class FeatureService extends Service {
             if (isset($data['species_id']) && $data['species_id'] == 'none') {
                 $data['species_id'] = null;
             }
-            if (isset($data['subtype_id']) && $data['subtype_id'] == 'none') {
-                $data['subtype_id'] = null;
-            }
-
             if ((isset($data['feature_category_id']) && $data['feature_category_id']) && !FeatureCategory::where('id', $data['feature_category_id'])->exists()) {
                 throw new \Exception('The selected trait category is invalid.');
             }
             if ((isset($data['species_id']) && $data['species_id']) && !Species::where('id', $data['species_id'])->exists()) {
                 throw new \Exception('The selected species is invalid.');
             }
-            if (isset($data['subtype_id']) && $data['subtype_id']) {
-                $subtype = Subtype::find($data['subtype_id']);
+            if (isset($data['subtype_ids']) && $data['subtype_ids']) {
+                $subtype = Subtype::find($data['subtype_ids']);
                 if (!(isset($data['species_id']) && $data['species_id'])) {
                     throw new \Exception('Species must be selected to select a subtype.');
                 }
-                if (!$subtype || $subtype->species_id != $data['species_id']) {
-                    throw new \Exception('Selected subtype invalid or does not match species.');
+
+                foreach ($data['subtype_ids'] as $subtypeId) {
+                    $subtype = Subtype::find($subtypeId);
+                    if (!$subtype || $subtype->species_id != $data['species_id']) {
+                        throw new \Exception('Selected subtype invalid or does not match species.');
+                    }
                 }
+            } else {
+                $data['subtype_ids'] = [];
             }
 
             // An alt type of a feature should not have the same name as an unrelated feature
@@ -412,6 +414,10 @@ class FeatureService extends Service {
             }
 
             $feature = Feature::create($data);
+
+            foreach ($data['subtype_ids'] as $subtypeId) {
+                $feature->subtypes()->attach($subtypeId);
+            }
 
             if (!$this->logAdminAction($user, 'Created Feature', 'Created '.$feature->displayName)) {
                 throw new \Exception('Failed to log admin action.');
@@ -452,9 +458,6 @@ class FeatureService extends Service {
             if (isset($data['species_id']) && $data['species_id'] == 'none') {
                 $data['species_id'] = null;
             }
-            if (isset($data['subtype_id']) && $data['subtype_id'] == 'none') {
-                $data['subtype_id'] = null;
-            }
 
             // More specific validation
             if (
@@ -489,17 +492,31 @@ class FeatureService extends Service {
             if ((isset($data['species_id']) && $data['species_id']) && !Species::where('id', $data['species_id'])->exists()) {
                 throw new \Exception('The selected species is invalid.');
             }
-            if (isset($data['subtype_id']) && $data['subtype_id']) {
-                $subtype = Subtype::find($data['subtype_id']);
+            if (isset($data['subtype_ids']) && $data['subtype_ids']) {
+                $subtype = Subtype::find($data['subtype_ids']);
                 if (!(isset($data['species_id']) && $data['species_id'])) {
                     throw new \Exception('Species must be selected to select a subtype.');
                 }
-                if (!$subtype || $subtype->species_id != $data['species_id']) {
-                    throw new \Exception('Selected subtype invalid or does not match species.');
+
+                foreach ($data['subtype_ids'] as $subtypeId) {
+                    $subtype = Subtype::find($subtypeId);
+                    if (!$subtype || $subtype->species_id != $data['species_id']) {
+                        throw new \Exception('Selected subtype invalid or does not match species.');
+                    }
                 }
+            } else {
+                $data['subtype_ids'] = [];
             }
 
             $data = $this->populateData($data, $feature);
+
+            // remove old subtypes
+            $feature->subtypes()->detach();
+            if (isset($data['subtype_ids']) && $data['subtype_ids']) {
+                foreach ($data['subtype_ids'] as $subtypeId) {
+                    $feature->subtypes()->attach($subtypeId);
+                }
+            }
 
             $image = null;
             if (isset($data['image']) && $data['image']) {
@@ -595,6 +612,12 @@ class FeatureService extends Service {
             if (DB::table('character_features')->where('feature_id', $feature->id)->exists()) {
                 throw new \Exception('A character with this trait exists. Please remove the trait first.');
             }
+
+            if (!$this->logAdminAction($user, 'Deleted Feature', 'Deleted '.$feature->name)) {
+                throw new \Exception('Failed to log admin action.');
+            }
+
+            $feature->subtypes()->detach();
 
             if ($feature->has_image) {
                 $this->deleteImage($feature->imagePath, $feature->imageFileName);

@@ -258,6 +258,7 @@
             refreshChances();
             $('#lootTableBody .selectize').selectize();
             attachRemoveListener($('#lootTableBody .remove-loot-button'));
+            attachWeightListener(($('#lootTableBody .loot-weight')));
 
             $('.delete-table-button').on('click', function(e) {
                 e.preventDefault();

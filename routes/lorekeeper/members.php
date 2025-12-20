@@ -343,6 +343,7 @@ Route::group(['prefix' => 'designs', 'namespace' => 'Characters'], function () {
     Route::post('{id}/traits', 'DesignController@postFeatures');
     Route::get('traits/subtype', 'DesignController@getFeaturesSubtype');
     Route::get('traits/transformation', 'DesignController@getFeaturesTransformation');
+    Route::get('traits/feature', 'DesignController@getFeaturesTrait');
 
     Route::get('{id}/confirm', 'DesignController@getConfirm');
     Route::post('{id}/submit', 'DesignController@postSubmit');
@@ -432,3 +433,8 @@ Route::get('adoption-center/create', 'UniqueItemController@getCreateItem');
 Route::get('adoption-center/edit/{id}', 'UniqueItemController@getEditItem');
 Route::post('adoption-center/create', 'UniqueItemController@postCreateEditItem');
 Route::post('adoption-center/edit/{id?}', 'UniqueItemController@postCreateEditItem');
+//    Rewards
+//**************************************************************************************************/
+Route::group(['prefix' => 'rewards'], function () {
+    Route::post('/types', 'RewardController@postRewardTypes');
+});

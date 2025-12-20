@@ -179,11 +179,16 @@
         @endforeach
     </div>
 
-    <h3>Rewards</h3>
-    <p>Rewards are credited on a per-user basis. Mods are able to modify the specific rewards granted at approval time.</p>
-    <p>You can add loot tables containing any kind of currencies (both user- and character-attached), but be sure to keep track of which are being distributed! Character-only currencies cannot be given to users.</p>
-    <p><b>Note that any EXP or Point rewards added here will be creditted directly to the user. If you want to reward EXP or Points to a specific character, you must add them during approval.</b></p>
-    @include('widgets._loot_select', ['loots' => $prompt->rewards, 'showLootTables' => true, 'showRaffles' => true])
+    {{-- blade-formatter-disable --}}
+    @include('widgets._add_rewards', [
+        'object' => $prompt,
+        'useForm' => false,
+        'showRaffles' => true,
+        'showLootTables' => true,
+        'showRecipient' => true,
+        'info' => '<p>User rewards are credited on a per-user basis, character rewards are rewarded to all characters attached. Mods are able to modify the specific rewards granted at approval time.</p><p class="mb-0">You can add loot tables containing any kind of currencies (both user- and character-attached), but be sure to keep track of which are being distributed! <strong>Character-only currencies cannot be given to users.</strong></p>',
+    ])
+    {{-- blade-formatter-enable --}}
 
     <hr class="w-70">
 
@@ -254,7 +259,6 @@
 
 @section('scripts')
     @parent
-    @include('js._loot_js', ['showLootTables' => true, 'showRaffles' => true])
     @include('widgets._datetimepicker_js')
     @include('js._tinymce_wysiwyg')
     <script>

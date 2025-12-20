@@ -156,32 +156,19 @@ return [
                 'name' => 'EXP Grants',
                 'url'  => 'admin/grants/exp',
             ],
-            // [
-            //     'name' => 'Stat Point Grants',
-            //     'url'  => 'admin/grants/points',
-            // ],
+
             [
                 'name' => 'Pet Grants',
                 'url'  => 'admin/grants/pets',
             ],
-            // [
-            //     'name' => 'Gear Grants',
-            //     'url'  => 'admin/grants/gear',
-            // ],
-            // [
-            //     'name' => 'Weapon Grants',
-            //     'url'  => 'admin/grants/weapons',
-            // ],
-            // [
-            //     'name' => 'Skill Grants',
-            //     'url'  => 'admin/grants/skills',
-            // ],
             [
                 'name' => 'Border Grants',
                 'url'  => 'admin/grants/borders',
             ],
+                'name' => 'Loot Table Grants',
+                'url'  => 'admin/grants/loot-tables',
+            ],
         ],
-    ],
     'Masterlist' => [
         'power' => 'manage_characters',
         'links' => [

@@ -30,6 +30,13 @@
         @endif
         @if($feature->species_id)
             <div><strong>Species:</strong> {!! $feature->species->displayName !!} @if($feature->subtype_id) ({!! $feature->subtype->displayName !!} subtype) @endif</div>
+        @if ($feature->species_id)
+            <div>
+                <strong>Species:</strong> {!! $feature->species->displayName !!}
+                @if (count($feature->getSubtypes(Auth::User() ?? null)))
+                    ({!! $feature->displaySubtypes(Auth::User() ?? null) !!})
+                @endif
+            </div>
         @endif
         <div class="world-entry-text parsed-text">
             {!! $feature->parsed_description !!}
