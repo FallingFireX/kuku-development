@@ -8,10 +8,10 @@ use App\Models\Base\Base;
 use App\Models\Character\BreedingPermission;
 use App\Models\Character\Character;
 use App\Models\Character\CharacterCategory;
+use App\Models\Character\CharacterImage;
 use App\Models\Character\CharacterLineageBlacklist;
 use App\Models\Character\CharacterLink;
 use App\Models\Character\CharacterMarking;
-use App\Models\Character\CharacterImage;
 use App\Models\Character\CharacterTransfer;
 use App\Models\Character\CharacterTransformation as Transformation;
 use App\Models\Feature\Feature;
@@ -54,16 +54,16 @@ class CharacterController extends Controller {
      */
     public function getCreateCharacter() {
         return view('admin.masterlist.create_character', [
-            'categories'  => CharacterCategory::orderBy('sort')->get(),
-            'userOptions' => User::query()->orderBy('name')->pluck('name', 'id')->toArray(),
-            'rarities'    => ['0' => 'Select Rarity'] + Rarity::orderBy('sort', 'DESC')->pluck('name', 'id')->toArray(),
-            'specieses'   => ['0' => 'Select Species'] + Species::orderBy('sort', 'DESC')->pluck('name', 'id')->toArray(),
-            'subtypes'    => [],
-            'features'    => Feature::getDropdownItems(1),
-            'isMyo'       => false,
+            'categories'       => CharacterCategory::orderBy('sort')->get(),
+            'userOptions'      => User::query()->orderBy('name')->pluck('name', 'id')->toArray(),
+            'rarities'         => ['0' => 'Select Rarity'] + Rarity::orderBy('sort', 'DESC')->pluck('name', 'id')->toArray(),
+            'specieses'        => ['0' => 'Select Species'] + Species::orderBy('sort', 'DESC')->pluck('name', 'id')->toArray(),
+            'subtypes'         => [],
+            'features'         => Feature::getDropdownItems(1),
+            'isMyo'            => false,
             'characterOptions' => CharacterLineageBlacklist::getAncestorOptions(),
             'markings'         => ['' => 'Select Markings(s)'] + Marking::orderBy('name', 'DESC')->pluck('name', 'id')->toArray(),
-            'bases'       => ['' => 'Select Base(s)'] + Base::orderBy('name', 'DESC')->pluck('code', 'id')->toArray(),
+            'bases'            => ['' => 'Select Base(s)'] + Base::orderBy('name', 'DESC')->pluck('code', 'id')->toArray(),
             'transformations'  => ['0' => 'Pick a Species First'],
             'stats'            => Stat::orderBy('name')->get(),
         ]);
@@ -76,15 +76,15 @@ class CharacterController extends Controller {
      */
     public function getCreateMyo() {
         return view('admin.masterlist.create_character', [
-            'userOptions' => User::query()->orderBy('name')->pluck('name', 'id')->toArray(),
-            'rarities'    => ['0' => 'Select Rarity'] + Rarity::orderBy('sort', 'DESC')->pluck('name', 'id')->toArray(),
-            'specieses'   => ['0' => 'Select Species'] + Species::orderBy('sort', 'DESC')->pluck('name', 'id')->toArray(),
-            'subtypes'    => [],
-            'features'    => Feature::getDropdownItems(1),
-            'isMyo'       => true,
+            'userOptions'      => User::query()->orderBy('name')->pluck('name', 'id')->toArray(),
+            'rarities'         => ['0' => 'Select Rarity'] + Rarity::orderBy('sort', 'DESC')->pluck('name', 'id')->toArray(),
+            'specieses'        => ['0' => 'Select Species'] + Species::orderBy('sort', 'DESC')->pluck('name', 'id')->toArray(),
+            'subtypes'         => [],
+            'features'         => Feature::getDropdownItems(1),
+            'isMyo'            => true,
             'characterOptions' => CharacterLineageBlacklist::getAncestorOptions(),
             'markings'         => ['' => 'Select Markings(s)'] + Marking::orderBy('name', 'DESC')->pluck('name', 'id')->toArray(),
-            'bases'       => ['' => 'Select Base(s)'] + Base::orderBy('name', 'DESC')->pluck('code', 'id')->toArray(),
+            'bases'            => ['' => 'Select Base(s)'] + Base::orderBy('name', 'DESC')->pluck('code', 'id')->toArray(),
             'transformations'  => ['0' => 'Pick a Species First'],
             'stats'            => Stat::orderBy('name')->get(),
         ]);
@@ -160,7 +160,6 @@ class CharacterController extends Controller {
             'marking_color_0', 'marking_color_1', 'is_chimera',
             'designer_id', 'designer_url',
             'artist_id', 'artist_url',
-            
 
             // hello darkness my old friend //
             'sire_id',           'sire_name',
@@ -344,47 +343,46 @@ class CharacterController extends Controller {
      *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function postEditCharacterStats(Request $request, CharacterManager $service, $slug)
-{
-    $request->validate(Character::$updateRules);
+    public function postEditCharacterStats(Request $request, CharacterManager $service, $slug) {
+        $request->validate(Character::$updateRules);
 
-    $data = $request->only([
-        'character_category_id', 'number', 'slug', 'is_giftable',
-        'is_tradeable', 'is_sellable', 'sale_value', 'transferrable_at',
-        'marking_id', 'is_dominant', 'base', 'secondary_base', 'side_id',
-        'marking_color_0', 'marking_color_1', 'is_chimera'
-    ]);
+        $data = $request->only([
+            'character_category_id', 'number', 'slug', 'is_giftable',
+            'is_tradeable', 'is_sellable', 'sale_value', 'transferrable_at',
+            'marking_id', 'is_dominant', 'base', 'secondary_base', 'side_id',
+            'marking_color_0', 'marking_color_1', 'is_chimera',
+        ]);
 
-    $this->character = Character::where('slug', $slug)->firstOrFail();
+        $this->character = Character::where('slug', $slug)->firstOrFail();
 
-    $is_chimera = $request->boolean('is_chimera');
+        $is_chimera = $request->boolean('is_chimera');
 
-    if ($is_chimera && isset($data['base']) && isset($data['secondary_base'])) {
-        // Prevent duplicate concatenation
-        if (!str_contains($this->character->base, '|')) {
-            $data['base'] = $data['base'] . '|' . $data['secondary_base'];
-        } else {
-            // Replace existing parts properly
-            $parts = explode('|', $this->character->base);
-            $primaryBase = $data['base'] ?? $parts[0];
-            $secondaryBase = $data['secondary_base'] ?? ($parts[1] ?? '');
-            $data['base'] = $primaryBase . '|' . $secondaryBase;
+        if ($is_chimera && isset($data['base']) && isset($data['secondary_base'])) {
+            // Prevent duplicate concatenation
+            if (!str_contains($this->character->base, '|')) {
+                $data['base'] = $data['base'].'|'.$data['secondary_base'];
+            } else {
+                // Replace existing parts properly
+                $parts = explode('|', $this->character->base);
+                $primaryBase = $data['base'] ?? $parts[0];
+                $secondaryBase = $data['secondary_base'] ?? ($parts[1] ?? '');
+                $data['base'] = $primaryBase.'|'.$secondaryBase;
+            }
         }
+
+        if ($service->updateCharacterStats($data, $this->character, Auth::user())) {
+            flash('Character stats updated successfully.')->success();
+            $service->updateCharacterMarkings($data, $this->character);
+
+            return redirect()->to($this->character->url);
+        }
+
+        foreach ($service->errors()->getMessages()['error'] as $error) {
+            flash($error)->error();
+        }
+
+        return redirect()->back()->withInput();
     }
-
-    if ($service->updateCharacterStats($data, $this->character, Auth::user())) {
-        flash('Character stats updated successfully.')->success();
-        $service->updateCharacterMarkings($data, $this->character);
-        return redirect()->to($this->character->url);
-    }
-
-    foreach ($service->errors()->getMessages()['error'] as $error) {
-        flash($error)->error();
-    }
-
-    return redirect()->back()->withInput();
-}
-
 
     /**
      * Edits an MYO slot's stats.
@@ -419,7 +417,6 @@ class CharacterController extends Controller {
 
         return redirect()->back()->withInput();
     }
-
 
     /**
      * Shows the edit character description modal.

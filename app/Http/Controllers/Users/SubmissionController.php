@@ -11,20 +11,17 @@ use App\Models\Gallery\GalleryCollaborator;
 use App\Models\Gallery\GallerySubmission;
 use App\Models\Item\Item;
 use App\Models\Item\ItemCategory;
+use App\Models\Pet\Pet;
 use App\Models\Prompt\Prompt;
 use App\Models\Prompt\PromptCriterion;
 use App\Models\Raffle\Raffle;
+use App\Models\Stat\Stat;
 use App\Models\Submission\Submission;
 use App\Models\User\User;
 use App\Models\User\UserItem;
 use App\Services\SubmissionManager;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Models\Pet\Pet;
-use App\Models\Weapon\Weapon;
-use App\Models\Gear\Gear;
-use App\Models\Stat\Stat;
-
 
 class SubmissionController extends Controller {
     /*
@@ -238,7 +235,7 @@ class SubmissionController extends Controller {
         ]);
     }
 
-     /**
+    /**
      * Shows prompt form.
      *
      * @param int $id

@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Character\Character;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -35,5 +34,4 @@ class SettingsController extends Controller {
 
         return redirect()->back();
     }
-
 }

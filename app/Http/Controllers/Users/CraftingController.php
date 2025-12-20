@@ -62,44 +62,45 @@ class CraftingController extends Controller {
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-   public function getCraftRecipe(RecipeManager $service, $id) {
-    $recipe = Recipe::find($id);
-    $selected = [];
+    public function getCraftRecipe(RecipeManager $service, $id) {
+        $recipe = Recipe::find($id);
+        $selected = [];
 
-    // Aggregate counts per item_id (safe even if duplicates exist)
-    $inventoryItems = \DB::table('user_items')
-    ->where('user_id', Auth::id())
-    ->whereNull('deleted_at')
-    ->pluck('count', 'item_id')
-    ->toArray();
+        // Aggregate counts per item_id (safe even if duplicates exist)
+        $inventoryItems = \DB::table('user_items')
+            ->where('user_id', Auth::id())
+            ->whereNull('deleted_at')
+            ->pluck('count', 'item_id')
+            ->toArray();
 
-    if (!$recipe || !Auth::user()) {
-        abort(404);
-    }
+        if (!$recipe || !Auth::user()) {
+            abort(404);
+        }
 
-    $selected = $service->pluckIngredients(Auth::user(), $recipe);
+        $selected = $service->pluckIngredients(Auth::user(), $recipe);
 
-    $inventory = UserItem::with('item')
-        ->whereNull('deleted_at')
-        ->where('count', '>', 0)
-        ->where('user_id', Auth::id())
-        ->get();
+        $inventory = UserItem::with('item')
+            ->whereNull('deleted_at')
+            ->where('count', '>', 0)
+            ->where('user_id', Auth::id())
+            ->get();
 
         $check = UserItem::where('user_id', Auth::id())
-    ->where('item_id', 1)
-    ->whereNull('deleted_at')
-    ->get(['item_id', 'count']);
-\Log::info('Check user item 1:', $check->toArray());
-    return view('home.crafting._modal_craft', [
-        'recipe'        => $recipe,
-        'categories'    => ItemCategory::orderBy('sort', 'DESC')->get(),
-        'item_filter'   => Item::orderBy('name')->get()->keyBy('id'),
-        'inventory'     => $inventory,
-        'inventoryItems'=> $inventoryItems,
-        'page'          => 'craft',
-        'selected'      => $selected,
-    ]);
-}
+            ->where('item_id', 1)
+            ->whereNull('deleted_at')
+            ->get(['item_id', 'count']);
+        \Log::info('Check user item 1:', $check->toArray());
+
+        return view('home.crafting._modal_craft', [
+            'recipe'        => $recipe,
+            'categories'    => ItemCategory::orderBy('sort', 'DESC')->get(),
+            'item_filter'   => Item::orderBy('name')->get()->keyBy('id'),
+            'inventory'     => $inventory,
+            'inventoryItems'=> $inventoryItems,
+            'page'          => 'craft',
+            'selected'      => $selected,
+        ]);
+    }
 
     /**
      * Crafts a recipe.

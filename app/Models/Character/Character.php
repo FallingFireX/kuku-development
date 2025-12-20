@@ -53,7 +53,7 @@ class Character extends Model {
         'home_id', 'home_changed', 'faction_id', 'faction_changed',
         'character_warning', 'folder_id', 'class_id',
         'genotype', 'phenotype', 'gender', 'eyecolor', 'spd', 'def', 'atk', 'diet', 'bio',
-        'base', 
+        'base',
     ];
 
     /**
@@ -925,8 +925,7 @@ class Character extends Model {
         }
     }
 
-    public function statusEffects()
-    {
+    public function statusEffects() {
         return $this->hasMany(CharacterStatusEffect::class, 'character_id');
     }
 
@@ -1213,8 +1212,6 @@ class Character extends Model {
         return $query->orderByDesc('sort');
     }
 
-    
-
     /**********************************************************************************************
 
         CHARACTER GENO/PHENO
@@ -1230,7 +1227,7 @@ class Character extends Model {
         $markings = CharacterMarking::where('character_id', $this->id)->get();
 
         if (!$markings->count()) {
-            //If no markings, return null
+            // If no markings, return null
             return null;
         }
 
@@ -1242,7 +1239,7 @@ class Character extends Model {
             $has_multi_bases = false;
             $marking_data = $marking->data ?? 0;
             if ($marking->carrier_id) {
-                //Add carriers if needed
+                // Add carriers if needed
                 $rendered['carriers'][$marking->carrier_id] = Carrier::where('id', $marking->carrier_id)->pluck('name')->toArray();
             }
             if (str_contains($marking->base_id, '|')) {
@@ -1294,231 +1291,229 @@ class Character extends Model {
      * @return string
      */
     /**
- * Gets the phenotype or genotype string for the character genome.
- *
- * @param mixed $markings
- * @param string $type
- * @return string
- */
-public function getMarkingLinkedArray($markings, $type = 'phenotype') {
-    $bases = $this->getBaseCoat();
+     * Gets the phenotype or genotype string for the character genome.
+     *
+     * @param mixed  $markings
+     * @param string $type
+     *
+     * @return string
+     */
+    public function getMarkingLinkedArray($markings, $type = 'phenotype') {
+        $bases = $this->getBaseCoat();
 
-    // Handle characters with no markings
-    if ($markings === null || count($markings) < 1) {
-        if (count($bases) > 1 && array_key_exists(1, $bases)) {
-            // Chimera with no markings
-            return ($type === 'phenotype')
-                ? $bases[0]['name'] . ' // ' . $bases[1]['name']
-                : $bases[0]['code'] . '//' . $bases[1]['code'] . '/';
-        } else {
-            // Single base
-            if ($type === 'phenotype') {
-                return $bases[0]['name'] ?? $bases['name'];
+        // Handle characters with no markings
+        if ($markings === null || count($markings) < 1) {
+            if (count($bases) > 1 && array_key_exists(1, $bases)) {
+                // Chimera with no markings
+                return ($type === 'phenotype')
+                    ? $bases[0]['name'].' // '.$bases[1]['name']
+                    : $bases[0]['code'].'//'.$bases[1]['code'].'/';
             } else {
-                return ($bases[0]['code'] ?? $bases['code']) . '/';
+                // Single base
+                if ($type === 'phenotype') {
+                    return $bases[0]['name'] ?? $bases['name'];
+                } else {
+                    return ($bases[0]['code'] ?? $bases['code']).'/';
+                }
             }
         }
-    }
 
-    // Validate markings array structure
-    if (!is_array($markings) || !array_key_exists('markings', $markings)) {
-        return 'Unknown';
-    }
-
-    $geno_sides = [];
-
-    // Handle each side (primary/secondary)
-    foreach ($markings['markings'] as $side => $group) {
-        $sideInner = $this->handleMarkingGroup($group, $type);
-        $geno_sides[$side] = $sideInner;
-
-        // Attach base color for that side
-        $geno_sides[$side][2] = $bases[$side] ?? $bases[0];
-        ksort($geno_sides[$side]);
-    }
-
-    // Ensure both sides have a base if chimera
-    if (!isset($geno_sides[1]) && isset($bases[1])) {
-        $geno_sides[1][2] = $bases[1];
-    }
-    if (!isset($geno_sides[0]) && isset($bases[0])) {
-        $geno_sides[0][2] = $bases[0];
-    }
-
-    // Render each side’s final output
-    $html_inner = [];
-    foreach ($geno_sides as $side) {
-        $html_inner[] = $this->renderFinalMarkingOutput($side, $type);
-    }
-
-    // Join sides with correct separator
-    if (count($html_inner) == 2) {
-        $separator = ($type == 'phenotype') ? ' // ' : '//';
-        $html_inner = implode($separator, $html_inner);
-    } else {
-        $html_inner = implode('', $html_inner);
-    }
-
-    return $html_inner;
-}
-
-/**
- * Converts raw markings into structured arrays suitable for rendering.
- */
-public function handleMarkingGroup($group, $type = 'phenotype') {
-    $result = [];
-
-    foreach ($group as $order => $order_group) {
-        foreach ($order_group as $marking) {
-            $markingArr = (array) $marking;
-
-            // Ensure we have the ID from CharacterMarking table
-            $result[$order][] = [
-                'marking_id' => $markingArr['marking_id'] ?? $markingArr['id'] ?? null,
-                'name'       => $markingArr['name'] ?? 'Unknown',
-                'code'       => $markingArr['code'] ?? '??',
-                'link'       => $markingArr['link'] ?? '#',
-            ];
+        // Validate markings array structure
+        if (!is_array($markings) || !array_key_exists('markings', $markings)) {
+            return 'Unknown';
         }
+
+        $geno_sides = [];
+
+        // Handle each side (primary/secondary)
+        foreach ($markings['markings'] as $side => $group) {
+            $sideInner = $this->handleMarkingGroup($group, $type);
+            $geno_sides[$side] = $sideInner;
+
+            // Attach base color for that side
+            $geno_sides[$side][2] = $bases[$side] ?? $bases[0];
+            ksort($geno_sides[$side]);
+        }
+
+        // Ensure both sides have a base if chimera
+        if (!isset($geno_sides[1]) && isset($bases[1])) {
+            $geno_sides[1][2] = $bases[1];
+        }
+        if (!isset($geno_sides[0]) && isset($bases[0])) {
+            $geno_sides[0][2] = $bases[0];
+        }
+
+        // Render each side’s final output
+        $html_inner = [];
+        foreach ($geno_sides as $side) {
+            $html_inner[] = $this->renderFinalMarkingOutput($side, $type);
+        }
+
+        // Join sides with correct separator
+        if (count($html_inner) == 2) {
+            $separator = ($type == 'phenotype') ? ' // ' : '//';
+            $html_inner = implode($separator, $html_inner);
+        } else {
+            $html_inner = implode('', $html_inner);
+        }
+
+        return $html_inner;
     }
 
-    return $result;
-}
+    /**
+     * Converts raw markings into structured arrays suitable for rendering.
+     *
+     * @param mixed $group
+     * @param mixed $type
+     */
+    public function handleMarkingGroup($group, $type = 'phenotype') {
+        $result = [];
 
-/**
- * Renders the final phenotype/genotype string for a character’s markings.
- *
- * @param array  $array Array of processed markings + base
- * @param string $type  'phenotype' or 'genotype'
- *
- * @return string
- */
-public function renderFinalMarkingOutput($array, $type = 'phenotype') {
-    if (!is_array($array)) {
-        return 'Unknown';
+        foreach ($group as $order => $order_group) {
+            foreach ($order_group as $marking) {
+                $markingArr = (array) $marking;
+
+                // Ensure we have the ID from CharacterMarking table
+                $result[$order][] = [
+                    'marking_id' => $markingArr['marking_id'] ?? $markingArr['id'] ?? null,
+                    'name'       => $markingArr['name'] ?? 'Unknown',
+                    'code'       => $markingArr['code'] ?? '??',
+                    'link'       => $markingArr['link'] ?? '#',
+                ];
+            }
+        }
+
+        return $result;
     }
 
-    switch ($type) {
-        case 'phenotype':
-            // Base (index 2 in your data)
-            $base = $array[2] ?? ['name' => 'Unknown', 'code' => '??'];
-            unset($array[2]);
+    /**
+     * Renders the final phenotype/genotype string for a character’s markings.
+     *
+     * @param array  $array Array of processed markings + base
+     * @param string $type  'phenotype' or 'genotype'
+     *
+     * @return string
+     */
+    public function renderFinalMarkingOutput($array, $type = 'phenotype') {
+        if (!is_array($array)) {
+            return 'Unknown';
+        }
 
-            $beforeMarkings = [];
-            $afterMarkings  = [];
+        switch ($type) {
+            case 'phenotype':
+                // Base (index 2 in your data)
+                $base = $array[2] ?? ['name' => 'Unknown', 'code' => '??'];
+                unset($array[2]);
 
-            $allMarkings = [];
+                $beforeMarkings = [];
+                $afterMarkings = [];
 
-            // Flatten all marking groups into a single array
-            foreach ($array as $group) {
-                if (!is_array($group)) continue;
-                foreach ($group as $marking) {
-                    $allMarkings[] = $marking;
+                $allMarkings = [];
+
+                // Flatten all marking groups into a single array
+                foreach ($array as $group) {
+                    if (!is_array($group)) {
+                        continue;
+                    }
+                    foreach ($group as $marking) {
+                        $allMarkings[] = $marking;
+                    }
                 }
-            }
 
-            // Separate markings by goes_before_base
-            foreach ($allMarkings as $marking) {
-                $markingId = $marking['marking_id'] ?? null;
-                
-                // If no marking_id, try to get it from the id field
-                if (!$markingId && isset($marking['id'])) {
-                    $markingId = $marking['id'];
+                // Separate markings by goes_before_base
+                foreach ($allMarkings as $marking) {
+                    $markingId = $marking['marking_id'] ?? null;
+
+                    // If no marking_id, try to get it from the id field
+                    if (!$markingId && isset($marking['id'])) {
+                        $markingId = $marking['id'];
+                    }
+
+                    // Skip if we can't identify the marking
+                    if (!$markingId) {
+                        continue;
+                    }
+
+                    $originalMarking = Marking::find($markingId);
+                    $goesBefore = $originalMarking && $originalMarking->goes_before_base ? true : false;
+
+                    $name = $marking['name'] ?? 'Unknown';
+                    $link = $marking['link'] ?? '#';
+
+                    if ($goesBefore) {
+                        // Before base: add 'ed' suffix unless exception
+                        $exceptions = ['Candied'];
+                        $displayName = in_array($name, $exceptions) ? $name : $name.'ed';
+                        $beforeMarkings[] = '<a href="'.$link.'" class="marking-link">'.htmlspecialchars($displayName).'</a>';
+                    } else {
+                        $afterMarkings[] = '<a href="'.$link.'" class="marking-link">'.htmlspecialchars($name).'</a>';
+                    }
                 }
-                
-                // Skip if we can't identify the marking
-                if (!$markingId) continue;
 
-                $originalMarking = Marking::find($markingId);
-                $goesBefore = $originalMarking && $originalMarking->goes_before_base ? true : false;
+                // Format lists with commas and "and"
+                $beforeText = $this->formatMarkingList($beforeMarkings);
+                $afterText = $this->formatMarkingList($afterMarkings);
 
-                $name = $marking['name'] ?? 'Unknown';
-                $link = $marking['link'] ?? '#';
+                // Construct final string
+                $html = '';
 
-                if ($goesBefore) {
-                    // Before base: add 'ed' suffix unless exception
-                    $exceptions = ['Candied'];
-                    $displayName = in_array($name, $exceptions) ? $name : $name.'ed';
-                    $beforeMarkings[] = '<a href="'.$link.'" class="marking-link">'.htmlspecialchars($displayName).'</a>';
-                } else {
-                    $afterMarkings[] = '<a href="'.$link.'" class="marking-link">'.htmlspecialchars($name).'</a>';
+                if ($beforeText) {
+                    $html .= ucfirst($beforeText).' ';
                 }
-            }
 
-            // Format lists with commas and "and"
-            $beforeText = $this->formatMarkingList($beforeMarkings);
-            $afterText  = $this->formatMarkingList($afterMarkings);
+                $html .= htmlspecialchars($base['name']);
 
-            // Construct final string
-            $html = '';
-
-            if ($beforeText) {
-                $html .= ucfirst($beforeText) . ' ';
-            }
-
-            $html .= htmlspecialchars($base['name']);
-
-            if ($afterText) {
-                $html .= ' with ' . $afterText;
-            }
-
-            break;
-
-        case 'genotype':
-            // Base first
-            $html = is_array($array[2]) ? $array[2]['code'] . '/' : $array[2] . '/';
-            unset($array[2]);
-
-            $before = [];
-            $after  = [];
-
-            // Flatten and separate
-            $allMarkings = [];
-            foreach ($array as $group) {
-                if (!is_array($group)) continue;
-                foreach ($group as $marking) {
-                    $allMarkings[] = $marking;
+                if ($afterText) {
+                    $html .= ' with '.$afterText;
                 }
-            }
 
-            foreach ($allMarkings as $marking) {
-                if (!isset($marking['marking_id'])) continue;
-                $originalMarking = Marking::find($marking['marking_id']);
-                $goesBefore = $originalMarking ? $originalMarking->goes_before_base : false;
+                break;
 
-                $code = $marking['code'] ?? $marking;
-                if ($goesBefore) {
-                    $before[] = $code;
-                } else {
-                    $after[] = $code;
+            case 'genotype':
+                // Base first
+                $html = is_array($array[2]) ? $array[2]['code'].'/' : $array[2].'/';
+                unset($array[2]);
+
+                $before = [];
+                $after = [];
+
+                // Flatten and separate
+                $allMarkings = [];
+                foreach ($array as $group) {
+                    if (!is_array($group)) {
+                        continue;
+                    }
+                    foreach ($group as $marking) {
+                        $allMarkings[] = $marking;
+                    }
                 }
-            }
 
-            $html .= implode('/', $before);
-            if ($before && $after) $html .= '/';
-            $html .= implode('/', $after);
+                foreach ($allMarkings as $marking) {
+                    if (!isset($marking['marking_id'])) {
+                        continue;
+                    }
+                    $originalMarking = Marking::find($marking['marking_id']);
+                    $goesBefore = $originalMarking ? $originalMarking->goes_before_base : false;
 
-            break;
+                    $code = $marking['code'] ?? $marking;
+                    if ($goesBefore) {
+                        $before[] = $code;
+                    } else {
+                        $after[] = $code;
+                    }
+                }
+
+                $html .= implode('/', $before);
+                if ($before && $after) {
+                    $html .= '/';
+                }
+                $html .= implode('/', $after);
+
+                break;
+        }
+
+        return '<span class="marking-output">'.$html.'</span>';
     }
-
-    return '<span class="marking-output">'.$html.'</span>';
-}
-
-
-/**
- * Helper to format an array of markings with commas and "and".
- */
-private function formatMarkingList(array $markings) {
-    $count = count($markings);
-    if ($count === 0) return '';
-    if ($count === 1) return $markings[0];
-    if ($count === 2) return $markings[0] . ' and ' . $markings[1];
-
-    return implode(', ', array_slice($markings, 0, -1)) . ', and ' . end($markings);
-}
-
-
-
 
     /**
      * Gets the genotype for the character genome.
@@ -1542,7 +1537,7 @@ private function formatMarkingList(array $markings) {
             }
         }
 
-        //If Not Chimera, Continue as normal
+        // If Not Chimera, Continue as normal
         $base = Base::where('id', $this->base)->first();
 
         if (!$base) {
@@ -1558,5 +1553,23 @@ private function formatMarkingList(array $markings) {
             'name'  => $base->name,
             'code'  => $base->code,
         ]];
+    }
+
+    /**
+     * Helper to format an array of markings with commas and "and".
+     */
+    private function formatMarkingList(array $markings) {
+        $count = count($markings);
+        if ($count === 0) {
+            return '';
+        }
+        if ($count === 1) {
+            return $markings[0];
+        }
+        if ($count === 2) {
+            return $markings[0].' and '.$markings[1];
+        }
+
+        return implode(', ', array_slice($markings, 0, -1)).', and '.end($markings);
     }
 }

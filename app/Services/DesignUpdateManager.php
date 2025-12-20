@@ -7,8 +7,8 @@ use App\Models\Character\Character;
 use App\Models\Character\CharacterDesignUpdate;
 use App\Models\Character\CharacterFeature;
 use App\Models\Character\CharacterImage;
-use App\Models\Character\CharacterTransformation as Transformation;
 use App\Models\Character\CharacterImageSubtype;
+use App\Models\Character\CharacterTransformation as Transformation;
 use App\Models\Currency\Currency;
 use App\Models\Feature\Feature;
 use App\Models\Rarity;
@@ -16,13 +16,12 @@ use App\Models\Species\Species;
 use App\Models\Species\Subtype;
 use App\Models\User\User;
 use App\Models\User\UserItem;
-use App\Services\LimitManager;
+use Auth;
 use Carbon\Carbon;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Intervention\Image\Facades\Image;
-use Auth;
 
 class DesignUpdateManager extends Service {
     /*
@@ -37,78 +36,78 @@ class DesignUpdateManager extends Service {
     /**
      * Creates a character design update request (or a MYO design approval request).
      *
-     * @param Character $character
-     * @param User      $user
+     * @param Character  $character
+     * @param User       $user
+     * @param mixed|null $image
+     * @param mixed      $isImage
      *
      * @return bool|CharacterDesignUpdate
      */
     public function createDesignUpdateRequest($character, $user, $image = null, $isImage = false) {
-    DB::beginTransaction();
+        DB::beginTransaction();
 
-    try {
-        // --- Dynamic limits check ---
-        $limitManager = new \App\Services\LimitManager;
-        $user = Auth::user(); 
-        if (!$limitManager->checkDynamicLimit('test', $user)) {
-            throw new \Exception('You have reached your monthly design update limit.');
-        }
-
-        // === existing logic ===
-        if($isImage){
-            $image = $image;
-        }else{
-            $image = $character->image;
-        }
-
-        if ($character->user_id != $user->id) {
-            throw new \Exception('You do not own this character.');
-        }
-
-        if (CharacterDesignUpdate::where('character_id', $character->id)->active()->exists()) {
-            throw new \Exception('This '.($character->is_myo_slot ? 'MYO slot' : 'character').' already has an existing request. Please update that one, or delete it before creating a new one.');
-        }
-
-        if (!$character->isAvailable) {
-            throw new \Exception('This '.($character->is_myo_slot ? 'MYO slot' : 'character').' is currently in an open trade or transfer. Please cancel the trade or transfer before creating a design update.');
-        }
-
-        $data = [
-            'user_id'       => $user->id,
-            'character_id'  => $character->id,
-            'status'        => 'Draft',
-            'hash'          => randomString(10),
-            'fullsize_hash' => randomString(15),
-            'update_type'   => $character->is_myo_slot ? 'MYO' : 'Character',
-            'rarity_id'     => $image->rarity_id,
-            'species_id'    => $image->species_id,
-            'subtype_id'    => $image->subtype_id,
-            'transformation_id' => $image->transformation_id,
-            'transformation_info' => $image->transformation_info,
-            'transformation_description' => $image->transformation_description
-        ];
-
-        $request = CharacterDesignUpdate::create($data);
-
-        if (!$character->is_myo_slot) {
-            foreach ($image->features as $feature) {
-                $request->features()->create([
-                    'character_image_id' => $request->id,
-                    'character_type'     => 'Update',
-                    'feature_id'         => $feature->feature_id,
-                    'data'               => $feature->data,
-                ]);
+        try {
+            // --- Dynamic limits check ---
+            $limitManager = new LimitManager;
+            $user = Auth::user();
+            if (!$limitManager->checkDynamicLimit('test', $user)) {
+                throw new \Exception('You have reached your monthly design update limit.');
             }
+
+            // === existing logic ===
+            if ($isImage) {
+                $image = $image;
+            } else {
+                $image = $character->image;
+            }
+
+            if ($character->user_id != $user->id) {
+                throw new \Exception('You do not own this character.');
+            }
+
+            if (CharacterDesignUpdate::where('character_id', $character->id)->active()->exists()) {
+                throw new \Exception('This '.($character->is_myo_slot ? 'MYO slot' : 'character').' already has an existing request. Please update that one, or delete it before creating a new one.');
+            }
+
+            if (!$character->isAvailable) {
+                throw new \Exception('This '.($character->is_myo_slot ? 'MYO slot' : 'character').' is currently in an open trade or transfer. Please cancel the trade or transfer before creating a design update.');
+            }
+
+            $data = [
+                'user_id'                    => $user->id,
+                'character_id'               => $character->id,
+                'status'                     => 'Draft',
+                'hash'                       => randomString(10),
+                'fullsize_hash'              => randomString(15),
+                'update_type'                => $character->is_myo_slot ? 'MYO' : 'Character',
+                'rarity_id'                  => $image->rarity_id,
+                'species_id'                 => $image->species_id,
+                'subtype_id'                 => $image->subtype_id,
+                'transformation_id'          => $image->transformation_id,
+                'transformation_info'        => $image->transformation_info,
+                'transformation_description' => $image->transformation_description,
+            ];
+
+            $request = CharacterDesignUpdate::create($data);
+
+            if (!$character->is_myo_slot) {
+                foreach ($image->features as $feature) {
+                    $request->features()->create([
+                        'character_image_id' => $request->id,
+                        'character_type'     => 'Update',
+                        'feature_id'         => $feature->feature_id,
+                        'data'               => $feature->data,
+                    ]);
+                }
+            }
+
+            return $this->commitReturn($request);
+        } catch (\Exception $e) {
+            $this->setError('error', $e->getMessage());
         }
 
-        return $this->commitReturn($request);
-    } catch (\Exception $e) {
-        $this->setError('error', $e->getMessage());
+        return $this->rollbackReturn(false);
     }
-
-    return $this->rollbackReturn(false);
-}
-
-
 
     /**
      * Saves the comment section of a character design update request.
@@ -458,7 +457,7 @@ class DesignUpdateManager extends Service {
             // Update other stats
             $request->species_id = $species->id;
             $request->rarity_id = $rarity->id;
-             $request->subtype_ids = $subtypes ?? null;
+            $request->subtype_ids = $subtypes ?? null;
             $request->transformation_id = $transformation ? $transformation->id : null;
             $request->transformation_info = $transformation_info;
             $request->transformation_description = $transformation_description;
@@ -480,41 +479,41 @@ class DesignUpdateManager extends Service {
      *
      * @return bool
      */
-public function submitRequest($request) {
-    DB::beginTransaction();
+    public function submitRequest($request) {
+        DB::beginTransaction();
 
-    try {
-        if ($request->status != 'Draft') {
-            throw new \Exception('This request cannot be resubmitted to the queue.');
+        try {
+            if ($request->status != 'Draft') {
+                throw new \Exception('This request cannot be resubmitted to the queue.');
+            }
+
+            $limitManager = new LimitManager;
+            $user = Auth::user();
+            if (!$limitManager->checkDynamicLimit('test', $user)) {
+                throw new \Exception('You have reached your monthly design update limit.');
+            }
+
+            // Recheck and set update type
+            if ($request->character->is_myo_slot) {
+                $request->update_type = 'MYO';
+            } else {
+                $request->update_type = 'Character';
+            }
+
+            // Mark as pending
+            $request->status = 'Pending';
+            if (!$request->submitted_at) {
+                $request->submitted_at = Carbon::now();
+            }
+            $request->save();
+
+            return $this->commitReturn(true);
+        } catch (\Exception $e) {
+            $this->setError('error', $e->getMessage());
         }
 
-       $limitManager = new \App\Services\LimitManager;
-        $user = Auth::user(); 
-        if (!$limitManager->checkDynamicLimit('test', $user)) {
-            throw new \Exception('You have reached your monthly design update limit.');
-        }
-
-        // Recheck and set update type
-        if ($request->character->is_myo_slot) {
-            $request->update_type = 'MYO';
-        } else {
-            $request->update_type = 'Character';
-        }
-
-        // Mark as pending
-        $request->status = 'Pending';
-        if (!$request->submitted_at) {
-            $request->submitted_at = \Carbon\Carbon::now();
-        }
-        $request->save();
-
-        return $this->commitReturn(true);
-    } catch (\Exception $e) {
-        $this->setError('error', $e->getMessage());
+        return $this->rollbackReturn(false);
     }
-
-    return $this->rollbackReturn(false);
-}
 
     /**
      * Approves a character design update request and processes it.
@@ -613,24 +612,24 @@ public function submitRequest($request) {
 
             // Create a new image with the request data
             $image = CharacterImage::create([
-                'character_id'       => $request->character_id,
-                'is_visible'         => 1,
-                'hash'               => $request->hash,
-                'fullsize_hash'      => $request->fullsize_hash ? $request->fullsize_hash : randomString(15),
-                'extension'          => config('lorekeeper.settings.masterlist_image_format') != null ? config('lorekeeper.settings.masterlist_image_format') : $request->extension,
-                'fullsize_extension' => config('lorekeeper.settings.masterlist_fullsizes_format') != null ? config('lorekeeper.settings.masterlist_fullsizes_format') : $request->extension,
-                'use_cropper'        => $request->use_cropper,
-                'x0'                 => $request->x0,
-                'x1'                 => $request->x1,
-                'y0'                 => $request->y0,
-                'y1'                 => $request->y1,
-                'species_id'         => $request->species_id,
-                'rarity_id'          => $request->rarity_id,
-                'sort'               => 0,
+                'character_id'               => $request->character_id,
+                'is_visible'                 => 1,
+                'hash'                       => $request->hash,
+                'fullsize_hash'              => $request->fullsize_hash ? $request->fullsize_hash : randomString(15),
+                'extension'                  => config('lorekeeper.settings.masterlist_image_format') != null ? config('lorekeeper.settings.masterlist_image_format') : $request->extension,
+                'fullsize_extension'         => config('lorekeeper.settings.masterlist_fullsizes_format') != null ? config('lorekeeper.settings.masterlist_fullsizes_format') : $request->extension,
+                'use_cropper'                => $request->use_cropper,
+                'x0'                         => $request->x0,
+                'x1'                         => $request->x1,
+                'y0'                         => $request->y0,
+                'y1'                         => $request->y1,
+                'species_id'                 => $request->species_id,
+                'rarity_id'                  => $request->rarity_id,
+                'sort'                       => 0,
                 'transformation_id'          => ($request->character->is_myo_slot && isset($request->character->image->transformation_id)) ? $request->character->image->transformation_id : $request->transformation_id,
                 'transformation_info'        => ($request->character->is_myo_slot && isset($request->character->image->transformation_info)) ? $request->character->image->transformation_info : $request->transformation_info,
                 'transformation_description' => ($request->character->is_myo_slot && isset($request->character->image->transformation_description)) ? $request->character->image->transformation_description : $request->transformation_description,
-                
+
             ]);
 
             // do subtype stuff

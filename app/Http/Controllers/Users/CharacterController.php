@@ -24,7 +24,7 @@ class CharacterController extends Controller {
     |
     */
 
-     /**
+    /**
      * Shows the user's characters.
      *
      * @return \Illuminate\Contracts\Support\Renderable
@@ -34,7 +34,7 @@ class CharacterController extends Controller {
 
         return view('home.characters', [
             'characters' => $characters,
-            'folders' => ['None' => 'None'] + Auth::user()->folders()->pluck('name', 'id')->toArray(),
+            'folders'    => ['None' => 'None'] + Auth::user()->folders()->pluck('name', 'id')->toArray(),
         ]);
     }
 

@@ -334,7 +334,7 @@ class GalleryController extends Controller {
 
         return view('galleries.create_edit_submission', [
             'closed' => $closed,
-        ] + ($closed ? [] : [ 
+        ] + ($closed ? [] : [
             'gallery'     => $gallery,
             'submission'  => new GallerySubmission,
             'prompts'     => Prompt::active()->sortAlphabetical()->pluck('name', 'id')->toArray(),

@@ -14,8 +14,8 @@ use App\Models\Claymore\GearCategory;
 use App\Models\Claymore\Weapon;
 use App\Models\Claymore\WeaponCategory;
 use App\Models\Currency\Currency;
-use App\Models\Element\Element;
 use App\Models\Currency\CurrencyCategory;
+use App\Models\Element\Element;
 use App\Models\Feature\Feature;
 use App\Models\Feature\FeatureCategory;
 use App\Models\Feature\FeatureSubcategory;
@@ -28,7 +28,6 @@ use App\Models\Rarity;
 use App\Models\Recipe\Recipe;
 use App\Models\Recipe\RecipeCategory;
 use App\Models\Shop\Shop;
-use App\Models\Shop\ShopStock;
 use App\Models\Skill\Skill;
 use App\Models\Skill\SkillCategory;
 use App\Models\Species\Species;
@@ -541,7 +540,6 @@ class WorldController extends Controller {
      * Provides a single trait's description html for use in a modal.
      *
      * @param mixed $id
-     * @param mixed $speciesId
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */

@@ -4,13 +4,11 @@ namespace App\Http\Controllers\Admin\Data;
 
 use App\Http\Controllers\Controller;
 use App\Models\Item\Item;
-use App\Models\Pet\Pet;
 use App\Models\Shop\Shop;
 use App\Models\Shop\ShopStock;
 use App\Services\ShopService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Log;
 
 class ShopController extends Controller {
     /*

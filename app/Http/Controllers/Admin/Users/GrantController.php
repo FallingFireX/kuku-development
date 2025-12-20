@@ -12,11 +12,11 @@ use App\Models\Claymore\Gear;
 use App\Models\Claymore\Weapon;
 use App\Models\Currency\Currency;
 use App\Models\Item\Item;
+use App\Models\Loot\LootTable;
 use App\Models\Pet\Pet;
 use App\Models\Recipe\Recipe;
 use App\Models\Skill\Skill;
 use App\Models\Stat\Stat;
-use App\Models\Loot\LootTable;
 use App\Models\Submission\Submission;
 use App\Models\Trade\Trade;
 use App\Models\User\User;
@@ -27,12 +27,12 @@ use App\Services\Claymore\GearManager;
 use App\Services\Claymore\WeaponManager;
 use App\Services\CurrencyManager;
 use App\Services\InventoryManager;
+use App\Services\LootManager;
 use App\Services\PetManager;
 use App\Services\RecipeService;
 use App\Services\SkillManager;
 use App\Services\Stat\ExperienceManager;
 use App\Services\Stat\StatManager;
-use App\Services\LootManager;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -477,8 +477,8 @@ class GrantController extends Controller {
 
         return redirect()->back();
     }
-       
-     /**
+
+    /**
      * Grants or removes loot tables from multiple users.
      *
      * @param App\Services\LootManager $service

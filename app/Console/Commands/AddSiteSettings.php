@@ -122,7 +122,7 @@ class AddSiteSettings extends Command {
         $this->addSiteSetting('notify_staff_applicants', 0, 'Toggle notifications sent when accepting/denying applicants to the staff team. 0: notifications disabled, 1 notifications enabled');
 
         $this->addSiteSetting('is_applications_comment_read_only', 1, 'Allow/disallow replies to comments from staff on applications. 0: applicants CAN reply to comments 1: applicants CANT reply to comments.');
-        
+
         $this->addSiteSetting('allow_users_to_delete_profile_comments', 0, '0: Users cannot delete profile comments, 1: Users can delete profile comments.');
 
         $this->line("\nSite settings up to date!");

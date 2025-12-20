@@ -12,11 +12,11 @@ use App\Models\Currency\Currency;
 use App\Models\Gallery\GalleryCriterion;
 use App\Models\Gallery\GallerySubmission;
 use App\Models\Report\Report;
+use App\Models\Submission\AdminApplication;
 use App\Models\Submission\Submission;
 use App\Models\Team;
 use App\Models\Trade\Trade;
 use App\Models\User\User;
-use App\Models\Submission\AdminApplication;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -62,9 +62,9 @@ class HomeController extends Controller {
             'gallerySubmissionCount'        => GallerySubmission::collaboratorApproved()->where('status', 'Pending')->count(),
             'galleryAwardCount'             => GallerySubmission::requiresAward()->where('is_valued', 0)->count(),
             'affiliateCount'                => Affiliate::where('status', 'Pending')->count(),
-            'teams'                  => Team::orderBy('id')->get(),
-            'AppCount'               => AdminApplication::where('status', 'Pending')->count(),
-            'openTradesQueue'        => $openTradesQueue,
+            'teams'                         => Team::orderBy('id')->get(),
+            'AppCount'                      => AdminApplication::where('status', 'Pending')->count(),
+            'openTradesQueue'               => $openTradesQueue,
         ]);
     }
 
