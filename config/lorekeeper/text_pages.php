@@ -40,5 +40,9 @@ return [
         'title' => 'Team Info Into',
         'text'  => 'This page contains the starting content of the team information page. Its a good idea to put application forms, information, staff exceptions, etc here! ',
     ],
+    'donation-shop' => [
+        'title' => 'Donation Shop',
+        'text'  => 'Default Donation text ',
+    ],
 
 ];

@@ -36,7 +36,7 @@
                         (config('lorekeeper.settings.allow_gallery_submissions_on_prompts') ? ' Alternatively, if you are submitting a gallery link, you can enter the title of your submission here.' : ''),
                 ) !!}
             @endif
-            {!! Form::text('url', isset($submission->url) ? $submission->url : old('url') ?? Request::get('url'), ['class' => 'form-control', 'required']) !!}
+            {!! Form::text('url', isset($submission->url) ? $submission->url : old('url') ?? Request::get('url'), ['class' => 'form-control', '']) !!}
         </div>
     </div>
     @if (config('lorekeeper.settings.allow_gallery_submissions_on_prompts') && !$isClaim)
@@ -200,14 +200,14 @@
 
 @if ($submission->status == 'Draft')
     <div class="text-right">
-        <a href="#" class="btn btn-danger mr-2" id="cancelButton">Delete Draft</a>
-        <a href="#" class="btn btn-secondary mr-2" id="draftButton">Save Draft</a>
-        <a href="#" class="btn btn-primary" id="confirmButton">Submit</a>
+        <button type="submit" class="btn btn-danger mr-2" id="cancelButton">Delete Draft</button>
+        <button type="submit" name="draft" value="1" class="btn btn-secondary mr-2" id="draftButton">Save Draft</button>
+        <button type="submit" class="btn btn-primary" id="confirmButton">Submit</button>
     </div>
 @else
     <div class="text-right">
-        <a href="#" class="btn btn-secondary mr-2" id="draftButton">Save Draft</a>
-        <a href="#" class="btn btn-primary" id="confirmButton">Submit</a>
+        <button type="submit" class="btn btn-secondary mr-2" id="draftButton">Save Draft</button>
+        <button type="submit" class="btn btn-primary" id="confirmButton">Submit</button>
     </div>
 @endif
 

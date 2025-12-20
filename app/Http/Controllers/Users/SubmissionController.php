@@ -20,6 +20,11 @@ use App\Models\User\UserItem;
 use App\Services\SubmissionManager;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Pet\Pet;
+use App\Models\Weapon\Weapon;
+use App\Models\Gear\Gear;
+use App\Models\Stat\Stat;
+
 
 class SubmissionController extends Controller {
     /*
@@ -131,6 +136,10 @@ class SubmissionController extends Controller {
             'expanded_rewards'       => config('lorekeeper.extensions.character_reward_expansion.expanded'),
             'criteria'               => $prompt ? Criterion::active()->whereIn('id', $promptCriteria)->orderBy('name')->pluck('name', 'id') : null,
             'userGallerySubmissions' => $gallerySubmissions,
+            'pets'                   => Pet::orderBy('name')->pluck('name', 'id'),
+            'weapons'                => [],
+            'gears'                  => [],
+            'stats'                  => Stat::orderBy('name')->pluck('name', 'id'),
         ]));
     }
 
@@ -188,6 +197,10 @@ class SubmissionController extends Controller {
             'criteria'               => Criterion::active()->whereIn('id', $promptCriteria)->orderBy('name')->pluck('name', 'id'),
             'count'                  => Submission::where('prompt_id', $submission->prompt_id)->where('status', 'Approved')->where('user_id', $submission->user_id)->count(),
             'userGallerySubmissions' => $gallerySubmissions,
+            'pets'                   => Pet::orderBy('name')->pluck('name', 'id'),
+            'weapons'                => [],
+            'gears'                  => [],
+            'stats'                  => Stat::orderBy('name')->pluck('name', 'id'),
         ]));
     }
 
@@ -468,6 +481,10 @@ class SubmissionController extends Controller {
             'page'                   => 'submission',
             'expanded_rewards'       => config('lorekeeper.extensions.character_reward_expansion.expanded'),
             'userGallerySubmissions' => [],
+            'pets'                   => Pet::orderBy('name')->pluck('name', 'id'),
+            'weapons'                => [],
+            'gears'                  => [],
+            'stats'                  => Stat::orderBy('name')->pluck('name', 'id'),
         ]));
     }
 
@@ -512,6 +529,10 @@ class SubmissionController extends Controller {
             'expanded_rewards'       => config('lorekeeper.extensions.character_reward_expansion.expanded'),
             'selectedInventory'      => isset($submission->data['user']) ? parseAssetData($submission->data['user']) : null,
             'userGallerySubmissions' => [],
+            'pets'                   => Pet::orderBy('name')->pluck('name', 'id'),
+            'weapons'                => [],
+            'gears'                  => [],
+            'stats'                  => Stat::orderBy('name')->pluck('name', 'id'),
         ]));
     }
 
@@ -565,7 +586,7 @@ class SubmissionController extends Controller {
         if ($submit && $service->editSubmission($submission, $request->only(['url', 'comments', 'stack_id', 'stack_quantity', 'slug', 'character_rewardable_type', 'character_rewardable_id', 'character_rewardable_quantity', 'rewardable_type', 'rewardable_id', 'quantity', 'currency_id', 'currency_quantity']), Auth::user(), true, $submit)) {
             flash('Draft submitted successfully.')->success();
 
-            return redirect()->to('claims/draft/'.$submission->id);
+            return redirect()->to('claims/view/'.$submission->id);
         } elseif ($service->editSubmission($submission, $request->only(['url', 'comments', 'slug', 'character_rewardable_type', 'character_rewardable_id', 'character_rewardable_quantity', 'rewardable_type', 'rewardable_id', 'quantity', 'stack_id', 'stack_quantity', 'currency_id', 'currency_quantity']), Auth::user(), true)) {
             flash('Draft saved successfully.')->success();
         } else {
