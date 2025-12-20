@@ -115,39 +115,38 @@
                         @else
                             <p>This submission is not eligible for currency awards{{ $submission->status == 'Pending' ? ' yet-- it must be accepted first' : '' }}.</p>
                         @endif
-<<<<<<< HEAD
-                        @if (isset($totals) && count($totals) > 0)
+                        <<<<<<< HEAD @if (isset($totals) && count($totals) > 0)
                             <hr />
                             <div id="totals">
                                 @include('galleries._submission_totals', ['totals' => $totals, 'collaboratorsCount' => $collaboratorsCount])
-=======
-                        <hr />
-                        @if (isset($submission->data['total']))
-                            <h6>Form Responses:</h6>
-                            <div class="row mb-2">
-                                @foreach ($submission->data['currencyData'] as $key => $data)
-                                    <div class="col-md-3 text-center">
-                                        @if (isset($data) && isset(config('lorekeeper.group_currency_form')[$key]))
-                                            <strong>{{ config('lorekeeper.group_currency_form')[$key]['name'] }}:</strong><br />
-                                            @if (config('lorekeeper.group_currency_form')[$key]['type'] == 'choice')
-                                                @if (isset(config('lorekeeper.group_currency_form')[$key]['multiple']) && config('lorekeeper.group_currency_form')[$key]['multiple'] == 'true')
-                                                    @foreach ($data as $answer)
-                                                        {{ config('lorekeeper.group_currency_form')[$key]['choices'][$answer] ?? '-' }}<br />
-                                                    @endforeach
-                                                @else
-                                                    {{ config('lorekeeper.group_currency_form')[$key]['choices'][$data] }}
+                                =======
+                                <hr />
+                                @if (isset($submission->data['total']))
+                                    <h6>Form Responses:</h6>
+                                    <div class="row mb-2">
+                                        @foreach ($submission->data['currencyData'] as $key => $data)
+                                            <div class="col-md-3 text-center">
+                                                @if (isset($data) && isset(config('lorekeeper.group_currency_form')[$key]))
+                                                    <strong>{{ config('lorekeeper.group_currency_form')[$key]['name'] }}:</strong><br />
+                                                    @if (config('lorekeeper.group_currency_form')[$key]['type'] == 'choice')
+                                                        @if (isset(config('lorekeeper.group_currency_form')[$key]['multiple']) && config('lorekeeper.group_currency_form')[$key]['multiple'] == 'true')
+                                                            @foreach ($data as $answer)
+                                                                {{ config('lorekeeper.group_currency_form')[$key]['choices'][$answer] ?? '-' }}<br />
+                                                            @endforeach
+                                                        @else
+                                                            {{ config('lorekeeper.group_currency_form')[$key]['choices'][$data] }}
+                                                        @endif
+                                                    @else
+                                                        {{ config('lorekeeper.group_currency_form')[$key]['type'] == 'checkbox' ? (config('lorekeeper.group_currency_form')[$key]['value'] == $data ? 'True' : 'False') : $data }}
+                                                    @endif
                                                 @endif
-                                            @else
-                                                {{ config('lorekeeper.group_currency_form')[$key]['type'] == 'checkbox' ? (config('lorekeeper.group_currency_form')[$key]['value'] == $data ? 'True' : 'False') : $data }}
-                                            @endif
-                                        @endif
+                                            </div>
+                                        @endforeach
+                                        >>>>>>> 8b6233ab90ea1589fb1c8eabece2136fde119222
                                     </div>
-                                @endforeach
->>>>>>> 8b6233ab90ea1589fb1c8eabece2136fde119222
+                                @endif
                             </div>
-                        @endif
                     </div>
-                </div>
             @endif
             <div class="card mb-4">
                 <div class="card-header">

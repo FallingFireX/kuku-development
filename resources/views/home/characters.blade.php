@@ -11,125 +11,121 @@
         My Characters
     </h1>
 
-<div class="text-right mb-2">
-    <a class="btn btn-primary create-folder mx-1" href="#"><i class="fas fa-plus"></i> Create New Folder</a>
-    <a class="btn btn-primary edit-folder mx-1" href="#"><i class="fas fa-edit"></i> Edit Folder</a>
-</div>
-
-<div id="folders" class="collapse text-right">
-    <div class="row">
-        <div class="col-8">
-        </div>
-        <div class="form-group col-4">
-            {!! Form::label('Select Folder to Edit') !!}
-            {!! Form::select('folder_ids[]', $folders, null, ['class' => 'form-control']) !!}
-        </div>
+    <div class="text-right mb-2">
+        <a class="btn btn-primary create-folder mx-1" href="#"><i class="fas fa-plus"></i> Create New Folder</a>
+        <a class="btn btn-primary edit-folder mx-1" href="#"><i class="fas fa-edit"></i> Edit Folder</a>
     </div>
-    <div class="edit-get-button btn btn-primary"><i class="fas fa-edit"></i> Edit Folder</a></div>
-</div>
 
-<p>This is a list of characters you own. Drag and drop to rearrange them.</p>
-
-{!! Form::open(['url' => 'characters/sort', 'class' => 'text-right']) !!}
-<div id="sortable" class="row sortable">
-    @foreach($characters as $character)
-        <div class="col-md-3 col-6 text-center mb-2" data-id="{{ $character->id }}">
-            <div>
-                <a href="{{ $character->url }}"><img src="{{ $character->image->thumbnailUrl }}" class="img-thumbnail" alt="Thumbnail for {{ $character->fullName }}" /></a>
+    <div id="folders" class="collapse text-right">
+        <div class="row">
+            <div class="col-8">
             </div>
-            <div class="mt-1 h5">
-                {!! $character->displayName !!}
-            </div>
-            <div class="form-group">
-                {!! Form::label('folder_ids[]', 'Folder (Optional)') !!}
-                {!! Form::select('folder_ids[]', $folders, $character->folder_id, ['class' => 'form-control']) !!}
+            <div class="form-group col-4">
+                {!! Form::label('Select Folder to Edit') !!}
+                {!! Form::select('folder_ids[]', $folders, null, ['class' => 'form-control']) !!}
             </div>
         </div>
+        <div class="edit-get-button btn btn-primary"><i class="fas fa-edit"></i> Edit Folder</a></div>
+    </div>
 
-    @endforeach
-</div>
+    <p>This is a list of characters you own. Drag and drop to rearrange them.</p>
+
+    {!! Form::open(['url' => 'characters/sort', 'class' => 'text-right']) !!}
+    <div id="sortable" class="row sortable">
+        @foreach ($characters as $character)
+            <div class="col-md-3 col-6 text-center mb-2" data-id="{{ $character->id }}">
+                <div>
+                    <a href="{{ $character->url }}"><img src="{{ $character->image->thumbnailUrl }}" class="img-thumbnail" alt="Thumbnail for {{ $character->fullName }}" /></a>
+                </div>
+                <div class="mt-1 h5">
+                    {!! $character->displayName !!}
+                </div>
+                <div class="form-group">
+                    {!! Form::label('folder_ids[]', 'Folder (Optional)') !!}
+                    {!! Form::select('folder_ids[]', $folders, $character->folder_id, ['class' => 'form-control']) !!}
+                </div>
+            </div>
+        @endforeach
+    </div>
 
     {!! Form::hidden('sort', null, ['id' => 'sortableOrder']) !!}
     {!! Form::submit('Save Order', ['class' => 'btn btn-primary']) !!}
-<<<<<<< HEAD
-{!! Form::close() !!}
+    <<<<<<< HEAD {!! Form::close() !!} <h1>
+        Selected Character
+        </h2>
 
-<h1>
-    Selected Character
-</h2>
-
-<p>You can select one of your characters to be featured on your profile here.</p>
-{!! Form::open(['url' => 'characters/select-character']) !!}
-{!! Form::select('character_id', $characters->pluck('fullName', 'id')->prepend('No Character', ''), Auth::user()->settings->selected_character_id, ['class' => 'form-control mb-2 default character-select', 'placeholder' => 'Select Character']) !!}
-    <div class="text-right">
-        {!! Form::submit('Submit', ['class' => 'btn btn-primary']) !!}
-    </div>
-{!! Form::close() !!}
+        <p>You can select one of your characters to be featured on your profile here.</p>
+        {!! Form::open(['url' => 'characters/select-character']) !!}
+        {!! Form::select('character_id', $characters->pluck('fullName', 'id')->prepend('No Character', ''), Auth::user()->settings->selected_character_id, ['class' => 'form-control mb-2 default character-select', 'placeholder' => 'Select Character']) !!}
+        <div class="text-right">
+            {!! Form::submit('Submit', ['class' => 'btn btn-primary']) !!}
+        </div>
+        {!! Form::close() !!}
 
 
-=======
-    {!! Form::close() !!}
+        =======
+        {!! Form::close() !!}
 
-    <div class="mobile-handle handle-clone badge badge-primary rounded-circle hide">
-        <i class="fas fa-hand-point-up" aria-hidden="true"></i>
-        <span class="sr-only">Drag Handle</span>
-    </div>
->>>>>>> f45d71933bf0b38f4e918e1b63391f9bd17fa0c8
-@endsection
-@section('scripts')
-    <script>
-        $( document ).ready(function() {
-            
-            $('.create-folder').click(function(e){
-                e.preventDefault();
-                loadModal("{{ url('/characters/folder/create') }}", "Create New Folder");
-            });
+        <div class="mobile-handle handle-clone badge badge-primary rounded-circle hide">
+            <i class="fas fa-hand-point-up" aria-hidden="true"></i>
+            <span class="sr-only">Drag Handle</span>
+        </div>
+        >>>>>>> f45d71933bf0b38f4e918e1b63391f9bd17fa0c8
+    @endsection
+    @section('scripts')
+        <script>
+            $(document).ready(function() {
 
-            $('.edit-folder').click(function(e){
-                e.preventDefault();
-                $('#folders').collapse('toggle');
-            });
-
-            $('.edit-get-button').click(function(e){
-                e.preventDefault();
-                var folder_id = $('#folders select').val();
-                var url = "{{ url('/characters/folder/edit') }}/" + folder_id;
-                loadModal(url, "Edit Folder");
-            });
-
-            $( "#sortable" ).sortable({
-                characters: '.sort-item',
-                placeholder: "sortable-placeholder col-md-3 col-6",
-                stop: function(event, ui) {
-                    $('#sortableOrder').val($(this).sortable("toArray", {
-                        attribute: "data-id"
-                    }));
-                },
-                create: function() {
-                    $('#sortableOrder').val($(this).sortable("toArray", {
-                        attribute: "data-id"
-                    }));
-                }
-            });
-            $("#sortable").disableSelection();
-
-            function isTouch() {
-                try {
-                    document.createEvent("TouchEvent");
-                    return true;
-                } catch (e) {
-                    return false;
-                }
-            }
-
-            if (isTouch()) {
-                $('#sortable').children().each(function() {
-                    var $clone = $('.handle-clone').clone();
-                    $(this).append($clone);
-                    $clone.removeClass('hide handle-clone');
+                $('.create-folder').click(function(e) {
+                    e.preventDefault();
+                    loadModal("{{ url('/characters/folder/create') }}", "Create New Folder");
                 });
-                $("#sortable").sortable("option", "handle", ".mobile-handle");
-            }
-        });
-    </script>
-@endsection
+
+                $('.edit-folder').click(function(e) {
+                    e.preventDefault();
+                    $('#folders').collapse('toggle');
+                });
+
+                $('.edit-get-button').click(function(e) {
+                    e.preventDefault();
+                    var folder_id = $('#folders select').val();
+                    var url = "{{ url('/characters/folder/edit') }}/" + folder_id;
+                    loadModal(url, "Edit Folder");
+                });
+
+                $("#sortable").sortable({
+                    characters: '.sort-item',
+                    placeholder: "sortable-placeholder col-md-3 col-6",
+                    stop: function(event, ui) {
+                        $('#sortableOrder').val($(this).sortable("toArray", {
+                            attribute: "data-id"
+                        }));
+                    },
+                    create: function() {
+                        $('#sortableOrder').val($(this).sortable("toArray", {
+                            attribute: "data-id"
+                        }));
+                    }
+                });
+                $("#sortable").disableSelection();
+
+                function isTouch() {
+                    try {
+                        document.createEvent("TouchEvent");
+                        return true;
+                    } catch (e) {
+                        return false;
+                    }
+                }
+
+                if (isTouch()) {
+                    $('#sortable').children().each(function() {
+                        var $clone = $('.handle-clone').clone();
+                        $(this).append($clone);
+                        $clone.removeClass('hide handle-clone');
+                    });
+                    $("#sortable").sortable("option", "handle", ".mobile-handle");
+                }
+            });
+        </script>
+    @endsection

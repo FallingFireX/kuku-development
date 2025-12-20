@@ -60,12 +60,12 @@
                     <h5>Rank</h5>
                 </div>
                 <div class="col-lg-9 col-md-9 col-8">{!! $user->rank->displayName !!} {!! add_help($user->rank->parsed_description) !!}</div>
-                @if(count($teams)>0)
+                @if (count($teams) > 0)
                     <div class="col-lg-3 col-md-3 col-4">
                         <h5>Team(s)</h5>
                     </div>
                     <div class="col-lg-9 col-md-9 col-8">
-                        @foreach($teams as $team)
+                        @foreach ($teams as $team)
                             {{ $team->name }}<br>
                         @endforeach
                     </div>
@@ -80,22 +80,22 @@
                 </div>
             @endif
 
-            @if($user->profile->pronouns)
-            <div class="row col-sm-6">
+            @if ($user->profile->pronouns)
+                <div class="row col-sm-6">
                     <div class="col-md-3 col-4">
                         <h6><b>Pronouns</b></h6>
                     </div>
                     <div class="col-md-8 col-8">
-                {{ $user->profile->pronouns }}
+                        {{ $user->profile->pronouns }}
+                    </div>
                 </div>
-            </div>
             @endif
         </div>
     </div>
 </div>
 
 @if (isset($user->profile->parsed_text))
-<div class="card mb-3" style="clear:both;">
+    <div class="card mb-3" style="clear:both;">
         <div class="card-body">
             {!! $user->profile->parsed_text !!}
         </div>
@@ -110,40 +110,40 @@
             <div class="card-body text-center">
                 <h5 class="card-title">Wallet</h5>
                 <div class="profile-assets-content">
-                    @foreach($user->getCurrencies(false) as $currency)
+                    @foreach ($user->getCurrencies(false) as $currency)
                         <div>{!! $currency->display($currency->quantity) !!}</div>
                     @endforeach
                 </div>
-                <div class="text-right"><a href="{{ $user->url.'/bank' }}">View all...</a></div>
+                <div class="text-right"><a href="{{ $user->url . '/bank' }}">View all...</a></div>
             </div>
         </div>
-        
-    <div class="card-deck mb-4 profile-assets" style="clear:both;">
-        <div class="card profile-inventory profile-assets-card">
-            <div class="card-body text-center">
-                <h5 class="card-title">Bank</h5>
-                <div class="profile-assets-content">
-                    @if (count($items))
-                        <div class="row">
-                            @foreach ($items as $item)
-                                <div class="col-md-3 col-6 profile-inventory-item">
-                                    @if ($item->imageUrl)
-                                        <img src="{{ $item->imageUrl }}" data-toggle="tooltip" title="{{ $item->name }}" alt="{{ $item->name }}" />
-                                    @else
-                                        <p>{{ $item->name }}</p>
-                                    @endif
-                                </div>
-                            @endforeach
-                        </div>
-                    @else
-                        <div>No items owned.</div>
-                    @endif
+
+        <div class="card-deck mb-4 profile-assets" style="clear:both;">
+            <div class="card profile-inventory profile-assets-card">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Bank</h5>
+                    <div class="profile-assets-content">
+                        @if (count($items))
+                            <div class="row">
+                                @foreach ($items as $item)
+                                    <div class="col-md-3 col-6 profile-inventory-item">
+                                        @if ($item->imageUrl)
+                                            <img src="{{ $item->imageUrl }}" data-toggle="tooltip" title="{{ $item->name }}" alt="{{ $item->name }}" />
+                                        @else
+                                            <p>{{ $item->name }}</p>
+                                        @endif
+                                    </div>
+                                @endforeach
+                            </div>
+                        @else
+                            <div>No items owned.</div>
+                        @endif
+                    </div>
+                    <div class="text-right"><a href="{{ $user->url . '/inventory' }}">View all...</a></div>
                 </div>
-            <div class="text-right"><a href="{{ $user->url . '/inventory' }}">View all...</a></div>
+            </div>
         </div>
     </div>
-</div>
-</div>
 </div>
 
 <h2>
@@ -154,9 +154,9 @@
         @endforeach
     @endif
 </h2>
-@foreach($characters->take(4)->get()->chunk(4) as $chunk)
+@foreach ($characters->take(4)->get()->chunk(4) as $chunk)
     <div class="row mb-4">
-        @foreach($chunk as $character)
+        @foreach ($chunk as $character)
             <div class="col-md-3 col-6 text-center">
                 <div>
                     @if ((Auth::check() && Auth::user()->settings->content_warning_visibility == 0 && isset($character->character_warning)) || (isset($character->character_warning) && !Auth::check()))
@@ -188,30 +188,30 @@
 
 <div class="col">
     <div class="card-deck mb-4 profile-assets">
-    <div class="card profile-currencies profile-assets-card">
-        <div class="card-body text-center">
-            <h5 class="card-title">Familiars</h5>
-            <div class="card-body">
-                @if (count($pets))
-                    <div class="row">
-                        @foreach ($pets as $pet)
-                            <div class="col profile-inventory-item">
-                                <a href="{{ url($user->url . '/pets') }}" class="inventory-stack">
-                                    <img class="img-fluid" src="{{ $pet->VariantImage($pet->pivot->id) }}" data-toggle="tooltip" title="{{ $pet->pivot->pet_name ? $pet->pivot->pet_name . ' (' . $pet->name . ')' : $pet->name }}"
-                                        alt="{{ $pet->pivot->pet_name ? $pet->pivot->pet_name . ' (' . $pet->name . ')' : $pet->name }}" />
-                                </a>
-                            </div>
-                        @endforeach
-                    </div>
-                @else
-                    <div>No Familiars owned.</div>
-                @endif
+        <div class="card profile-currencies profile-assets-card">
+            <div class="card-body text-center">
+                <h5 class="card-title">Familiars</h5>
+                <div class="card-body">
+                    @if (count($pets))
+                        <div class="row">
+                            @foreach ($pets as $pet)
+                                <div class="col profile-inventory-item">
+                                    <a href="{{ url($user->url . '/pets') }}" class="inventory-stack">
+                                        <img class="img-fluid" src="{{ $pet->VariantImage($pet->pivot->id) }}" data-toggle="tooltip" title="{{ $pet->pivot->pet_name ? $pet->pivot->pet_name . ' (' . $pet->name . ')' : $pet->name }}"
+                                            alt="{{ $pet->pivot->pet_name ? $pet->pivot->pet_name . ' (' . $pet->name . ')' : $pet->name }}" />
+                                    </a>
+                                </div>
+                            @endforeach
+                        </div>
+                    @else
+                        <div>No Familiars owned.</div>
+                    @endif
+                </div>
+                <div class="text-right"><a href="{{ $user->url . '/pets' }}">View all...</a></div>
             </div>
-            <div class="text-right"><a href="{{ $user->url . '/pets' }}">View all...</a></div>
         </div>
+
     </div>
-    
-</div>
 </div>
 <div class="row col-12">
     @if ($user->settings->allow_profile_comments)

@@ -1,7 +1,7 @@
 {!! Form::open(['url' => 'admin/data/borders/edit/' . $border->id . '/' . $type . 's/' . ($variant->id ? 'edit/' . $variant->id : 'create'), 'files' => true]) !!}
 
 @php
-    $word = $type == 'variant' ? 'Variant' : (($type == 'top') ? 'Top Layer' : 'Bottom Layer')
+    $word = $type == 'variant' ? 'Variant' : ($type == 'top' ? 'Top Layer' : 'Bottom Layer');
 @endphp
 
 <h3>Basic Information</h3>
@@ -27,7 +27,7 @@
                 'class' => 'form-check-input',
                 'data-toggle' => 'toggle',
             ]) !!}
-            {!! Form::label('delete', 'Delete ' . $word , ['class' => 'form-check-label ml-3']) !!}
+            {!! Form::label('delete', 'Delete ' . $word, ['class' => 'form-check-label ml-3']) !!}
         </div>
     @endif
 </div>

@@ -145,13 +145,13 @@
             @include('layouts._clock')
             <img id="logo" src="{{ asset('images/logo.png') }}">
         </div>
-       
+
         @include('layouts._nav')
         @if (View::hasSection('sidebar'))
             <div class="site-mobile-header bg-secondary"><a href="#" class="btn btn-sm btn-outline-light" id="mobileMenuButton">Menu <i class="fas fa-caret-right ml-1"></i></a></div>
         @endif
 
-        
+
         <main class="container-fluid" id="main">
             <div class="flex-wrapper">
                 <div class="row">
@@ -160,7 +160,7 @@
                     <div class="sidebar col-lg-2" id="sidebar">
                         @yield('sidebar')
                     </div>
-                   
+
 
                     {{-- Main content --}}
                     <div class="main-content col-lg-8 p-4">
@@ -180,7 +180,7 @@
                                 @if (Auth::user()->is_sales_unread)
                                     <div class="alert alert-info"><a href="{{ url('sales') }}">There is a new sales post!</a></div>
                                 @endif
-                                @if(Auth::user()->is_raffles_unread)
+                                @if (Auth::user()->is_raffles_unread)
                                     <div class="alert alert-info"><a href="{{ url('raffles') }}">There is a new raffle!</a></div>
                                 @endif
                             @endif
@@ -250,9 +250,10 @@
 
                 // CLOCK
                 function time() {
-                    setInterval(function() { 
+                    setInterval(function() {
                         var date = new Date(); // initial date, this acts kinda like a first carbon instance so we can preform functions on it
-                        var time = new Date(date.getTime() + (3 * (60*60*1000)));  // preform function on first date (basically get time in timestamp format, the 60*60*1000 is an offset of +1 hour. To do other timezones just convert it to the necessary amount of hours +- UTC
+                        var time = new Date(date.getTime() + (3 * (60 * 60 *
+                        1000))); // preform function on first date (basically get time in timestamp format, the 60*60*1000 is an offset of +1 hour. To do other timezones just convert it to the necessary amount of hours +- UTC
                         var cycle = time.getUTCHours() >= 12 ? ' PM' : ' AM'; // this gets the hour in military time so if it's greater than 12 it's pm
                         // substr is a function that'll knock of certain letters from a given input. 
                         // Because ours is -2, if we have 001, it'll read as 01. If we have 042, it'll be 42
@@ -260,10 +261,11 @@
                         // this doesn't look correct so we basically ''force'' it to be correct by adding and (sometimes) removed the extra 0
                         // we do getUTC so that it doesn't change per person and is universal
                         // you can see more here https://stackoverflow.com/a/39418437/11052835
-                        var display = time.getUTCHours() + ":" +  ('0' + time.getUTCMinutes()).substr(-2) + ":" +  ('0' + time.getUTCSeconds()).substr(-2) + " " + cycle; // make it look pretty
+                        var display = time.getUTCHours() + ":" + ('0' + time.getUTCMinutes()).substr(-2) + ":" + ('0' + time.getUTCSeconds()).substr(-2) + " " + cycle; // make it look pretty
                         $("#clock").text(display); // set the div to new time
-                    }, 1000)} // times it out for 1 second so loop
-                
+                    }, 1000)
+                } // times it out for 1 second so loop
+
                 setInterval(time(), 1000); // loop
             });
         </script>

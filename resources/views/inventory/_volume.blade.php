@@ -7,8 +7,8 @@
             $volume = \App\Models\Volume\Volume::visible()->find($tag->getData()['volume_id']);
         @endphp
         @if (!isset($volume))
-        <div class="alert alert-warning">
-            Invalid {{ __('volumes.volume') }} or invisible {{ __('volumes.volume') }} set. Contact an admin.
+            <div class="alert alert-warning">
+                Invalid {{ __('volumes.volume') }} or invisible {{ __('volumes.volume') }} set. Contact an admin.
             </div>
         @else
             <p>Using this item will credit {!! $volume->displayName !!} to your {{ __('volumes.volume') }} collection.</p>

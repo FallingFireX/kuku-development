@@ -11,11 +11,11 @@
 
     <p>This is a list of traits that can be attached to characters. </p>
 
-<div class="text-right mb-3">
-    <a class="btn btn-primary" href="{{ url('admin/data/trait-categories') }}"><i class="fas fa-folder"></i> Trait Categories</a>
-    <a class="btn btn-primary" href="{{ url('admin/data/trait-subcategories') }}"><i class="fas fa-folder"></i> Trait Subcategories</a>
-    <a class="btn btn-primary" href="{{ url('admin/data/traits/create') }}"><i class="fas fa-plus"></i> Create New Trait</a>
-</div>
+    <div class="text-right mb-3">
+        <a class="btn btn-primary" href="{{ url('admin/data/trait-categories') }}"><i class="fas fa-folder"></i> Trait Categories</a>
+        <a class="btn btn-primary" href="{{ url('admin/data/trait-subcategories') }}"><i class="fas fa-folder"></i> Trait Subcategories</a>
+        <a class="btn btn-primary" href="{{ url('admin/data/traits/create') }}"><i class="fas fa-plus"></i> Create New Trait</a>
+    </div>
 
     <div>
         {!! Form::open(['method' => 'GET', 'class' => '']) !!}
@@ -105,8 +105,8 @@
                             <div class="col-12 col-md-3">
                                 <div class="logs-table-cell">
                                     <!-- @if (!$feature->is_visible)
-                                        <i class="fas fa-eye-slash mr-1"></i>
-                                    @endif -->
+    <i class="fas fa-eye-slash mr-1"></i>
+    @endif -->
                                     {{ $feature->name }}
                                 </div>
                             </div>
@@ -130,10 +130,10 @@
                 @endforeach
             </div>
         </div>
-      </div>
-    {!! $features->render() !!}
-    <div class="text-center mt-4 small text-muted">{{ $features->total() }} result{{ $features->total() == 1 ? '' : 's' }} found.</div>
-@endif
+        </div>
+        {!! $features->render() !!}
+        <div class="text-center mt-4 small text-muted">{{ $features->total() }} result{{ $features->total() == 1 ? '' : 's' }} found.</div>
+    @endif
 
 @endsection
 

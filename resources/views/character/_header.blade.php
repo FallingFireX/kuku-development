@@ -35,11 +35,11 @@
         <a href="#" class="btn btn-outline-info float-right bookmark-button ml-2" data-id="{{ $bookmark ? $bookmark->id : 0 }}" data-character-id="{{ $character->id }}"><i class="fas fa-bookmark"></i>
             {{ $bookmark ? 'Edit Bookmark' : 'Bookmark' }}</a>
     @endif
- 
+
     @if (!$character->is_visible)
         <i class="fas fa-eye-slash"></i>
     @endif
-    
+
     {!! $character->displayName !!}
     @if (!$character->is_myo_slot)
         <i data-toggle="tooltip" title="Click to Copy the Character Code" id="copy" style="font-size: 14px; vertical-align: middle; " class="far fa-copy text-small"></i>

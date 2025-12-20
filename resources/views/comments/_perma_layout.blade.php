@@ -30,7 +30,7 @@
                 selector: '.comment-wysiwyg',
                 height: 300,
                 menubar: false,
-                
+
                 convert_urls: false,
                 plugins: [
                     'advlist autolink lists link image charmap print preview anchor',

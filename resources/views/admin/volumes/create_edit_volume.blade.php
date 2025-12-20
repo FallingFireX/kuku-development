@@ -8,9 +8,7 @@
     {!! breadcrumbs([
         'Admin Panel' => 'admin',
         ucfirst(__('volumes.volumes')) => 'admin/data/volumes',
-        ($volume->id ? 'Edit' : 'Create') . ' ' . ucfirst(__('volumes.volume')) => $volume->id
-            ? 'admin/data/volumes/edit/' . $volume->id
-            : 'admin/data/volumes/create',
+        ($volume->id ? 'Edit' : 'Create') . ' ' . ucfirst(__('volumes.volume')) => $volume->id ? 'admin/data/volumes/edit/' . $volume->id : 'admin/data/volumes/create',
     ]) !!}
 
     <h1>{{ $volume->id ? 'Edit' : 'Create' }} Volume
@@ -61,13 +59,7 @@
                     'class' => 'form-check-input',
                     'data-toggle' => 'toggle',
                 ]) !!}
-                {!! Form::label('is_global', 'Is Global', ['class' => 'form-check-label ml-3']) !!} {!! add_help(
-                    'Global ' .
-                        __('volumes.volumes') .
-                        ' will have their contents visible for all users as long as at least 1 person has unlocked this ' .
-                        __('volumes.volume') .
-                        '.',
-                ) !!}
+                {!! Form::label('is_global', 'Is Global', ['class' => 'form-check-label ml-3']) !!} {!! add_help('Global ' . __('volumes.volumes') . ' will have their contents visible for all users as long as at least 1 person has unlocked this ' . __('volumes.volume') . '.') !!}
             </div>
         </div>
     </div>
@@ -78,9 +70,7 @@
     </div>
 
     <div class="form-group">
-        {!! Form::label('Summary (Optional)') !!} {!! add_help(
-            'This is a short blurb that shows up on ' . __('volumes.book') . ' index. HTML cannot be used here.',
-        ) !!}
+        {!! Form::label('Summary (Optional)') !!} {!! add_help('This is a short blurb that shows up on ' . __('volumes.book') . ' index. HTML cannot be used here.') !!}
         {!! Form::text('summary', $volume->summary, ['class' => 'form-control', 'maxLength' => 250]) !!}
     </div>
 

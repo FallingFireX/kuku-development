@@ -29,7 +29,7 @@
                         <li class="list-group-item"><a href="{{ url('world/all-traits-index') }}">All Traits Index</a></li>
                     @endif
                     <li class="list-group-item"><a href="{{ url('world/character-categories') }}">Character Categories</a></li>
-                    <li class="list-group-item"><a href="{{ url('world/'.__('transformations.transformations')) }}">{{ ucfirst(__('transformations.transformations')) }}</a></li>
+                    <li class="list-group-item"><a href="{{ url('world/' . __('transformations.transformations')) }}">{{ ucfirst(__('transformations.transformations')) }}</a></li>
                     <li class="list-group-item"><a href="{{ url('world/character-classes') }}">Character Classes</a></li>
                     <li class="list-group-item"><a href="{{ url('world/levels') }}">Levels</a></li>
                     <li class="list-group-item"><a href="{{ url('world/stats') }}">Stats</a></li>
@@ -49,9 +49,9 @@
                     <li class="list-group-item"><a href="{{ url('world/skill-categories') }}">Skill Categories</a></li>
                     <li class="list-group-item"><a href="{{ url('world/skills') }}">All Skills</a></li>
                     <li class="list-group-item"><a href="{{ url('world/currencies') }}">Currencies</a></li>
-                    <li class="list-group-item"><a href="{{ url('world/'.__('awards.award').'-categories') }}">{{ ucfirst(__('awards.award')) }} Categories</a></li>
-                    <li class="list-group-item"><a href="{{ url('world/'.__('awards.awards')) }}">All {{ ucfirst(__('awards.award')) }}</a></li>
-                    <li class="list-group-item"><a href="{{ url('world/'.__('volumes.library')) }}">{{ ucfirst(__('volumes.library')) }}</a></li>
+                    <li class="list-group-item"><a href="{{ url('world/' . __('awards.award') . '-categories') }}">{{ ucfirst(__('awards.award')) }} Categories</a></li>
+                    <li class="list-group-item"><a href="{{ url('world/' . __('awards.awards')) }}">All {{ ucfirst(__('awards.award')) }}</a></li>
+                    <li class="list-group-item"><a href="{{ url('world/' . __('volumes.library')) }}">{{ ucfirst(__('volumes.library')) }}</a></li>
                     <li class="list-group-item"><a href="{{ url('world/recipes') }}">All Recipes</a></li>
                     <li class="list-group-item"><a href="{{ url('world/pet-categories') }}">Pet Categories</a></li>
                     <li class="list-group-item"><a href="{{ url('world/pets') }}">All Pets</a></li>

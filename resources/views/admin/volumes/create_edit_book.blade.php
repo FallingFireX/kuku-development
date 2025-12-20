@@ -59,8 +59,8 @@
             </div>
         </div>
     </div>
-    <h5>{{ucfirst(__('volumes.volume'))}} Prefix</h5>
-    <p>You can set a prefix for this {{__('volumes.book')}}'s {{__('volumes.volumes')}}. It can be text, a number, or both. Example: "Chapter" for text, and "number" for numeric will output "Chapter 1", "Chapter 2", etc.</p>
+    <h5>{{ ucfirst(__('volumes.volume')) }} Prefix</h5>
+    <p>You can set a prefix for this {{ __('volumes.book') }}'s {{ __('volumes.volumes') }}. It can be text, a number, or both. Example: "Chapter" for text, and "number" for numeric will output "Chapter 1", "Chapter 2", etc.</p>
     <div class="row">
         <div class="col-md-3">
             <div class="form-group">
@@ -134,7 +134,8 @@
         <div class="card mb-3 p-4">
             <h2>{{ ucfirst(__('volumes.book')) }} {{ ucfirst(__('volumes.volumes')) }}</h2>
             <p>You can sort this {{ __('volumes.book') }}'s {{ __('volumes.volumes') }} here.</p>
-            <p><strong>The {{ __('volumes.volumes') }} MUST be sorted properly for their back/next buttons to display correctly. You should click to sort every time you add a new {{ __('volumes.volume') }} to this {{ __('volumes.book') }} order to keep
+            <p><strong>The {{ __('volumes.volumes') }} MUST be sorted properly for their back/next buttons to display correctly. You should click to sort every time you add a new {{ __('volumes.volume') }} to this {{ __('volumes.book') }} order to
+                    keep
                     them current.</strong></p>
 
             <div class="card-body">

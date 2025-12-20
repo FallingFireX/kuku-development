@@ -32,18 +32,23 @@
         </div>
         <div class="form-inline justify-content-end">
             <div class="form-group ml-3 mb-3">
-                {!! Form::select('sort', [
-                    'alpha'          => 'Sort Alphabetically (A-Z)',
-                    'alpha-reverse'  => 'Sort Alphabetically (Z-A)',
-                    'category'       => 'Sort by Category',
-                    'subcategory'       => 'Sort by Subcategory',
-                    'rarity-reverse' => 'Sort by Rarity (Common to Rare)',
-                    'rarity'         => 'Sort by Rarity (Rare to Common)',
-                    'species'        => 'Sort by Species',
-                    'subtypes'       => 'Sort by Subtype',
-                    'newest'         => 'Newest First',
-                    'oldest'         => 'Oldest First'    
-                ], Request::get('sort') ? : 'category', ['class' => 'form-control']) !!}
+                {!! Form::select(
+                    'sort',
+                    [
+                        'alpha' => 'Sort Alphabetically (A-Z)',
+                        'alpha-reverse' => 'Sort Alphabetically (Z-A)',
+                        'category' => 'Sort by Category',
+                        'subcategory' => 'Sort by Subcategory',
+                        'rarity-reverse' => 'Sort by Rarity (Common to Rare)',
+                        'rarity' => 'Sort by Rarity (Rare to Common)',
+                        'species' => 'Sort by Species',
+                        'subtypes' => 'Sort by Subtype',
+                        'newest' => 'Newest First',
+                        'oldest' => 'Oldest First',
+                    ],
+                    Request::get('sort') ?: 'category',
+                    ['class' => 'form-control'],
+                ) !!}
             </div>
             <div class="form-group ml-3 mb-3">
                 {!! Form::submit('Search', ['class' => 'btn btn-primary']) !!}
@@ -54,19 +59,19 @@
 
     {!! $features->render() !!}
     @foreach ($features->chunk(4) as $chunk)
-    <div class = "container-flex">
-        <div class = "row">
-        @foreach ($chunk as $feature)
-            <div class = "col-xs-12 col-s-12 col-md-4 col-lg-3 col-xl-3 mb-3">
-                <div class="card" style = "height: 100%">
-                    <div class="card-body">
-                        @include('world._feature_entry', ['feature' => $feature])
+        <div class = "container-flex">
+            <div class = "row">
+                @foreach ($chunk as $feature)
+                    <div class = "col-xs-12 col-s-12 col-md-4 col-lg-3 col-xl-3 mb-3">
+                        <div class="card" style = "height: 100%">
+                            <div class="card-body">
+                                @include('world._feature_entry', ['feature' => $feature])
+                            </div>
+                        </div>
                     </div>
-                </div>
+                @endforeach
             </div>
-            @endforeach
         </div>
-    </div>
     @endforeach
     {!! $features->render() !!}
 

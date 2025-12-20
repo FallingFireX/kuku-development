@@ -1,10 +1,12 @@
 @extends('admin.layout')
 
-@section('admin-title'){{ $submission->prompt_id ? 'Submission' : 'Claim' }} (#{{ $submission->id }})@endsection
+@section('admin-title')
+    {{ $submission->prompt_id ? 'Submission' : 'Claim' }} (#{{ $submission->id }})
+@endsection
 
 <style>
     .card-body {
-        line-height:1;
+        line-height: 1;
     }
 </style>
 
@@ -37,7 +39,6 @@
                     </div>
                     <div class="col-md-10 col-8">{!! $submission->prompt->displayName !!}</div>
                 </div>
-                
             @endif
             <div class="row">
                 <div class="col-md-2 col-4">
@@ -309,7 +310,6 @@
                 </div>
             </div>
         </div>
-    
     @else
         <div class="alert alert-danger">This {{ $submission->prompt_id ? 'submission' : 'claim' }} has already been processed.</div>
         @include('home._submission_content', ['submission' => $submission])
@@ -388,4 +388,3 @@
         </script>
     @endif
 @endsection
-

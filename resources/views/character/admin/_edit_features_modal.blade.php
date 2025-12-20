@@ -50,42 +50,73 @@
     </div>
 </div>
 
- <div class="form-group" id='gender'>
-            {!! Form::label('gender') !!}
-            {!! Form::select('gender', ['Rook' => 'Rook', 'Dove' => 'Dove'], $image->gender, ['class' => 'form-control']) !!}
-        </div>
+<div class="form-group" id='gender'>
+    {!! Form::label('gender') !!}
+    {!! Form::select('gender', ['Rook' => 'Rook', 'Dove' => 'Dove'], $image->gender, ['class' => 'form-control']) !!}
+</div>
 <div class="form-group" id='eyecolor'>
-            {!! Form::label('eyecolor') !!}
-            {!! Form::text('eyecolor', $image->eyecolor, ['class' => 'form-control mr-2']) !!}
-        </div>
+    {!! Form::label('eyecolor') !!}
+    {!! Form::text('eyecolor', $image->eyecolor, ['class' => 'form-control mr-2']) !!}
+</div>
 
-        
+
 <div class="form-group" id='genotype'>
-            {!! Form::label('genotype') !!}
-            {!! Form::text('genotype', $image->genotype, ['class' => 'form-control mr-2']) !!}
-        </div>
- <div class="form-group" id='phenotype'>
-            {!! Form::label('phenotype') !!}
-            {!! Form::text('phenotype', $image->phenotype, ['class' => 'form-control mr-2']) !!}
-        </div>
+    {!! Form::label('genotype') !!}
+    {!! Form::text('genotype', $image->genotype, ['class' => 'form-control mr-2']) !!}
+</div>
+<div class="form-group" id='phenotype'>
+    {!! Form::label('phenotype') !!}
+    {!! Form::text('phenotype', $image->phenotype, ['class' => 'form-control mr-2']) !!}
+</div>
 
 <div class="form-group" id='stats'>
-            {!! Form::label('Stats (atk/def/spd)') !!}
-            {!! Form::text('atk', $image->atk, ['class' => 'form-control mr-2']) !!}
-            {!! Form::text('def', $image->def, ['class' => 'form-control mr-2']) !!}
-            {!! Form::text('spd', $image->spd, ['class' => 'form-control mr-2']) !!}
-        </div>
+    {!! Form::label('Stats (atk/def/spd)') !!}
+    {!! Form::text('atk', $image->atk, ['class' => 'form-control mr-2']) !!}
+    {!! Form::text('def', $image->def, ['class' => 'form-control mr-2']) !!}
+    {!! Form::text('spd', $image->spd, ['class' => 'form-control mr-2']) !!}
+</div>
 
 <div class="form-group" id='bio'>
-            {!! Form::label('bio') !!}
-            {!! Form::select('bio', ['Diurnal' => 'Diurnal', 'Crepuscular' => 'Crepuscular', 'Nocturnal' => 'Nocturnal', 'Diurnal (originally Nocturnal)' => 'Diurnal (originally Nocturnal)', 'Diurnal (originally Crepuscular)' => 'Diurnal (originally Crepuscular)', 'Crepuscular (originally Diurnal)' => 'Crepuscular (originally Diurnal)', 'Crepuscular (originally Nocturnal)' => 'Crepuscular (originally Nocturnal)', 'Nocturnal (originally Diurnal)' => 'Nocturnal (originally Diurnal)', 'Nocturnal (originally Crepuscular)' => 'Nocturnal (originally Crepuscular)'], $image->bio, ['class' => 'form-control']) !!}
-        </div>
+    {!! Form::label('bio') !!}
+    {!! Form::select(
+        'bio',
+        [
+            'Diurnal' => 'Diurnal',
+            'Crepuscular' => 'Crepuscular',
+            'Nocturnal' => 'Nocturnal',
+            'Diurnal (originally Nocturnal)' => 'Diurnal (originally Nocturnal)',
+            'Diurnal (originally Crepuscular)' => 'Diurnal (originally Crepuscular)',
+            'Crepuscular (originally Diurnal)' => 'Crepuscular (originally Diurnal)',
+            'Crepuscular (originally Nocturnal)' => 'Crepuscular (originally Nocturnal)',
+            'Nocturnal (originally Diurnal)' => 'Nocturnal (originally Diurnal)',
+            'Nocturnal (originally Crepuscular)' => 'Nocturnal (originally Crepuscular)',
+        ],
+        $image->bio,
+        ['class' => 'form-control'],
+    ) !!}
+</div>
 
 <div class="form-group" id='diet'>
-            {!! Form::label('diet') !!}
-            {!! Form::select('diet', ['Carnivore' => 'Carnivore', 'Omnivore' => 'Omnivore', 'Herbivore' => 'Herbivore', 'Carnivore (originally Herbivore)' => 'Carnivore (originally Herbivore)', 'Omnivore (originally Carnivore)' =>'Omnivore (originally Carnivore)', 'Carnivore (originally Omnivore)' => 'Carnivore (originally Omnivore)', 'Herbivore (originally Carnivore)' => 'Herbivore (originally Carnivore)', 'Herbivore (originally Omnivore)' => 'Herbivore (originally Omnivore)', 'Omnivore (originally Herbivore)' => 'Omnivore (originally Herbivore)', 'Herbivore (originally Carnivore)' => 'Herbivore (originally Carnivore)'], $image->diet, ['class' => 'form-control']) !!}
-        </div>
- 
+    {!! Form::label('diet') !!}
+    {!! Form::select(
+        'diet',
+        [
+            'Carnivore' => 'Carnivore',
+            'Omnivore' => 'Omnivore',
+            'Herbivore' => 'Herbivore',
+            'Carnivore (originally Herbivore)' => 'Carnivore (originally Herbivore)',
+            'Omnivore (originally Carnivore)' => 'Omnivore (originally Carnivore)',
+            'Carnivore (originally Omnivore)' => 'Carnivore (originally Omnivore)',
+            'Herbivore (originally Carnivore)' => 'Herbivore (originally Carnivore)',
+            'Herbivore (originally Omnivore)' => 'Herbivore (originally Omnivore)',
+            'Omnivore (originally Herbivore)' => 'Omnivore (originally Herbivore)',
+            'Herbivore (originally Carnivore)' => 'Herbivore (originally Carnivore)',
+        ],
+        $image->diet,
+        ['class' => 'form-control'],
+    ) !!}
+</div>
+
 <div class="text-right">
     {!! Form::submit('Edit', ['class' => 'btn btn-primary']) !!}
 </div>

@@ -31,14 +31,14 @@
     </label>
 </div>
 
-@if($raffle->id && $raffle->is_active)
-        <div class="col-md">
-            <div class="form-group">
-                {!! Form::checkbox('bump', 1, null, ['class' => 'form-check-input', 'data-toggle' => 'toggle']) !!}
-                {!! Form::label('bump', 'Bump Raffle', ['class' => 'form-check-label ml-3']) !!} {!! add_help('If toggled on, this will alert users that there is a new raffle. Best in conjunction with a clear notification of changes!') !!}
-            </div>
+@if ($raffle->id && $raffle->is_active)
+    <div class="col-md">
+        <div class="form-group">
+            {!! Form::checkbox('bump', 1, null, ['class' => 'form-check-input', 'data-toggle' => 'toggle']) !!}
+            {!! Form::label('bump', 'Bump Raffle', ['class' => 'form-check-label ml-3']) !!} {!! add_help('If toggled on, this will alert users that there is a new raffle. Best in conjunction with a clear notification of changes!') !!}
         </div>
-    @endif
+    </div>
+@endif
 
 <div class="text-right">
     {!! Form::submit('Confirm', ['class' => 'btn btn-primary']) !!}

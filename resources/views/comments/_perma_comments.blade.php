@@ -25,7 +25,7 @@
                 @endif
             </div>
             <div
-                class="comment border p-3 rounded {{ $limit == 0 ? 'shadow-sm border-info' : '' }} {{ $comment->is_featured && $limit != 0 ? 'border-success' : '' }} {{ $comment->likes()->where('is_like', 1)->count() -$comment->likes()->where('is_like', 0)->count() <0? 'bg-light bg-gradient': '' }}">
+                class="comment border p-3 rounded {{ $limit == 0 ? 'shadow-sm border-info' : '' }} {{ $comment->is_featured && $limit != 0 ? 'border-success' : '' }} {{ $comment->likes()->where('is_like', 1)->count() - $comment->likes()->where('is_like', 0)->count() < 0 ? 'bg-light bg-gradient' : '' }}">
                 <p>
                     {!! config('lorekeeper.settings.wysiwyg_comments') ? $comment->comment : '<p>' . nl2br($markdown->line(strip_tags($comment->comment))) . '</p>' !!}
                 </p>
@@ -83,53 +83,52 @@ url should be equal to the last replies permalink (e.g reply 5) --}}
         @else
             <div id="comment-{{ $comment->getKey() }}" class="pt-4" style="flex-basis: 100%;">
     @endif
-<<<<<<< HEAD
-</div>
-</div>
-</div>
+    <<<<<<< HEAD </div>
+        </div>
+        </div>
 @endif
 =======
-    <div class="media-body row mw-100 mx-0" style="flex:1;flex-wrap:wrap;">
-        <div class="d-none d-md-block">
-            <img class="mr-3 mt-2" src="{{ asset('images/avatars/default.jpg') }}" style="width:70px; height:70px; border-radius:50%;" alt="Default Avatar">
+<div class="media-body row mw-100 mx-0" style="flex:1;flex-wrap:wrap;">
+    <div class="d-none d-md-block">
+        <img class="mr-3 mt-2" src="{{ asset('images/avatars/default.jpg') }}" style="width:70px; height:70px; border-radius:50%;" alt="Default Avatar">
+    </div>
+    <div class="d-block bg-light" style="flex:1">
+        <div class="border p-3 rounded {{ $limit == 0 ? 'shadow-sm border-info' : '' }}">
+            <p>Comment deleted </p>
+            <p class="border-top pt-1 text-right mb-0">
+                <small class="text-muted">{!! $comment->created_at !!}
+                    @if ($comment->created_at != $comment->deleted_at)
+                        <span class="text-muted border-left mx-1 px-1">(Deleted {!! $comment->deleted_at !!})</span>
+                    @endif
+                </small>
+                <a href="{{ url('comment/') . '/' . $comment->id }}"><i class="fas fa-link ml-1" style="opacity: 50%;"></i></a>
+            </p>
         </div>
-        <div class="d-block bg-light" style="flex:1">
-            <div class="border p-3 rounded {{ $limit == 0 ? 'shadow-sm border-info' : '' }}">
-                <p>Comment deleted </p>
-                <p class="border-top pt-1 text-right mb-0">
-                    <small class="text-muted">{!! $comment->created_at !!}
-                        @if ($comment->created_at != $comment->deleted_at)
-                            <span class="text-muted border-left mx-1 px-1">(Deleted {!! $comment->deleted_at !!})</span>
-                        @endif
-                    </small>
-                    <a href="{{ url('comment/') . '/' . $comment->id }}"><i class="fas fa-link ml-1" style="opacity: 50%;"></i></a>
-                </p>
-            </div>
-        </div>
+    </div>
 
-        {{-- Recursion for children --}}
-        <div class="w-100 mw-100">
-            @php $children = $depth == 0 ? $comment->children->sortByDesc('created_at')->paginate(5) : $comment->children->sortByDesc('created_at') @endphp
-            @foreach ($children as $reply)
-                @php $limit++; @endphp
+    {{-- Recursion for children --}}
+    <div class="w-100 mw-100">
+        @php $children = $depth == 0 ? $comment->children->sortByDesc('created_at')->paginate(5) : $comment->children->sortByDesc('created_at') @endphp
+        @foreach ($children as $reply)
+            @php $limit++; @endphp
 
-                @if ($limit >= 5 && $depth >= 1)
-                    <a href="{{ url('comment/') . '/' . $comment->id }}"><span class="btn btn-secondary w-100">See More Replies</span></a>
-                    @break
-                @endif
-
-                @include('comments._perma_comments', [
-                    'comment' => $reply,
-                    'reply' => true,
-                    'limit' => $limit,
-                    'depth' => $depth + 1,
-                ])
-            @endforeach
-            @if ($depth == 0)
-                {!! $children->render() !!}
+            @if ($limit >= 5 && $depth >= 1)
+                <a href="{{ url('comment/') . '/' . $comment->id }}"><span class="btn btn-secondary w-100">See More Replies</span></a>
+                @break
             @endif
-        </div>
+
+            @include('comments._perma_comments', [
+                'comment' => $reply,
+                'reply' => true,
+                'limit' => $limit,
+                'depth' => $depth + 1,
+            ])
+        @endforeach
+        @if ($depth == 0)
+            {!! $children->render() !!}
+        @endif
     </div>
-    </div>
+</div>
+</div>
 @endif
 >>>>>>> f45d71933bf0b38f4e918e1b63391f9bd17fa0c8

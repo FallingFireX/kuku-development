@@ -8,15 +8,15 @@
     {!! breadcrumbs(['Credits' => url('credits')]) !!}
     <h1>Credits</h1>
 
-<p style="text-align: center;">&nbsp;</p>
-</div>
+    <p style="text-align: center;">&nbsp;</p>
+    </div>
 
     <div class="site-page-content parsed-text">
         {!! $credits->parsed_text !!}
     </div>
 
 
-<hr>
+    <hr>
     <h4 class="mb-0">Core Extensions</h4>
     <p class="mb-2">These extensions were coded by the Lorekeeper community and are now a part of core Lorekeeper.</p>
     <div class="extensions row no-gutters">
@@ -195,30 +195,27 @@
             ({{ config('lorekeeper.extensions.staff_rewards.enabled') ? 'Enabled' : 'Disabled' }})
         </p>
         <p class="mb-0 col-md-4">
-<<<<<<< HEAD
-            <a href="http://wiki.lorekeeper.me/index.php?title=Extensions:VTI_Trait_Modals"><strong>Visual Trait Indexes Trait Modals</strong></a> by <a href="https://github.com/AW0005">Moif</a>
-            ({{ config('lorekeeper.extensions.species_trait_index.trait_modals') ? 'Enabled' : 'Disabled' }})
-=======
-            <a href="http://wiki.lorekeeper.me/index.php?title=Extensions:TinyMCE_Code_Editor"><strong>TinyMCE Code Editor</strong></a> by <a href="https://github.com/AW0005">Moif</a>
-            ({{ config('lorekeeper.extensions.tinymce_code_editor') ? 'Enabled' : 'Disabled' }})
+            <<<<<<< HEAD <a href="http://wiki.lorekeeper.me/index.php?title=Extensions:VTI_Trait_Modals"><strong>Visual Trait Indexes Trait Modals</strong></a> by <a href="https://github.com/AW0005">Moif</a>
+                ({{ config('lorekeeper.extensions.species_trait_index.trait_modals') ? 'Enabled' : 'Disabled' }})
+                =======
+                <a href="http://wiki.lorekeeper.me/index.php?title=Extensions:TinyMCE_Code_Editor"><strong>TinyMCE Code Editor</strong></a> by <a href="https://github.com/AW0005">Moif</a>
+                ({{ config('lorekeeper.extensions.tinymce_code_editor') ? 'Enabled' : 'Disabled' }})
         </p>
         <p class="mb-0 col-md-4">
             <a href="http://wiki.lorekeeper.me/index.php?title=Extensions:Universal_Trait_Index"><strong>Universal Trait Index</strong></a> by <a href="https://github.com/CH3RVB">CH3RVB</a>
             ({{ config('lorekeeper.extensions.visual_trait_index.enable_universal_index') ? 'Enabled' : 'Disabled' }})
->>>>>>> f45d71933bf0b38f4e918e1b63391f9bd17fa0c8
+            >>>>>>> f45d71933bf0b38f4e918e1b63391f9bd17fa0c8
         </p>
         <p class="mb-0 col-md-4">
             <a href="http://wiki.lorekeeper.me/index.php?title=Extensions:User_Character_Minibadges"><strong>User Character Minibadges</strong></a> by <a href="https://github.com/SpeedyD">Speedy</a>
             ({{ config('lorekeeper.extensions.badges_on_user_character_page') ? 'Enabled' : 'Disabled' }})
         </p>
         <p class="mb-0 col-md-4">
-<<<<<<< HEAD
-=======
-            <a href="http://wiki.lorekeeper.me/index.php?title=Extensions:VTI_Trait_Modals"><strong>Visual Trait Indexes Trait Modals</strong></a> by <a href="https://github.com/AW0005">Moif</a>
-            ({{ config('lorekeeper.extensions.visual_trait_index.trait_modals') ? 'Enabled' : 'Disabled' }})
+            <<<<<<< HEAD=======<a href="http://wiki.lorekeeper.me/index.php?title=Extensions:VTI_Trait_Modals"><strong>Visual Trait Indexes Trait Modals</strong></a> by <a href="https://github.com/AW0005">Moif</a>
+                ({{ config('lorekeeper.extensions.visual_trait_index.trait_modals') ? 'Enabled' : 'Disabled' }})
         </p>
         <p class="mb-0 col-md-4">
->>>>>>> f45d71933bf0b38f4e918e1b63391f9bd17fa0c8
+            >>>>>>> f45d71933bf0b38f4e918e1b63391f9bd17fa0c8
             <a href="http://wiki.lorekeeper.me/index.php?title=Extensions:Watermarking"><strong>Watermarking</strong></a> by <a href="https://github.com/itinerare">itinerare</a>
             ({{ config('lorekeeper.settings.watermark_masterlist_images') ? 'Enabled' : 'Disabled' }})
         </p>
@@ -259,7 +256,8 @@
 
     <hr>
     <h4 class="mb-0">Extensions No longer in use</h4>
-    <p class="mb-2">These extensions were added or used at some point, but are no longer in use for various reasons. <br> <i> We would still like to thank those that contributed these extensions and code, even if we no longer use them. Their code and extensions were used on our site at some point and deserve praise</i></p>
+    <p class="mb-2">These extensions were added or used at some point, but are no longer in use for various reasons. <br> <i> We would still like to thank those that contributed these extensions and code, even if we no longer use them. Their code and
+            extensions were used on our site at some point and deserve praise</i></p>
     <div class="extensions row no-gutters">
         <p class="mb-0 col-md-4">
             <a href="http://wiki.lorekeeper.me/index.php?title=Extensions:Higher_or_Lower"><strong>Higher or Lower</strong></a> by <a href="https://github.com/CH3RVB/">CH3RVB</a>

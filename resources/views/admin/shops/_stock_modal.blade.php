@@ -342,13 +342,15 @@
         $(".datepicker").datetimepicker({
             dateFormat: "yy-mm-dd",
             timeFormat: 'HH:mm:ss',
-<<<<<<< HEAD
-=======
+            <<
+            << << < HEAD ===
+            === =
             changeMonth: true,
             changeYear: true,
             timezone: '{!! Carbon\Carbon::now()->utcOffset() !!}',
             altFieldTimeOnly: false,
->>>>>>> f45d71933bf0b38f4e918e1b63391f9bd17fa0c8
+            >>>
+            >>> > f45d71933bf0b38f4e918e1b63391f9bd17fa0c8
             beforeShow: function(input, inst) {
                 const box = inst.input[0].getBoundingClientRect();
                 setTimeout(function() {

@@ -9,4 +9,3 @@
     </td>
     <td class="text-right"><a href="{{ $submission->viewUrl }}" class="btn btn-primary btn-sm">Details</a></td>
 </tr>
-

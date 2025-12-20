@@ -84,24 +84,23 @@
         @include('widgets._bank_select_js', [])
 
 
-<script>
-   
-    $(document).ready(function() {
-        var $confirmationModal = $('#confirmationModal');
-        var $submissionForm = $('#submissionForm');
+        <script>
+            $(document).ready(function() {
+                var $confirmationModal = $('#confirmationModal');
+                var $submissionForm = $('#submissionForm');
 
-        var $confirmButton = $('#confirmButton');
-        var $confirmContent = $('#confirmContent');
-        var $confirmSubmit = $('#confirmSubmit');
+                var $confirmButton = $('#confirmButton');
+                var $confirmContent = $('#confirmContent');
+                var $confirmSubmit = $('#confirmSubmit');
 
-        var $draftButton = $('#draftButton');
-        var $draftContent = $('#draftContent');
-        var $draftSubmit = $('#draftSubmit');
+                var $draftButton = $('#draftButton');
+                var $draftContent = $('#draftContent');
+                var $draftSubmit = $('#draftSubmit');
 
                 @if (!$isClaim)
                     var $prompt = $('#prompt');
-                    var $rewards = $('#rewards');
-<<<<<<< HEAD
+                    var $rewards = $('#rewards'); <<
+                    << << < HEAD
                     var $form = $('#prompt-form');
                     if ($prompt.val() != '') {
                         $.get('{{ url('submissions/new/form') }}/' + $prompt.val(), function(data) {
@@ -109,10 +108,10 @@
                                 format: 'html'
                             });
                         });
-                    }
-=======
-                    var $requirementsWarning = $('#requirementsWarning');
->>>>>>> f45d71933bf0b38f4e918e1b63391f9bd17fa0c8
+                    } ===
+                    === =
+                    var $requirementsWarning = $('#requirementsWarning'); >>>
+                    >>> > f45d71933bf0b38f4e918e1b63391f9bd17fa0c8
 
                     $prompt.selectize();
                     $prompt.on('change', function(e) {
@@ -133,14 +132,15 @@
                     }
                 @endif
 
-            // Load initial form and initialize TinyMCE after it loads
-            $form.load('{{ url('submissions/new/form') }}/' + $prompt.val(), function() {
-                initWysiwyg();
-            });
+                // Load initial form and initialize TinyMCE after it loads
+                $form.load('{{ url('submissions/new/form') }}/' + $prompt.val(), function() {
+                    initWysiwyg();
+                });
 
-<<<<<<< HEAD
-            $prompt.selectize();
-=======
+                <<
+                << << < HEAD
+                $prompt.selectize(); ===
+                === =
                 $confirmSubmit.on('click', function(e) {
                     e.preventDefault();
                     let $confirm = $('#requirementsWarning').find('#confirm').length ? $('#requirementsWarning').find('#confirm').is(':checked') : true;
@@ -150,94 +150,95 @@
                     }
                     $submissionForm.attr('action', '{{ url()->current() }}');
                     $submissionForm.submit();
+                }); >>>
+                >>> > f45d71933bf0b38f4e918e1b63391f9bd17fa0c8
+
+                $prompt.on('change', function(e) {
+                    var promptId = $(this).val();
+
+                    $rewards.load('{{ url('submissions/new/prompt') }}/' + promptId);
+                    $('#copy-calc').load('{{ url('criteria/prompt') }}/' + promptId);
+                    if (promptId) $('#criterion-section').removeClass('hide');
+
+                    // Reload the form HTML and reinit TinyMCE afterward
+                    $form.load('{{ url('submissions/new/form') }}/' + promptId, function() {
+                        initWysiwyg();
+                    });
                 });
->>>>>>> f45d71933bf0b38f4e918e1b63391f9bd17fa0c8
+            @else
+                // Initialize editor for claims (no prompt switch)
+                initWysiwyg();
+            @endif
 
-            $prompt.on('change', function(e) {
-                var promptId = $(this).val();
-
-                $rewards.load('{{ url('submissions/new/prompt') }}/' + promptId);
-                $('#copy-calc').load('{{ url('criteria/prompt') }}/' + promptId);
-                if (promptId) $('#criterion-section').removeClass('hide');
-
-                // Reload the form HTML and reinit TinyMCE afterward
-                $form.load('{{ url('submissions/new/form') }}/' + promptId, function() {
-                    initWysiwyg();
-                });
+            $confirmButton.on('click', function(e) {
+                e.preventDefault();
+                $confirmContent.removeClass('hide');
+                $draftContent.addClass('hide');
+                $confirmationModal.modal('show');
             });
-        @else
-            // Initialize editor for claims (no prompt switch)
-            initWysiwyg();
-        @endif
 
-        $confirmButton.on('click', function(e) {
-            e.preventDefault();
-            $confirmContent.removeClass('hide');
-            $draftContent.addClass('hide');
-            $confirmationModal.modal('show');
-        });
+            $confirmSubmit.on('click', function(e) {
+                e.preventDefault();
+                $submissionForm.attr('action', '{{ url()->current() }}');
+                $submissionForm.submit();
+            });
 
-        $confirmSubmit.on('click', function(e) {
-            e.preventDefault();
-            $submissionForm.attr('action', '{{ url()->current() }}');
-            $submissionForm.submit();
-        });
+            $draftButton.on('click', function(e) {
+                e.preventDefault();
+                $draftContent.removeClass('hide');
+                $confirmContent.addClass('hide');
+                $confirmationModal.modal('show');
+            });
 
-        $draftButton.on('click', function(e) {
-            e.preventDefault();
-            $draftContent.removeClass('hide');
-            $confirmContent.addClass('hide');
-            $confirmationModal.modal('show');
-        });
+            $draftSubmit.on('click', function(e) {
+                e.preventDefault();
+                $submissionForm.attr('action', '{{ url()->current() }}/draft');
+                $submissionForm.submit();
+            });
 
-        $draftSubmit.on('click', function(e) {
-            e.preventDefault();
-            $submissionForm.attr('action', '{{ url()->current() }}/draft');
-            $submissionForm.submit();
-        });
+            $('.add-calc').on('click', function(e) {
+                e.preventDefault();
+                var clone = $('#copy-calc').clone();
+                clone.removeClass('hide');
+                var input = clone.find('[name*=criterion]');
+                var count = $('.criterion-select').length;
+                input.attr('name', input.attr('name').replace('#', count))
+                clone.find('.criterion-select').on('change', loadForm);
+                clone.find('.delete-calc').on('click', deleteCriterion);
+                clone.removeAttr('id');
+                $('#criteria').append(clone);
+            });
 
-        $('.add-calc').on('click', function(e) {
-            e.preventDefault();
-            var clone = $('#copy-calc').clone();
-            clone.removeClass('hide');
-            var input = clone.find('[name*=criterion]');
-            var count = $('.criterion-select').length;
-            input.attr('name', input.attr('name').replace('#', count))
-            clone.find('.criterion-select').on('change', loadForm);
-            clone.find('.delete-calc').on('click', deleteCriterion);
-            clone.removeAttr('id');
-            $('#criteria').append(clone);
-        });
+            $('.delete-calc').on('click', deleteCriterion);
 
-        $('.delete-calc').on('click', deleteCriterion);
-
-        function deleteCriterion(e) {
-            e.preventDefault();
-            var toDelete = $(this).closest('.card');
-            toDelete.remove();
-        }
-
-        function loadForm(e) {
-            var id = $(this).val();
-            var promptId = $prompt.val();
-            var formId = $(this).attr('name').split('[')[1].replace(']', '');
-
-            if (id) {
-                var form = $(this).closest('.card').find('.form');
-                form.load("{{ url('criteria/prompt') }}/" + id + "/" + promptId + "/" + formId, (response, status, xhr) => {
-                    if (status == "error") {
-                        var msg = "Error: ";
-                        console.error(msg + xhr.status + " " + xhr.statusText);
-                    } else {
-                        form.find('[data-toggle=tooltip]').tooltip({ html: true });
-                        form.find('[data-toggle=toggle]').bootstrapToggle();
-                    }
-                });
+            function deleteCriterion(e) {
+                e.preventDefault();
+                var toDelete = $(this).closest('.card');
+                toDelete.remove();
             }
-        }
 
-        $('.criterion-select').on('change', loadForm);
-    });
-</script>
+            function loadForm(e) {
+                var id = $(this).val();
+                var promptId = $prompt.val();
+                var formId = $(this).attr('name').split('[')[1].replace(']', '');
 
-@endsection
+                if (id) {
+                    var form = $(this).closest('.card').find('.form');
+                    form.load("{{ url('criteria/prompt') }}/" + id + "/" + promptId + "/" + formId, (response, status, xhr) => {
+                        if (status == "error") {
+                            var msg = "Error: ";
+                            console.error(msg + xhr.status + " " + xhr.statusText);
+                        } else {
+                            form.find('[data-toggle=tooltip]').tooltip({
+                                html: true
+                            });
+                            form.find('[data-toggle=toggle]').bootstrapToggle();
+                        }
+                    });
+                }
+            }
+
+            $('.criterion-select').on('change', loadForm);
+            });
+        </script>
+    @endsection

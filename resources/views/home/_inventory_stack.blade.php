@@ -1,4 +1,4 @@
-@if (!$stack) 
+@if (!$stack)
     <div class="text-center">
         Invalid stack selected.</div>
 @else
@@ -30,8 +30,8 @@
                 </div>
             </div>
         </div>
-    @endif 
-    
+    @endif
+
 
     @if ($item->parsed_description)
         <div class="mb-2">
@@ -130,12 +130,17 @@
                         </div>
                     </li>
                 @endif
-                
-                @if($item->canDonate)
+
+                @if ($item->canDonate)
                     <li class="list-group-item">
-                        <a class="card-title h5 collapse-title" data-toggle="collapse" href="#donateForm">@if($stack->first()->user_id != $user->id) [ADMIN] @endif Donate Item</a>
+                        <a class="card-title h5 collapse-title" data-toggle="collapse" href="#donateForm">
+                            @if ($stack->first()->user_id != $user->id)
+                                [ADMIN]
+                            @endif Donate Item
+                        </a>
                         <div id="donateForm" class="collapse">
-                            <p>This will donate this item to the <a href="{{ url('shops/donation-shop') }}">Donation Shop</a>, where it will be available for other users to take. This action is not reversible. Are you sure you want to donate this item?</p>
+                            <p>This will donate this item to the <a href="{{ url('shops/donation-shop') }}">Donation Shop</a>, where it will be available for other users to take. This action is not reversible. Are you sure you want to donate this
+                                item?</p>
                             <div class="text-right">
                                 {!! Form::button('Donate', ['class' => 'btn btn-warning', 'name' => 'action', 'value' => 'donate', 'type' => 'submit']) !!}
                             </div>
@@ -189,15 +194,19 @@
                                 {!! Form::button('Delete', ['class' => 'btn btn-danger', 'name' => 'action', 'value' => 'delete', 'type' => 'submit']) !!}
                             </div>
                         </div>
-                    
-                @endif 
 
-                    <!-- Deposit form -->
+                @endif
+
+                <!-- Deposit form -->
                 <li class="list-group-item">
-                    <a class="card-title h5 collapse-title" data-toggle="collapse" href="#depositForm">@if($stack->first()->user_id != $user->id) [ADMIN] @endif Deposit Item</a>
+                    <a class="card-title h5 collapse-title" data-toggle="collapse" href="#depositForm">
+                        @if ($stack->first()->user_id != $user->id)
+                            [ADMIN]
+                        @endif Deposit Item
+                    </a>
                     <div id="depositForm" class="collapse">
                         <p>
-                            This item will be moved into your <a href="{{ url(__('safetydeposit.url')) }}" target="_blank">{{ ucwords(__('safetydeposit.name')) }}</a> for later usage. <br/>
+                            This item will be moved into your <a href="{{ url(__('safetydeposit.url')) }}" target="_blank">{{ ucwords(__('safetydeposit.name')) }}</a> for later usage. <br />
                             It will not be usable in trades, submissions, etc until you move it back into your inventory.
                         </p>
                         <div class="text-right">
@@ -205,7 +214,7 @@
                         </div>
                     </div>
                 </li>
-                
+
             </ul>
         </div>
     @endif

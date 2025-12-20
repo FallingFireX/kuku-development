@@ -22,11 +22,7 @@
                 <div class="d-flex row flex-wrap col-12 mt-1 pt-1 px-0 ubt-top">
                     <div class="col-6 col-md-4">{!! $member->displayName !!}</div>
                     <div class="col-6 col-md-4">{!! $member->factionRank ? $member->factionRank->displayName : '-' !!}</div>
-                    <div class="col-6 col-md">{!! $currency->display(
-                        $member->getCurrencies(true)->where('id', Settings::get('WE_faction_currency'))->first()
-                            ? $member->getCurrencies(true)->where('id', Settings::get('WE_faction_currency'))->first()->quantity
-                            : 0,
-                    ) !!}</div>
+                    <div class="col-6 col-md">{!! $currency->display($member->getCurrencies(true)->where('id', Settings::get('WE_faction_currency'))->first() ? $member->getCurrencies(true)->where('id', Settings::get('WE_faction_currency'))->first()->quantity : 0) !!}</div>
                 </div>
             @endforeach
         </div>

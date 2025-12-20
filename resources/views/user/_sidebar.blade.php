@@ -18,25 +18,25 @@
             @endforeach
         @endif
         <!-- <div class="sidebar-item"><a href="{{ $user->url . '/myos' }}" class="{{ set_active('user/' . $user->name . '/myos*') }}">MYO Slots</a></div> -->
-        <div class="sidebar-item"><a href="{{ $user->url.'/breeding-permissions' }}" class="{{ set_active('user/'.$user->name.'/breeding-permissions*') }}">Breeding Permissions</a></div>
+        <div class="sidebar-item"><a href="{{ $user->url . '/breeding-permissions' }}" class="{{ set_active('user/' . $user->name . '/breeding-permissions*') }}">Breeding Permissions</a></div>
         <div class="sidebar-item"><a href="{{ $user->url . '/inventory' }}" class="{{ set_active('user/' . $user->name . '/inventory*') }}">Bank</a></div>
-        <!-- <div class="sidebar-item"><a href="{{ $user->url.'/'.__('awards.awardcase') }}" class="{{ set_active('user/'.$user->name.'/awardcase*') }}">{{ucfirst(ucfirst(__('awards.awardcase')))}}</a></div> -->
+        <!-- <div class="sidebar-item"><a href="{{ $user->url . '/' . __('awards.awardcase') }}" class="{{ set_active('user/' . $user->name . '/awardcase*') }}">{{ ucfirst(ucfirst(__('awards.awardcase'))) }}</a></div> -->
         <div class="sidebar-item"><a href="{{ $user->url . '/bank' }}" class="{{ set_active('user/' . $user->name . '/bank*') }}">Wallet</a></div>
         <div class="sidebar-item"><a href="{{ $user->url . '/pets' }}" class="{{ set_active('user/' . $user->name . '/pets*') }}">Familiars</a></div>
         <!-- <div class="sidebar-item"><a href="{{ $user->url . '/armoury' }}" class="{{ set_active('user/' . $user->name . '/armoury*') }}">Armoury</a></div> -->
         <!-- <div class="sidebar-item"><a href="{{ $user->url . '/stats' }}" class="{{ set_active('user/' . $user->name . '/stats*') }}">Stat Information</a></div> -->
-        <div class="sidebar-item"><a href="{{ $user->url.'/borders' }}" class="{{ set_active('user/'.$user->name.'/borders*') }}">Borders</a></div>
+        <div class="sidebar-item"><a href="{{ $user->url . '/borders' }}" class="{{ set_active('user/' . $user->name . '/borders*') }}">Borders</a></div>
     </li>
     <li class="sidebar-section">
-        <div class="sidebar-item"><a href="{{ $user->url.'/username-logs' }}" class="{{ set_active('user/'.$user->name.'/username-logs*') }}">Username History</a></div>
+        <div class="sidebar-item"><a href="{{ $user->url . '/username-logs' }}" class="{{ set_active('user/' . $user->name . '/username-logs*') }}">Username History</a></div>
         <div class="sidebar-item"><a href="{{ $user->url . '/ownership' }}" class="{{ set_active('user/' . $user->name . '/ownership*') }}">Ownership History</a></div>
         <div class="sidebar-item"><a href="{{ $user->url . '/item-logs' }}" class="{{ set_active('user/' . $user->name . '/item-logs*') }}">Bank Logs</a></div>
         <div class="sidebar-item"><a href="{{ $user->url . '/currency-logs' }}" class="{{ set_active('user/' . $user->name . '/currency-logs*') }}">Wallet Logs</a></div>
         <div class="sidebar-item"><a href="{{ $user->url . '/pet-logs' }}" class="{{ set_active($user->url . '/pet-logs*') }}">Familiar Logs</a></div>
-        <div class="sidebar-item"><a href="{{ $user->url.'/border-logs' }}" class="{{ set_active('user/'.$user->name.'/border-logs*') }}">Border Logs</a></div>
-        <!-- <div class="sidebar-item"><a href="{{ $user->url.'/'.__('awards.award').'-logs' }}" class="{{ set_active($user->url.'/award-logs*') }}">{{ucfirst(ucfirst(__('awards.award')))}} Logs</a></div> -->
+        <div class="sidebar-item"><a href="{{ $user->url . '/border-logs' }}" class="{{ set_active('user/' . $user->name . '/border-logs*') }}">Border Logs</a></div>
+        <!-- <div class="sidebar-item"><a href="{{ $user->url . '/' . __('awards.award') . '-logs' }}" class="{{ set_active($user->url . '/award-logs*') }}">{{ ucfirst(ucfirst(__('awards.award'))) }} Logs</a></div> -->
         <div class="sidebar-item"><a href="{{ $user->url . '/submissions' }}" class="{{ set_active('user/' . $user->name . '/submissions*') }}">Submissions</a></div>
-        <!-- <div class="sidebar-item"><a href="{{ $user->url.'/recipe-logs' }}" class="{{ set_active($user->url.'/recipe-logs*') }}">Recipe Logs</a></div> -->
+        <!-- <div class="sidebar-item"><a href="{{ $user->url . '/recipe-logs' }}" class="{{ set_active($user->url . '/recipe-logs*') }}">Recipe Logs</a></div> -->
     </li>
 
     @if (Auth::check() && Auth::user()->hasPower('edit_user_info'))

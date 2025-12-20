@@ -1,111 +1,118 @@
 <div>
     {!! Form::open(['method' => 'GET']) !!}
-        <div class="form-inline justify-content-end">
-            <div class="form-group mr-3 mb-3">
-                {!! Form::label('name', 'Character Name/Code: ', ['class' => 'mr-2']) !!}
-                {!! Form::text('name', Request::get('name'), ['class' => 'form-control']) !!}
-            </div>
-            <div class="form-group mb-3">
-                {!! Form::select('rarity_id', $rarities, Request::get('rarity_id'), ['class' => 'form-control mr-3']) !!}
-            </div>
-            <div class="form-group mb-3">
-                {!! Form::select('species_id', $specieses, Request::get('species_id'), ['class' => 'form-control']) !!}
-            </div>
+    <div class="form-inline justify-content-end">
+        <div class="form-group mr-3 mb-3">
+            {!! Form::label('name', 'Character Name/Code: ', ['class' => 'mr-2']) !!}
+            {!! Form::text('name', Request::get('name'), ['class' => 'form-control']) !!}
         </div>
-       
+        <div class="form-group mb-3">
+            {!! Form::select('rarity_id', $rarities, Request::get('rarity_id'), ['class' => 'form-control mr-3']) !!}
+        </div>
+        <div class="form-group mb-3">
+            {!! Form::select('species_id', $specieses, Request::get('species_id'), ['class' => 'form-control']) !!}
+        </div>
     </div>
-    <div class="text-right mb-3"><a href="#advancedSearch" class="btn btn-sm btn-outline-info" data-toggle="collapse">Show Advanced Search Options <i class="fas fa-caret-down"></i></a></div>
-    <div class="card bg-light mb-3 collapse" id="advancedSearch">
-        <div class="card-body masterlist-advanced-search">
-            @if (!$isMyo)
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            {!! Form::label('character_category_id', 'Category: ') !!}
-                            {!! Form::select('character_category_id', $categories, Request::get('character_category_id'), ['class' => 'form-control']) !!}
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            {!! Form::label('subtype_ids[]', 'Species Subtype: ') !!}
-                            {!! add_help('Search for characters that have <strong>' . (config('lorekeeper.extensions.exclusionary_search') ? 'all' : 'any') . '</strong> of the selected subtypes.') !!}
-                            {!! Form::select('subtype_ids[]', $subtypes, Request::get('subtype_ids'), ['class' => 'form-control userselectize', 'multiple']) !!}
-                        </div>
+
+</div>
+<div class="text-right mb-3"><a href="#advancedSearch" class="btn btn-sm btn-outline-info" data-toggle="collapse">Show Advanced Search Options <i class="fas fa-caret-down"></i></a></div>
+<div class="card bg-light mb-3 collapse" id="advancedSearch">
+    <div class="card-body masterlist-advanced-search">
+        @if (!$isMyo)
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        {!! Form::label('character_category_id', 'Category: ') !!}
+                        {!! Form::select('character_category_id', $categories, Request::get('character_category_id'), ['class' => 'form-control']) !!}
                     </div>
                 </div>
-                <hr />
-                <div class="masterlist-search-field">
-                    {!! Form::label('owner_url', 'Owner URL / Username: ') !!} {!! add_help ('Example: https://deviantart.com/username OR username') !!}
-                    {!! Form::text('owner_url', Request::get('owner_url'), ['class'=> 'form-control mr-2', 'style' => 'width: 250px', 'placeholder' => 'Type a Username']) !!}
+                <div class="col-md-6">
+                    <div class="form-group">
+                        {!! Form::label('subtype_ids[]', 'Species Subtype: ') !!}
+                        {!! add_help('Search for characters that have <strong>' . (config('lorekeeper.extensions.exclusionary_search') ? 'all' : 'any') . '</strong> of the selected subtypes.') !!}
+                        {!! Form::select('subtype_ids[]', $subtypes, Request::get('subtype_ids'), ['class' => 'form-control userselectize', 'multiple']) !!}
+                    </div>
                 </div>
-                <div class="masterlist-search-field">
-                    {!! Form::label('artist_url', 'Artist URL / Username: ') !!} {!! add_help ('Example: https://deviantart.com/username OR username') !!}
-                    {!! Form::text('artist_url', Request::get('artist_url'), ['class'=> 'form-control mr-2', 'style' => 'width: 250px', 'placeholder' => 'Type a Username']) !!}
-                </div>
-            @endif
-            <br />
-            {{-- Setting the width and height on the toggles as they don't seem to calculate correctly if the div is collapsed. --}}
-            <div class="masterlist-search-field">
-                {!! Form::checkbox('is_trading', 1, Request::get('is_trading'), ['class' => 'form-check-input', 'data-toggle' => 'toggle', 'data-on' => 'Open For Trade', 'data-off' => 'Any Trading Status', 'data-width' => '200', 'data-height' => '46']) !!}
-            </div>
-            <div class="masterlist-search-field">
-                {!! Form::checkbox('is_sellable', 1, Request::get('is_sellable'), ['class' => 'form-check-input', 'data-toggle' => 'toggle', 'data-on' => 'Can Be Sold', 'data-off' => 'Any Sellable Status', 'data-width' => '204', 'data-height' => '46']) !!}
-            </div>
-            <div class="masterlist-search-field">
-                {!! Form::checkbox('is_tradeable', 1, Request::get('is_tradeable'), ['class' => 'form-check-input', 'data-toggle' => 'toggle', 'data-on' => 'Can Be Traded', 'data-off' => 'Any Tradeable Status', 'data-width' => '220', 'data-height' => '46']) !!}
-            </div>
-            <div class="masterlist-search-field">
-                {!! Form::checkbox('is_giftable', 1, Request::get('is_giftable'), ['class' => 'form-check-input', 'data-toggle' => 'toggle', 'data-on' => 'Can Be Gifted', 'data-off' => 'Any Giftable Status', 'data-width' => '202', 'data-height' => '46']) !!}
             </div>
             <hr />
-            <div class="form-group">
-                {!! Form::label('Has Traits: ') !!} {!! add_help('This will narrow the search to characters that have ALL of the selected traits at the same time.') !!}
-                {!! Form::select('feature_ids[]', $features, Request::get('feature_ids'), ['class' => 'form-control feature-select', 'placeholder' => 'Select Traits', 'multiple']) !!}
-            </div>
-            @if (!$isMyo)
-                <div class="row">
-                    <div class="col-md-6 form-group">
-                        {!! Form::label('Exclude Selected Tags: ') !!} {!! add_help('This will exclude characters that have ANY of the selected tags.') !!}
-                        {!! Form::select('excluded_tags[]', ['all' => 'Exclude All'] + $contentWarnings, Request::get('excluded_tags'), ['class' => 'form-control feature-select userselectize', 'placeholder' => 'Select Tags', 'multiple']) !!}
-                    </div>
-                    <div class="col-md-6 form-group">
-                        {!! Form::label('Include Selected Tags: ') !!} {!! add_help('This will include characters that have ANY of the selected tags.') !!}
-                        {!! Form::select('included_tags[]', ['all' => 'Include All'] + $contentWarnings, Request::get('included_tags'), ['class' => 'form-control feature-select userselectize', 'placeholder' => 'Select Tags', 'multiple']) !!}
-                    </div>
-                </div>
-            @endif
-
             <div class="masterlist-search-field">
-                    {!! Form::checkbox('search_images', 1, Request::get('search_images'), ['class' => 'form-check-input mr-3',  'data-toggle' => 'toggle']) !!}
-                    <span class="ml-2">Include all character images in search {!! add_help('Each character can have multiple images for each updated version of the character, which captures the traits on that character at that point in time. By default the search will only search on the most up-to-date image, but this option will retrieve characters that match the criteria on older images - you may get results that are outdated.') !!}</span>
-                </div>
-                <div class="masterlist-search-field">
-                {!! Form::label('genotype', 'Genotype: ') !!} {!! add_help('This will search all kukuri for a given marking. Ex: Entering &quotnCo&quot will return non-dominate collared kukuri') !!}
-                {!! Form::text('genotype', Request::get('genotype'), ['class' => 'form-control mr-2', 'style' => 'width: 250px', 'placeholder' => 'Type a geno string']) !!}
-                </div>
-                <div class="masterlist-search-field">
-                {!! Form::label('description', 'Items: ') !!} {!! add_help('This will search all kukuri for a given marking. Ex: Entering &quotnCo&quot will return non-dominate collared kukuri') !!}
-                {!! Form::text('description', Request::get('description'), ['class' => 'form-control mr-2', 'style' => 'width: 250px', 'placeholder' => 'Type a geno string']) !!}
-                </div>
-                <div class="masterlist-search-field">
-                    {!! Form::checkbox('kotm', 1, Request::get('kotm'), ['class' => 'form-check-input', 'data-toggle' => 'toggle', 'data-on' => 'KotM Winners', 'data-off' => 'All Kukuri', 'data-width' => '202', 'data-height' => '46']) !!}{!! add_help('This will filter by kukuri who have won kukuri of the month before!') !!}
+                {!! Form::label('owner_url', 'Owner URL / Username: ') !!} {!! add_help('Example: https://deviantart.com/username OR username') !!}
+                {!! Form::text('owner_url', Request::get('owner_url'), ['class' => 'form-control mr-2', 'style' => 'width: 250px', 'placeholder' => 'Type a Username']) !!}
             </div>
+            <div class="masterlist-search-field">
+                {!! Form::label('artist_url', 'Artist URL / Username: ') !!} {!! add_help('Example: https://deviantart.com/username OR username') !!}
+                {!! Form::text('artist_url', Request::get('artist_url'), ['class' => 'form-control mr-2', 'style' => 'width: 250px', 'placeholder' => 'Type a Username']) !!}
+            </div>
+        @endif
+        <br />
+        {{-- Setting the width and height on the toggles as they don't seem to calculate correctly if the div is collapsed. --}}
+        <div class="masterlist-search-field">
+            {!! Form::checkbox('is_trading', 1, Request::get('is_trading'), ['class' => 'form-check-input', 'data-toggle' => 'toggle', 'data-on' => 'Open For Trade', 'data-off' => 'Any Trading Status', 'data-width' => '200', 'data-height' => '46']) !!}
+        </div>
+        <div class="masterlist-search-field">
+            {!! Form::checkbox('is_sellable', 1, Request::get('is_sellable'), ['class' => 'form-check-input', 'data-toggle' => 'toggle', 'data-on' => 'Can Be Sold', 'data-off' => 'Any Sellable Status', 'data-width' => '204', 'data-height' => '46']) !!}
+        </div>
+        <div class="masterlist-search-field">
+            {!! Form::checkbox('is_tradeable', 1, Request::get('is_tradeable'), ['class' => 'form-check-input', 'data-toggle' => 'toggle', 'data-on' => 'Can Be Traded', 'data-off' => 'Any Tradeable Status', 'data-width' => '220', 'data-height' => '46']) !!}
+        </div>
+        <div class="masterlist-search-field">
+            {!! Form::checkbox('is_giftable', 1, Request::get('is_giftable'), ['class' => 'form-check-input', 'data-toggle' => 'toggle', 'data-on' => 'Can Be Gifted', 'data-off' => 'Any Giftable Status', 'data-width' => '202', 'data-height' => '46']) !!}
+        </div>
+        <hr />
+        <div class="form-group">
+            {!! Form::label('Has Traits: ') !!} {!! add_help('This will narrow the search to characters that have ALL of the selected traits at the same time.') !!}
+            {!! Form::select('feature_ids[]', $features, Request::get('feature_ids'), ['class' => 'form-control feature-select', 'placeholder' => 'Select Traits', 'multiple']) !!}
+        </div>
+        @if (!$isMyo)
+            <div class="row">
+                <div class="col-md-6 form-group">
+                    {!! Form::label('Exclude Selected Tags: ') !!} {!! add_help('This will exclude characters that have ANY of the selected tags.') !!}
+                    {!! Form::select('excluded_tags[]', ['all' => 'Exclude All'] + $contentWarnings, Request::get('excluded_tags'), ['class' => 'form-control feature-select userselectize', 'placeholder' => 'Select Tags', 'multiple']) !!}
+                </div>
+                <div class="col-md-6 form-group">
+                    {!! Form::label('Include Selected Tags: ') !!} {!! add_help('This will include characters that have ANY of the selected tags.') !!}
+                    {!! Form::select('included_tags[]', ['all' => 'Include All'] + $contentWarnings, Request::get('included_tags'), ['class' => 'form-control feature-select userselectize', 'placeholder' => 'Select Tags', 'multiple']) !!}
+                </div>
+            </div>
+        @endif
 
-            <hr />
-            <div class="form-group">
-                {!! Form::checkbox('search_images', 1, Request::get('search_images'), ['class' => 'form-check-input', 'data-toggle' => 'toggle']) !!}
-                {!! Form::label('search_images', 'Include all character images in search', ['class' => 'form-check-label ml-3']) !!} {!! add_help(
-                    'Each character can have multiple images for each updated version of the character, which captures the traits on that character at that point in time. By default the search will only search on the most up-to-date image, but this option will retrieve characters that match the criteria on older images - you may get results that are outdated.',
-                ) !!}
-            </div>
+        <div class="masterlist-search-field">
+            {!! Form::checkbox('search_images', 1, Request::get('search_images'), ['class' => 'form-check-input mr-3', 'data-toggle' => 'toggle']) !!}
+            <span class="ml-2">Include all character images in search {!! add_help(
+                'Each character can have multiple images for each updated version of the character, which captures the traits on that character at that point in time. By default the search will only search on the most up-to-date image, but this option will retrieve characters that match the criteria on older images - you may get results that are outdated.',
+            ) !!}</span>
         </div>
-        <div class="form-inline justify-content-end mb-3">
-            <div class="form-group mr-3">
-                {!! Form::label('sort', 'Sort: ', ['class' => 'mr-2']) !!}
-                {!! Form::select('sort', ['number_desc' => 'Number Descending', 'number_asc' => 'Number Ascending', 'id_desc' => 'Newest First', 'id_asc' => 'Oldest First', 'sale_value_desc' => 'Highest Sale Value', 'sale_value_asc' => 'Lowest Sale Value'], Request::get('sort'), ['class' => 'form-control']) !!}
-            </div>
-            {!! Form::submit('Search', ['class' => 'btn btn-primary']) !!}
+        <div class="masterlist-search-field">
+            {!! Form::label('genotype', 'Genotype: ') !!} {!! add_help('This will search all kukuri for a given marking. Ex: Entering &quotnCo&quot will return non-dominate collared kukuri') !!}
+            {!! Form::text('genotype', Request::get('genotype'), ['class' => 'form-control mr-2', 'style' => 'width: 250px', 'placeholder' => 'Type a geno string']) !!}
         </div>
+        <div class="masterlist-search-field">
+            {!! Form::label('description', 'Items: ') !!} {!! add_help('This will search all kukuri for a given marking. Ex: Entering &quotnCo&quot will return non-dominate collared kukuri') !!}
+            {!! Form::text('description', Request::get('description'), ['class' => 'form-control mr-2', 'style' => 'width: 250px', 'placeholder' => 'Type a geno string']) !!}
+        </div>
+        <div class="masterlist-search-field">
+            {!! Form::checkbox('kotm', 1, Request::get('kotm'), ['class' => 'form-check-input', 'data-toggle' => 'toggle', 'data-on' => 'KotM Winners', 'data-off' => 'All Kukuri', 'data-width' => '202', 'data-height' => '46']) !!}{!! add_help('This will filter by kukuri who have won kukuri of the month before!') !!}
+        </div>
+
+        <hr />
+        <div class="form-group">
+            {!! Form::checkbox('search_images', 1, Request::get('search_images'), ['class' => 'form-check-input', 'data-toggle' => 'toggle']) !!}
+            {!! Form::label('search_images', 'Include all character images in search', ['class' => 'form-check-label ml-3']) !!} {!! add_help(
+                'Each character can have multiple images for each updated version of the character, which captures the traits on that character at that point in time. By default the search will only search on the most up-to-date image, but this option will retrieve characters that match the criteria on older images - you may get results that are outdated.',
+            ) !!}
+        </div>
+    </div>
+    <div class="form-inline justify-content-end mb-3">
+        <div class="form-group mr-3">
+            {!! Form::label('sort', 'Sort: ', ['class' => 'mr-2']) !!}
+            {!! Form::select(
+                'sort',
+                ['number_desc' => 'Number Descending', 'number_asc' => 'Number Ascending', 'id_desc' => 'Newest First', 'id_asc' => 'Oldest First', 'sale_value_desc' => 'Highest Sale Value', 'sale_value_asc' => 'Lowest Sale Value'],
+                Request::get('sort'),
+                ['class' => 'form-control'],
+            ) !!}
+        </div>
+        {!! Form::submit('Search', ['class' => 'btn btn-primary']) !!}
+    </div>
     {!! Form::close() !!}
 </div>
 <div class="hide" id="featureContent">
@@ -143,14 +150,10 @@
                 <div class="col-md-3 col-6 text-center mb-3">
                     <div class="position-relative d-inline-block">
                         <a href="{{ $character->url }}">
-                            <img 
-                                src="{{ $character->image->thumbnailUrl }}" 
-                                class="img-thumbnail {{ $character->image->showContentWarnings(Auth::user() ?? null) ? 'content-warning' : '' }}" 
-                                alt="Thumbnail for {{ $character->fullName }}"
-                            />
+                            <img src="{{ $character->image->thumbnailUrl }}" class="img-thumbnail {{ $character->image->showContentWarnings(Auth::user() ?? null) ? 'content-warning' : '' }}" alt="Thumbnail for {{ $character->fullName }}" />
                         </a>
 
-                        @if($character->has_status_effect)
+                        @if ($character->has_status_effect)
                             <span class="status-badge" data-toggle="tooltip" title="This Kukuri is injured or Ill"><i class="fas fa-biohazard"></i></span>
                         @endif
                     </div>

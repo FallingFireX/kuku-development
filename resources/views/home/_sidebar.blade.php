@@ -3,7 +3,7 @@
     <li class="sidebar-section">
         <div class="sidebar-section-header">Kukus</div>
         <div class="sidebar-item"><a href="{{ url('characters') }}" class="{{ set_active('characters') }}">My Kukuri</a></div>
-        <!-- <div class="sidebar-item"><a href="{{ url('breeding-permissions') }}" class="{{ set_active('breeding-permissions') }}">Breeding Permissions</a></div> --> 
+        <!-- <div class="sidebar-item"><a href="{{ url('breeding-permissions') }}" class="{{ set_active('breeding-permissions') }}">Breeding Permissions</a></div> -->
     </li>
     <li class="sidebar-section">
         <div class="sidebar-section-header">Activity</div>
@@ -20,7 +20,7 @@
         <div class="sidebar-item"><a href="{{ url('inventory') }}" class="{{ set_active('inventory*') }}">Bank</a></div>
         <div class="sidebar-item"><a href="{{ url('bank') }}" class="{{ set_active('bank*') }}">Wallet</a></div>
         <div class="sidebar-item"><a href="{{ url('pets') }}" class="{{ set_active('pets*') }}">Familiars</a></div>
-        <div class="sidebar-item"><a href="{{ url(__('safetydeposit.url')) }}" class="{{ set_active(__('safetydeposit.url').'*') }}">{{ ucwords(__('safetydeposit.name')) }}</a></div>
+        <div class="sidebar-item"><a href="{{ url(__('safetydeposit.url')) }}" class="{{ set_active(__('safetydeposit.url') . '*') }}">{{ ucwords(__('safetydeposit.name')) }}</a></div>
     </li>
     <li class="sidebar-section">
         <div class="sidebar-section-header">Reports</div>
