@@ -98,6 +98,13 @@
         </div>
     </div>
 @endif
+<div class="comments">
+    @comments([
+        'model' => $submission,
+        'perPage' => 5,
+        'allow_dislikes' => false,
+    ])
+</div>
 
 @if (array_filter(parseAssetData(isset($submission->data['rewards']) ? $submission->data['rewards'] : $submission->data)))
     <div class="card mb-3">

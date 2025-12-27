@@ -93,6 +93,7 @@
                 </div>
             </div>
         @endif
+
         {!! Form::open(['url' => url()->current(), 'id' => 'submissionForm']) !!}
 
 

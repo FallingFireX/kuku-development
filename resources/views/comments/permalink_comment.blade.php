@@ -40,7 +40,7 @@ Comment
 
             case 'App\Models\Submission\Submission':
                 $label = 'Claim';
-                $link = url('claims/view' . '/' . $commentable->id);
+                $link = url('submissions/view' . '/' . $commentable->id);
                 $profile = false;
                 break;
                 

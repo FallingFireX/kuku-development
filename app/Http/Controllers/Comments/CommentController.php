@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Comments;
 
 use App\Facades\Notifications;
 use App\Facades\Settings;
+use App\Models\Character\CharacterDesignUpdate;
 use App\Models\Comment\Comment;
 use App\Models\DevLogs;
 use App\Models\Gallery\GallerySubmission;
@@ -167,6 +168,11 @@ class CommentController extends Controller {
                 $recipient = $application->user;
                 $post = 'your submission';
                 $link = $application->url.'/#comment-'.$comment->getKey();
+            case 'App\Models\Character\CharacterDesignUpdate':
+                $request = CharacterDesignUpdate::find($comment->commentable_id);
+                $recipient = $request->user;
+                $post = 'your character design update';
+                $link = $request->url.'/#comment-'.$comment->getKey();
                 break;
             default:
                 throw new \Exception('Comment type not supported.');
