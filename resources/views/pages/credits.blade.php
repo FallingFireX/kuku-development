@@ -8,15 +8,15 @@
     {!! breadcrumbs(['Credits' => url('credits')]) !!}
     <h1>Credits</h1>
 
-<p style="text-align: center;">&nbsp;</p>
-</div>
+    <p style="text-align: center;">&nbsp;</p>
+    </div>
 
     <div class="site-page-content parsed-text">
         {!! $credits->parsed_text !!}
     </div>
 
 
-<hr>
+    <hr>
     <h4 class="mb-0">Core Extensions</h4>
     <p class="mb-2">These extensions were coded by the Lorekeeper community and are now a part of core Lorekeeper.</p>
     <div class="extensions row no-gutters">
@@ -251,7 +251,8 @@
 
     <hr>
     <h4 class="mb-0">Extensions No longer in use</h4>
-    <p class="mb-2">These extensions were added or used at some point, but are no longer in use for various reasons. <br> <i> We would still like to thank those that contributed these extensions and code, even if we no longer use them. Their code and extensions were used on our site at some point and deserve praise</i></p>
+    <p class="mb-2">These extensions were added or used at some point, but are no longer in use for various reasons. <br> <i> We would still like to thank those that contributed these extensions and code, even if we no longer use them. Their code and
+            extensions were used on our site at some point and deserve praise</i></p>
     <div class="extensions row no-gutters">
         <p class="mb-0 col-md-4">
             <a href="http://wiki.lorekeeper.me/index.php?title=Extensions:Higher_or_Lower"><strong>Higher or Lower</strong></a> by <a href="https://github.com/CH3RVB/">CH3RVB</a>
@@ -261,4 +262,4 @@
         </p>
 
 
-@endsection
+    @endsection

@@ -1,6 +1,8 @@
 @extends('admin.layout')
 
-@section('admin-title'){{ $submission->prompt_id ? 'Submission' : 'Claim' }} (#{{ $submission->id }})@endsection
+@section('admin-title')
+    {{ $submission->prompt_id ? 'Submission' : 'Claim' }} (#{{ $submission->id }})
+@endsection
 
 @section('admin-content')
 
@@ -326,7 +328,6 @@
                 </div>
             </div>
         </div>
-    
     @else
         <div class="alert alert-danger">This {{ $submission->prompt_id ? 'submission' : 'claim' }} has already been processed.</div>
         @include('home._submission_content', ['submission' => $submission])
@@ -405,4 +406,3 @@
         </script>
     @endif
 @endsection
-

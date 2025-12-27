@@ -52,7 +52,7 @@
             </tbody>
         </table>
         <hr>
-        
+
     </div>
     @if (count(getLimits($prompt)))
         <div class="card-footer">
