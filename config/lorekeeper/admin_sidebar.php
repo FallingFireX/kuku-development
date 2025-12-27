@@ -294,7 +294,7 @@ return [
             [
                 'name' => 'Dynamic Limits',
                 'url'  => 'admin/data/limits',
-            ], 
+            ],
             [
                 'name' => 'Library',
                 'url'  => 'admin/data/volumes',

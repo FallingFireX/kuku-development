@@ -64,7 +64,6 @@ class SubmissionController extends Controller {
             abort(404);
         }
         $prompt = $submission->prompt;
-        
 
         $count['all'] = Submission::submitted($prompt->id, $submission->user_id)->count();
         $count['Hour'] = Submission::submitted($prompt->id, $submission->user_id)->where('created_at', '>=', now()->startOfHour())->count();
