@@ -101,7 +101,6 @@
                 @if (!$isClaim)
                     var $prompt = $('#prompt');
                     var $rewards = $('#rewards');
-<<<<<<< HEAD
                     var $form = $('#prompt-form');
                     if ($prompt.val() != '') {
                         $.get('{{ url('submissions/new/form') }}/' + $prompt.val(), function(data) {
@@ -110,9 +109,7 @@
                             });
                         });
                     }
-=======
                     var $requirementsWarning = $('#requirementsWarning');
->>>>>>> f45d71933bf0b38f4e918e1b63391f9bd17fa0c8
 
                     $prompt.selectize();
                     $prompt.on('change', function(e) {
@@ -138,9 +135,6 @@
                 initWysiwyg();
             });
 
-<<<<<<< HEAD
-            $prompt.selectize();
-=======
                 $confirmSubmit.on('click', function(e) {
                     e.preventDefault();
                     let $confirm = $('#requirementsWarning').find('#confirm').length ? $('#requirementsWarning').find('#confirm').is(':checked') : true;
@@ -151,7 +145,6 @@
                     $submissionForm.attr('action', '{{ url()->current() }}');
                     $submissionForm.submit();
                 });
->>>>>>> f45d71933bf0b38f4e918e1b63391f9bd17fa0c8
 
             $prompt.on('change', function(e) {
                 var promptId = $(this).val();

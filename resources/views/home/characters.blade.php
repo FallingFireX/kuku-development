@@ -51,8 +51,11 @@
 
     {!! Form::hidden('sort', null, ['id' => 'sortableOrder']) !!}
     {!! Form::submit('Save Order', ['class' => 'btn btn-primary']) !!}
-<<<<<<< HEAD
 {!! Form::close() !!}
+ <div class="mobile-handle handle-clone badge badge-primary rounded-circle hide">
+        <i class="fas fa-hand-point-up" aria-hidden="true"></i>
+        <span class="sr-only">Drag Handle</span>
+    </div>
 
 <h1>
     Selected Character
@@ -67,14 +70,6 @@
 {!! Form::close() !!}
 
 
-=======
-    {!! Form::close() !!}
-
-    <div class="mobile-handle handle-clone badge badge-primary rounded-circle hide">
-        <i class="fas fa-hand-point-up" aria-hidden="true"></i>
-        <span class="sr-only">Drag Handle</span>
-    </div>
->>>>>>> f45d71933bf0b38f4e918e1b63391f9bd17fa0c8
 @endsection
 @section('scripts')
     <script>

@@ -6,11 +6,9 @@ use App\Models\Gallery\GallerySubmission;
 use App\Models\Model;
 use App\Models\Prompt\Prompt;
 use App\Models\User\User;
-use App\Traits\Commentable;
 use Carbon\Carbon;
 
 class Submission extends Model {
-    use Commentable;
     /**
      * The attributes that are mass assignable.
      *

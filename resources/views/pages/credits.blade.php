@@ -195,30 +195,22 @@
             ({{ config('lorekeeper.extensions.staff_rewards.enabled') ? 'Enabled' : 'Disabled' }})
         </p>
         <p class="mb-0 col-md-4">
-<<<<<<< HEAD
-            <a href="http://wiki.lorekeeper.me/index.php?title=Extensions:VTI_Trait_Modals"><strong>Visual Trait Indexes Trait Modals</strong></a> by <a href="https://github.com/AW0005">Moif</a>
-            ({{ config('lorekeeper.extensions.species_trait_index.trait_modals') ? 'Enabled' : 'Disabled' }})
-=======
             <a href="http://wiki.lorekeeper.me/index.php?title=Extensions:TinyMCE_Code_Editor"><strong>TinyMCE Code Editor</strong></a> by <a href="https://github.com/AW0005">Moif</a>
             ({{ config('lorekeeper.extensions.tinymce_code_editor') ? 'Enabled' : 'Disabled' }})
         </p>
         <p class="mb-0 col-md-4">
             <a href="http://wiki.lorekeeper.me/index.php?title=Extensions:Universal_Trait_Index"><strong>Universal Trait Index</strong></a> by <a href="https://github.com/CH3RVB">CH3RVB</a>
             ({{ config('lorekeeper.extensions.visual_trait_index.enable_universal_index') ? 'Enabled' : 'Disabled' }})
->>>>>>> f45d71933bf0b38f4e918e1b63391f9bd17fa0c8
         </p>
         <p class="mb-0 col-md-4">
             <a href="http://wiki.lorekeeper.me/index.php?title=Extensions:User_Character_Minibadges"><strong>User Character Minibadges</strong></a> by <a href="https://github.com/SpeedyD">Speedy</a>
             ({{ config('lorekeeper.extensions.badges_on_user_character_page') ? 'Enabled' : 'Disabled' }})
         </p>
         <p class="mb-0 col-md-4">
-<<<<<<< HEAD
-=======
             <a href="http://wiki.lorekeeper.me/index.php?title=Extensions:VTI_Trait_Modals"><strong>Visual Trait Indexes Trait Modals</strong></a> by <a href="https://github.com/AW0005">Moif</a>
             ({{ config('lorekeeper.extensions.visual_trait_index.trait_modals') ? 'Enabled' : 'Disabled' }})
         </p>
         <p class="mb-0 col-md-4">
->>>>>>> f45d71933bf0b38f4e918e1b63391f9bd17fa0c8
             <a href="http://wiki.lorekeeper.me/index.php?title=Extensions:Watermarking"><strong>Watermarking</strong></a> by <a href="https://github.com/itinerare">itinerare</a>
             ({{ config('lorekeeper.settings.watermark_masterlist_images') ? 'Enabled' : 'Disabled' }})
         </p>
@@ -267,6 +259,6 @@
         <p class="mb-0 col-md-4">
             <a href="http://wiki.lorekeeper.me/index.php?title=Extensions:Artist_Credits_Tracker"><strong>Artist Credits Tracker</strong></a> by <a href="https://github.com/TornPages/">TornPages</a>
         </p>
-    </div>
+
 
 @endsection

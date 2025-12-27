@@ -15,7 +15,7 @@ return [
     */
 
     'Admin'      => [
-        'power' => 'manage_reports',
+        'power' => 'admin',
         'links' => [
             [
                 'name' => 'User Ranks',
@@ -165,10 +165,12 @@ return [
                 'name' => 'Border Grants',
                 'url'  => 'admin/grants/borders',
             ],
+            [
                 'name' => 'Loot Table Grants',
                 'url'  => 'admin/grants/loot-tables',
             ],
         ],
+    ],
     'Masterlist' => [
         'power' => 'manage_characters',
         'links' => [

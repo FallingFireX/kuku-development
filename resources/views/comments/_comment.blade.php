@@ -118,32 +118,5 @@
                 @endif
             </div>
         </div>
-<<<<<<< HEAD
-
-        {{-- Recursion for children --}}
-        @if(empty($read_only) || !$read_only)
-        <div class="w-100 mw-100">
-            @if ($grouped_comments->has($comment->getKey()))
-                @foreach ($grouped_comments[$comment->getKey()] as $child)
-                    @php $limit++; @endphp
-
-                    @if ($limit >= 3)
-                        <a href="{{ url('comment/') . '/' . $comment->id }}"><span class="btn btn-secondary w-100 my-2">See More Replies</span></a>
-                    @break
-                @endif
-
-                @include('comments::_comment', [
-                    'comment' => $child,
-                    'reply' => true,
-                    'grouped_comments' => $grouped_comments,
-                ])
-            @endforeach
-        @endif
     </div>
-    @endif
-</div>
-</div>
-=======
-    </div>
->>>>>>> f45d71933bf0b38f4e918e1b63391f9bd17fa0c8
 @endif

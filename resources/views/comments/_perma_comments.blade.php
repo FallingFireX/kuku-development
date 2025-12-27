@@ -83,12 +83,6 @@ url should be equal to the last replies permalink (e.g reply 5) --}}
         @else
             <div id="comment-{{ $comment->getKey() }}" class="pt-4" style="flex-basis: 100%;">
     @endif
-<<<<<<< HEAD
-</div>
-</div>
-</div>
-@endif
-=======
     <div class="media-body row mw-100 mx-0" style="flex:1;flex-wrap:wrap;">
         <div class="d-none d-md-block">
             <img class="mr-3 mt-2" src="{{ asset('images/avatars/default.jpg') }}" style="width:70px; height:70px; border-radius:50%;" alt="Default Avatar">
@@ -132,4 +126,3 @@ url should be equal to the last replies permalink (e.g reply 5) --}}
     </div>
     </div>
 @endif
->>>>>>> f45d71933bf0b38f4e918e1b63391f9bd17fa0c8
