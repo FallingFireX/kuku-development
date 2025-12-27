@@ -9,8 +9,8 @@ use App\Models\Item\Item;
 use App\Models\Item\ItemCategory;
 use App\Models\Loot\LootTable;
 use App\Models\Pet\Pet;
-use App\Models\Status\StatusEffect;
 use App\Models\Rarity;
+use App\Models\Status\StatusEffect;
 use App\Services\LootService;
 use Illuminate\Http\Request;
 

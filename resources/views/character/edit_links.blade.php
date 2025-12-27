@@ -24,7 +24,7 @@
     @endif
     <div class="alert alert-info">This creates a one-to-one relation with all requested characters!</div>
 
-    <strong> 
+    <strong>
         <p>Characters you own will auto-link and not require approval.</p>
     </strong>
 

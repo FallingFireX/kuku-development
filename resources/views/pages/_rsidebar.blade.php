@@ -1,29 +1,30 @@
-
 <head>
     <link rel="preload" as="image" href="https://www.kukuri-arpg.com/files/newside1.webp" fetchpriority="high">
 </head>
 
 <style>
-@media (max-width: 576px) {
-    h4{
-        margin-top:5rem;
+    @media (max-width: 576px) {
+        h4 {
+            margin-top: 5rem;
+        }
     }
-}
 </style>
 @if (Request::is('/'))
-<ul class="text-center list-unstyled">
-    
+    <ul class="text-center list-unstyled">
+
         <li class="rightSidebar-section p-2">
             <h5>Kukuri of the Month</h5>
-            @if(isset($featured) && $featured)
+            @if (isset($featured) && $featured)
                 <div>
                     <a href="{{ $featured->url }}">
                         <img src="{{ $featured->image->thumbnailUrl }}" class="img-thumbnail" />
                     </a>
                 </div>
                 <div class="mt-1">
-                    <a href="{{ $featured->url }}" class="h5 mb-0"  style="color:var(--dark);">
-                        @if(!$featured->is_visible) <i class="fas fa-eye-slash"></i> @endif
+                    <a href="{{ $featured->url }}" class="h5 mb-0" style="color:var(--dark);">
+                        @if (!$featured->is_visible)
+                            <i class="fas fa-eye-slash"></i>
+                        @endif
                         {{ $featured->fullName }}
                     </a>
                 </div>
@@ -44,7 +45,6 @@
                 <img src="https://discordapp.com/api/guilds/152924425774170113/widget.png?style=banner2" alt="">
             </a>
         </li>
-    
-</ul>
-@endif
 
+    </ul>
+@endif

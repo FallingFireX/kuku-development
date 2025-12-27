@@ -83,8 +83,8 @@
         }
 
         if ($userItemCategory.val() === 'selected' || '{{ $page ?? '' }}' === 'specificPage') {
-    $userItemCategory.val('selected'); // Ensure "Selected Items" is selected
-    refreshFilter(); // Trigger filtering logic
-}
+            $userItemCategory.val('selected'); // Ensure "Selected Items" is selected
+            refreshFilter(); // Trigger filtering logic
+        }
     });
 </script>

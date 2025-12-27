@@ -19,7 +19,7 @@
             <div class="col-5">
                 <select name="category_1" class="form-control">
                     <option value="">Select Filter</option>
-                    @foreach($categories as $category)
+                    @foreach ($categories as $category)
                         <option value="{{ $category->id }}" {{ request('category_1') == $category->id ? 'selected' : '' }}>{{ $category->category_name }}</option>
                     @endforeach
                 </select>
@@ -27,7 +27,7 @@
             <div class="col-5">
                 <select name="category_2" class="form-control">
                     <option value="">Select Filter</option>
-                    @foreach($categories as $category)
+                    @foreach ($categories as $category)
                         <option value="{{ $category->id }}" {{ request('category_2') == $category->id ? 'selected' : '' }}>{{ $category->category_name }}</option>
                     @endforeach
                 </select>
@@ -37,8 +37,8 @@
             </div>
         </div>
     </form>
-<br>
-<br>
+    <br>
+    <br>
     <div class="mb-4 logs-table">
         <div class="logs-table-header">
             <div class="row">
@@ -53,43 +53,41 @@
                 </div>
             </div>
         </div>
-</div>
+    </div>
     <div class="logs-table-body">
-    @foreach ($items as $item)
-        @if ($item->owner) <!-- Skip the item if it has an owner -->
-            @continue
-        @endif
-        <div class="logs-table-row">
-            <div class="row flex-wrap">
-                <div class="col-2 col-md-2">
-                    <div class="logs-table-cell">
-                        @if ($item->is_over_a_year)
-                            <b style="font-size: medium";><span class="badge badge-info">Monthly</span></b>
-                        @else
-                            <b style="font-size: medium";><span class="badge badge-success">Newbie</span></b>
-                        @endif
-                        {{ $item->item_slug }}  <!-- No <a> tag here -->
+        @foreach ($items as $item)
+            @if ($item->owner)
+                <!-- Skip the item if it has an owner -->
+                @continue
+            @endif
+            <div class="logs-table-row">
+                <div class="row flex-wrap">
+                    <div class="col-2 col-md-2">
+                        <div class="logs-table-cell">
+                            @if ($item->is_over_a_year)
+                                <b style="font-size: medium";><span class="badge badge-info">Monthly</span></b>
+                            @else
+                                <b style="font-size: medium";><span class="badge badge-success">Newbie</span></b>
+                            @endif
+                            {{ $item->item_slug }} <!-- No <a> tag here -->
+                        </div>
                     </div>
-                </div>
-                <div class="col-3 col-md-3">
-                    <div class="logs-table-cell">
-                        <a href="{{ $item->link }}" target="_blank">{{ $item->link }}</a>  <!-- Only the link text should be clickable -->
+                    <div class="col-3 col-md-3">
+                        <div class="logs-table-cell">
+                            <a href="{{ $item->link }}" target="_blank">{{ $item->link }}</a> <!-- Only the link text should be clickable -->
+                        </div>
                     </div>
-                </div>
-                <div class="col-5 col-md-5">
-                    <div class="logs-table-cell">
-                        {!! $item->description !!}  <!-- Only the description text should be clickable -->
+                    <div class="col-5 col-md-5">
+                        <div class="logs-table-cell">
+                            {!! $item->description !!} <!-- Only the description text should be clickable -->
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    @endforeach
+        @endforeach
 
         <div class="pagination">
             {{ $items->appends(request()->query())->links() }}
         </div>
     </div>
-
-
-
 @endsection

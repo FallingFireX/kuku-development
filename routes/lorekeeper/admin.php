@@ -603,7 +603,7 @@ Route::group(['prefix' => 'data', 'namespace' => 'Data', 'middleware' => 'power:
     Route::post('criteria/{id}/step/{step_id}', 'CriterionController@postCreateEditCriterionStep');
     Route::get('criteria/delete/{id}', 'CriterionController@getDeleteCriterion');
     Route::post('criteria/delete/{id}', 'CriterionController@postDeleteCriterion');
-    Route::get('criteria/step/delete/{step_id}', 'CriterionController@getDeleteCriterionStep'); 
+    Route::get('criteria/step/delete/{step_id}', 'CriterionController@getDeleteCriterionStep');
     Route::post('criteria/step/delete/{id}', 'CriterionController@postDeleteCriterionStep');
     Route::get('criteria/step/{step_id}/option/{id}', 'CriterionController@getCreateEditCriterionOption');
     Route::get('criteria/step/{step_id}/option', 'CriterionController@getCreateEditCriterionOption');

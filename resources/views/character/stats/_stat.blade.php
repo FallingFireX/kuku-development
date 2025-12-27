@@ -147,14 +147,14 @@
                     <h5>Edit Stat Level</h5>
                     <p>This will edit the character's current stat level.</p>
                     {!! Form::open(['url' => 'character/' . $character->slug . '/stats/' . $stat->stat->id . '/level-edit', 'method' => 'POST']) !!}
-                        <div class="form-group">
-                            {!! Form::label('stat_level', 'Stat Level') !!}
-                            {!! Form::number('stat_level', $stat->stat_level, ['class' => 'form-control']) !!}
-                        </div>
+                    <div class="form-group">
+                        {!! Form::label('stat_level', 'Stat Level') !!}
+                        {!! Form::number('stat_level', $stat->stat_level, ['class' => 'form-control']) !!}
+                    </div>
 
-                        <div class="text-right">
-                            {!! Form::submit('Update Level', ['class' => 'btn btn-primary']) !!}
-                        </div>
+                    <div class="text-right">
+                        {!! Form::submit('Update Level', ['class' => 'btn btn-primary']) !!}
+                    </div>
                     {!! Form::close() !!}
 
                 </div>

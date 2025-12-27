@@ -20,10 +20,10 @@ use App\Models\Currency\Currency;
 use App\Models\Gallery\GallerySubmission;
 use App\Models\Item\Item;
 use App\Models\Item\ItemCategory;
+use App\Models\Rarity;
 use App\Models\Skill\Skill;
 use App\Models\Stat\Stat;
 use App\Models\Status\StatusEffect;
-use App\Models\Rarity;
 use App\Models\User\User;
 use App\Models\User\UserAward;
 use App\Models\User\UserCurrency;
@@ -1138,6 +1138,27 @@ class CharacterController extends Controller {
         ]);
     }
 
+    public function getFeaturedCharacter() {
+        $featuredId = SiteSetting::where('key', 'featured_character')->value('value');
+
+        if (!$featuredId) {
+            return response()->json(['error' => 'No featured character set'], 404);
+        }
+
+        $character = Character::find($featuredId);
+
+        if (!$character) {
+            return response()->json(['error' => 'Character not found'], 404);
+        }
+
+        return response()->json([
+            'id'        => $character->id,
+            'slug'      => $character->slug,
+            'name'      => $character->name,
+            'image_url' => $character->image_url,
+        ]);
+    }
+
     /**
      * Transfers inventory awards back to a user.
      *
@@ -1236,27 +1257,4 @@ class CharacterController extends Controller {
 
         return redirect()->back();
     }
-
-    
-    public function getFeaturedCharacter()
-{
-    $featuredId = SiteSetting::where('key', 'featured_character')->value('value');
-
-    if (!$featuredId) {
-        return response()->json(['error' => 'No featured character set'], 404);
-    }
-
-    $character = Character::find($featuredId);
-
-    if (!$character) {
-        return response()->json(['error' => 'Character not found'], 404);
-    }
-
-    return response()->json([
-        'id' => $character->id,
-        'slug' => $character->slug,
-        'name' => $character->name,
-        'image_url' => $character->image_url,
-    ]);
-}
 }

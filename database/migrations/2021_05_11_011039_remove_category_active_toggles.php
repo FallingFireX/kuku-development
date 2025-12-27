@@ -9,7 +9,6 @@ class RemoveCategoryActiveToggles extends Migration {
      * Run the migrations.
      */
     public function up() {
-    
         Schema::table('faction_types', function (Blueprint $table) {
             $table->dropColumn('is_active');
         });

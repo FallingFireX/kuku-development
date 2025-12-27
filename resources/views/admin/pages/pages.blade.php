@@ -61,16 +61,16 @@
     <i>This edits the side bar on the main home page</i>
     <br><br>
     {!! Form::open(['method' => 'GET']) !!}
-        <div class="form-group">
-            {!! Form::label('mqdesc', 'MQ Description: ') !!} {!! add_help('This updates the text area of the MQ side bar') !!}
-            {!! Form::textarea('mqdesc', Request::get('mqdesc'), ['class' => 'form-control wysiwyg', 'style' => 'width: 500px', 'placeholder' => 'MQ preview goes here']) !!}
-        </div>
+    <div class="form-group">
+        {!! Form::label('mqdesc', 'MQ Description: ') !!} {!! add_help('This updates the text area of the MQ side bar') !!}
+        {!! Form::textarea('mqdesc', Request::get('mqdesc'), ['class' => 'form-control wysiwyg', 'style' => 'width: 500px', 'placeholder' => 'MQ preview goes here']) !!}
+    </div>
     {!! Form::close() !!}
 
-    @if(session('success'))
+    @if (session('success'))
         <div class="alert alert-success">{{ session('success') }}</div>
     @endif
-    {!! Form::open(['method' => 'POST', 'route' => 'admin.sidebar.update']) !!}  <!-- Changed to POST for updates -->
+    {!! Form::open(['method' => 'POST', 'route' => 'admin.sidebar.update']) !!} <!-- Changed to POST for updates -->
 
     <div class="form-group">
         {!! Form::label('box1content', 'Box 1 Content: ') !!} {!! add_help('This updates the Box 1 area of the sidebar') !!}
@@ -78,6 +78,6 @@
     </div>
 
     {!! Form::submit('Save Changes', ['class' => 'btn btn-primary']) !!}
-{!! Form::close() !!}
+    {!! Form::close() !!}
 
 @endsection

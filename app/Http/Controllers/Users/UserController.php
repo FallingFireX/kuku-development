@@ -21,15 +21,11 @@ use App\Models\Gallery\GallerySubmission;
 use App\Models\Item\Item;
 use App\Models\Item\ItemCategory;
 use App\Models\Pet\Pet;
-use App\Models\Pet\PetCategory;
 use App\Models\Prompt\Prompt;
 use App\Models\Rarity;
 use App\Models\User\User;
 use App\Models\User\UserCurrency;
-use App\Models\User\UserPet;
 use App\Models\User\UserUpdateLog;
-use App\Models\Team;
-use App\Models\User\UserTeam;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\View;
@@ -50,35 +46,37 @@ class UserController extends Controller {
      * Create a new controller instance.
      */
     public function __construct() {
-    parent::__construct();
+        parent::__construct();
 
-    // <<< Add this line
-    if (app()->runningInConsole() || !Route::current()) return;
+        // <<< Add this line
+        if (app()->runningInConsole() || !Route::current()) {
+            return;
+        }
 
-    $name = Route::current()->parameter('name');
-    $this->user = User::where('name', $name)->first();
-    // check previous usernames (only grab the latest change)
-    if (!$this->user) {
-        $this->user = UserUpdateLog::whereIn('type', ['Username Changed', 'Name/Rank Change'])
-            ->where('data', 'like', '%"old_name":"'.$name.'"%')
-            ->orderBy('id', 'DESC')
-            ->first()
-            ->user ?? null;
+        $name = Route::current()->parameter('name');
+        $this->user = User::where('name', $name)->first();
+        // check previous usernames (only grab the latest change)
+        if (!$this->user) {
+            $this->user = UserUpdateLog::whereIn('type', ['Username Changed', 'Name/Rank Change'])
+                ->where('data', 'like', '%"old_name":"'.$name.'"%')
+                ->orderBy('id', 'DESC')
+                ->first()
+                ->user ?? null;
+        }
+        if (!$this->user) {
+            abort(404);
+        }
+
+        View::share('sublists', Sublist::orderBy('sort', 'DESC')->get());
+
+        $this->user->updateCharacters();
+        $this->user->updateArtDesignCredits();
+        if (!$this->user->level) {
+            $this->user->level()->create([
+                'user_id' => $this->user->id,
+            ]);
+        }
     }
-    if (!$this->user) {
-        abort(404);
-    }
-
-    View::share('sublists', Sublist::orderBy('sort', 'DESC')->get());
-
-    $this->user->updateCharacters();
-    $this->user->updateArtDesignCredits();
-    if (!$this->user->level) {
-        $this->user->level()->create([
-            'user_id' => $this->user->id,
-        ]);
-    }
-}
 
     /**
      * Shows a user's profile.
@@ -118,7 +116,7 @@ class UserController extends Controller {
             'pets'                  => $this->user->pets()->orderBy('user_pets.updated_at', 'DESC')->take(5)->get(),
             'user_enabled'          => Settings::get('WE_user_locations'),
             'user_factions_enabled' => Settings::get('WE_user_factions'),
-            'teams'      => $teams
+            'teams'                 => $teams,
         ]);
     }
 

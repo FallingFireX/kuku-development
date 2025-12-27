@@ -51,7 +51,7 @@
                     </div>
                 </div>
             @endforeach
-        </div>
-    </div>
-    {!! $logs->render() !!}
-@endsection
+            </div>
+            </div>
+            {!! $logs->render() !!}
+        @endsection

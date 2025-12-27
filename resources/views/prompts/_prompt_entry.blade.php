@@ -92,13 +92,13 @@
                         @endforeach
                     </tbody>
                 </table>
-            @if (count(getLimits($prompt)))
-                <hr />
-                @include('widgets._limits', [
-                    'object' => $prompt,
-                    'hideUnlock' => true,
-                ])
-            @endif
+                @if (count(getLimits($prompt)))
+                    <hr />
+                    @include('widgets._limits', [
+                        'object' => $prompt,
+                        'hideUnlock' => true,
+                    ])
+                @endif
         </div>
         <div class="text-right {{ $prompt->limit ? 'text-danger' : '' }}">
             <p>{{ $prompt->limit ? 'You can submit this prompt ' . $prompt->limit . ' time(s)' : 'You can submit this prompt an unlimited number of times' }}
@@ -111,8 +111,7 @@
             @elseif ($prompt->start_at && $prompt->start_at->isFuture())
                 <span class="text-secondary">This prompt is not open for submissions yet.</span>
             @else
-                <a href="{{ url('submissions/new?prompt_id=' . $prompt->id) }}"
-                class="btn btn-primary">
+                <a href="{{ url('submissions/new?prompt_id=' . $prompt->id) }}" class="btn btn-primary">
                     Submit Prompt
                 </a>
             @endif

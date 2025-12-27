@@ -1,8 +1,6 @@
 <?php
 
 use App\Models\Character\Character;
-use Illuminate\Support\Facades\DB;
-use App\Models\Marking\Marking;
 use Illuminate\Http\Request;
 
 /*
@@ -20,7 +18,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-
 Route::get('/characters/count', function (Request $request) {
     $token = $request->header('X-API-KEY');
     if ($token !== config('discord.key')) {
@@ -28,14 +25,12 @@ Route::get('/characters/count', function (Request $request) {
     }
 
     return response()->json([
-        'count' => Character::where('is_myo_slot', 0)->count()
+        'count' => Character::where('is_myo_slot', 0)->count(),
     ]);
 });
 
-
 Route::get('/featured', function (Request $request) {
-
     return response()->json([
-        'count' => Character::where('is_myo_slot', 0)->count()
+        'count' => Character::where('is_myo_slot', 0)->count(),
     ]);
 });

@@ -1,12 +1,11 @@
-
 @extends('layouts.app')
 
 @section('title')
-Comments
+    Comments
 @endsection
 
 @section('profile-title')
-Comment
+    Comment
 @endsection
 
 @section('content')
@@ -31,7 +30,6 @@ Comment
         $profile = null;
 
         switch ($comment->commentable_type) {
-
             case 'App\Models\User\UserProfile':
                 $label = 'Profile';
                 $link = $comment->commentable->user->displayName;
@@ -43,10 +41,10 @@ Comment
                 $link = url('submissions/view' . '/' . $commentable->id);
                 $profile = false;
                 break;
-                
+
             case 'App\Models\Prompt\Prompt':
                 $label = 'Prompt';
-                $link = url('claims/view' . $commentable->id) - '/comment-' . $comment->id;    
+                $link = url('claims/view' . $commentable->id) - '/comment-' . $comment->id;
                 $profile = false;
                 break;
 
@@ -88,11 +86,7 @@ Comment
 
             case 'App\Models\Gallery\GallerySubmission':
                 $label = 'Gallery Submission';
-                $link = (
-                    $type !== 'User-User'
-                        ? $commentable->queueUrl
-                        : $commentable->url
-                ) . '/#comment-' . $comment->getKey();
+                $link = ($type !== 'User-User' ? $commentable->queueUrl : $commentable->url) . '/#comment-' . $comment->getKey();
                 $profile = false;
                 break;
 
@@ -111,12 +105,12 @@ Comment
     @endphp
 
 
-    <h1> Comments on: 
+    <h1> Comments on:
         @if ($profile)
             {!! $link !!}
         @else
             @if ($link)
-                <a href="{{ $link }}">{{$label}}</a>
+                <a href="{{ $link }}">{{ $label }}</a>
             @else
                 <span class="text-muted">Unknown source</span>
             @endif

@@ -65,7 +65,8 @@
 
         <div class="col-md-6">
             <h3>Image</h3>
-            <p><b>An image is required. You can't have a border with no image!</b> A square canvas is recommended. The container that contains the avatar and borders has a max-width set of 150px, while the avatar itself is resized down to around 120px. This can be adjusted in the CSS.</p>
+            <p><b>An image is required. You can't have a border with no image!</b> A square canvas is recommended. The container that contains the avatar and borders has a max-width set of 150px, while the avatar itself is resized down to around 120px.
+                This can be adjusted in the CSS.</p>
 
             <div class="form-group">
                 {!! Form::label('image', 'Border Image', ['class' => 'font-weight-bold']) !!}

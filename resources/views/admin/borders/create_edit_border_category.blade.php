@@ -8,9 +8,7 @@
     {!! breadcrumbs([
         'Admin Panel' => 'admin',
         'Border Categories' => 'admin/data/border-categories',
-        ($category->id ? 'Edit' : 'Create') . ' Category' => $category->id
-            ? 'admin/data/border-categories/edit/' . $category->id
-            : 'admin/data/border-categories/create',
+        ($category->id ? 'Edit' : 'Create') . ' Category' => $category->id ? 'admin/data/border-categories/edit/' . $category->id : 'admin/data/border-categories/create',
     ]) !!}
 
     <h1>{{ $category->id ? 'Edit' : 'Create' }} Category
@@ -20,9 +18,7 @@
     </h1>
 
     {!! Form::open([
-        'url' => $category->id
-            ? 'admin/data/border-categories/edit/' . $category->id
-            : 'admin/data/border-categories/create',
+        'url' => $category->id ? 'admin/data/border-categories/edit/' . $category->id : 'admin/data/border-categories/create',
         'files' => true,
     ]) !!}
 

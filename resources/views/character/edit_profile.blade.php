@@ -26,36 +26,36 @@
 
     {!! Form::open(['url' => $character->url . '/profile/edit']) !!}
 
+    <div class="form-group">
+        {!! Form::label('name', 'Name') !!}
+        {!! Form::text('name', $character->name, ['class' => 'form-control']) !!}
+    </div>
+    <div class="form-group">
+        {!! Form::label('character_warning', 'Character Warning') !!} {!! add_help('Provide a succinct content warning for the design if necessary. The design will be displayed in full on its page, however. If an admin has put a warning on your character, do not remove it.') !!}
+        {!! Form::text('character_warning', $character->character_warning, ['class' => 'form-control']) !!}
+    </div>
+    @if (config('lorekeeper.extensions.character_TH_profile_link'))
         <div class="form-group">
-            {!! Form::label('name', 'Name') !!}
-            {!! Form::text('name', $character->name, ['class' => 'form-control']) !!}
+            {!! Form::label('link', 'Profile Link') !!}
+            {!! Form::text('link', $character->profile->link, ['class' => 'form-control']) !!}
         </div>
-        <div class="form-group">
-            {!! Form::label('character_warning', 'Character Warning') !!} {!! add_help('Provide a succinct content warning for the design if necessary. The design will be displayed in full on its page, however. If an admin has put a warning on your character, do not remove it.') !!}
-            {!! Form::text('character_warning', $character->character_warning, ['class' => 'form-control']) !!}
-        </div>
-        @if (config('lorekeeper.extensions.character_TH_profile_link'))
-            <div class="form-group">
-                {!! Form::label('link', 'Profile Link') !!}
-                {!! Form::text('link', $character->profile->link, ['class' => 'form-control']) !!}
-            </div>
+    @endif
+
+
+    @if (!$character->is_myo_slot && ($char_faction_enabled == 2 || (Auth::user()->isStaff && $char_faction_enabled == 3)))
+        @if (Auth::user()->isStaff && $char_faction_enabled == 3)
+            <div class="alert alert-warning">You can edit this because you are a staff member. Normal users cannot edit their character factions freely.</div>
         @endif
+        <p>Please note that changing this character's faction will remove them from any special ranks and reset their faction standing!</p>
+        <div class="form-group row">
+            <label class="col-md-1 col-form-label">Faction</label>
+            <div class="col-md">
+                {!! Form::select('faction', [0 => 'Choose a Faction'] + $factions, isset($character->faction_id) ? $character->faction_id : 0, ['class' => 'form-control selectize']) !!}
+            </div>
+        </div>
+    @endif
 
-
-            @if(!$character->is_myo_slot && ($char_faction_enabled == 2 || (Auth::user()->isStaff && $char_faction_enabled == 3)))
-                @if(Auth::user()->isStaff && $char_faction_enabled == 3)
-                    <div class="alert alert-warning">You can edit this because you are a staff member. Normal users cannot edit their character factions freely.</div>
-                @endif
-                <p>Please note that changing this character's faction will remove them from any special ranks and reset their faction standing!</p>
-                <div class="form-group row">
-                    <label class="col-md-1 col-form-label">Faction</label>
-                    <div class="col-md">
-                    {!! Form::select('faction', [0=>'Choose a Faction'] + $factions, isset($character->faction_id) ? $character->faction_id : 0, ['class' => 'form-control selectize']) !!}
-                    </div>
-                </div>
-            @endif
-
-        {!! Form::label('custom_values', "Custom Values") !!}
+    {!! Form::label('custom_values', 'Custom Values') !!}
     <div id="customValues">
         @foreach ($character->profile->custom_values as $value)
             <div class="form-row">
@@ -63,13 +63,13 @@
                     <span class="btn btn-link drag-custom-value-row w-100"><i class="fas fa-arrows-alt-v"></i></span>
                 </div>
                 <div class="col-5 col-md-3 mb-2">
-                    {!! Form::text('custom_values_group[]', $value->group, ['class' => 'form-control', 'maxLength' => 50, 'placeholder' => "Group (Optional)"]) !!}
+                    {!! Form::text('custom_values_group[]', $value->group, ['class' => 'form-control', 'maxLength' => 50, 'placeholder' => 'Group (Optional)']) !!}
                 </div>
                 <div class="col-5 col-md-3 mb-2">
-                    {!! Form::text('custom_values_name[]', $value->name, ['class' => 'form-control', 'maxLength' => 50, 'placeholder' => "Title:"]) !!}
+                    {!! Form::text('custom_values_name[]', $value->name, ['class' => 'form-control', 'maxLength' => 50, 'placeholder' => 'Title:']) !!}
                 </div>
                 <div class="col-10 col-md-4 mb-3">
-                    {!! Form::text('custom_values_data[]', $value->data_parsed, ['class' => 'form-control', 'maxLength' => 150, 'placeholder' => "Custom Value"]) !!}
+                    {!! Form::text('custom_values_data[]', $value->data_parsed, ['class' => 'form-control', 'maxLength' => 150, 'placeholder' => 'Custom Value']) !!}
                 </div>
                 <div class="col-2 col-md-1 mb-3">
                     <button class="btn btn-danger delete-custom-value-row w-100" type="button">x</button>
@@ -79,7 +79,7 @@
     </div>
     <a href="#" class="add-custom-value-row btn btn-primary mb-3">Add Custom Value</a>
 
-    
+
     <div class="form-group">
         {!! Form::label('text', 'Profile Content') !!}
         {!! Form::textarea('text', $character->profile->text, ['class' => 'wysiwyg form-control']) !!}
@@ -123,31 +123,30 @@
     @if (Auth::check() && Auth::user()->hasPower('manage_characters'))
         This labels a kuku as being currently or formerly a Kukuri of the month. Only turn on if theyve won!
         <br>
-                    <div class="col-md form-group">
-                        {!! Form::label('kotm', 'kotm', ['class' => 'form-check-label mb-3']) !!} 
-                        {!! Form::checkbox('kotm', 1, $character->kotm, ['class' => 'form-check-input', 'data-toggle' => 'toggle']) !!}
-                    </div>
-                    <div class="row">
-                        <div class="col-md form-group">
-                            {!! Form::label('Date of character adoption') !!}
-                            {!! Form::text('adoption', $character->adoption ?? '', ['class' => 'form-control datepicker', 'placeholder' => 'Enter adoption date']) !!}
-                        </div>
-                        <div class="col-md form-group">
-                            {!! Form::label('Date of character donation') !!}
-                            {!! Form::text('donation', $character->donation ?? '', ['class' => 'form-control datepicker', 'placeholder' => 'Enter donation date']) !!}
-                        </div>
-                    </div>
+        <div class="col-md form-group">
+            {!! Form::label('kotm', 'kotm', ['class' => 'form-check-label mb-3']) !!}
+            {!! Form::checkbox('kotm', 1, $character->kotm, ['class' => 'form-check-input', 'data-toggle' => 'toggle']) !!}
+        </div>
+        <div class="row">
+            <div class="col-md form-group">
+                {!! Form::label('Date of character adoption') !!}
+                {!! Form::text('adoption', $character->adoption ?? '', ['class' => 'form-control datepicker', 'placeholder' => 'Enter adoption date']) !!}
+            </div>
+            <div class="col-md form-group">
+                {!! Form::label('Date of character donation') !!}
+                {!! Form::text('donation', $character->donation ?? '', ['class' => 'form-control datepicker', 'placeholder' => 'Enter donation date']) !!}
+            </div>
+        </div>
     @endif
 
     <div class="text-right">
         {!! Form::submit('Edit Profile', ['class' => 'btn btn-primary']) !!}
     </div>
     {!! Form::close() !!}
-    
+
 @endsection
 
 @section('scripts')
-    
     @include('widgets._datetimepicker_js')
     @parent
     @include('js._tinymce_wysiwyg')

@@ -55,8 +55,7 @@
                     <div class="col-3 col-md-2"> {!! $border->is_default ? '<i class="text-success fas fa-check"></i>' : '-' !!} </div>
                     <div class="col-3 col-md-2"> {!! $border->admin_only ? '<i class="text-success fas fa-check"></i>' : '-' !!} </div>
                     <div class="col col-md text-right">
-                        <a href="{{ url('admin/data/borders/edit/' . $border->id) }}"
-                            class="btn btn-primary py-0 px-2">Edit</a>
+                        <a href="{{ url('admin/data/borders/edit/' . $border->id) }}" class="btn btn-primary py-0 px-2">Edit</a>
                     </div>
                 </div>
             @endforeach

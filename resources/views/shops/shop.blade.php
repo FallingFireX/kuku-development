@@ -37,15 +37,15 @@
 
     @foreach ($stocks as $type => $stock)
         @if (count($stock))
-            @if($type == 'pet')
+            @if ($type == 'pet')
                 <h3>
                     <br>
                     Familiars
                 </h3>
             @else
-            <h3>
-                {{ $type . (substr($type, -1) == 's' ? '' : 's') }}
-            </h3>
+                <h3>
+                    {{ $type . (substr($type, -1) == 's' ? '' : 's') }}
+                </h3>
             @endif
         @endif
         @if (Settings::get('shop_type'))

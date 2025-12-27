@@ -100,7 +100,7 @@ class Feature extends Model {
     public function subcategory() {
         return $this->belongsTo('App\Models\Feature\FeatureSubcategory', 'feature_subcategory_id');
     }
-    
+
     /**
      * Get the subtypes of this feature.
      */
@@ -219,9 +219,9 @@ class Feature extends Model {
     /**
      * Scope a query to sort features in subcategory order.
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param Builder $query
      *
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @return Builder
      */
     public function scopeSortSubcategory($query) {
         $ids = FeatureSubcategory::orderBy('sort', 'DESC')->pluck('id')->toArray();

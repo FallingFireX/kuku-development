@@ -8,7 +8,7 @@
     {!! breadcrumbs(['Pets' => 'pets']) !!}
 
     <h1>
-    Familiars
+        Familiars
     </h1>
 
     <p>These are your Familiars. Click on a Familiars to view more details and actions you can perform on it.</p>

@@ -89,8 +89,8 @@
     </div>
     <div class="form-group">
         <input type="hidden" name="goes_before_base" value="0">
-{!! Form::checkbox('goes_before_base', 1, $marking->goes_before_base ?? 1, ['class' => 'form-check-input', 'data-toggle' => 'toggle']) !!}
-{!! Form::label('goes_before_base', 'Before Base', ['class' => 'form-check-label ml-3']) !!}
+        {!! Form::checkbox('goes_before_base', 1, $marking->goes_before_base ?? 1, ['class' => 'form-check-input', 'data-toggle' => 'toggle']) !!}
+        {!! Form::label('goes_before_base', 'Before Base', ['class' => 'form-check-label ml-3']) !!}
 
     </div>
 
@@ -120,5 +120,4 @@
             });
         });
     </script>
-
 @endsection

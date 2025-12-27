@@ -22,34 +22,35 @@
                 <strong>Category:</strong> {!! $feature->category->displayName !!}
             </div>
         @endif
-        @if($feature->parent_id)
+        @if ($feature->parent_id)
             <div><strong>Parent Trait:</strong> {!! $feature->parent->displayName !!}</div>
         @endif
-         @if($feature->feature_subcategory_id)
+        @if ($feature->feature_subcategory_id)
             <div><strong>Subcategory:</strong> {!! $feature->subcategory->displayName !!}</div>
         @endif
-        @if($feature->species_id)
-            <div><strong>Species:</strong> {!! $feature->species->displayName !!} @if($feature->subtype_id) ({!! $feature->subtype->displayName !!} subtype) @endif</div>
         @if ($feature->species_id)
-            <div>
-                <strong>Species:</strong> {!! $feature->species->displayName !!}
-                @if (count($feature->getSubtypes(Auth::User() ?? null)))
-                    ({!! $feature->displaySubtypes(Auth::User() ?? null) !!})
-                @endif
+            <div><strong>Species:</strong> {!! $feature->species->displayName !!} @if ($feature->subtype_id) ({!! $feature->subtype->displayName !!} subtype) @endif
             </div>
-        @endif
-        <div class="world-entry-text parsed-text">
-            {!! $feature->parsed_description !!}
-        </div>
-        
-
-        @if ($feature->full_page)
-            <a href="{{ $feature->getUrlAttribute() }}" class="btn btn-primary mt-4">View Guide</a>
-        @else
+            @if ($feature->species_id)
+                <div>
+                    <strong>Species:</strong> {!! $feature->species->displayName !!}
+                    @if (count($feature->getSubtypes(Auth::User() ?? null)))
+                        ({!! $feature->displaySubtypes(Auth::User() ?? null) !!})
+                    @endif
+                </div>
+            @endif
             <div class="world-entry-text parsed-text">
                 {!! $feature->parsed_description !!}
             </div>
-        @endif
+
+
+            @if ($feature->full_page)
+                <a href="{{ $feature->getUrlAttribute() }}" class="btn btn-primary mt-4">View Guide</a>
+            @else
+                <div class="world-entry-text parsed-text">
+                    {!! $feature->parsed_description !!}
+                </div>
+            @endif
 
     </div>
 </div>

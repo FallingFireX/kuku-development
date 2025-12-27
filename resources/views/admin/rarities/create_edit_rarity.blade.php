@@ -53,8 +53,8 @@
     </div>
 
     @include('admin.lineage._edit_lineage_blacklist', [
-    'lineageBlacklist' => $lineageBlacklist,
-    'type' => 'rarity'
+        'lineageBlacklist' => $lineageBlacklist,
+        'type' => 'rarity',
     ])
 
     <div class="text-right">

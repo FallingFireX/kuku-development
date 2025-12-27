@@ -29,7 +29,7 @@
             </div>
             <div class="col-md-10"><a href="{{ $submission->url }}">{{ $submission->url }}</a></div>
         </div>
-        
+
         <div class="row mb-2 no-gutters">
             <div class="col-md-2">
                 <h5 class="mb-0">Submitted</h5>
@@ -265,4 +265,3 @@
         </div>
     </div>
 @endif
-

@@ -14,25 +14,23 @@ use App\Models\Character\CharacterCurrency;
 use App\Models\Character\CharacterDesignUpdate;
 use App\Models\Character\CharacterFeature;
 use App\Models\Character\CharacterImage;
+use App\Models\Character\CharacterImageSubtype;
 use App\Models\Character\CharacterLineage;
 use App\Models\Character\CharacterLink;
+use App\Models\Character\CharacterLog;
 use App\Models\Character\CharacterMarking;
 use App\Models\Character\CharacterStat;
-use App\Models\Character\CharacterImageSubtype;
-use App\Models\Character\CharacterLog;
 use App\Models\Character\CharacterTransfer;
-use App\Models\Character\CharacterTransformation as Transformation;
 use App\Models\Currency\Currency;
-use App\Models\Feature\Feature;
 use App\Models\Marking\Marking;
 use App\Models\Rarity;
 use App\Models\Sales\SalesCharacter;
 use App\Models\Species\Species;
 use App\Models\Species\Subtype;
 use App\Models\User\User;
+use App\Models\User\UserCharacterLog;
 use App\Models\User\UserPet;
 use App\Models\WorldExpansion\FactionRankMember;
-use App\Models\User\UserCharacterLog;
 use Carbon\Carbon;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Config;
@@ -2670,53 +2668,53 @@ class CharacterManager extends Service {
     }
 
     /**
- * Updates a character's markings.
- *
- * @param array     $data
- * @param Character $character
- *
- * @return bool
- */
-public function updateCharacterMarkings($data, $character) {
-    DB::beginTransaction();
+     * Updates a character's markings.
+     *
+     * @param array     $data
+     * @param Character $character
+     *
+     * @return bool
+     */
+    public function updateCharacterMarkings($data, $character) {
+        DB::beginTransaction();
 
-    try {
-        // Clear old markings
-        CharacterMarking::where('character_id', $character->id)->delete();
+        try {
+            // Clear old markings
+            CharacterMarking::where('character_id', $character->id)->delete();
 
-        $i = 0;
+            $i = 0;
 
-        // Attach markings
-        foreach ($data['marking_id'] as $markingId) {
-            if ($markingId) {
-                $temp = Marking::where('id', $markingId)->first();
+            // Attach markings
+            foreach ($data['marking_id'] as $markingId) {
+                if ($markingId) {
+                    $temp = Marking::where('id', $markingId)->first();
 
-                $is_dominant = $data['is_dominant'][$i] ?? 0;
+                    $is_dominant = $data['is_dominant'][$i] ?? 0;
 
-                $marking = CharacterMarking::create([
-                    'character_id'  => $character->id,
-                    'marking_id'    => $markingId,
-                    'code'          => ($is_dominant ? $temp->dominant : $temp->recessive),
-                    'order'         => !empty($temp->goes_before_base) ? 1 : 0, // <-- Uses your new column
-                    'is_dominant'   => $is_dominant,
-                    'data'          => $data['side_id'][$i] ?? 0,
-                    'base_id'       => $character->base, // Set the base_id field
-                ]);
+                    $marking = CharacterMarking::create([
+                        'character_id'  => $character->id,
+                        'marking_id'    => $markingId,
+                        'code'          => ($is_dominant ? $temp->dominant : $temp->recessive),
+                        'order'         => !empty($temp->goes_before_base) ? 1 : 0, // <-- Uses your new column
+                        'is_dominant'   => $is_dominant,
+                        'data'          => $data['side_id'][$i] ?? 0,
+                        'base_id'       => $character->base, // Set the base_id field
+                    ]);
+                }
+
+                $i++;
             }
 
-            $i++;
+            $character->save();
+
+            return $this->commitReturn(true);
+        } catch (\Exception $e) {
+            \Log::error('Marking error', ['error' => $e->getMessage()]);
+            $this->setError('error', $e->getMessage());
         }
 
-        $character->save();
-
-        return $this->commitReturn(true);
-    } catch (\Exception $e) {
-        \Log::error('Marking error', ['error' => $e->getMessage()]);
-        $this->setError('error', $e->getMessage());
+        return $this->rollbackReturn(false);
     }
-
-    return $this->rollbackReturn(false);
-}
 
     /**
      * Handles character data.
@@ -3064,7 +3062,6 @@ public function updateCharacterMarkings($data, $character) {
         return false;
     }
 
-
     /**
      * Generates a list of features for displaying.
      *
@@ -3128,13 +3125,13 @@ public function updateCharacterMarkings($data, $character) {
                     $is_dominant = $data['is_dominant'][$key];
 
                     $marking = CharacterMarking::create([
-                    'character_id'  => $character->id,
-                    'marking_id'    => $markingId,
-                    'code'          => ($is_dominant ? $temp->dominant : $temp->recessive),
-                    'order'         => !empty($temp->goes_before_base) ? 1 : 0, // <-- Uses your new column
-                    'is_dominant'   => $is_dominant,
-                    'data'          => $data['side_id'][$i] ?? 0,
-                ]);
+                        'character_id'  => $character->id,
+                        'marking_id'    => $markingId,
+                        'code'          => ($is_dominant ? $temp->dominant : $temp->recessive),
+                        'order'         => !empty($temp->goes_before_base) ? 1 : 0, // <-- Uses your new column
+                        'is_dominant'   => $is_dominant,
+                        'data'          => $data['side_id'][$i] ?? 0,
+                    ]);
                 }
             }
 

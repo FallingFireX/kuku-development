@@ -92,7 +92,7 @@
         </div>
     @endif
 
-    @if (Auth::check() && (Auth::user()->hasPower('manage_characters')))
+    @if (Auth::check() && Auth::user()->hasPower('manage_characters'))
         <div class="text-right m-2 mr-5 mt-3">
             <a href="{{ $character->url . '/links/edit' }}" class="btn btn-outline-info btn-sm">
                 <i class="fas fa-envelope"></i> Create Links For {!! $character->fullName !!}

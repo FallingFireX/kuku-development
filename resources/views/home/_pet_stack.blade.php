@@ -67,46 +67,45 @@
                     {!! Form::close() !!}
                 </li>
                 @if ($user->hasPower('edit_inventories'))
-                <li class="list-group-item">
-                    @php
-                        $now = Carbon\Carbon::parse($stack->attached_at);
-                        $diff = $now->addDays(Settings::get('claymore_cooldown'));
-                    @endphp
-                    @if ($stack->character_id != null && $diff < Carbon\Carbon::now())
-                        <a class="card-title h5 collapse-title" data-toggle="collapse" href="#attachForm">
-                            @if ($stack->user_id != $user->id)
-                                [ADMIN]
-                            @endif Detach Pet from Character
-                        </a>
-                        {!! Form::open(['url' => 'pets/detach/' . $stack->id, 'id' => 'attachForm', 'class' => 'collapse']) !!}
-                        <p>This pet is currently attached to {!! $stack->character->displayName !!}, do you want to detach them?</p>
-                        <div class="text-right">
-                            {!! Form::submit('Detach', ['class' => 'btn btn-primary']) !!}
-                        </div>
-                        {!! Form::close() !!}
-                    @elseif($stack->character_id == null || $diff < Carbon\Carbon::now())
-                        <a class="card-title h5 collapse-title" data-toggle="collapse" href="#attachForm">
-                            @if ($stack->user_id != $user->id)
-                                [ADMIN]
-                            @endif Attach Pet to Character
-                        </a>
-                        
-                        {!! Form::open(['url' => 'pets/attach/' . $stack->id, 'id' => 'attachForm', 'class' => 'collapse']) !!}
-                        <p>Attach this pet to a character you own! They'll appear on the character's page and any stat bonuses will automatically be applied.</p>
-                        <p>Pets can be detached.</p>
-                        <div class="form-group">
-                            {!! Form::label('id', 'Slug') !!} {!! add_help('Insert your character\'s slug.') !!}
-                            {!! Form::select('id', $chara, null, ['class' => 'form-control']) !!}
-                        </div>
-                        <div class="text-right">
-                            {!! Form::submit('Attach', ['class' => 'btn btn-primary']) !!}
-                        </div>
-                        {!! Form::close() !!}
-                       
-                    @else
-                        <a class="card-title h5">You cannot currently attach / detach this pet! It is under cooldown.</a>
-                    @endif
-                </li>
+                    <li class="list-group-item">
+                        @php
+                            $now = Carbon\Carbon::parse($stack->attached_at);
+                            $diff = $now->addDays(Settings::get('claymore_cooldown'));
+                        @endphp
+                        @if ($stack->character_id != null && $diff < Carbon\Carbon::now())
+                            <a class="card-title h5 collapse-title" data-toggle="collapse" href="#attachForm">
+                                @if ($stack->user_id != $user->id)
+                                    [ADMIN]
+                                @endif Detach Pet from Character
+                            </a>
+                            {!! Form::open(['url' => 'pets/detach/' . $stack->id, 'id' => 'attachForm', 'class' => 'collapse']) !!}
+                            <p>This pet is currently attached to {!! $stack->character->displayName !!}, do you want to detach them?</p>
+                            <div class="text-right">
+                                {!! Form::submit('Detach', ['class' => 'btn btn-primary']) !!}
+                            </div>
+                            {!! Form::close() !!}
+                        @elseif($stack->character_id == null || $diff < Carbon\Carbon::now())
+                            <a class="card-title h5 collapse-title" data-toggle="collapse" href="#attachForm">
+                                @if ($stack->user_id != $user->id)
+                                    [ADMIN]
+                                @endif Attach Pet to Character
+                            </a>
+
+                            {!! Form::open(['url' => 'pets/attach/' . $stack->id, 'id' => 'attachForm', 'class' => 'collapse']) !!}
+                            <p>Attach this pet to a character you own! They'll appear on the character's page and any stat bonuses will automatically be applied.</p>
+                            <p>Pets can be detached.</p>
+                            <div class="form-group">
+                                {!! Form::label('id', 'Slug') !!} {!! add_help('Insert your character\'s slug.') !!}
+                                {!! Form::select('id', $chara, null, ['class' => 'form-control']) !!}
+                            </div>
+                            <div class="text-right">
+                                {!! Form::submit('Attach', ['class' => 'btn btn-primary']) !!}
+                            </div>
+                            {!! Form::close() !!}
+                        @else
+                            <a class="card-title h5">You cannot currently attach / detach this pet! It is under cooldown.</a>
+                        @endif
+                    </li>
                 @endif
                 @if ($user && count($splices) && $user->id == $stack->user_id)
                     <li class="list-group-item">
@@ -123,12 +122,7 @@
                         </div>
                         <div class="form-group">
                             @php
-                                $variants =
-                                    ['0' => 'Default'] +
-                                    $stack->pet
-                                        ->variants()
-                                        ->pluck('variant_name', 'id')
-                                        ->toArray();
+                                $variants = ['0' => 'Default'] + $stack->pet->variants()->pluck('variant_name', 'id')->toArray();
                             @endphp
                             {!! Form::select('variant_id', $variants, $stack->variant_id, ['class' => 'form-control']) !!}
                         </div>
@@ -151,12 +145,7 @@
                         </p>
                         <div class="form-group">
                             @php
-                                $variants =
-                                    ['0' => 'Default'] +
-                                    $stack->pet
-                                        ->variants()
-                                        ->pluck('variant_name', 'id')
-                                        ->toArray();
+                                $variants = ['0' => 'Default'] + $stack->pet->variants()->pluck('variant_name', 'id')->toArray();
                             @endphp
                             {!! Form::select('variant_id', $variants, $stack->variant_id, ['class' => 'form-control mt-2']) !!}
                         </div>
@@ -177,12 +166,7 @@
                         </p>
                         <div class="form-group">
                             @php
-                                $evolutions =
-                                    ['0' => 'Default'] +
-                                    $stack->pet
-                                        ->evolutions()
-                                        ->pluck('evolution_name', 'id')
-                                        ->toArray();
+                                $evolutions = ['0' => 'Default'] + $stack->pet->evolutions()->pluck('evolution_name', 'id')->toArray();
                             @endphp
                             {!! Form::select('evolution_id', $evolutions, $stack->evolution_id, ['class' => 'form-control mt-2']) !!}
                         </div>
@@ -265,19 +249,19 @@
                     </li>
                 @endif
                 @if ($user->hasPower('edit_inventories'))
-                <li class="list-group-item">
-                    <a class="card-title h5 collapse-title" data-toggle="collapse" href="#deleteForm">
-                        @if ($stack->user_id != $user->id)
-                            [ADMIN]
-                        @endif Delete Pet
-                    </a>
-                    {!! Form::open(['url' => 'pets/delete/' . $stack->id, 'id' => 'deleteForm', 'class' => 'collapse']) !!}
-                    <p>This action is not reversible. Are you sure you want to delete this pet?</p>
-                    <div class="text-right">
-                        {!! Form::submit('Delete', ['class' => 'btn btn-danger']) !!}
-                    </div>
-                    {!! Form::close() !!}
-                </li>
+                    <li class="list-group-item">
+                        <a class="card-title h5 collapse-title" data-toggle="collapse" href="#deleteForm">
+                            @if ($stack->user_id != $user->id)
+                                [ADMIN]
+                            @endif Delete Pet
+                        </a>
+                        {!! Form::open(['url' => 'pets/delete/' . $stack->id, 'id' => 'deleteForm', 'class' => 'collapse']) !!}
+                        <p>This action is not reversible. Are you sure you want to delete this pet?</p>
+                        <div class="text-right">
+                            {!! Form::submit('Delete', ['class' => 'btn btn-danger']) !!}
+                        </div>
+                        {!! Form::close() !!}
+                    </li>
                 @endif
             </ul>
         </div>

@@ -9,10 +9,7 @@
                         </h5>
                         @if ($character->skills()->where('skill_id', $skill->id)->exists())
                             @php
-                                $characterSkill = $character
-                                    ->skills()
-                                    ->where('skill_id', $skill->id)
-                                    ->first();
+                                $characterSkill = $character->skills()->where('skill_id', $skill->id)->first();
                             @endphp
                             Level: {{ $characterSkill->level }}
                     </div>

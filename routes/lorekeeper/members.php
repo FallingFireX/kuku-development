@@ -434,7 +434,7 @@ Route::get('adoption-center/edit/{id}', 'UniqueItemController@getEditItem');
 Route::post('adoption-center/create', 'UniqueItemController@postCreateEditItem');
 Route::post('adoption-center/edit/{id?}', 'UniqueItemController@postCreateEditItem');
 //    Rewards
-//**************************************************************************************************/
+// **************************************************************************************************/
 Route::group(['prefix' => 'rewards'], function () {
     Route::post('/types', 'RewardController@postRewardTypes');
 });

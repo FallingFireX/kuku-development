@@ -20,25 +20,22 @@
             setView('list');
         });
 
-        function initView()
-        {
+        function initView() {
             view = window.localStorage.getItem('lorekeeper_masterlist_view');
-            if(!view) view = 'grid';
+            if (!view) view = 'grid';
             setView(view);
         }
 
-        function setView(status)
-        {
+        function setView(status) {
             view = status;
 
-            if(view == 'grid') {
+            if (view == 'grid') {
                 $gridView.removeClass('hide');
                 $gridButton.addClass('active');
                 $listView.addClass('hide');
                 $listButton.removeClass('active');
                 window.localStorage.setItem('lorekeeper_masterlist_view', 'grid');
-            }
-            else if (view == 'list') {
+            } else if (view == 'list') {
                 $listView.removeClass('hide');
                 $listButton.addClass('active');
                 $gridView.addClass('hide');
@@ -80,7 +77,7 @@
             return '<div><span>' + escape(item["text"].trim()) + ' (' + escape(item["optgroup"].trim()) + ')' + '</span></div>';
         }
 
-         //Markings
+        //Markings
         var $markingBody = $('#markingBody');
         var $markingSelect = $('#markingContent .marking-block');
         var $addMarkingButton = $('.add-marking-button');
