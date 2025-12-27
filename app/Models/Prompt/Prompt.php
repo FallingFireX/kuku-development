@@ -3,7 +3,6 @@
 namespace App\Models\Prompt;
 
 use App\Models\Model;
-use App\Models\Reward\Reward;
 use Carbon\Carbon;
 
 class Prompt extends Model {
@@ -14,8 +13,8 @@ class Prompt extends Model {
      */
     protected $fillable = [
         'prompt_category_id', 'name', 'summary', 'description', 'parsed_description', 'is_active',
-        'start_at', 'end_at', 'hide_before_start', 'hide_after_end', 'has_image', 'prefix', 'limit', 'limit_period', 'limit_character',
-        'hide_submissions', 'staff_only', 'hash', 'public_queue', 'level_req', 'form',
+        'start_at', 'end_at', 'hide_before_start', 'hide_after_end', 'has_image', 'prefix',
+        'hide_submissions', 'staff_only', 'hash', 'limit', 'limit_period', 'limit_character',
     ];
 
     /**
@@ -24,6 +23,7 @@ class Prompt extends Model {
      * @var string
      */
     protected $table = 'prompts';
+
     /**
      * The attributes that should be cast to native types.
      *
@@ -46,7 +46,6 @@ class Prompt extends Model {
         'summary'            => 'nullable',
         'description'        => 'nullable',
         'image'              => 'mimes:png',
-        'form'               => 'nullable',
     ];
 
     /**
@@ -61,7 +60,6 @@ class Prompt extends Model {
         'summary'            => 'nullable',
         'description'        => 'nullable',
         'image'              => 'mimes:png',
-        'form'               => 'nullable',
     ];
 
     /**********************************************************************************************
@@ -81,21 +79,7 @@ class Prompt extends Model {
      * Get the rewards attached to this prompt.
      */
     public function rewards() {
-        return $this->morphMany(Reward::class, 'object', 'object_model', 'object_id');
-    }
-
-    /**
-     * Get the skills attached to this prompt.
-     */
-    public function skills() {
-        return $this->hasMany('App\Models\Prompt\PromptSkill', 'prompt_id');
-    }
-
-    /**
-     * Get the criteria attached to this prompt.
-     */
-    public function criteria() {
-        return $this->hasMany(PromptCriterion::class, 'prompt_id');
+        return $this->hasMany(PromptReward::class, 'prompt_id');
     }
 
     /**********************************************************************************************
@@ -199,12 +183,22 @@ class Prompt extends Model {
      * Scope a query to sort features by newest first.
      *
      * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param mixed                                 $reverse
      *
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeSortNewest($query, $reverse = false) {
-        return $query->orderBy('id', $reverse ? 'ASC' : 'DESC');
+    public function scopeSortNewest($query) {
+        return $query->orderBy('id', 'DESC');
+    }
+
+    /**
+     * Scope a query to sort features oldest first.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeSortOldest($query) {
+        return $query->orderBy('id');
     }
 
     /**
@@ -261,7 +255,7 @@ class Prompt extends Model {
      * @return string
      */
     public function getImageFileNameAttribute() {
-        return $this->id.'-'.$this->hash.'-image.png';
+        return $this->hash.$this->id.'-image.png';
     }
 
     /**
@@ -293,15 +287,6 @@ class Prompt extends Model {
      */
     public function getUrlAttribute() {
         return url('prompts/prompts?name='.$this->name);
-    }
-
-    /**
-     * Gets the URL of the individual prompt's page, by ID.
-     *
-     * @return string
-     */
-    public function getIdUrlAttribute() {
-        return url('prompts/'.$this->id);
     }
 
     /**

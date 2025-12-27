@@ -34,9 +34,6 @@
             <div class="form-group ml-3 mb-3">
                 {!! Form::select('prompt_category_id', $categories, Request::get('prompt_category_id'), ['class' => 'form-control']) !!}
             </div>
-            <div class="form-group ml-3 mb-3">
-                {!! Form::select('prompt_id', $prompts, Request::get('prompt_id'), ['class' => 'form-control']) !!}
-            </div>
         @endif
     </div>
     <div class="form-inline justify-content-end">
@@ -98,7 +95,7 @@
                             </div>
                         </div>
                         <div class="col-6 col-md-3">
-                            <div class="logs-table-cell">{!! pretty_date($submission->updated_at) !!}</div>
+                            <div class="logs-table-cell">{!! pretty_date($submission->created_at) !!}</div>
                         </div>
                         <div class="col-3 col-md-1">
                             <div class="logs-table-cell">
