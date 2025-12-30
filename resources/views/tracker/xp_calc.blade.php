@@ -128,7 +128,7 @@
                         <h3>{{ __('art_tracker.xp') }} Totals</h3>
                     </div>
                     <div class="card-body">
-                        <div class="p-2 border border-secondary rounded" id="calcTotals"></div>
+                        <div id="calcTotals"></div>
                         <hr />
                         {!! Form::label('Select Character') !!}
                         {!! Form::select('character_id', $users_character, null, ['class' => 'form-control mr-2 characterSelect', 'placeholder' => 'Select a Character...']) !!}
@@ -168,7 +168,7 @@
             var i = 0;
 
             //On lit word count change
-            $('#pointValues .wordCount').on('change', function() {
+            $('#pointValues').on('change', '.wordCount', function() {
                 var wc = $(this).val();
                 var index = $(this).closest('.tracker-item').attr('data-index');
 
@@ -183,6 +183,10 @@
 
                 var raw = (cr[0] * (Math.round(wc / ro) * ro)) / cr[1];
                 var total = Math.round(raw * ro) / ro;
+
+                if (!totals[index]) {
+                    totals[index] = {};
+                }
 
                 totals[index]['Word Count'] = total;
                 updateTotals();
@@ -201,7 +205,9 @@
                     selected.each(function(i, element) {
                         $temp_selected[$(this).attr('label')] = $(this).val();
                     });
-                    totals[index] = [];
+                    if (!totals[index]) {
+                        totals[index] = {};
+                    }
                     totals[index][group] = $temp_selected;
                 }
 
@@ -210,16 +216,16 @@
             }
 
             //On checkbox input changes
-            $('#pointValues input[type="checkbox"][name]').change(function() {
+            $('#pointValues').on('change', 'input[type="checkbox"][name]', function() {
                 updateCheckRadioGroup($(this).closest('.card')[0], 'checkbox');
             });
             //On radio input changes
-            $('#pointValues input[type="radio"][name]').change(function() {
+            $('#pointValues').on('change', 'input[type="radio"][name]', function() {
                 updateCheckRadioGroup($(this).closest('.card')[0], 'radio');
             });
 
             //On type change
-            $('input[name="tracker_type"]').on('change', function(e) {
+            $('.main-content').on('change', 'input[name="tracker_type"]', function(e) {
                 var t = $('input[name="tracker_type"]:checked').val();
 
                 if (t === 'multi') {
@@ -262,40 +268,28 @@
             function updateTotals() {
                 target.empty();
 
-                //console.log(totals);
+                console.log(totals);
 
                 $.each(totals, function(i, card) {
                     var item;
-                    item = '<h3>Tracker #' + i + '</h3>';
+                    item = '<div class="card mb-2"><h3 class="card-header">Tracker #' + i + '</h3><div class="card-body">';
                     //Trackers
                     Object.entries(card).forEach(([group, value]) => {
                         //Sub tracker groups
                         if (typeof value === 'object') {
-                            item = item + `<div class="mb-2 pb-2 border-bottom border-seconday" ><h5>${group}</h5>`;
+                            item = item + `<div class="mb-2 pb-2 border-bottom border-seconday"><h5>${group}</h5>`;
                             Object.entries(value).forEach(([k, v]) => {
                                 //Sub tracker sub lines
-                                item = item + `<div><strong>${k}:</strong> <span>${v}</span></div>`;
+                                item = item + `<div class="d-flex justify-content-between"><strong>${k}:</strong> <span>${v}</span></div>`;
                             });
                             item = item + `</div>`;
                         } else {
                             item = item + `<div class="d-flex justify-content-between"><strong>${group}:</strong> <span>${value}</span></div>`;
                         }
-                        target.append(item);
                     });
+                    item = item + '</div></div>';
+                    target.append(item);
                 });
-
-                // $.each(card, function(key, value) {
-                //     if(typeof value === 'object') {
-                //         item = `<div class="mb-2 pb-2 border-bottom border-seconday" ><h5>${key}</h5>`;
-                //         Object.entries(value).forEach(([k, v]) => {
-                //             item = item + `<div><strong>${k}:</strong> <span>${v}</span></div>`;
-                //         });
-                //         item = item + `</div>`;
-                //     } else {
-                //         item = `<div class="d-flex justify-content-between"><strong>${key}:</strong> <span>${value}</span></div>`;
-                //     }
-                //     target.append(item);
-                // });
             }
         });
     </script>
