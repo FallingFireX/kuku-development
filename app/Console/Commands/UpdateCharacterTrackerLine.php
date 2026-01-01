@@ -63,6 +63,7 @@ class UpdateCharacterTrackerLine extends Command {
             $bar->start();
 
             for ($i = 0; $i < $count; $i++) {
+                //START: Card level
                 $tracker = $trackers[$i];
                 $data = $tracker->getDataAttribute();
                 $updated = false;
@@ -90,9 +91,19 @@ class UpdateCharacterTrackerLine extends Command {
                         if (isset($value['sub_card'])) {
                             // If it's a sub-card, loop through those items.
                             foreach ($value['sub_card'] as $sub_name => &$sub_value) {
-                                if ($sub_name === $line_item) {
-                                    $sub_value = (int) $points;
-                                    $updated = true;
+                                if (gettype($sub_value) !== 'array') {
+                                    if ($sub_name === $line_item) {
+                                        $sub_value = (int) $points;
+                                        $updated = true;
+                                    }
+                                } else {
+                                    //If this is still an array, loop deeper.
+                                    foreach ($sub_value as $deep_name => &$deep_value) {
+                                        if ($deep_name === $line_item) {
+                                            $deep_value = (int) $points;
+                                            $updated = true;
+                                        }
+                                    }
                                 }
                             }
                         }

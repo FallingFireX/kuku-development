@@ -25,126 +25,50 @@
                     {!! $image_html !!}
                 </div>
                 <div class="col-md-9">
-                    <?php
-                    $data = $tracker->getDataAttribute();
-                    $cards = [];
-                    $total = 0;
-                    ?>
-                    @if ($tracker->status === 'Pending' || !$editable)
-                        @if (count($data) > 1)
-                            @foreach ($data as $i => $card)
-                                @foreach ($card as $title => $value)
-                                    @if (gettype($value) === 'array')
-                                        <div class="line-group border border-secondary my-2">
-                                            <h4 class="line-header text-uppercase font-weight-bold p-2">{{ $title }}</h4>
-                                            @foreach ($value as $sub_title => $sub_val)
-                                                @if ($sub_title === 'sub_card')
-                                                    @foreach ($sub_val as $sub_sub_title => $sub_sub_val)
-                                                        <div class="line-item w-100 d-inline-flex justify-content-between p-2">
-                                                            <h5 class="lh-1 m-0">{{ $sub_sub_title }}</h5>
-                                                            <p class="lh-1 m-0">{{ $sub_sub_val }} {{ __('art_tracker.xp') }}</p>
-                                                        </div>
-                                                    @endforeach
-                                                @else
-                                                    <div class="line-item w-100 d-inline-flex justify-content-between p-2">
-                                                        <h5 class="lh-1 m-0">{{ $sub_title }}</h5>
-                                                        <p class="lh-1 m-0">{{ $sub_val }} {{ __('art_tracker.xp') }}</p>
-                                                    </div>
-                                                @endif
-                                            @endforeach
-                                        </div>
-                                    @else
-                                        <div class="line-item w-100 d-inline-flex justify-content-between p-2">
-                                            <h5 class="lh-1 m-0">{{ $title }}</h5>
-                                            <p class="lh-1 m-0">{{ $value }} {{ __('art_tracker.xp') }}</p>
-                                        </div>
-                                    @endif
-                                @endforeach
-                            @endforeach
-                        @else
-                            @foreach ($data as $i => $subcard)
-                                @if (gettype($subcard) === 'array')
-                                    @foreach ($subcard as $group_title => $lines)
-                                        <div class="line-group border border-secondary my-2">
-                                            <h4 class="line-header text-uppercase font-weight-bold p-2">{{ $group_title }}</h4>
-                                            @if (gettype($lines) === 'array')
-                                                @foreach ($lines as $sub_title => $sub_val)
-                                                    <div class="line-item w-100 d-inline-flex justify-content-between p-2">
-                                                        <h5 class="lh-1 m-0">{{ $sub_title }}</h5>
-                                                        <p class="lh-1 m-0">{{ $sub_val }} {{ __('art_tracker.xp') }}</p>
-                                                    </div>
-                                                @endforeach
-                                            @else
-                                                <div class="line-item w-100 d-inline-flex justify-content-between p-2">
-                                                    <h5 class="lh-1 m-0">{{ $group_title }}</h5>
-                                                    <p class="lh-1 m-0">{{ $lines }} {{ __('art_tracker.xp') }}</p>
-                                                </div>
-                                            @endif
-                                        </div>
-                                    @endforeach
-                                @else
-                                    <div class="line-item w-100 d-inline-flex justify-content-between p-2">
-                                        <h5 class="lh-1 m-0">{{ $i }}</h5>
-                                        <p class="lh-1 m-0">{{ $subcard }} {{ __('art_tracker.xp') }}</p>
-                                    </div>
-                                @endif
-                            @endforeach
-                        @endif
-                    @else
-                        <?php
-                        $total = 0;
-                        $i = 0;
-                        ?>
-                        <div class="line-rows">
+                    <div class="px-4 line-rows">
                             <?php
                             $total = 0;
                             $i = 0;
                             ?>
-                            @foreach ($cardData as $title => $value)
-                                @if (gettype($value) === 'array')
-                                    <div class="line-group border border-secondary my-2" data-id="{{ $i }}">
-                                        <div class="line-header p-2">
-                                            <div class="d-flex justify-content-between mb-2">
-                                                <h5>Group</h5>
-                                                <a href="#" class="remove-group btn btn-sm btn-danger ml-2">-</a>
-                                            </div>
-                                            {!! Form::text('card[' . $i . '][title]', $title, ['class' => 'form-control']) !!}
-                                        </div>
-                                        <hr class="my-1 border border-secondary" />
-                                        <?php $si = 0; ?>
-                                        @foreach ($value as $title => $sub_val)
-                                            <div class="line-item w-100 d-inline-flex align-items-center justify-content-between p-2">
-                                                {!! Form::text('card[' . $i . '][sub_card][' . $si . '][title]', $title, ['class' => 'form-control']) !!}
-                                                {!! Form::number('card[' . $i . '][sub_card][' . $si . '][value]', $sub_val, ['class' => 'form-control w-25 ml-2']) !!} <span class="badge ml-2">{{ __('art_tracker.xp') }}</span>
-                                                <a href="#" class="remove-line btn btn-sm btn-danger ml-2">-</a>
-                                            </div>
-                                            <?php
-                                            $total += $sub_val;
-                                            $si++;
-                                            ?>
-                                        @endforeach
-                                        <div class="text-right">
-                                            <a href="#" id="addSubLine" class="btn btn-sm btn-primary m-2">Add Sub Line</a>
-                                        </div>
-                                    </div>
-                                @else
-                                    <div class="line-item w-100 d-inline-flex align-items-center justify-content-between p-2" data-id="{{ $i }}">
-                                        {!! Form::text('card[' . $i . '][title]', $title, ['class' => 'form-control']) !!}
-                                        {!! Form::number('card[' . $i . '][value]', $value, ['class' => 'form-control w-25 ml-2']) !!} <span class="badge ml-2">{{ __('art_tracker.xp') }}</span>
-                                        <a href="#" class="remove-line btn btn-sm btn-danger ml-2">-</a>
-                                    </div>
-                                    <?php $total += $value; ?>
-                                @endif
-                                <?php
-                                $i++;
-                                ?>
-                            @endforeach
+                            @if (count($cardData) > 1)
+                                <div class="accordion" id="MultiTracker">
+                                    <?php $sb = 0; ?>
+                                    @foreach ($cardData as $title => $value)
+                                        @if (gettype($value) === 'array')
+                                            <?php $ssb = 0; ?>
+                                            @foreach ($value as $sub_title => $sub_value)
+                                                <div class="card">
+                                                    <div class="card-header" id="subHeading-{{ $sb }}">
+                                                        <h4 class="mb-0">
+                                                            <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapse-{{ $sb }}" aria-expanded="true"
+                                                                aria-controls="collapse-{{ $sb }}">Sub-Tracker #{{ $sb }}</button>
+                                                        </h4>
+                                                    </div>
+                                                    <div id="collapse-{{ $sb }}" class="collapse {{ $sb === 0 ? 'show' : '' }}" aria-labelledby="subHeading-{{ $sb }}" data-parent="#MultiTracker">
+                                                        <div class="card-body">
+                                                            @include('tracker._tracker_group', ['title' => $sub_title, 'cardData' => $sub_value, 'i' => $i])
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <?php $ssb++; ?>
+                                            @endforeach
+                                        @endif
+                                        <?php $sb++; ?>
+                                    @endforeach
+                                </div>
+                            @else
+                                @foreach ($cardData as $title => $value)
+                                    @include('tracker._tracker_group', ['title' => $title, 'value' => $value, 'i' => $i])
+                                    <?php
+                                    $i++;
+                                    ?>
+                                @endforeach
+                            @endif
                         </div>
                         <div class="text-right">
                             <a href="#" id="addGroup" class="btn btn-sm btn-primary mt-2">Add Group</a>
                             <a href="#" id="addLine" class="btn btn-sm btn-primary mt-2">Add Line</a>
                         </div>
-                    @endif
                 </div>
             </div>
         </div>
