@@ -31,11 +31,7 @@
             <div class="row mt-auto mb-auto">
             <div class="col-md-10 pt-2 pb-2 m-auto">
                 
-                    <a href="https://www.kukuri-arpg.com/info/col-2025"><img src="https://www.kukuri-arpg.com/files/col_banner.png"></a>
-                    <p style="margin-top:12px;font-size:14pt;">Monthly Quest is taking a break during Carnival of Life!</p>
-                    <br>
-                    <a style="font-size:11pt;" href="https://www.kukuri-arpg.com/info/col-2025"><b>Read more about it here!</b></a>
-                    <br><br>
+                    {!! $sidebar->box2content !!}
                 
             </div>
                 
