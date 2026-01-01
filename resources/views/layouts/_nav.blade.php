@@ -182,7 +182,7 @@
                             <a class="dropdown-item" href="{{ url('info/coliseum') }}">
                                 Coliseum
                             </a>
-                            <a class="dropdown-item" href="https://kukuri-arpg.w3spaces.com/activities/traveling-merchant.html">
+                            <a class="dropdown-item" href="{{ url('info/merchant') }}">
                                 Traveling Merchant
                             </a>
                             <div class="dropdown-divider"></div>
