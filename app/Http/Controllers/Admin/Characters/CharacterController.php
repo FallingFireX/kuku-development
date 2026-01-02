@@ -1,0 +1,957 @@
+<?php
+
+namespace App\Http\Controllers\Admin\Characters;
+
+use App\Facades\Settings;
+use App\Http\Controllers\Controller;
+use App\Models\Base\Base;
+use App\Models\Character\BreedingPermission;
+use App\Models\Character\Character;
+use App\Models\Character\CharacterCategory;
+use App\Models\Character\CharacterImage;
+use App\Models\Character\CharacterLineageBlacklist;
+use App\Models\Character\CharacterLink;
+use App\Models\Character\CharacterMarking;
+use App\Models\Character\CharacterTransfer;
+use App\Models\Character\CharacterTransformation as Transformation;
+use App\Models\Feature\Feature;
+use App\Models\Marking\Marking;
+use App\Models\Rarity;
+use App\Models\Species\Species;
+use App\Models\Species\Subtype;
+use App\Models\Stat\Stat;
+use App\Models\Trade\Trade;
+use App\Models\User\User;
+use App\Services\CharacterManager;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+
+class CharacterController extends Controller {
+    /*
+    |--------------------------------------------------------------------------
+    | Admin / Character Controller
+    |--------------------------------------------------------------------------
+    |
+    | Handles admin creation/editing of characters and MYO slots.
+    |
+    */
+
+    /**
+     * Gets the next number for a character in a category.
+     *
+     * @param App\Services\CharacterManager $service
+     *
+     * @return string
+     */
+    public function getPullNumber(Request $request, CharacterManager $service) {
+        return $service->pullNumber($request->get('category'));
+    }
+
+    /**
+     * Shows the create character page.
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function getCreateCharacter() {
+        return view('admin.masterlist.create_character', [
+            'categories'       => CharacterCategory::orderBy('sort')->get(),
+            'userOptions'      => User::query()->orderBy('name')->pluck('name', 'id')->toArray(),
+            'rarities'         => ['0' => 'Select Rarity'] + Rarity::orderBy('sort', 'DESC')->pluck('name', 'id')->toArray(),
+            'specieses'        => ['0' => 'Select Species'] + Species::orderBy('sort', 'DESC')->pluck('name', 'id')->toArray(),
+            'subtypes'         => [],
+            'features'         => Feature::getDropdownItems(1),
+            'isMyo'            => false,
+            'characterOptions' => CharacterLineageBlacklist::getAncestorOptions(),
+            'markings'         => ['' => 'Select Markings(s)'] + Marking::orderBy('name', 'DESC')->pluck('name', 'id')->toArray(),
+            'bases'            => ['' => 'Select Base(s)'] + Base::orderBy('name', 'DESC')->pluck('code', 'id')->toArray(),
+            'transformations'  => ['0' => 'Pick a Species First'],
+            'stats'            => Stat::orderBy('name')->get(),
+        ]);
+    }
+
+    /**
+     * Shows the create MYO slot page.
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function getCreateMyo() {
+        return view('admin.masterlist.create_character', [
+            'userOptions'      => User::query()->orderBy('name')->pluck('name', 'id')->toArray(),
+            'rarities'         => ['0' => 'Select Rarity'] + Rarity::orderBy('sort', 'DESC')->pluck('name', 'id')->toArray(),
+            'specieses'        => ['0' => 'Select Species'] + Species::orderBy('sort', 'DESC')->pluck('name', 'id')->toArray(),
+            'subtypes'         => [],
+            'features'         => Feature::getDropdownItems(1),
+            'isMyo'            => true,
+            'characterOptions' => CharacterLineageBlacklist::getAncestorOptions(),
+            'markings'         => ['' => 'Select Markings(s)'] + Marking::orderBy('name', 'DESC')->pluck('name', 'id')->toArray(),
+            'bases'            => ['' => 'Select Base(s)'] + Base::orderBy('name', 'DESC')->pluck('code', 'id')->toArray(),
+            'transformations'  => ['0' => 'Pick a Species First'],
+            'stats'            => Stat::orderBy('name')->get(),
+        ]);
+    }
+
+    /**
+     * Shows the edit image subtype portion of the modal.
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function getCreateCharacterMyoSubtype(Request $request) {
+        $species = $request->input('species');
+
+        return view('admin.masterlist._create_character_subtype', [
+            'subtypes' => Subtype::where('species_id', '=', $species)->orderBy('sort', 'DESC')->pluck('name', 'id')->toArray(),
+            'isMyo'    => $request->input('myo'),
+        ]);
+    }
+
+    /**
+     * Shows the edit image transformation portion of the modal.
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function getCreateCharacterMyoTransformation(Request $request) {
+        $species = $request->input('species');
+
+        return view('admin.masterlist._create_character_transformation', [
+            'transformations' => ['0' => 'Select '.ucfirst(__('transformations.transformation'))] + Transformation::where('species_id', '=', $species)->orWhereNull('species_id')->orderBy('sort', 'DESC')->pluck('name', 'id')->toArray(),
+            'isMyo'           => $request->input('myo'),
+        ]);
+    }
+
+    /**
+     * Gets the stats that are available for a specific species/subtype.
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function getCreateCharacterMyoStats(Request $request) {
+        $species = $request->input('species') ?? null;
+        $subtype = $request->input('subtype') ?? null;
+
+        $stats = Stat::whereHas('limits', function ($query) use ($species) {
+            $query->where('species_id', $species)->where('is_subtype', 0);
+        })->orWhereHas('limits', function ($query) use ($subtype) {
+            $query->where('species_id', $subtype)->where('is_subtype', 1);
+        })->orWhereDoesntHave('limits')->orderBy('name', 'ASC')->get();
+
+        return view('admin.masterlist._create_character_stats', [
+            'stats'      => $stats,
+            'species_id' => $species,
+            'subtype_id' => $subtype,
+        ]);
+    }
+
+    /**
+     * Creates a character.
+     *
+     * @param App\Services\CharacterManager $service
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function postCreateCharacter(Request $request, CharacterManager $service) {
+        $request->validate(Character::$createRules);
+        $data = $request->only([
+            'user_id', 'owner_url', 'character_category_id', 'number', 'slug',
+            'description', 'is_visible', 'is_giftable', 'is_tradeable', 'is_sellable',
+            'sale_value', 'transferrable_at', 'use_cropper',
+            'x0', 'x1', 'y0', 'y1',
+            'designer_id', 'designer_url',
+            'artist_id', 'artist_url',
+            'species_id', 'subtype_ids', 'rarity_id', 'feature_id', 'feature_data', 'marking_id', 'is_dominant', 'base', 'secondary_base', 'side_id',
+            'marking_color_0', 'marking_color_1', 'is_chimera',
+            'designer_id', 'designer_url',
+            'artist_id', 'artist_url',
+
+            // hello darkness my old friend //
+            'sire_id',           'sire_name',
+            'sire_sire_id',      'sire_sire_name',
+            'sire_sire_sire_id', 'sire_sire_sire_name',
+            'sire_sire_dam_id',  'sire_sire_dam_name',
+            'sire_dam_id',       'sire_dam_name',
+            'sire_dam_sire_id',  'sire_dam_sire_name',
+            'sire_dam_dam_id',   'sire_dam_dam_name',
+            'dam_id',            'dam_name',
+            'dam_sire_id',       'dam_sire_name',
+            'dam_sire_sire_id',  'dam_sire_sire_name',
+            'dam_sire_dam_id',   'dam_sire_dam_name',
+            'dam_dam_id',        'dam_dam_name',
+            'dam_dam_sire_id',   'dam_dam_sire_name',
+            'dam_dam_dam_id',    'dam_dam_dam_name',
+            'generate_ancestors',
+
+            'image', 'thumbnail', 'image_description', 'content_warnings', 'parent_id', 'transformation_id', 'transformation_info', 'transformation_description', 'stats', 'genotype', 'phenotype', 'gender', 'eyecolor', 'spd', 'def', 'atk',
+            'diet', 'bio',
+        ]);
+
+        if ($character = $service->createCharacter($data, Auth::user())) {
+            flash('Character created successfully.')->success();
+
+            $service->updateCharacterMarkings($data, $character);
+
+            return redirect()->to($character->url);
+        } else {
+            foreach ($service->errors()->getMessages()['error'] as $error) {
+                flash($error)->error();
+            }
+        }
+
+        return redirect()->back()->withInput();
+    }
+
+    /**
+     * Creates an MYO slot.
+     *
+     * @param App\Services\CharacterManager $service
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function postCreateMyo(Request $request, CharacterManager $service) {
+        $request->validate(Character::$myoRules);
+        $data = $request->only([
+            'user_id', 'owner_url', 'name',
+            'description', 'is_visible', 'is_giftable', 'is_tradeable', 'is_sellable',
+            'sale_value', 'transferrable_at', 'use_cropper',
+            'x0', 'x1', 'y0', 'y1',
+            'designer_id', 'designer_url',
+            'artist_id', 'artist_url',
+
+            // i've come to speak with you again //
+            'sire_id',           'sire_name',
+            'sire_sire_id',      'sire_sire_name',
+            'sire_sire_sire_id', 'sire_sire_sire_name',
+            'sire_sire_dam_id',  'sire_sire_dam_name',
+            'sire_dam_id',       'sire_dam_name',
+            'sire_dam_sire_id',  'sire_dam_sire_name',
+            'sire_dam_dam_id',   'sire_dam_dam_name',
+            'dam_id',            'dam_name',
+            'dam_sire_id',       'dam_sire_name',
+            'dam_sire_sire_id',  'dam_sire_sire_name',
+            'dam_sire_dam_id',   'dam_sire_dam_name',
+            'dam_dam_id',        'dam_dam_name',
+            'dam_dam_sire_id',   'dam_dam_sire_name',
+            'dam_dam_dam_id',    'dam_dam_dam_name',
+            'generate_ancestors',
+
+            'species_id', 'subtype_ids', 'rarity_id', 'feature_id', 'feature_data', 'marking_id', 'is_dominant', 'base', 'secondary_base', 'side_id',
+            'marking_color_0', 'marking_color_1', 'is_chimera',
+            'image', 'thumbnail', 'parent_id', 'transformation_id', 'transformation_info', 'transformation_description', 'stats', 'genotype', 'phenotype', 'gender', 'eyecolor', 'spd', 'def', 'atk',
+            'diet', 'bio',
+        ]);
+        if ($character = $service->createCharacter($data, Auth::user(), true)) {
+            flash('MYO slot created successfully.')->success();
+
+            $service->updateCharacterMarkings($data, $character);
+
+            return redirect()->to($character->url);
+        } else {
+            foreach ($service->errors()->getMessages()['error'] as $error) {
+                flash($error)->error();
+            }
+        }
+
+        return redirect()->back()->withInput();
+    }
+
+    /**
+     * Shows the edit character stats modal.
+     *
+     * @param string $slug
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function getEditCharacterStats($slug) {
+        $this->character = Character::where('slug', $slug)->first();
+        if (!$this->character) {
+            abort(404);
+        }
+
+        $glint_bases = [];
+        $temp = CharacterMarking::where('character_id', $this->character->id)
+            ->whereIn('code', ['GG', 'Gl'])
+            ->value('base_id');
+        if ($temp) {
+            $has_glint = true;
+            if (str_contains($temp, '|')) {
+                $glint_bases = Base::whereIn('id', explode('|', $temp))->pluck('name', 'id')->toArray();
+            } else {
+                $glint_bases = Base::where('id', $temp)->pluck('name', 'id')->toArray();
+            }
+        } else {
+            $has_glint = false;
+        }
+
+        return view('character.admin._edit_stats_modal', [
+            'character'         => $this->character,
+            'categories'        => CharacterCategory::orderBy('sort')->pluck('name', 'id')->toArray(),
+            'userOptions'       => User::query()->orderBy('name')->pluck('name', 'id')->toArray(),
+            'number'            => format_masterlist_number($this->character->number, config('lorekeeper.settings.character_number_digits')),
+            'isMyo'             => false,
+            'markings'          => ['' => 'Select Markings(s)'] + Marking::orderBy('name', 'DESC')->pluck('name', 'id')->toArray(),
+            'bases'             => ['' => 'Select Base(s)'] + Base::orderBy('id', 'ASC')->pluck('code', 'id')->toArray(),
+            'is_chimera'        => (str_contains($this->character->base, '|') ? 1 : 0),
+            'characterMarkings' => CharacterMarking::where('character_id', $this->character->id)->get(),
+            'has_glint'         => $has_glint,
+            'glint_bases'       => $glint_bases,
+        ]);
+    }
+
+    /**
+     * Shows the edit MYO stats modal.
+     *
+     * @param int $id
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function getEditMyoStats($id) {
+        $this->character = Character::where('is_myo_slot', 1)->where('id', $id)->first();
+        if (!$this->character) {
+            abort(404);
+        }
+
+        $glint_bases = [];
+        $temp = CharacterMarking::where('character_id', $this->character->id)
+            ->whereIn('code', ['GG', 'Gl'])
+            ->value('base_id');
+        if ($temp) {
+            $has_glint = true;
+            if (str_contains($temp, '|')) {
+                $glint_bases = Base::whereIn('id', explode('|', $temp))->pluck('name', 'id')->toArray();
+            } else {
+                $glint_bases = Base::where('id', $temp)->pluck('name', 'id')->toArray();
+            }
+        } else {
+            $has_glint = false;
+        }
+
+        return view('character.admin._edit_stats_modal', [
+            'character'         => $this->character,
+            'userOptions'       => User::query()->orderBy('name')->pluck('name', 'id')->toArray(),
+            'isMyo'             => true,
+            'markings'          => ['' => 'Select Markings(s)'] + Marking::orderBy('name', 'DESC')->pluck('name', 'id')->toArray(),
+            'bases'             => ['' => 'Select Base(s)'] + Base::orderBy('id', 'ASC')->pluck('name', 'id')->toArray(),
+            'is_chimera'        => (str_contains($this->character->base, '|') ? 1 : 0),
+            'characterMarkings' => CharacterMarking::where('character_id', $this->character->id)->get(),
+            'has_glint'         => $has_glint,
+            'glint_bases'       => $glint_bases,
+        ]);
+    }
+
+    /**
+     * Edits a character's stats.
+     *
+     * @param App\Services\CharacterManager $service
+     * @param string                        $slug
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function postEditCharacterStats(Request $request, CharacterManager $service, $slug) {
+        $request->validate(Character::$updateRules);
+
+        $data = $request->only([
+            'character_category_id', 'number', 'slug', 'is_giftable',
+            'is_tradeable', 'is_sellable', 'sale_value', 'transferrable_at',
+            'marking_id', 'is_dominant', 'base', 'secondary_base', 'side_id',
+            'marking_color_0', 'marking_color_1', 'is_chimera',
+        ]);
+
+        $this->character = Character::where('slug', $slug)->firstOrFail();
+
+        $is_chimera = $request->boolean('is_chimera');
+
+        if ($is_chimera && isset($data['base']) && isset($data['secondary_base'])) {
+            // Prevent duplicate concatenation
+            if (!str_contains($this->character->base, '|')) {
+                $data['base'] = $data['base'].'|'.$data['secondary_base'];
+            } else {
+                // Replace existing parts properly
+                $parts = explode('|', $this->character->base);
+                $primaryBase = $data['base'] ?? $parts[0];
+                $secondaryBase = $data['secondary_base'] ?? ($parts[1] ?? '');
+                $data['base'] = $primaryBase.'|'.$secondaryBase;
+            }
+        }
+
+        if ($service->updateCharacterStats($data, $this->character, Auth::user())) {
+            flash('Character stats updated successfully.')->success();
+            $service->updateCharacterMarkings($data, $this->character);
+
+            return redirect()->to($this->character->url);
+        }
+
+        foreach ($service->errors()->getMessages()['error'] as $error) {
+            flash($error)->error();
+        }
+
+        return redirect()->back()->withInput();
+    }
+
+    /**
+     * Edits an MYO slot's stats.
+     *
+     * @param App\Services\CharacterManager $service
+     * @param int                           $id
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function postEditMyoStats(Request $request, CharacterManager $service, $id) {
+        $request->validate(Character::$myoRules);
+        $data = $request->only([
+            'name',
+            'is_giftable', 'is_tradeable', 'is_sellable', 'sale_value',
+            'transferrable_at', 'marking_id', 'is_dominant', 'base', 'secondary_base', 'side_id', 'marking_color_0', 'marking_color_1',
+        ]);
+        $this->character = Character::where('is_myo_slot', 1)->where('id', $id)->first();
+        if (!$this->character) {
+            abort(404);
+        }
+        if ($service->updateCharacterStats($data, $this->character, Auth::user())) {
+            flash('Character stats updated successfully.')->success();
+
+            $service->updateCharacterMarkings($data, $this->character);
+
+            return redirect()->to($this->character->url);
+        } else {
+            foreach ($service->errors()->getMessages()['error'] as $error) {
+                flash($error)->error();
+            }
+        }
+
+        return redirect()->back()->withInput();
+    }
+
+    /**
+     * Shows the edit character description modal.
+     *
+     * @param string $slug
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function getEditCharacterDescription($slug) {
+        $this->character = Character::where('slug', $slug)->first();
+        if (!$this->character) {
+            abort(404);
+        }
+
+        return view('character.admin._edit_description', [
+            'character' => $this->character,
+            'isMyo'     => false,
+        ]);
+    }
+
+    /**
+     * Shows the edit MYO slot description modal.
+     *
+     * @param int $id
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function getEditMyoDescription($id) {
+        $this->character = Character::where('is_myo_slot', 1)->where('id', $id)->first();
+        if (!$this->character) {
+            abort(404);
+        }
+
+        return view('character.admin._edit_description', [
+            'character' => $this->character,
+            'isMyo'     => true,
+        ]);
+    }
+
+    /**
+     * Edits a character's description.
+     *
+     * @param App\Services\CharacterManager $service
+     * @param string                        $slug
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function postEditCharacterDescription(Request $request, CharacterManager $service, $slug) {
+        $data = $request->only([
+            'description',
+        ]);
+        $this->character = Character::where('slug', $slug)->first();
+        if (!$this->character) {
+            abort(404);
+        }
+        if ($service->updateCharacterDescription($data, $this->character, Auth::user())) {
+            flash('Character description updated successfully.')->success();
+
+            return redirect()->to($this->character->url);
+        } else {
+            foreach ($service->errors()->getMessages()['error'] as $error) {
+                flash($error)->error();
+            }
+        }
+
+        return redirect()->back()->withInput();
+    }
+
+    /**
+     * Edits an MYO slot's description.
+     *
+     * @param App\Services\CharacterManager $service
+     * @param int                           $id
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function postEditMyoDescription(Request $request, CharacterManager $service, $id) {
+        $data = $request->only([
+            'description',
+        ]);
+        $this->character = Character::where('is_myo_slot', 1)->where('id', $id)->first();
+        if (!$this->character) {
+            abort(404);
+        }
+        if ($service->updateCharacterDescription($data, $this->character, Auth::user())) {
+            flash('Character description updated successfully.')->success();
+
+            return redirect()->to($this->character->url);
+        } else {
+            foreach ($service->errors()->getMessages()['error'] as $error) {
+                flash($error)->error();
+            }
+        }
+
+        return redirect()->back()->withInput();
+    }
+
+    /**
+     * Edits a character's settings.
+     *
+     * @param App\Services\CharacterManager $service
+     * @param string                        $slug
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function postCharacterSettings(Request $request, CharacterManager $service, $slug) {
+        $data = $request->only([
+            'is_visible',
+        ]);
+        $this->character = Character::where('slug', $slug)->first();
+        if (!$this->character) {
+            abort(404);
+        }
+        if ($service->updateCharacterSettings($data, $this->character, Auth::user())) {
+            flash('Character settings updated successfully.')->success();
+
+            return redirect()->to($this->character->url);
+        } else {
+            foreach ($service->errors()->getMessages()['error'] as $error) {
+                flash($error)->error();
+            }
+        }
+
+        return redirect()->back()->withInput();
+    }
+
+    /**
+     * Edits an MYO slot's settings.
+     *
+     * @param App\Services\CharacterManager $service
+     * @param int                           $id
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function postMyoSettings(Request $request, CharacterManager $service, $id) {
+        $data = $request->only([
+            'is_visible',
+        ]);
+        $this->character = Character::where('is_myo_slot', 1)->where('id', $id)->first();
+        if (!$this->character) {
+            abort(404);
+        }
+        if ($service->updateCharacterSettings($data, $this->character, Auth::user())) {
+            flash('Character settings updated successfully.')->success();
+
+            return redirect()->to($this->character->url);
+        } else {
+            foreach ($service->errors()->getMessages()['error'] as $error) {
+                flash($error)->error();
+            }
+        }
+
+        return redirect()->back()->withInput();
+    }
+
+    /**
+     * Shows the use breeding permission modal.
+     *
+     * @param string $slug
+     * @param int    $id
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function getUseBreedingPermission($slug, $id) {
+        $this->character = Character::where('slug', $slug)->first();
+        if (!$this->character) {
+            abort(404);
+        }
+
+        return view('character.admin._use_breeding_permission', [
+            'character'          => $this->character,
+            'breedingPermission' => BreedingPermission::find($id),
+        ]);
+    }
+
+    /**
+     * Marks a breeding permission as used.
+     *
+     * @param App\Services\CharacterManager $service
+     * @param string                        $slug
+     * @param int                           $id
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function postUseBreedingPermission(Request $request, CharacterManager $service, $slug, $id) {
+        $this->character = Character::where('slug', $slug)->first();
+        if (!$this->character) {
+            abort(404);
+        }
+
+        if ($service->useBreedingPermission($this->character, BreedingPermission::find($id), Auth::user())) {
+            flash('Breeding permission marked used successfully.')->success();
+
+            return redirect()->back();
+        } else {
+            foreach ($service->errors()->getMessages()['error'] as $error) {
+                flash($error)->error();
+            }
+        }
+
+        return redirect()->back();
+    }
+
+    /**
+     * Shows the delete character modal.
+     *
+     * @param string $slug
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function getCharacterDelete($slug) {
+        $this->character = Character::where('slug', $slug)->first();
+        if (!$this->character) {
+            abort(404);
+        }
+
+        return view('character.admin._delete_character_modal', [
+            'character' => $this->character,
+            'isMyo'     => false,
+        ]);
+    }
+
+    /**
+     * Shows the delete MYO slot modal.
+     *
+     * @param int $id
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function getMyoDelete($id) {
+        $this->character = Character::where('is_myo_slot', 1)->where('id', $id)->first();
+        if (!$this->character) {
+            abort(404);
+        }
+
+        return view('character.admin._delete_character_modal', [
+            'character' => $this->character,
+            'isMyo'     => true,
+        ]);
+    }
+
+    /**
+     * Deletes a character.
+     *
+     * @param App\Services\CharacterManager $service
+     * @param string                        $slug
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function postCharacterDelete(Request $request, CharacterManager $service, $slug) {
+        $this->character = Character::where('slug', $slug)->first();
+        if (!$this->character) {
+            abort(404);
+        }
+
+        if ($service->deleteCharacter($this->character, Auth::user())) {
+            flash('Character deleted successfully.')->success();
+
+            return redirect()->to('masterlist');
+        } else {
+            foreach ($service->errors()->getMessages()['error'] as $error) {
+                flash($error)->error();
+            }
+        }
+
+        return redirect()->back();
+    }
+
+    /**
+     * Deletes an MYO slot.
+     *
+     * @param App\Services\CharacterManager $service
+     * @param int                           $id
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function postMyoDelete(Request $request, CharacterManager $service, $id) {
+        $this->character = Character::where('is_myo_slot', 1)->where('id', $id)->first();
+        if (!$this->character) {
+            abort(404);
+        }
+
+        if ($service->deleteCharacter($this->character, Auth::user())) {
+            flash('Character deleted successfully.')->success();
+
+            return redirect()->to('myos');
+        } else {
+            foreach ($service->errors()->getMessages()['error'] as $error) {
+                flash($error)->error();
+            }
+        }
+
+        return redirect()->back();
+    }
+
+    /**
+     * Transfers a character.
+     *
+     * @param App\Services\CharacterManager $service
+     * @param string                        $slug
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function postTransfer(Request $request, CharacterManager $service, $slug) {
+        $this->character = Character::where('slug', $slug)->first();
+        if (!$this->character) {
+            abort(404);
+        }
+
+        $parent = CharacterLink::where('child_id', $this->character->id)->first();
+        $child = CharacterLink::where('parent_id', $this->character->id)->first();
+        if ($parent && $child) {
+            $mutual = CharacterLink::where('child_id', $parent->parent->id)->where('parent_id', $this->character->id)->first();
+        }
+        if ($parent && !isset($mutual)) {
+            flash('This character is bound and cannot be transfered. You must transfer the character it is bound to.')->error();
+
+            return redirect()->back();
+        }
+        if ($service->adminTransfer($request->only(['recipient_id', 'recipient_alias', 'cooldown', 'reason']), $this->character, Auth::user())) {
+            flash('Character transferred successfully.')->success();
+            if ($child) {
+                flash("This character's attachments have been transferred with it.")->warning();
+            }
+        }
+
+        return redirect()->back();
+    }
+
+    /**
+     * Transfers an MYO slot.
+     *
+     * @param App\Services\CharacterManager $service
+     * @param int                           $id
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function postMyoTransfer(Request $request, CharacterManager $service, $id) {
+        $this->character = Character::where('is_myo_slot', 1)->where('id', $id)->first();
+        if (!$this->character) {
+            abort(404);
+        }
+
+        $parent = CharacterLink::where('child_id', $this->character->id)->first();
+        $child = CharacterLink::where('parent_id', $this->character->id)->first();
+        if ($parent && $child) {
+            $mutual = CharacterLink::where('child_id', $parent->parent->id)->where('parent_id', $this->character->id)->first();
+        }
+        if ($parent && !isset($mutual)) {
+            flash('This character is bound and cannot be transfered. You must transfer the character it is bound to.')->error();
+
+            return redirect()->back();
+        }
+        if ($service->adminTransfer($request->only(['recipient_id', 'cooldown', 'reason']), $this->character, Auth::user())) {
+            flash('Character transferred successfully.')->success();
+        } else {
+            foreach ($service->errors()->getMessages()['error'] as $error) {
+                flash($error)->error();
+            }
+        }
+
+        return redirect()->back();
+    }
+
+    /**
+     * Binds a character.
+     *
+     * @param App\Services\CharacterManager $service
+     * @param string                        $slug
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function postBind(Request $request, CharacterManager $service, $slug) {
+        $this->character = Character::where('slug', $slug)->first();
+        if (!$this->character) {
+            abort(404);
+        }
+
+        if ($service->boundTransfer($request->only(['parent_id']), $this->character, Auth::user())) {
+            flash('Character binding updated.')->success();
+        } else {
+            foreach ($service->errors()->getMessages()['error'] as $error) {
+                flash($error)->error();
+            }
+        }
+
+        return redirect()->back();
+    }
+
+    /**
+     * Binds an MYO slot.
+     *
+     * @param App\Services\CharacterManager $service
+     * @param int                           $id
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function postMyoBind(Request $request, CharacterManager $service, $id) {
+        $this->character = Character::where('is_myo_slot', 1)->where('id', $id)->first();
+        if (!$this->character) {
+            abort(404);
+        }
+
+        if ($service->boundTransfer($request->only(['parent_id']), $this->character, Auth::user())) {
+            flash('Character binding updated.')->success();
+        } else {
+            foreach ($service->errors()->getMessages()['error'] as $error) {
+                flash($error)->error();
+            }
+        }
+
+        return redirect()->back();
+    }
+
+    /**
+     * Shows the character transfer queue.
+     *
+     * @param string $type
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function getTransferQueue(Request $request, $type) {
+        $transfers = CharacterTransfer::query();
+        $user = Auth::user();
+        $data = $request->only(['sort']);
+        if (isset($data['sort'])) {
+            switch ($data['sort']) {
+                case 'newest':
+                    $transfers->sortNewest();
+                    break;
+                case 'oldest':
+                    $transfers->sortNewest(true);
+                    break;
+            }
+        } else {
+            $transfers->sortNewest(true);
+        }
+
+        if ($type == 'completed') {
+            $transfers->completed();
+        } elseif ($type == 'incoming') {
+            $transfers->active()->where('is_approved', 0);
+        } else {
+            abort(404);
+        }
+
+        $openTransfersQueue = Settings::get('open_transfers_queue');
+
+        return view('admin.masterlist.character_transfers', [
+            'transfers'          => $transfers->orderBy('id', 'DESC')->paginate(20),
+            'transfersQueue'     => Settings::get('open_transfers_queue'),
+            'openTransfersQueue' => $openTransfersQueue,
+            'transferCount'      => $openTransfersQueue ? CharacterTransfer::active()->where('is_approved', 0)->count() : 0,
+            'tradeCount'         => $openTransfersQueue ? Trade::where('status', 'Pending')->count() : 0,
+        ]);
+    }
+
+    /**
+     * Shows the character transfer action modal.
+     *
+     * @param int    $id
+     * @param string $action
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function getTransferModal($id, $action) {
+        if ($action != 'approve' && $action != 'reject') {
+            abort(404);
+        }
+        $transfer = CharacterTransfer::where('id', $id)->active()->first();
+        if (!$transfer) {
+            abort(404);
+        }
+
+        return view('admin.masterlist._'.$action.'_modal', [
+            'transfer' => $transfer,
+            'cooldown' => Settings::get('transfer_cooldown'),
+        ]);
+    }
+
+    /**
+     * Acts on a transfer in the transfer queue.
+     *
+     * @param App\Services\CharacterManager $service
+     * @param int                           $id
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function postTransferQueue(Request $request, CharacterManager $service, $id) {
+        if (!Auth::check()) {
+            abort(404);
+        }
+
+        $action = $request->get('action');
+
+        if ($service->processTransferQueue($request->only(['action', 'cooldown', 'reason']) + ['transfer_id' => $id], Auth::user())) {
+            if (strtolower($action) == 'approve') {
+                flash('Transfer '.strtolower($action).'d.')->success();
+            } else {
+                flash('Transfer '.strtolower($action).'ed.')->success();
+            }
+        } else {
+            foreach ($service->errors()->getMessages()['error'] as $error) {
+                flash($error)->error();
+            }
+        }
+
+        return redirect()->back();
+    }
+
+    /**
+     * Shows a list of all existing MYO slots.
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function getMyoIndex() {
+        return view('admin.masterlist.myo_index', [
+            'slots' => Character::myo(1)->orderBy('id', 'DESC')->paginate(30),
+        ]);
+    }
+
+    /**
+     * Gets all extant content warnings.
+     *
+     * @return string
+     */
+    public function getContentWarnings() {
+        $contentWarnings = CharacterImage::whereNotNull('content_warnings')->pluck('content_warnings')->flatten()->map(function ($warnings) {
+            return collect($warnings)->map(function ($warning) {
+                $lower = strtolower(trim($warning));
+
+                return ['warning' => ucwords($lower)];
+            });
+        })->sort()->flatten(1)->unique()->values()->toJson();
+
+        return $contentWarnings;
+    }
+}
