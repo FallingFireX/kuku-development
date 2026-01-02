@@ -11,114 +11,128 @@
         Admin Dashboard</h1>
     <div class="row">
         @if (Auth::user()->hasPower('manage_submissions'))
-            <!-- big box -->
-            <div class="col-sm-12">
-                <div class="card mb-3">
-                    <!-- small box-->
-                    <div class="row" style="padding-top: 1rem;padding-left: 1rem;padding-right: 1rem;vertical-align: text-top;">
-                        <div class="col-sm-3" style="margin-top:-1rem;">
-                            <div class="card-body" style="text-align: center; padding:0rem;">
-                                <br><br><br>
-                                <h3 class="card-title">Status Updates</h3>
-                                <p class="card-text">
-                                    @if ($fpCount)
-                                        <h5><span class="badge badge-primary">{{ $fpCount }}</span></h5>
-                                    @else
-                                        <h5><span class="badge badge-success">Clear</span></h5>
-                                    @endif
-                                </p>
-                                <br>
-                            </div>
-                        </div>
-                        <div class="col-sm-3">
-                            <div class="card-body" style="text-align: center;">
-                                <h3><i class="fas fa-calculator"></i></h3>
-                                <h5 class="card-title">Rank Updates</h5>
-                                <div class="text-center">
-                                    <a href="{{ url('https://www.kukuri-arpg.com/admin/submissions/pending?prompt_id=2&sort=oldest') }}" class="card-link">View Queue <span class="fas fa-caret-right ml-1"></span></a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-sm-3">
-                            <div class="card-body" style="text-align: center;">
-                                <h3><i class="fas fa-upload"></i></h3>
-                                <h5 class="card-title">Bulk Uploads</h5>
-                                <div class="text-center">
-                                    <a href="{{ url('https://www.kukuri-arpg.com/admin/submissions/pending?prompt_id=4&sort=oldest') }}" class="card-link">View Queue <span class="fas fa-caret-right ml-1"></span></a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-sm-3">
-                            <div class="card-body" style="text-align: center;">
-                                <h3><i class="fas fa-dumbbell"></i></h3>
-                                <h5 class="card-title">Statpoint updates</h5>
-                                <div class="text-center">
-                                    <a href="{{ url('https://www.kukuri-arpg.com/admin/submissions/pending?prompt_id=8&sort=oldest') }}" class="card-link">View Queue <span class="fas fa-caret-right ml-1"></span></a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- big box -->
-            <div class="col-sm-12">
-                <div class="card mb-3">
-                    <!-- small box-->
-                    <div class="row" style="padding-top: 1rem;padding-left: 1rem;padding-right: 1rem;vertical-align: text-top;">
-                        <div class="col-sm-3" style="margin-top:-1rem;">
-                            <div class="card-body" style="text-align: center; padding:0rem;">
-                                <br><br><br>
-                                <h3 class="card-title">Activity Rolls</h3>
-                                <p class="card-text">
+            <div class="col-md-3 d-flex">
+                        <div class="card text-center flex-fill">
+                            <h3 class="card-header">Status Updates</h3>
+                            <div class="card-body pt-3" style="text-align: center;">
+                                <h5><i class="fas fa-calculator"></i> Rank Updates
                                     @if ($arCount)
-                                        <h5><span class="badge badge-primary">{{ $arCount }}</span></h5>
+                                        <span class="badge badge-primary">{{ $arCount }}</span>
                                     @else
-                                        <h5><span class="badge badge-success">Clear</span></h5>
+                                        <span class="badge badge-success ml-3 pt-1">Clear</span>
                                     @endif
-                                </p>
-                                <br>
+                                    </h5>
+                                <a href="{{ url('https://www.kukuri-arpg.com/admin/submissions/pending?prompt_id=2&sort=oldest') }}" class="card-link">View Queue <span class="fas fa-caret-right ml-1"></span></a>
+                            
+                                <h5 class="mt-3 pt-3"><i class="fas fa-upload"></i> Bulk Uploads
+                                    @if ($arCount)
+                                        <span class="badge badge-primary">{{ $arCount }}</span>
+                                    @else
+                                        <span class="badge badge-success ml-3 pt-1">Clear</span>
+                                    @endif
+                                    </h5>
+                                <a href="{{ url('https://www.kukuri-arpg.com/admin/submissions/pending?prompt_id=4&sort=oldest') }}" class="card-link">View Queue <span class="fas fa-caret-right ml-1"></span></a>
+                            
+                                <h5 class="mt-3 pt-3"><i class="fas fa-dumbbell"></i> SP updates
+                                    @if ($arCount)
+                                        <span class="badge badge-primary">{{ $arCount }}</span>
+                                    @else
+                                        <span class="badge badge-success ml-3 pt-1">Clear</span>
+                                    @endif
+                                    </h5>
+                                <a href="{{ url('https://www.kukuri-arpg.com/admin/submissions/pending?prompt_id=8&sort=oldest') }}" class="card-link">View Queue <span class="fas fa-caret-right ml-1 pb-3"></span></a>
                             </div>
-                        </div>
-                        <div class="col-sm-2">
-                            <div class="card-body" style="text-align: center;">
-                                <h3><i class="fas fa-drumstick-bite"></i></h3>
-                                <h5 class="card-title">Hunting</h5>
-                                <div class="text-center">
-                                    <a href="{{ url('https://www.kukuri-arpg.com/admin/submissions/pending?prompt_id=12&sort=oldest') }}" class="card-link">View Queue <span class="fas fa-caret-right ml-1"></span></a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-sm-2">
-                            <div class="card-body" style="text-align: center;">
-                                <h3><i class="fas fa-leaf"></i></h3>
-                                <h5 class="card-title">Gathering</h5>
-                                <div class="text-center">
-                                    <a href="{{ url('https://www.kukuri-arpg.com/admin/submissions/pending?prompt_id=13&sort=oldest') }}" class="card-link">View Queue <span class="fas fa-caret-right ml-1"></span></a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-sm-2">
-                            <div class="card-body" style="text-align: center;">
-                                <h3><i class="fas fa-gem"></i></h3>
-                                <h5 class="card-title">Excavating</h5>
-                                <div class="text-center">
-                                    <a href="{{ url('https://www.kukuri-arpg.com/admin/submissions/pending?prompt_id=15&sort=oldest') }}" class="card-link">View Queue <span class="fas fa-caret-right ml-1"></span></a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-sm-2">
-                            <div class="card-body" style="text-align: center;">
-                                <h3><i class="fas fa-compass"></i></h3>
-                                <h5 class="card-title">Traveling</h5>
-                                <div class="text-center">
-                                    <a href="{{ url('https://www.kukuri-arpg.com/admin/submissions/pending?prompt_id=14&sort=oldest') }}" class="card-link">View Queue <span class="fas fa-caret-right ml-1"></span></a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                        
                 </div>
             </div>
+            <div class="col-md-3 d-flex">
+                        <div class="card text-center flex-fill">
+                            <h3 class="card-header">Activity Rolls</h3>
+                            <div class="card-body pt-3" style="text-align: center;">
+                                <h5><i class="fas fa-compass"></i> Traveling
+                                    @if ($arCount)
+                                        <span class="badge badge-primary">{{ $arCount }}</span>
+                                    @else
+                                        <span class="badge badge-success ml-3 pt-1">Clear</span>
+                                    @endif
+                                    </h5>
+                                <a href="{{ url('https://www.kukuri-arpg.com/admin/submissions/pending?prompt_id=2&sort=oldest') }}" class="card-link">View Queue <span class="fas fa-caret-right ml-1"></span></a>
+                            
+                                <h5 class="mt-3 pt-3"><i class="fas fa-gem"></i> Excavation
+                                    @if ($arCount)
+                                        <span class="badge badge-primary">{{ $arCount }}</span>
+                                    @else
+                                        <span class="badge badge-success ml-3 pt-1">Clear</span>
+                                    @endif
+                                    </h5>
+                                <a href="{{ url('https://www.kukuri-arpg.com/admin/submissions/pending?prompt_id=4&sort=oldest') }}" class="card-link">View Queue <span class="fas fa-caret-right ml-1"></span></a>
+                            
+                                <h5 class="mt-3 pt-3"><i class="fas fa-leaf"></i> Gathering
+                                    @if ($arCount)
+                                        <span class="badge badge-primary">{{ $arCount }}</span>
+                                    @else
+                                        <span class="badge badge-success ml-3 pt-1">Clear</span>
+                                    @endif
+                                    </h5>
+                                <a href="{{ url('https://www.kukuri-arpg.com/admin/submissions/pending?prompt_id=8&sort=oldest') }}" class="card-link">View Queue <span class="fas fa-caret-right ml-1"></span></a>
+
+                                <h5 class="mt-3 pt-3"><i class="fas fa-drumstick-bite"></i> Hunting
+                                    @if ($arCount)
+                                        <span class="badge badge-primary">{{ $arCount }}</span>
+                                    @else
+                                        <span class="badge badge-success ml-3 pt-1">Clear</span>
+                                    @endif
+                                    </h5>
+                                <a href="{{ url('https://www.kukuri-arpg.com/admin/submissions/pending?prompt_id=8&sort=oldest') }}" class="card-link">View Queue <span class="fas fa-caret-right ml-1 pb-3"></span></a>
+                            
+                            </div>
+                </div>
+            </div>
+            <div class="col-md-3 d-flex">
+                        <div class="card text-center flex-fill">
+                            <h3 class="card-header">Adventures</h3>
+                            <div class="card-body pt-3" style="text-align: center;">
+                                <h5><i class="fas fa-map"></i> Quest/Event
+                                    @if ($arCount)
+                                        <span class="badge badge-primary">{{ $arCount }}</span>
+                                    @else
+                                        <span class="badge badge-success ml-3 pt-1">Clear</span>
+                                    @endif
+                                    </h5>
+                                <a href="{{ url('https://www.kukuri-arpg.com/admin/submissions/pending?prompt_id=2&sort=oldest') }}" class="card-link">View Queue <span class="fas fa-caret-right ml-1"></span></a>
+                            
+                                <h5 class="mt-3 pt-3"><i class="fas fa-envelope"></i> Letters
+                                    @if ($arCount)
+                                        <span class="badge badge-primary">{{ $arCount }}</span>
+                                    @else
+                                        <span class="badge badge-success ml-3 pt-1">Clear</span>
+                                    @endif
+                                    </h5>
+                                <a href="{{ url('https://www.kukuri-arpg.com/admin/submissions/pending?prompt_id=4&sort=oldest') }}" class="card-link">View Queue <span class="fas fa-caret-right ml-1"></span></a>
+                            
+                                <h5 class="mt-3 pt-3"><i class="fas fa-stamp"></i> Training
+                                    @if ($arCount)
+                                        <span class="badge badge-primary">{{ $arCount }}</span>
+                                    @else
+                                        <span class="badge badge-success ml-3 pt-1">Clear</span>
+                                    @endif
+                                    </h5>
+                                <a href="{{ url('https://www.kukuri-arpg.com/admin/submissions/pending?prompt_id=8&sort=oldest') }}" class="card-link">View Queue <span class="fas fa-caret-right ml-1"></span></a>
+
+                                <h5 class="mt-3 pt-3"><i class="fas fa-dumbbell"></i> Coli/Merchant
+                                    @if ($arCount)
+                                        <span class="badge badge-primary">{{ $arCount }}</span>
+                                    @else
+                                        <span class="badge badge-success ml-3 pt-1">Clear</span>
+                                    @endif
+                                    </h5>
+                                <a href="{{ url('https://www.kukuri-arpg.com/admin/submissions/pending?prompt_id=8&sort=oldest') }}" class="card-link">View Queue <span class="fas fa-caret-right ml-1 pb-3"></span></a>
+                            
+                            </div>
+                </div>
+            </div>
+    </div>
+<br>
             <!-- big box -->
             <div class="col-sm-12">
                 <div class="card mb-3">

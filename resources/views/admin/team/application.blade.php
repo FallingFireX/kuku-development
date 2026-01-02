@@ -105,5 +105,8 @@
                 <div class="card mb-3">
                     <div class="card-body">{!! $applications->application !!}</div>
                 </div>
+           </div>
     @endif
+   
+ 
 @endsection
