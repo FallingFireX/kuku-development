@@ -5,6 +5,7 @@ namespace App\Models\Submission;
 use App\Models\Gallery\GallerySubmission;
 use App\Models\Model;
 use App\Models\Prompt\Prompt;
+use App\Models\Tracker\Tracker;
 use App\Models\User\User;
 use App\Traits\Commentable;
 use Carbon\Carbon;
@@ -19,7 +20,7 @@ class Submission extends Model {
     protected $fillable = [
         'prompt_id', 'user_id', 'staff_id', 'url',
         'comments', 'staff_comments', 'parsed_staff_comments',
-        'status', 'data',
+        'status', 'data', 'tracker_id',
     ];
 
     /**
@@ -85,6 +86,13 @@ class Submission extends Model {
      */
     public function characters() {
         return $this->hasMany(SubmissionCharacter::class, 'submission_id');
+    }
+
+    /**
+     * Get the attached tracker card.
+     */
+    public function tracker() {
+        return $this->belongsTo(Tracker::class, 'tracker_id');
     }
 
     /**********************************************************************************************

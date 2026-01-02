@@ -131,6 +131,10 @@ return [
                 'name' => 'Trades',
                 'url'  => 'admin/trades/incoming',
             ],
+            [
+                'name' => 'Tracker Submissions',
+                'url'  => 'admin/trackers',
+            ],
         ],
     ],
     'Grants'     => [
@@ -168,6 +172,10 @@ return [
             [
                 'name' => 'Loot Table Grants',
                 'url'  => 'admin/grants/loot-tables',
+            ],
+            [
+                'name' => 'Character XP Grants',
+                'url'  => 'admin/grants/xp',
             ],
         ],
     ],
@@ -310,6 +318,10 @@ return [
             [
                 'name' => 'User Borders',
                 'url'  => 'admin/data/borders',
+            ],
+            [
+                'name' => 'Art Tracker Settings',
+                'url'  => 'admin/tracker-settings',
             ],
         ],
     ],

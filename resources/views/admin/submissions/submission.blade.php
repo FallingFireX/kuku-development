@@ -69,6 +69,15 @@
                         <h5 class="mb-0">Gallery Submission</h5>
                     </div>
                     <div class="col-md-10"><a href="{{ $submission->gallerySubmission->url }}">{{ $submission->gallerySubmission->title }}</a></div>
+                    </div>
+            @endif
+            @if ($submission->tracker_id)
+                <div class="row">
+                    <div class="col-md-2 col-4">
+                        <h5>Tracker Card</h5>
+                    </div>
+                    <div class="col-md-10 col-8"><a href="{{ $submission->tracker->adminUrl }}">Tracker #{{ $submission->tracker->id }}</a> <span
+                            class="badge ml-2 {{ $submission->tracker->status === 'Pending' ? 'badge-warning' : 'badge-info' }}">{{ $submission->tracker->status === 'Pending' ? 'Needs Review' : 'Approved' }}</span></div>
                 </div>
             @endif
             <div class="row">

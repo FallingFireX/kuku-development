@@ -87,4 +87,9 @@ return [
         'description' => 'This is your site\'s affiliate icon!',
         'filename'    => 'our_affiliate.png',
     ],
+    'content_warning' => [
+        'name'        => 'Tracker Card Fallback',
+        'description' => 'Thumbnail used tracker cards when either none is input or it is a grant.',
+        'filename'    => 'tracker_fallback.png',
+    ],
 ];

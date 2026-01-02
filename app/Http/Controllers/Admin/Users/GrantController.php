@@ -33,6 +33,8 @@ use App\Services\RecipeService;
 use App\Services\SkillManager;
 use App\Services\Stat\ExperienceManager;
 use App\Services\Stat\StatManager;
+use App\Services\TrackerManager;
+use DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -446,6 +448,23 @@ class GrantController extends Controller {
         ]);
     }
 
+     /**
+     * Show the XP grant page.
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function getXP() {
+        $levels = DB::table('site_settings')->where('key', 'xp_levels')->pluck('value');
+
+        return view('admin.grants.xp', [
+            'users'      => User::orderBy('id')->pluck('name', 'id'),
+            'characters' => Character::orderBy('name')->get()->pluck('fullName', 'id')->mapWithKeys(function ($item, $key) {
+                return [$key => $item];
+            })->toArray(),
+            'levels' => isset($levels[0]) ? json_decode($levels[0]) : null,
+        ]);
+    }
+
     /**
      * Show the loot table grant page.
      *
@@ -489,6 +508,26 @@ class GrantController extends Controller {
         $data = $request->only(['names', 'loot_table_ids', 'quantities', 'data', 'disallow_transfer', 'notes']);
         if ($service->grantLootTables($data, Auth::user())) {
             flash('Loot tables granted successfully.')->success();
+            } else {
+            foreach ($service->errors()->getMessages()['error'] as $error) {
+                flash($error)->error();
+            }
+        }
+
+        return redirect()->back();
+    }
+     /**
+     * Grants XP to characters.
+     *
+     * @param App\Services\TrackerManager $service
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function postXP(Request $request, TrackerManager $service) {
+        $data = $request->only(['characters', 'data', 'levels', 'static_xp']);
+
+        if ($service->grantCharacterXP($data, Auth::user())) {
+            flash('XP granted successfully.')->success();
         } else {
             foreach ($service->errors()->getMessages()['error'] as $error) {
                 flash($error)->error();

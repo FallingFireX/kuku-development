@@ -238,6 +238,9 @@
                         <a class="dropdown-item" href="{{ url('shops') }}">
                             Shops
                         </a>
+                        <a class="dropdown-item" href="{{ url('submit-xp') }}">
+                                Submit {{ __('art_tracker.xp') }}
+                        </a>
                     </div>
                 </li>
 

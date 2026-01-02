@@ -151,12 +151,26 @@ Route::group(['prefix' => 'character', 'namespace' => 'Characters'], function ()
 
     Route::get('{slug}/breeding-permissions', 'CharacterController@getCharacterBreedingPermissions');
     Route::get('{slug}/pets', 'CharacterController@getCharacterPets');
+    Route::get('{slug}/xp-logs', 'CharacterController@getCharacterXPLogs');
+
+    Route::get('{slug}/gallery', 'CharacterController@getCharacterGallery');
+    Route::get('{slug}/tracker', 'CharacterController@getCharacterTracker');
 });
 Route::group(['prefix' => 'myo', 'namespace' => 'Characters'], function () {
     Route::get('{id}', 'MyoController@getCharacter');
     Route::get('{id}/profile', 'MyoController@getCharacterProfile');
     Route::get('{id}/ownership', 'MyoController@getCharacterOwnershipLogs');
     Route::get('{id}/change-log', 'MyoController@getCharacterLogs');
+});
+
+/**************************************************************************************************
+    Art Tracker Cards
+**************************************************************************************************/
+
+Route::group(['prefix' => 'tracker'], function () {
+    Route::get('/{id}', 'TrackerController@getTrackerCard');
+    Route::get('/{id}/edit', 'TrackerController@getEditableTrackerCard');
+    Route::post('/{id}/request-edit', 'TrackerController@postTrackerCardEditRequest');
 });
 
 /**************************************************************************************************
@@ -388,3 +402,8 @@ Route::group(['prefix' => 'design-hub'], function () {
 });
 Route::get('/teams', 'BrowseController@getTeamsIndex');
 Route::get('/join-the-team', 'BrowseController@getJoinTeam');
+/**************************************************************************************************
+    XP Calculator
+**************************************************************************************************/
+Route::get('/submit-xp', 'XPCalcController@getXPCalc');
+Route::post('/submit-xp', 'XPCalcController@postXPForm');

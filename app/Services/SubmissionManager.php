@@ -150,6 +150,7 @@ class SubmissionManager extends Service {
                 'status'    => $isDraft ? 'Draft' : 'Pending',
                 'comments'  => $data['comments'],
                 'data'      => null,
+                'tracker_id'=> $data['tracker_id'] ?? null,
             ] + ($isClaim ? [] : [
                 'prompt_id' => $prompt->id,
             ]));
@@ -278,6 +279,7 @@ class SubmissionManager extends Service {
                 'url'           => $data['url'] ?? null,
                 'updated_at'    => Carbon::now(),
                 'comments'      => $data['comments'],
+                'tracker_id'    => $data['tracker_id'] ?? null,
                 'data'          => [
                     'user'              => Arr::only(getDataReadyAssets($userAssets), ['user_items', 'currencies']),
                     'rewards'           => getDataReadyAssets($promptRewards),

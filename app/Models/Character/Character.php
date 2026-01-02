@@ -28,6 +28,8 @@ use App\Models\Status\StatusEffectLog;
 use App\Models\Submission\Submission;
 use App\Models\Submission\SubmissionCharacter;
 use App\Models\Trade\Trade;
+use App\Models\Tracker\TrackerLog;
+
 use App\Models\User\User;
 use App\Models\User\UserCharacterLog;
 use App\Models\WorldExpansion\FactionRankMember;
@@ -1006,6 +1008,27 @@ class Character extends Model {
         $query = CharacterLog::with('sender.rank')->where('character_id', $this->id)->where('log_type', 'Skill Awarded')->orderBy('id', 'DESC');
 
         return $query->paginate(30);
+    }
+
+    /**
+     * Get the character's XP logs.
+     *
+     * @param int $limit
+     *
+     * @return \Illuminate\Pagination\LengthAwarePaginator|\Illuminate\Support\Collection
+     */
+    public function getXPLogs($limit = 10) {
+        $character = $this;
+
+        $query = TrackerLog::where(function ($query) use ($character) {
+            $query->where('character_id', $character->id)->where('log_type', '!=', 'Staff Grant');
+        })->orderBy('id', 'DESC');
+
+        if ($limit) {
+            return $query->take($limit)->get();
+        } else {
+            return $query->paginate(30);
+        }
     }
 
     /**

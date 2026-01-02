@@ -761,6 +761,9 @@ Route::group(['prefix' => 'grants', 'namespace' => 'Users', 'middleware' => 'pow
 
     Route::get('loot-tables', 'GrantController@getLootTables');
     Route::post('loot-tables', 'GrantController@postLootTables');
+
+    Route::get('xp', 'GrantController@getXP');
+    Route::post('xp', 'GrantController@postXP');
 });
 
 // TRADES
@@ -1197,4 +1200,16 @@ Route::group(['prefix' => 'world',  'namespace' => 'World', 'middleware' => 'pow
 // REWARDS
 Route::group(['prefix' => 'rewards', 'middleware' => 'power:manage_data'], function () {
     Route::post('/', 'RewardController@postPopulateRewards');
+});
+// ART TRACKER
+Route::group(['prefix' => 'trackers', 'middleware' => 'power:manage_submissions'], function () {
+    Route::get('/', 'TrackerController@getTrackerIndex');
+    Route::get('/{status}', 'TrackerController@getTrackerIndex')->where('status', 'pending|approved|rejected');
+    Route::get('edit/{id}', 'TrackerController@getTrackerCard');
+    Route::post('edit/{id}/{action}', 'TrackerController@postTrackerCard')->where('action', 'approve|reject|cancel');
+});
+Route::group(['prefix' => 'tracker-settings', 'middleware' => 'power:edit_data'], function () {
+    Route::get('/', 'TrackerController@getTrackerSettingsPage');
+    Route::post('/', 'TrackerController@saveTrackerSettings');
+    Route::post('/edit', 'TrackerController@saveTrackerSettings')->where('action', 'edit');
 });

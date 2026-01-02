@@ -17,6 +17,7 @@ use App\Models\Prompt\PromptCriterion;
 use App\Models\Raffle\Raffle;
 use App\Models\Stat\Stat;
 use App\Models\Submission\Submission;
+use App\Models\Tracker\Tracker;
 use App\Models\User\User;
 use App\Models\User\UserItem;
 use App\Services\SubmissionManager;
@@ -91,6 +92,11 @@ class SubmissionController extends Controller {
     public function getNewSubmission(Request $request) {
         $closed = !Settings::get('is_prompts_open');
         $inventory = UserItem::with('item')->whereNull('deleted_at')->where('count', '>', '0')->where('user_id', Auth::user()->id)->get();
+        $trackers = Tracker::where('user_id', Auth::user()->id)->where('status', 'Pending')->get();
+        $trackers_formatted = [];
+        foreach ($trackers as $tracker) {
+            $trackers_formatted[$tracker->id] = 'Tracker Card #'.$tracker->id.' - '.$tracker->character->fullName;
+        }
 
         $prompt = $request->all()['prompt_id'] ?? null;
         $promptCriteria = $prompt ? PromptCriterion::where('prompt_id', $prompt)->pluck('criterion_id')->toArray() : null;
@@ -137,6 +143,7 @@ class SubmissionController extends Controller {
             'weapons'                => [],
             'gears'                  => [],
             'stats'                  => Stat::orderBy('name')->pluck('name', 'id'),
+            'trackers'            => (['' => 'Select tracker card...']) + $trackers_formatted,
         ]));
     }
 
@@ -153,6 +160,11 @@ class SubmissionController extends Controller {
         $submission = Submission::where('id', $id)->where('status', 'Draft')->where('user_id', Auth::user()->id)->first();
         if (!$submission) {
             abort(404);
+        }
+        $trackers = Tracker::where('user_id', Auth::user()->id)->where('status', 'Pending')->get();
+        $trackers_formatted = [];
+        foreach ($trackers as $tracker) {
+            $trackers_formatted[$tracker->id] = 'Tracker Card #'.$tracker->id.' - '.$tracker->character->fullName;
         }
 
         $promptCriteria = PromptCriterion::where('prompt_id', $submission->prompt_id)->pluck('criterion_id')->toArray();
@@ -198,6 +210,7 @@ class SubmissionController extends Controller {
             'weapons'                => [],
             'gears'                  => [],
             'stats'                  => Stat::orderBy('name')->pluck('name', 'id'),
+            'trackers'            => (['' => 'Select tracker card...']) + $trackers_formatted,
         ]));
     }
 
@@ -295,7 +308,7 @@ class SubmissionController extends Controller {
      */
     public function postNewSubmission(Request $request, SubmissionManager $service, $draft = false) {
         $request->validate(Submission::$createRules);
-        if ($submission = $service->createSubmission($request->only(['url', 'prompt_id', 'comments', 'slug', 'character_rewardable_type', 'character_rewardable_id', 'character_rewardable_quantity', 'rewardable_type', 'rewardable_id', 'quantity', 'stack_id', 'stack_quantity', 'currency_id', 'currency_quantity',
+        if ($submission = $service->createSubmission($request->only(['url', 'prompt_id', 'comments', 'slug', 'character_rewardable_type', 'character_rewardable_id', 'character_rewardable_quantity', 'rewardable_type', 'rewardable_id', 'quantity', 'stack_id', 'stack_quantity', 'currency_id', 'currency_quantity', 'tracker_id',
             'criterion_id', 'criterion', 'gallery_submission_id',
         ]), Auth::user(), false, $draft)) {
             if ($submission->status == 'Draft') {

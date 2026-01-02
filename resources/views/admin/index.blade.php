@@ -722,20 +722,32 @@
                     </div>
                 </div>
             </div>
-    </div>
-    @endif
-    <h3>Team responsibilities</h3>
-
-    <div class="row">
-        @foreach ($teams as $team)
-            @if ($team->responsibilities)
-                <div class="col-md-3">
-                    <div class="card p-3">
-                        <h4>{{ $team->name }}</h4>
-                        <p>{!! $team->responsibilities !!}</p>
+        @if (Auth::user()->hasPower('manage_submissions'))
+            <div class="col-sm-6">
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">Tracker Submissions
+                            @if ($trackerCount)
+                                <span class="badge badge-primary">{{ $trackerCount }}</span>
+                            @endif
+                        </h5>
+                        <p class="card-text">
+                            @if ($trackerCount)
+                                @if ($trackerCount)
+                                    {{ $trackerCount }} tracker submission{{ $trackerCount == 1 ? '' : 's' }} awaiting assignment.
+                                @endif
+                                {!! $trackerCount ? '<br/>' : '' !!}
+                            @else
+                                The tracker submission queue is clear. Hooray!
+                            @endif
+                        </p>
+                        <div class="text-right">
+                            <a href="{{ url('admin/trackers/pending') }}" class="card-link">View Queue <span class="fas fa-caret-right ml-1"></span></a>
+                        </div>
                     </div>
                 </div>
-            @endif
-        @endforeach
+            </div>
+        @endif
+        @endif
     </div>
 @endsection
