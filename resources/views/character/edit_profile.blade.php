@@ -24,6 +24,12 @@
         </div>
     @endif
 
+    <div class="alert alert-info">Here you may edit your Kukuri's name, personality, give them a content warning, or toggle the gift art status. Please be aware of the following:
+        <br>
+        <b>1.)</b> If you edit the name, please make note of the previous. Admins often will need them for previous submissions, especially literature 
+        <br><b>2.)</b> If a content warning was added by an admin, DO NOT remove it.
+    </div>
+
     {!! Form::open(['url' => $character->url . '/profile/edit']) !!}
 
     <div class="form-group">
@@ -34,12 +40,7 @@
         {!! Form::label('character_warning', 'Character Warning') !!} {!! add_help('Provide a succinct content warning for the design if necessary. The design will be displayed in full on its page, however. If an admin has put a warning on your character, do not remove it.') !!}
         {!! Form::text('character_warning', $character->character_warning, ['class' => 'form-control']) !!}
     </div>
-    @if (config('lorekeeper.extensions.character_TH_profile_link'))
-        <div class="form-group">
-            {!! Form::label('link', 'Profile Link') !!}
-            {!! Form::text('link', $character->profile->link, ['class' => 'form-control']) !!}
-        </div>
-    @endif
+    
 
 
     @if (!$character->is_myo_slot && ($char_faction_enabled == 2 || (Auth::user()->isStaff && $char_faction_enabled == 3)))
@@ -54,30 +55,6 @@
             </div>
         </div>
     @endif
-
-    {!! Form::label('custom_values', 'Custom Values') !!}
-    <div id="customValues">
-        @foreach ($character->profile->custom_values as $value)
-            <div class="form-row">
-                <div class="col-2 col-md-1 mb-2">
-                    <span class="btn btn-link drag-custom-value-row w-100"><i class="fas fa-arrows-alt-v"></i></span>
-                </div>
-                <div class="col-5 col-md-3 mb-2">
-                    {!! Form::text('custom_values_group[]', $value->group, ['class' => 'form-control', 'maxLength' => 50, 'placeholder' => 'Group (Optional)']) !!}
-                </div>
-                <div class="col-5 col-md-3 mb-2">
-                    {!! Form::text('custom_values_name[]', $value->name, ['class' => 'form-control', 'maxLength' => 50, 'placeholder' => 'Title:']) !!}
-                </div>
-                <div class="col-10 col-md-4 mb-3">
-                    {!! Form::text('custom_values_data[]', $value->data_parsed, ['class' => 'form-control', 'maxLength' => 150, 'placeholder' => 'Custom Value']) !!}
-                </div>
-                <div class="col-2 col-md-1 mb-3">
-                    <button class="btn btn-danger delete-custom-value-row w-100" type="button">x</button>
-                </div>
-            </div>
-        @endforeach
-    </div>
-    <a href="#" class="add-custom-value-row btn btn-primary mb-3">Add Custom Value</a>
 
 
     <div class="form-group">
@@ -99,10 +76,6 @@
                     {!! Form::select('is_gift_writing_allowed', [0 => 'No', 1 => 'Yes', 2 => 'Ask First'], $character->is_gift_writing_allowed, ['class' => 'form-control user-select']) !!}
                 </div>
             </div>
-            <div class="col-md form-group">
-                {!! Form::label('is_links_open', 'Allow Link Requests?', ['class' => 'form-check-label mb-3']) !!} {!! add_help('This will allow users to request links with your character.') !!}
-                {!! Form::checkbox('is_links_open', 1, $character->is_links_open, ['class' => 'form-check-input', 'data-toggle' => 'toggle']) !!}
-            </div>
         @endif
         @if ($character->is_tradeable || $character->is_sellable)
             <div class="form-group disabled">
@@ -121,6 +94,14 @@
     @endif
 
     @if (Auth::check() && Auth::user()->hasPower('manage_characters'))
+    <hr>
+    <div class="alert alert-warning">You can see these because you are an admin, edit carefully!</div>
+    @if (config('lorekeeper.extensions.character_TH_profile_link'))
+        <div class="form-group">
+            {!! Form::label('link', 'Profile Link') !!}
+            {!! Form::text('link', $character->profile->link, ['class' => 'form-control']) !!}
+        </div>
+    @endif
         This labels a kuku as being currently or formerly a Kukuri of the month. Only turn on if theyve won!
         <br>
         <div class="col-md form-group">

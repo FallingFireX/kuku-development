@@ -734,25 +734,28 @@ Route::group(['prefix' => 'grants', 'namespace' => 'Users', 'middleware' => 'pow
     Route::get('items', 'GrantController@getItems');
     Route::post('items', 'GrantController@postItems');
 
-    Route::get('exp', 'GrantController@getExp');
-    Route::post('exp', 'GrantController@postExp');
+    // Route::get('exp', 'GrantController@getExp');
+    // Route::post('exp', 'GrantController@postExp');
 
-    Route::get('points', 'GrantController@getPoints');
-    Route::post('points', 'GrantController@postPoints');
+    // Route::get('points', 'GrantController@getPoints');
+    // Route::post('points', 'GrantController@postPoints');
 
     Route::get('pets', 'GrantController@getPets');
     Route::post('pets', 'GrantController@postPets');
     Route::get('pets/variants/{id}', 'GrantController@getPetVariants');
     Route::get('pets/evolutions/{id}', 'GrantController@getPetEvolutions');
 
-    Route::get('weapons', 'GrantController@getWeapons');
-    Route::post('weapons', 'GrantController@postWeapons');
+    // Route::get('weapons', 'GrantController@getWeapons');
+    // Route::post('weapons', 'GrantController@postWeapons');
 
-    Route::get('gear', 'GrantController@getGear');
-    Route::post('gear', 'GrantController@postGear');
+    // Route::get('gear', 'GrantController@getGear');
+    // Route::post('gear', 'GrantController@postGear');
 
-    Route::get('skills', 'GrantController@getSkills');
-    Route::post('skills', 'GrantController@postSkills');
+    // Route::get('skills', 'GrantController@getSkills');
+    // Route::post('skills', 'GrantController@postSkills');
+
+    Route::get('awards', 'GrantController@getAwards');
+    Route::post('awards', 'GrantController@postAwards');
 
     Route::get('item-search', 'GrantController@getItemSearch');
 

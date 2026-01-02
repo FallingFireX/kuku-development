@@ -216,7 +216,7 @@ class CharacterController extends Controller {
         $data = $request->only([
             'name', 'link', 'text', 'is_gift_art_allowed', 'is_gift_writing_allowed',
             'is_trading', 'character_warning', 'custom_values_group', 'custom_values_name',
-            'custom_values_data', 'alert_user', 'is_links_open', 'kotm', 'location', 'faction',
+            'custom_values_data', 'alert_user', 'kotm', 'location', 'faction',
             'adoption', 'donation',
         ]);
 

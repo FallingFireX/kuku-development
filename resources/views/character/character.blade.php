@@ -259,10 +259,8 @@
             </div>
         </div>
     </div>
-    </div>
+   
 
-    <br>
-    <p></p>
 
 @endsection
 

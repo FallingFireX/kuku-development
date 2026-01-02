@@ -148,23 +148,23 @@ return [
                 'name' => 'Award Grants',
                 'url'  => 'admin/grants/awards',
             ],
-            [
-                'name' => 'Recipe Grants',
-                'url'  => 'admin/grants/recipes',
-            ],
-            [
-                'name' => 'EXP Grants',
-                'url'  => 'admin/grants/exp',
-            ],
+            // [
+            //     'name' => 'Recipe Grants',
+            //     'url'  => 'admin/grants/recipes',
+            // ],
+            // [
+            //     'name' => 'EXP Grants',
+            //     'url'  => 'admin/grants/exp',
+            // ],
 
             [
                 'name' => 'Pet Grants',
                 'url'  => 'admin/grants/pets',
             ],
-            [
-                'name' => 'Border Grants',
-                'url'  => 'admin/grants/borders',
-            ],
+            // [
+            //     'name' => 'Border Grants',
+            //     'url'  => 'admin/grants/borders',
+            // ],
             [
                 'name' => 'Loot Table Grants',
                 'url'  => 'admin/grants/loot-tables',

@@ -19,14 +19,9 @@
     @endif
 @endif
 <div class="character-masterlist-categories">
-    @if (!$character->is_myo_slot)
+    @if ($character->is_myo_slot)
         {!! $character->category?->displayName ?? 'None' !!} ・ {!! $character->image->species?->displayName ?? 'None' !!} ・ {!! $character->image->rarity?->displayName ?? 'None' !!}
-    @else
-        MYO Slot @if ($character->image->species_id)
-            ・ {!! $character->image->species->displayName !!}
-            @endif @if ($character->image->rarity_id)
-                ・ {!! $character->image->rarity->displayName !!}
-            @endif
+    
         @endif
 </div>
 <h1 class="mb-0 text-center">
