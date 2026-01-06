@@ -587,13 +587,24 @@ class TrackerManager extends Service {
      */
     public function checkCharacterLevel($characterId) {
         $character = Character::where('id', $characterId)->first();
-        if (!$character) {
-            return false;
-        }
+    if (!$character) {
+        return false;
+    }
 
-        $currentLevel = $character->level;
-        $levels = Settings::get('xp_levels', []);
-        ksort($levels);
+    $currentLevel = $character->level;
+
+    // Get the raw setting
+    $levelsRaw = Settings::get('xp_levels', '[]');
+
+    // Decode it as an associative array
+    $levels = json_decode($levelsRaw, true);
+
+    // Ensure we have an array
+    if (!is_array($levels)) {
+        $levels = [];
+    }
+
+    ksort($levels);
 
         $newLevel = $currentLevel;
         foreach ($levels as $levelName => $threshold) {

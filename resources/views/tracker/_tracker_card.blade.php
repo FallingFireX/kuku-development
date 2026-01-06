@@ -1,5 +1,5 @@
 @if ($tracker)
-
+ 
     <?php
     if ($tracker->gallery_id) {
         $image_data = [
@@ -73,8 +73,12 @@
             </div>
         </div>
         <div class="card-footer d-flex justify-content-between">
-            <h5>Total</h5><span class="font-weight-bold bg-primary text-white p-2 rounded">TOTAL {{ __('art_tracker.xp') }}</span>
-        </div>
+    <h5>Total</h5>
+    <span class="font-weight-bold bg-primary text-white p-2 rounded">
+        {{ $totalXP }} {{ __('art_tracker.xp') }}
+    </span>
+</div>
+
     </div>
 
     @if ($editable)

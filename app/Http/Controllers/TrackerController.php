@@ -17,18 +17,46 @@ class TrackerController extends Controller {
      * @return \Illuminate\Contracts\Support\Renderable
      */
     public function getTrackerCard($id, $editable = false) {
-        $tracker = Tracker::where('id', $id)->first();
+    $tracker = Tracker::where('id', $id)->first();
 
-        if (!$tracker) {
-            abort(404);
-        }
-
-        return view('tracker.index', [
-            'tracker'          => $tracker,
-            'cardData'         => $tracker->getDataAttribute(),
-            'editable'         => $editable,
-        ]);
+    if (!$tracker) {
+        abort(404);
     }
+
+    $cardData = $tracker->getDataAttribute();
+
+    // Calculate total XP
+    $totalXP = 0;
+
+if ($cardData) {
+    foreach ($cardData as $field) {
+        if (isset($field['sub_card'])) {
+            // sub_card can be an array of numbers or array of arrays/objects
+            if (is_array($field['sub_card'])) {
+                foreach ($field['sub_card'] as $key => $val) {
+                    if (is_numeric($val)) {
+                        $totalXP += floatval($val);
+                    } elseif (is_array($val) && isset($val['value'])) {
+                        $totalXP += floatval($val['value']);
+                    } elseif (is_object($val) && isset($val->value)) {
+                        $totalXP += floatval($val->value);
+                    }
+                }
+            }
+        } elseif (isset($field['value'])) {
+            $totalXP += floatval($field['value']);
+        }
+    }
+}
+
+    return view('tracker.index', [
+        'tracker'   => $tracker,
+        'cardData'  => $cardData,
+        'editable'  => $editable,
+        'totalXP'   => $totalXP,  // Pass the total to the view
+    ]);
+}
+
 
     /**
      * Shows the editable version of an individual tracker card.
