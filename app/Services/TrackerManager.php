@@ -295,9 +295,7 @@ class TrackerManager extends Service {
                         }
                     }
                     if (count($sub_cards) > 0) {
-                        $card_data[$card['title']] = [
-                            'sub_card'  => $sub_cards,
-                        ];
+                        $card_data[$card['title']][] = $sub_cards;
                     }
                 } else {
                     if (isset($card['title']) && $card['title'] != '') {
@@ -408,8 +406,6 @@ class TrackerManager extends Service {
             if (count($characters) != count($data['characters'])) {
                 throw new \Exception('You must select at least 1 character.');
             }
-
-            \Log::info($data);
 
             $xp = (floatval($data['levels']) ?? 0) + (floatval($data['static_xp']) ?? 0);
 
@@ -565,7 +561,6 @@ class TrackerManager extends Service {
                     }
                     $nI++;
                 }
-                \Log::info($form);
                 $this->updateSiteOption('xp_calculator', $form);
             }
 
@@ -587,24 +582,18 @@ class TrackerManager extends Service {
      */
     public function checkCharacterLevel($characterId) {
         $character = Character::where('id', $characterId)->first();
-    if (!$character) {
-        return false;
-    }
+        if (!$character) {
+            return false;
+        }
 
-    $currentLevel = $character->level;
+        $currentLevel = $character->level;
 
-    // Get the raw setting
-    $levelsRaw = Settings::get('xp_levels', '[]');
-
-    // Decode it as an associative array
-    $levels = json_decode($levelsRaw, true);
-
-    // Ensure we have an array
-    if (!is_array($levels)) {
-        $levels = [];
-    }
-
-    ksort($levels);
+        $levels = Settings::get('xp_levels');
+        if (!$levels) {
+            return false;
+        }
+        $levels = (array) json_decode($levels);
+        ksort($levels);
 
         $newLevel = $currentLevel;
         foreach ($levels as $levelName => $threshold) {

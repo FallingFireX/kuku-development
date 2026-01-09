@@ -48,12 +48,11 @@
                                 <div class="card-body">
                                     @if ($xp_calc_form)
                                         @foreach ($xp_calc_form as $field)
-                                            <div class="card mb-3 calc-group" data-name="{{ $field->field_name }}">
+                                            <div class="card mb-3" data-name="{{ $field->field_name }}">
                                                 <h5 class="card-header">{{ $field->field_name }}</h5>
                                                 <div class="card-body">
                                                     @if ($field->field_description)
                                                         <p>{!! $field->field_description !!}</p>
-                                                    @endif
 
                                                         @switch($field->field_type)
                                                             @case('number')
@@ -98,7 +97,7 @@
                                                                     There was an issue rendering the field.
                                                                 </div>
                                                         @endswitch
-                                                    
+                                                    @endif
                                                 </div>
                                             </div>
                                         @endforeach
@@ -152,9 +151,10 @@
             {!! Form::submit('Submit Tracker Card for Review', ['class' => 'btn btn-primary']) !!}
         </div>
     </div>
-  
+    </div>
     {!! Form::close() !!}
 
+    </div>
 @endsection
 
 @section('scripts')
