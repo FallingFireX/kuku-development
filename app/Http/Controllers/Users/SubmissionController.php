@@ -143,7 +143,7 @@ class SubmissionController extends Controller {
             'weapons'                => [],
             'gears'                  => [],
             'stats'                  => Stat::orderBy('name')->pluck('name', 'id'),
-            'trackers'            => (['' => 'Select tracker card...']) + $trackers_formatted,
+            'trackers'               => (['' => 'Select tracker card...']) + $trackers_formatted,
         ]));
     }
 
@@ -210,7 +210,7 @@ class SubmissionController extends Controller {
             'weapons'                => [],
             'gears'                  => [],
             'stats'                  => Stat::orderBy('name')->pluck('name', 'id'),
-            'trackers'            => (['' => 'Select tracker card...']) + $trackers_formatted,
+            'trackers'               => (['' => 'Select tracker card...']) + $trackers_formatted,
         ]));
     }
 

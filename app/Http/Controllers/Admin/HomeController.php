@@ -15,8 +15,8 @@ use App\Models\Report\Report;
 use App\Models\Submission\AdminApplication;
 use App\Models\Submission\Submission;
 use App\Models\Team;
-use App\Models\Trade\Trade;
 use App\Models\Tracker\Tracker;
+use App\Models\Trade\Trade;
 use App\Models\User\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -66,7 +66,7 @@ class HomeController extends Controller {
             'teams'                         => Team::orderBy('id')->get(),
             'AppCount'                      => AdminApplication::where('status', 'Pending')->count(),
             'openTradesQueue'               => $openTradesQueue,
-            'trackerCount'           => Tracker::where('status', 'Pending')->whereNotNull('character_id')->count(),
+            'trackerCount'                  => Tracker::where('status', 'Pending')->whereNotNull('character_id')->count(),
         ]);
     }
 

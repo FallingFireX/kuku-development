@@ -261,20 +261,20 @@ class Tracker extends Model {
         $line_template = '<div class="line-item w-100 d-inline-flex justify-content-between p-2"><h5 class="lh-1 m-0">$title</h5><p class="lh-1 m-0">$value XP</p></div>';
 
         if (count($data) > 1) {
-            //Multi-card
+            // Multi-card
             $accordion = true;
         } else {
-            //Sinle-card
+            // Sinle-card
             $accordion = false;
         }
 
-        //Format each multi-level card - this also applies to single though it won't create an accordion
+        // Format each multi-level card - this also applies to single though it won't create an accordion
         foreach ($data as $i => $card) {
             $ci = 0;
             foreach ($card as $title => $value) {
                 if (gettype($value) === 'array') {
                     $sub_line = [];
-                    //If this is a group rather than a single line
+                    // If this is a group rather than a single line
                     foreach ($value as $sub_title => $sub_val) {
                         $sub_line[] = str_replace(['$card_id', '$title', '$value'], [$this->id, $sub_title, $sub_val], $line_template);
                         if ($this->status === 'Approved') {

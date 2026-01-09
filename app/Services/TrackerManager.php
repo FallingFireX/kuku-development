@@ -23,8 +23,8 @@ class TrackerManager extends Service {
     /**
      * Creates a new tracker card.
      *
-     * @param array                 $data
-     * @param \App\Models\User\User $user
+     * @param array $data
+     * @param User  $user
      *
      * @return mixed
      */
@@ -46,14 +46,14 @@ class TrackerManager extends Service {
             $tracker_data = [];
             $ci = 0;
 
-            //Set the tracker limits
+            // Set the tracker limits
             if ($data['tracker_type'] === 'single') {
                 $limit = 1;
             } else {
                 $limit = 10;
             }
 
-            //Create the tracker array
+            // Create the tracker array
             foreach ($data['tracker'] as $i => $tracker) {
                 if ($limit < $ci) {
                     break;
@@ -107,10 +107,10 @@ class TrackerManager extends Service {
     /**
      * Edits an existing tracker card.
      *
-     * @param array                 $data
-     * @param \App\Models\User\User $user
-     * @param mixed                 $tracker
-     * @param mixed                 $isSubmit
+     * @param array $data
+     * @param User  $user
+     * @param mixed $tracker
+     * @param mixed $isSubmit
      *
      * @return mixed
      */
@@ -205,8 +205,8 @@ class TrackerManager extends Service {
     /**
      * Rejects a submission.
      *
-     * @param array                 $data
-     * @param \App\Models\User\User $user
+     * @param array $data
+     * @param User  $user
      *
      * @return mixed
      */
@@ -266,8 +266,8 @@ class TrackerManager extends Service {
     /**
      * Approves a submission.
      *
-     * @param array                 $data
-     * @param \App\Models\User\User $user
+     * @param array $data
+     * @param User  $user
      *
      * @return mixed
      */
@@ -333,7 +333,7 @@ class TrackerManager extends Service {
                 ]);
             }
 
-            //Check the current character level and update if needed
+            // Check the current character level and update if needed
             $this->checkCharacterLevel($tracker->character_id);
 
             Notifications::create('TRACKER_SUBMISSION_APPROVED', $tracker->user, [
@@ -525,18 +525,18 @@ class TrackerManager extends Service {
                 }
                 $this->updateSiteOption('xp_levels', $levels);
 
-                //Unset these after updating so we can update the calculator array
+                // Unset these after updating so we can update the calculator array
                 unset($data['level_name']);
                 unset($data['level_threshold']);
             }
             if (isset($data['word_count_conversion_rate'])) {
-                //Set up the word count conversion rate
+                // Set up the word count conversion rate
                 $this->updateSiteOption('xp_lit_conversion_options', [
                     'conversion_rate' => $data['word_count_conversion_rate'],
                     'round_to'        => $data['round_to'],
                 ]);
 
-                //Unset after updating
+                // Unset after updating
                 unset($data['word_count_conversion_rate']);
                 unset($data['round_to']);
                 unset($data['enable_rounding']);
@@ -623,12 +623,12 @@ class TrackerManager extends Service {
             $exists = DB::table('site_settings')->where('key', $key)->first();
             $value = json_encode($value);
             if ($exists) {
-                //Update
+                // Update
                 if ($exists->value !== $value) {
                     DB::table('site_settings')->where('key', $key)->update(['value' => $value]);
                 }
             } else {
-                //Create
+                // Create
                 DB::table('site_settings')->insert(['key' => $key, 'value' => $value, 'description' => 'Auto-Generated']);
             }
         }
