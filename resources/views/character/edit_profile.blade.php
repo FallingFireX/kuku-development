@@ -26,7 +26,7 @@
 
     <div class="alert alert-info">Here you may edit your Kukuri's name, personality, give them a content warning, or toggle the gift art status. Please be aware of the following:
         <br>
-        <b>1.)</b> If you edit the name, please make note of the previous. Admins often will need them for previous submissions, especially literature 
+        <b>1.)</b> If you edit the name, please make note of the previous. Admins often will need them for previous submissions, especially literature
         <br><b>2.)</b> If a content warning was added by an admin, DO NOT remove it.
     </div>
 
@@ -40,7 +40,7 @@
         {!! Form::label('character_warning', 'Character Warning') !!} {!! add_help('Provide a succinct content warning for the design if necessary. The design will be displayed in full on its page, however. If an admin has put a warning on your character, do not remove it.') !!}
         {!! Form::text('character_warning', $character->character_warning, ['class' => 'form-control']) !!}
     </div>
-    
+
 
 
     @if (!$character->is_myo_slot && ($char_faction_enabled == 2 || (Auth::user()->isStaff && $char_faction_enabled == 3)))
@@ -94,14 +94,14 @@
     @endif
 
     @if (Auth::check() && Auth::user()->hasPower('manage_characters'))
-    <hr>
-    <div class="alert alert-warning">You can see these because you are an admin, edit carefully!</div>
-    @if (config('lorekeeper.extensions.character_TH_profile_link'))
-        <div class="form-group">
-            {!! Form::label('link', 'Profile Link') !!}
-            {!! Form::text('link', $character->profile->link, ['class' => 'form-control']) !!}
-        </div>
-    @endif
+        <hr>
+        <div class="alert alert-warning">You can see these because you are an admin, edit carefully!</div>
+        @if (config('lorekeeper.extensions.character_TH_profile_link'))
+            <div class="form-group">
+                {!! Form::label('link', 'Profile Link') !!}
+                {!! Form::text('link', $character->profile->link, ['class' => 'form-control']) !!}
+            </div>
+        @endif
         This labels a kuku as being currently or formerly a Kukuri of the month. Only turn on if theyve won!
         <br>
         <div class="col-md form-group">
