@@ -168,7 +168,7 @@
             {!! Form::label('currency_id', 'Currency') !!}
 
             <!-- {!! Form::select('conversion_id[]', $currencies, null, ['class' => 'form-control mr-2 conversion-select', 'placeholder' => 'Select Currency']) !!}
-            {!! Form::text('rate[]', null, ['class' => 'form-control mr-2 conversion-rate', 'placeholder' => 'Conversion Rate']) !!} -->
+                {!! Form::text('rate[]', null, ['class' => 'form-control mr-2 conversion-rate', 'placeholder' => 'Conversion Rate']) !!} -->
             <div class="form-control border-0 w-25">
             </div>
             <a href="#" class="remove-conversion btn btn-danger mb-2">×</a>
