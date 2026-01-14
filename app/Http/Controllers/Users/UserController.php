@@ -14,19 +14,18 @@ use App\Models\Character\Sublist;
 use App\Models\Claymore\GearCategory;
 use App\Models\Claymore\WeaponCategory;
 use App\Models\Currency\Currency;
+use App\Models\Currency\CurrencyCategory;
 use App\Models\Gallery\Gallery;
 use App\Models\Gallery\GalleryCharacter;
 use App\Models\Gallery\GallerySubmission;
 use App\Models\Item\Item;
 use App\Models\Item\ItemCategory;
 use App\Models\Pet\Pet;
-use App\Models\Pet\PetCategory;
+use App\Models\Prompt\Prompt;
+use App\Models\Rarity;
 use App\Models\User\User;
 use App\Models\User\UserCurrency;
-use App\Models\User\UserPet;
 use App\Models\User\UserUpdateLog;
-use App\Models\Team;
-use App\Models\User\UserTeam;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\View;
@@ -47,35 +46,37 @@ class UserController extends Controller {
      * Create a new controller instance.
      */
     public function __construct() {
-    parent::__construct();
+        parent::__construct();
 
-    // <<< Add this line
-    if (app()->runningInConsole() || !Route::current()) return;
+        // <<< Add this line
+        if (app()->runningInConsole() || !Route::current()) {
+            return;
+        }
 
-    $name = Route::current()->parameter('name');
-    $this->user = User::where('name', $name)->first();
-    // check previous usernames (only grab the latest change)
-    if (!$this->user) {
-        $this->user = UserUpdateLog::whereIn('type', ['Username Changed', 'Name/Rank Change'])
-            ->where('data', 'like', '%"old_name":"'.$name.'"%')
-            ->orderBy('id', 'DESC')
-            ->first()
-            ->user ?? null;
+        $name = Route::current()->parameter('name');
+        $this->user = User::where('name', $name)->first();
+        // check previous usernames (only grab the latest change)
+        if (!$this->user) {
+            $this->user = UserUpdateLog::whereIn('type', ['Username Changed', 'Name/Rank Change'])
+                ->where('data', 'like', '%"old_name":"'.$name.'"%')
+                ->orderBy('id', 'DESC')
+                ->first()
+                ->user ?? null;
+        }
+        if (!$this->user) {
+            abort(404);
+        }
+
+        View::share('sublists', Sublist::orderBy('sort', 'DESC')->get());
+
+        $this->user->updateCharacters();
+        $this->user->updateArtDesignCredits();
+        if (!$this->user->level) {
+            $this->user->level()->create([
+                'user_id' => $this->user->id,
+            ]);
+        }
     }
-    if (!$this->user) {
-        abort(404);
-    }
-
-    View::share('sublists', Sublist::orderBy('sort', 'DESC')->get());
-
-    $this->user->updateCharacters();
-    $this->user->updateArtDesignCredits();
-    if (!$this->user->level) {
-        $this->user->level()->create([
-            'user_id' => $this->user->id,
-        ]);
-    }
-}
 
     /**
      * Shows a user's profile.
@@ -115,7 +116,7 @@ class UserController extends Controller {
             'pets'                  => $this->user->pets()->orderBy('user_pets.updated_at', 'DESC')->take(5)->get(),
             'user_enabled'          => Settings::get('WE_user_locations'),
             'user_factions_enabled' => Settings::get('WE_user_factions'),
-            'teams'      => $teams
+            'teams'                 => $teams,
         ]);
     }
 
@@ -166,16 +167,10 @@ class UserController extends Controller {
         if (!Auth::check() || !(Auth::check() && Auth::user()->hasPower('manage_characters'))) {
             $query->visible();
         }
-        $query = $query->orderBy('sort', 'DESC')->get()
-        // group query folder, getting the name from the id
-            ->groupBy(function ($item) {
-                return $item->folder ? $item->folder->name : 'Unsorted';
-            });
 
         return view('user.characters', [
             'user'       => $this->user,
-            'characters' => $query,
-            'sublists'   => Sublist::orderBy('sort', 'DESC')->get(),
+            'characters' => $query->orderBy('sort', 'DESC')->get(),
         ]);
     }
 
@@ -302,23 +297,38 @@ class UserController extends Controller {
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function getUserInventory($name) {
-        // Retrieve user by name (ensure the 'name' field exists and is unique)
-        $user = User::where('name', $name)->firstOrFail();
-
-        $categories = ItemCategory::visible(Auth::check() ? Auth::user() : null)
-            ->orderBy('sort', 'DESC')
-            ->get();
+    public function getUserInventory(Request $request, $name) {
+        $categories = ItemCategory::visible(Auth::user() ?? null)->orderBy('sort', 'DESC')->get();
+        $query = Item::query();
+        $data = $request->only(['item_category_id', 'name', 'artist', 'rarity_id']);
+        if (isset($data['item_category_id'])) {
+            $query->where('item_category_id', $data['item_category_id']);
+        }
+        if (isset($data['name'])) {
+            $query->where('name', 'LIKE', '%'.$data['name'].'%');
+        }
+        if (isset($data['artist'])) {
+            $query->where('artist_id', $data['artist']);
+        }
+        if (isset($data['rarity_id'])) {
+            if ($data['rarity_id'] == 'withoutOption') {
+                $query->whereNull('data->rarity_id');
+            } else {
+                $query->where('data->rarity_id', $data['rarity_id']);
+            }
+        }
 
         $items = count($categories) ?
-            $user->items()
+            $this->user->items()
+                ->whereIn('items.id', $query->pluck('id')->toArray())
                 ->where('count', '>', 0)
                 ->orderByRaw('FIELD(item_category_id,'.implode(',', $categories->pluck('id')->toArray()).')')
                 ->orderBy('name')
                 ->orderBy('updated_at')
                 ->get()
                 ->groupBy(['item_category_id', 'id']) :
-            $user->items()
+            $this->user->items()
+                ->whereIn('items.id', $query->pluck('id')->toArray())
                 ->where('count', '>', 0)
                 ->orderBy('name')
                 ->orderBy('updated_at')
@@ -368,48 +378,9 @@ class UserController extends Controller {
             'awards'      => $awards,
             'userOptions' => User::where('id', '!=', $this->user->id)->orderBy('name')->pluck('name', 'id')->toArray(),
             'user'        => $this->user,
-            'logs'        => $this->user->getAwardLogs(),
-            'sublists'    => Sublist::orderBy('sort', 'DESC')->get(),
-        ]);
-    }
-
-    /**
-     * Shows a user's pets.
-     *
-     * @param string $name
-     *
-     * @return \Illuminate\Contracts\Support\Renderable
-     */
-    public function getUserPets($name) {
-        $categories = PetCategory::orderBy('sort', 'DESC')->get();
-        $pets = count($categories) ? $this->user->pets()->orderByRaw('FIELD(pet_category_id,'.implode(',', $categories->pluck('id')->toArray()).')')->orderBy('name')->orderBy('updated_at')->get()->groupBy('pet_category_id') : $this->user->pets()->orderBy('name')->orderBy('updated_at')->get()->groupBy('pet_category_id');
-
-        return view('user.pets', [
-            'user'        => $this->user,
-            'categories'  => $categories->keyBy('id'),
-            'pets'        => $pets,
-            'userOptions' => User::where('id', '!=', $this->user->id)->orderBy('name')->pluck('name', 'id')->toArray(),
-            'user'        => $this->user,
-            'logs'        => $this->user->getPetLogs(),
-        ]);
-    }
-
-    /**
-     * Shows a user's pets.
-     *
-     * @param string $name
-     * @param mixed  $id
-     *
-     * @return \Illuminate\Contracts\Support\Renderable
-     */
-    public function getUserPet($name, $id) {
-        $pet = UserPet::findOrFail($id);
-
-        return view('user.pet', [
-            'user'        => $this->user,
-            'pet'         => $pet,
-            'userOptions' => User::where('id', '!=', $this->user->id)->orderBy('name')->pluck('name', 'id')->toArray(),
-            'logs'        => $this->user->getPetLogs(),
+            'logs'        => $this->user->getItemLogs()->take(10)->get(),
+            'artists'     => User::whereIn('id', Item::whereNotNull('artist_id')->pluck('artist_id')->toArray())->pluck('name', 'id')->toArray(),
+            'rarities'    => ['withoutOption' => 'No Rarity'] + Rarity::orderBy('rarities.sort', 'DESC')->pluck('name', 'id')->toArray(),
         ]);
     }
 
@@ -425,9 +396,9 @@ class UserController extends Controller {
 
         return view('user.bank', [
             'user' => $this->user,
-            'logs' => $this->user->getCurrencyLogs(),
+            'logs' => $this->user->getCurrencyLogs()->take(10)->get(),
         ] + (Auth::check() && Auth::user()->id == $this->user->id ? [
-            'currencyOptions' => Currency::where('allow_user_to_user', 1)->where('is_user_owned', 1)->whereIn('id', UserCurrency::where('user_id', $this->user->id)->pluck('currency_id')->toArray())->orderBy('sort_user', 'DESC')->pluck('name', 'id')->toArray(),
+            'currencyOptions' => Currency::visible(Auth::user() ?? null)->where('allow_user_to_user', 1)->where('is_user_owned', 1)->whereIn('id', UserCurrency::where('user_id', $this->user->id)->pluck('currency_id')->toArray())->orderBy('sort_user', 'DESC')->pluck('name', 'id')->toArray(),
             'userOptions'     => User::where('id', '!=', Auth::user()->id)->orderBy('name')->pluck('name', 'id')->toArray(),
         ] : []));
     }
@@ -483,12 +454,31 @@ class UserController extends Controller {
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function getUserCurrencyLogs($name) {
+    public function getUserCurrencyLogs(Request $request, $name) {
         $user = $this->user;
 
+        $query = $this->user->getCurrencyLogs();
+        if ($request->get('currency_ids')) {
+            $query->whereIn('currency_id', $request->get('currency_ids'));
+        }
+        if ($request->get('currency_category_ids')) {
+            $query->whereIn('currency_id', Currency::whereIn('currency_category_id', $request->get('currency_category_ids'))->pluck('id')->toArray());
+        }
+        if ($request->get('user_id')) {
+            $query->where(function ($query) use ($request) {
+                $query->where('sender_id', $request->get('user_id'))->orWhere('recipient_id', $request->get('user_id'));
+            });
+        }
+        if ($request->get('sort')) {
+            $query->orderBy('created_at', $request->get('sort') == 'newest' ? 'DESC' : 'ASC');
+        }
+
         return view('user.currency_logs', [
-            'user' => $this->user,
-            'logs' => $this->user->getCurrencyLogs(0),
+            'user'               => $this->user,
+            'logs'               => $query->paginate(30)->appends($request->query()),
+            'users'              => User::orderBy('name')->pluck('name', 'id')->toArray(),
+            'currencies'         => Currency::visible(Auth::user() ?? null)->orderBy('name', 'DESC')->pluck('name', 'id')->toArray(),
+            'currencyCategories' => CurrencyCategory::orderBy('sort', 'DESC')->pluck('name', 'id')->toArray(),
         ]);
     }
 
@@ -499,12 +489,30 @@ class UserController extends Controller {
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function getUserItemLogs($name) {
+    public function getUserItemLogs(Request $request, $name) {
         $user = $this->user;
+        $query = $this->user->getItemLogs();
+        if ($request->get('item_ids')) {
+            $query->whereIn('item_id', $request->get('item_ids'));
+        }
+        if ($request->get('item_category_ids')) {
+            $query->whereIn('item_id', Item::whereIn('item_category_id', $request->get('item_category_ids'))->pluck('id')->toArray());
+        }
+        if ($request->get('user_id')) {
+            $query->where(function ($query) use ($request) {
+                $query->where('sender_id', $request->get('user_id'))->orWhere('recipient_id', $request->get('user_id'));
+            });
+        }
+        if ($request->get('sort')) {
+            $query->orderBy('created_at', $request->get('sort') == 'newest' ? 'DESC' : 'ASC');
+        }
 
         return view('user.item_logs', [
-            'user' => $this->user,
-            'logs' => $this->user->getItemLogs(0),
+            'user'           => $this->user,
+            'logs'           => $query->paginate(30)->appends($request->query()),
+            'users'          => User::orderBy('name')->pluck('name', 'id')->toArray(),
+            'items'          => Item::released(Auth::user() ?? null)->orderBy('name')->pluck('name', 'id')->toArray(),
+            'itemCategories' => ItemCategory::orderBy('sort', 'DESC')->pluck('name', 'id')->toArray(),
         ]);
     }
 
@@ -655,10 +663,19 @@ class UserController extends Controller {
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function getUserSubmissions($name) {
+    public function getUserSubmissions(Request $request, $name) {
+        $logs = $this->user->getSubmissions(Auth::user() ?? null);
+        if ($request->get('prompt_ids')) {
+            $logs->whereIn('prompt_id', $request->get('prompt_ids'));
+        }
+        if ($request->get('sort')) {
+            $logs->orderBy('created_at', $request->get('sort') == 'newest' ? 'DESC' : 'ASC');
+        }
+
         return view('user.submission_logs', [
-            'user' => $this->user,
-            'logs' => $this->user->getSubmissions(Auth::user() ?? null),
+            'user'    => $this->user,
+            'logs'    => $logs->paginate(30)->appends($request->query()),
+            'prompts' => Prompt::active()->pluck('name', 'id'),
         ]);
     }
 
@@ -754,7 +771,7 @@ class UserController extends Controller {
         return view('user.favorites', [
             'user'       => $this->user,
             'characters' => false,
-            'favorites'  => GallerySubmission::whereIn('id', $this->user->galleryFavorites()->pluck('gallery_submission_id')->toArray())->visible(Auth::user() ?? null)->accepted()->orderBy('created_at', 'DESC')->paginate(20)->appends($request->query()),
+            'favorites'  => GallerySubmission::whereIn('id', $this->user->galleryFavorites()->pluck('gallery_submission_id')->toArray())->visible(Auth::user() ?? null)->orderBy('created_at', 'DESC')->paginate(20)->appends($request->query()),
         ]);
     }
 
@@ -773,7 +790,7 @@ class UserController extends Controller {
         return view('user.favorites', [
             'user'       => $this->user,
             'characters' => true,
-            'favorites'  => $this->user->characters->count() ? GallerySubmission::whereIn('id', $userFavorites)->whereIn('id', GalleryCharacter::whereIn('character_id', $userCharacters)->pluck('gallery_submission_id')->toArray())->visible(Auth::check() ? Auth::user() : null)->orderBy('created_at', 'DESC')->paginate(20)->appends($request->query()) : null,
+            'favorites'  => $this->user->characters->count() ? GallerySubmission::whereIn('id', $userFavorites)->whereIn('id', GalleryCharacter::whereIn('character_id', $userCharacters)->pluck('gallery_submission_id')->toArray())->visible(Auth::user() ?? null)->orderBy('created_at', 'DESC')->paginate(20)->appends($request->query()) : null,
         ]);
     }
 

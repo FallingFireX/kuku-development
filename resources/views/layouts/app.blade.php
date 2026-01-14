@@ -19,43 +19,41 @@
         {!! RecaptchaV3::initJs() !!}
     @endif
 
-    <title>{{ config('lorekeeper.settings.site_name', 'Lorekeeper') }} -@yield('title')</title>
+    <title>{{ config('lorekeeper.settings.site_name', 'Lorekeeper') }}{!! View::hasSection('title') ? ' - ' . trim(View::getSection('title')) : '' !!}</title>
 
     <!-- Primary Meta Tags -->
-    <meta name="title" content="{{ config('lorekeeper.settings.site_name', 'Lorekeeper') }} -@yield('title')">
-    <meta name="description" content="@if (View::hasSection('meta-desc')) @yield('meta-desc') @else {{ config('lorekeeper.settings.site_desc', 'A Lorekeeper ARPG') }} @endif">
+    <meta name="title" content="{{ config('lorekeeper.settings.site_name', 'Lorekeeper') }}{!! View::hasSection('title') ? ' - ' . trim(View::getSection('title')) : '' !!}">
+    <meta name="description" content="{!! View::hasSection('meta-desc') ? trim(strip_tags(View::getSection('meta-desc'))) : config('lorekeeper.settings.site_desc', 'A Lorekeeper ARPG') !!}">
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="{{ config('app.url', 'http://localhost') }}">
-    <meta property="og:image" content="@if (View::hasSection('meta-img')) @yield('meta-img') @else {{ asset('images/meta-image.png') }} @endif">
-    <meta property="og:title" content="{{ config('lorekeeper.settings.site_name', 'Lorekeeper') }} -@yield('title')">
-    <meta property="og:description" content="@if (View::hasSection('meta-desc')) @yield('meta-desc') @else {{ config('lorekeeper.settings.site_desc', 'A Lorekeeper ARPG') }} @endif">
+    <meta property="og:image" content="{{ View::hasSection('meta-img') ? View::getSection('meta-img') : asset('images/meta-image.png') }}">
+    <meta property="og:title" content="{{ config('lorekeeper.settings.site_name', 'Lorekeeper') }}{!! View::hasSection('title') ? ' - ' . trim(View::getSection('title')) : '' !!}">
+    <meta property="og:description" content="{!! View::hasSection('meta-desc') ? trim(strip_tags(View::getSection('meta-desc'))) : config('lorekeeper.settings.site_desc', 'A Lorekeeper ARPG') !!}">
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="{{ config('app.url', 'http://localhost') }}">
-    <meta property="twitter:image" content="@if (View::hasSection('meta-img')) @yield('meta-img') @else {{ asset('images/meta-image.png') }} @endif">
-    <meta property="twitter:title" content="{{ config('lorekeeper.settings.site_name', 'Lorekeeper') }} -@yield('title')">
-    <meta property="twitter:description" content="@if (View::hasSection('meta-desc')) @yield('meta-desc') @else {{ config('lorekeeper.settings.site_desc', 'A Lorekeeper ARPG') }} @endif">
+    <meta property="twitter:image" content="{{ View::hasSection('meta-img') ? View::getSection('meta-img') : asset('images/meta-image.png') }}">
+    <meta property="twitter:title" content="{{ config('lorekeeper.settings.site_name', 'Lorekeeper') }}{!! View::hasSection('title') ? ' - ' . trim(View::getSection('title')) : '' !!}">
+    <meta property="twitter:description" content="{!! View::hasSection('meta-desc') ? trim(strip_tags(View::getSection('meta-desc'))) : config('lorekeeper.settings.site_desc', 'A Lorekeeper ARPG') !!}">
 
     <!-- No AI scraping directives -->
     <meta name="robots" content="noai">
     <meta name="robots" content="noimageai">
 
     <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}"></script>
-    <script src="{{ asset('js/site.js') }}"></script>
-    <script src="{{ asset('js/jquery-ui.min.js') }}"></script>
-    <script src="{{ asset('js/bootstrap4-toggle.min.js') }}"></script>
+    <script src="{{ mix('js/app.js') }}"></script>
+    <script defer src="{{ mix('js/app-secondary.js') }}"></script>
+    <script defer src="{{ asset('js/site.js') }}"></script>
     <script src="{{ asset('js/tinymce.min.js') }}"></script>
     <script src="{{ asset('js/jquery.tinymce.min.js') }}"></script>
-    <script src="{{ asset('js/lightbox.min.js') }}"></script>
-    <script src="{{ asset('js/bootstrap-colorpicker.min.js') }}"></script>
+    <script defer src="{{ asset('js/bootstrap-colorpicker.min.js') }}"></script>
     <script src="{{ asset('js/bs-custom-file-input.min.js') }}"></script>
-    <script src="{{ asset('js/selectize.min.js') }}"></script>
-    <script src="{{ asset('js/jquery-ui-timepicker-addon.js') }}"></script>
-    <script src="{{ asset('js/croppie.min.js') }}"></script>
+    <script defer src="{{ asset('js/jquery-ui-timepicker-addon.js') }}"></script>
+    <script defer src="{{ asset('js/croppie.min.js') }}"></script>
+    <script src="{{ asset('js/jquery.ui.touch-punch.min.js') }}"></script>
 
     <!-- Scripts for wheel of fortune dailies -->
     <script src="{{ asset('js/winwheel.min.js') }}"></script>
@@ -66,24 +64,23 @@
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet" type="text/css">
 
     <!-- Styles -->
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link href="{{ mix('css/app.css') }}" rel="stylesheet">
     <link href="{{ asset('css/lorekeeper.css?v=' . filemtime(public_path('css/lorekeeper.css'))) }}" rel="stylesheet">
 
     {{-- Font Awesome --}}
-    <link href="{{ asset('css/all.min.css') }}" rel="stylesheet">
+    <link defer href="{{ faVersion() }}" rel="stylesheet">
 
     {{-- jQuery UI --}}
-    <link href="{{ asset('css/jquery-ui.min.css') }}" rel="stylesheet">
+    <link defer href="{{ asset('css/jquery-ui.min.css') }}" rel="stylesheet">
 
     {{-- Bootstrap Toggle --}}
-    <link href="{{ asset('css/bootstrap4-toggle.min.css') }}" rel="stylesheet">
+    <link defer href="{{ asset('css/bootstrap4-toggle.min.css') }}" rel="stylesheet">
 
-
-    <link href="{{ asset('css/lightbox.min.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/bootstrap-colorpicker.min.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/jquery-ui-timepicker-addon.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/croppie.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/selectize.bootstrap4.css') }}" rel="stylesheet">
+    <link defer href="{{ asset('css/lightbox.min.css') }}" rel="stylesheet">
+    <link defer href="{{ asset('css/bootstrap-colorpicker.min.css') }}" rel="stylesheet">
+    <link defer href="{{ asset('css/jquery-ui-timepicker-addon.css') }}" rel="stylesheet">
+    <link defer href="{{ asset('css/croppie.css') }}" rel="stylesheet">
+    <link defer href="{{ asset('css/selectize.bootstrap4.css') }}" rel="stylesheet">
 
     @if (file_exists(public_path() . '/css/custom.css'))
         <link href="{{ asset('css/custom.css') . '?v=' . filemtime(public_path('css/custom.css')) }}" rel="stylesheet">
@@ -137,6 +134,8 @@
     @endif
 
     @include('feed::links')
+
+    @yield('head')
 </head>
 
 
@@ -146,13 +145,13 @@
             @include('layouts._clock')
             <img id="logo" src="{{ asset('images/logo.png') }}">
         </div>
-       
+
         @include('layouts._nav')
         @if (View::hasSection('sidebar'))
             <div class="site-mobile-header bg-secondary"><a href="#" class="btn btn-sm btn-outline-light" id="mobileMenuButton">Menu <i class="fas fa-caret-right ml-1"></i></a></div>
         @endif
 
-        
+
         <main class="container-fluid" id="main">
             <div class="flex-wrapper">
                 <div class="row">
@@ -161,6 +160,7 @@
                     <div class="sidebar col-lg-2" id="sidebar">
                         @yield('sidebar')
                     </div>
+
 
                     {{-- Main content --}}
                     <div class="main-content col-lg-8 p-4">
@@ -180,7 +180,7 @@
                                 @if (Auth::user()->is_sales_unread)
                                     <div class="alert alert-info"><a href="{{ url('sales') }}">There is a new sales post!</a></div>
                                 @endif
-                                @if(Auth::user()->is_raffles_unread)
+                                @if (Auth::user()->is_raffles_unread)
                                     <div class="alert alert-info"><a href="{{ url('raffles') }}">There is a new raffle!</a></div>
                                 @endif
                             @endif
@@ -192,47 +192,10 @@
                             @include('layouts._footer')
                         </div>
                     </div>
-                    
-                
-                
-                
-                <div class="rightSidebar col-lg-2 mb-0 p-0" id="rightSidebar">
-                    <ul class="text-center">
-                        @if (Request::is('/'))
-                            <li class="rightSidebar-section p-2">
-                                <h5>Kukuri of the Month</h5>
-                                @if(isset($featured) && $featured)
-                                    <div>
-                                        <a href="{{ $featured->url }}">
-                                            <img src="{{ $featured->image->thumbnailUrl }}" class="img-thumbnail" />
-                                        </a>
-                                    </div>
-                                    <div class="mt-1">
-                                        <a href="{{ $featured->url }}" class="h5 mb-0"  style="color:var(--dark);">
-                                            @if(!$featured->is_visible) <i class="fas fa-eye-slash"></i> @endif
-                                            {{ $featured->fullName }}
-                                        </a>
-                                    </div>
-                                    <div class="small" style="color:var(--dark)!important;">
-                                        Owned by: {!! $featured->displayOwner !!}
-                                    </div>
-                                @else
-                                    <p>There is no featured character.</p>
-                                @endif
-                            </li>
-
-                            <li class="rightSidebar-section p-2">
-                                @include('widgets._affiliates', ['affiliates' => $affiliates, 'featured' => $featured_affiliates, 'open' => $open])
-                            </li>
-                                  
-                            <li><a href="https://discord.gg/XE25D68xMf"> <img src="https://discordapp.com/api/guilds/152924425774170113/widget.png?style=banner2" alt=""></a></li>
-                        @endif
-                    </ul>
+                    <div class="rightSidebar col-lg-2 mb-0 p-0" id="rightSidebar">
+                        @include('pages._rsidebar')
+                    </div>
                 </div>
-        
-
-    </div>
-         
         </main>
 
 
@@ -259,75 +222,12 @@
                 }
             });
 
-            $(function() {
+            $(document).ready(function() {
                 $('[data-toggle="tooltip"]').tooltip({
                     html: true
                 });
+                $('.cp').colorpicker();
 
-                class BlurValid extends $.colorpicker.Extension {
-                    constructor(colorpicker, options = {}) {
-                        super(colorpicker, options);
-
-                        if (this.colorpicker.inputHandler.hasInput()) {
-                            const onBlur = function(colorpicker, fallback) {
-                                return () => {
-                                    colorpicker.setValue(colorpicker.blurFallback._original.color);
-                                }
-                            };
-                            this.colorpicker.inputHandler.input[0].addEventListener('blur', onBlur(this.colorpicker));
-                        }
-                    }
-
-                    onInvalid(e) {
-                        const color = this.colorpicker.colorHandler.getFallbackColor();
-                        if (color._original.valid)
-                            this.colorpicker.blurFallback = color;
-                    }
-                }
-
-                $.colorpicker.extensions.blurvalid = BlurValid;
-                console.log($['colorpicker'].extensions);
-
-                $('.cp').colorpicker({
-                    'autoInputFallback': false,
-                    'autoHexInputFallback': false,
-                    'format': 'auto',
-                    'useAlpha': true,
-                    extensions: [{
-                        name: 'blurValid'
-                    }]
-                });
-
-                tinymce.init({
-                    selector: '.wysiwyg',
-                    height: 500,
-                    menubar: false,
-                    convert_urls: false,
-                    
-                    plugins: [
-                        'advlist autolink lists link image charmap print preview anchor',
-                        'searchreplace visualblocks code fullscreen spoiler',
-                        'insertdatetime media table paste code help wordcount',
-                        "code"
-                    ],
-                    toolbar: 'undo redo | formatselect | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | spoiler-add spoiler-remove | removeformat | code',
-                    content_css: [
-                        '{{ asset('css/app.css') }}',
-                        '{{ asset('css/lorekeeper.css') }}',
-                        '{{ asset('css/custom.css') }}',
-                        '{{ asset($theme?->cssUrl) }}',
-                        '{{ asset($conditionalTheme?->cssUrl) }}',
-                        '{{ asset($decoratorTheme?->cssUrl) }}',
-                        '{{ asset('css/all.min.css') }}' //fontawesome
-                    ],
-                    content_style: `
-                    {{ str_replace(['<style>', '</style>'], '', view('layouts.editable_theme', ['theme' => $theme])) }}
-                    {{ str_replace(['<style>', '</style>'], '', view('layouts.editable_theme', ['theme' => $conditionalTheme])) }}
-                    {{ str_replace(['<style>', '</style>'], '', view('layouts.editable_theme', ['theme' => $decoratorTheme])) }}
-                    `,
-                    spoiler_caption: 'View Details',
-                    target_list: false
-                });
                 bsCustomFileInput.init();
                 var $mobileMenuButton = $('#mobileMenuButton');
                 var $sidebar = $('#sidebar');
@@ -350,9 +250,10 @@
 
                 // CLOCK
                 function time() {
-                    setInterval(function() { 
+                    setInterval(function() {
                         var date = new Date(); // initial date, this acts kinda like a first carbon instance so we can preform functions on it
-                        var time = new Date(date.getTime() + (3 * (60*60*1000)));  // preform function on first date (basically get time in timestamp format, the 60*60*1000 is an offset of +1 hour. To do other timezones just convert it to the necessary amount of hours +- UTC
+                        var time = new Date(date.getTime() + (3 * (60 * 60 *
+                            1000))); // preform function on first date (basically get time in timestamp format, the 60*60*1000 is an offset of +1 hour. To do other timezones just convert it to the necessary amount of hours +- UTC
                         var cycle = time.getUTCHours() >= 12 ? ' PM' : ' AM'; // this gets the hour in military time so if it's greater than 12 it's pm
                         // substr is a function that'll knock of certain letters from a given input. 
                         // Because ours is -2, if we have 001, it'll read as 01. If we have 042, it'll be 42
@@ -360,10 +261,11 @@
                         // this doesn't look correct so we basically ''force'' it to be correct by adding and (sometimes) removed the extra 0
                         // we do getUTC so that it doesn't change per person and is universal
                         // you can see more here https://stackoverflow.com/a/39418437/11052835
-                        var display = time.getUTCHours() + ":" +  ('0' + time.getUTCMinutes()).substr(-2) + ":" +  ('0' + time.getUTCSeconds()).substr(-2) + " " + cycle; // make it look pretty
+                        var display = time.getUTCHours() + ":" + ('0' + time.getUTCMinutes()).substr(-2) + ":" + ('0' + time.getUTCSeconds()).substr(-2) + " " + cycle; // make it look pretty
                         $("#clock").text(display); // set the div to new time
-                    }, 1000)} // times it out for 1 second so loop
-                
+                    }, 1000)
+                } // times it out for 1 second so loop
+
                 setInterval(time(), 1000); // loop
             });
         </script>

@@ -1,25 +1,31 @@
 <style>
     .sidebar-item a {
-    display: block;         /* Makes the whole row clickable */
-    padding: 10px 15px;
-    text-decoration: none;
-    font-weight: bold;  /* Remove underline */
-    color: var(--dark);            /* Text color */
-    background: var(--secondary);    /* Default background */
-    border-radius: 5px;     /* Rounded corners (optional) */
-    transition: background 0.2s ease;
-}
+        display: block;
+        /* Makes the whole row clickable */
+        padding: 10px 15px;
+        text-decoration: none;
+        font-weight: bold;
+        /* Remove underline */
+        color: var(--dark);
+        /* Text color */
+        background: var(--secondary);
+        /* Default background */
+        border-radius: 5px;
+        /* Rounded corners (optional) */
+        transition: background 0.2s ease;
+    }
 
-.sidebar-item a:hover {
-    background: var(--cyan);    /* Hover effect */
-    cursor: pointer;
-}
+    .sidebar-item a:hover {
+        background: var(--cyan);
+        /* Hover effect */
+        cursor: pointer;
+    }
 
-.sidebar-item a.active {
-    background: #b0b0b0;    /* Active state */
-    font-weight: bold;
-}
-
+    .sidebar-item a.active {
+        background: #b0b0b0;
+        /* Active state */
+        font-weight: bold;
+    }
 </style>
 @extends('layouts.app')
 
@@ -27,15 +33,31 @@
     {{ $page->title }}
 @endsection
 
+@if ($page->has_image)
+    @section('meta-img')
+        {{ $page->imageUrl }}
+    @endsection
+@endif
+
 @section('content')
     <x-admin-edit title="Page" :object="$page" />
     {!! breadcrumbs([$page->title => $page->url]) !!}
-    <h1>{{ $page->title }}</h1>
+    <h1>
+        @if (!$page->is_visible)
+            <i class="fas fa-eye-slash mr-1"></i>
+        @endif
+        {{ $page->title }}
+    </h1>
     <div class="mb-4">
         <div><strong>Created:</strong> {!! format_date($page->created_at) !!}</div>
         <div><strong>Last updated:</strong> {!! format_date($page->updated_at) !!}</div>
     </div>
 
+    @if ($page->has_image)
+        <div class="page-image">
+            <img src="{{ $page->imageUrl }}" alt="{{ $page->name }}" class="w-100" />
+        </div>
+    @endif
     <div class="site-page-content parsed-text">
         {!! $page->parsed_text !!}
     </div>

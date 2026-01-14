@@ -4,8 +4,8 @@
 <div class="row">
     <div class="col-md-6">
         <div class="form-group">
-            {!! Form::label(__('volumes.volume').' Granted') !!}
-            {!! Form::select('volume_id', $volumes, $tag->getData()['volume_id'], ['class' => 'form-control selectize', 'placeholder' => 'Select a '.ucfirst(__('volumes.volume'))]) !!}
+            {!! Form::label(__('volumes.volume') . ' Granted') !!}
+            {!! Form::select('volume_id', $volumes, $tag->getData()['volume_id'], ['class' => 'form-control selectize', 'placeholder' => 'Select a ' . ucfirst(__('volumes.volume'))]) !!}
         </div>
     </div>
 </div>

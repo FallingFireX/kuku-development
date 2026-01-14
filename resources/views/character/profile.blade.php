@@ -4,10 +4,6 @@
     {{ $character->fullName }}'s Profile
 @endsection
 
-@section('meta-img')
-    {{ $character->image->thumbnailUrl }}
-@endsection
-
 @section('profile-content')
     @if ($character->is_myo_slot)
         {!! breadcrumbs(['MYO Slot Masterlist' => 'myos', $character->fullName => $character->url, 'Profile' => $character->url . '/profile']) !!}
@@ -41,36 +37,38 @@
             <a href="{{ $character->url . '/profile/edit' }}" class="btn btn-outline-info btn-sm"><i class="fas fa-cog"></i> Edit Profile</a>
         </div>
     @endif
-    @if($character->profile->custom_values->count() > 0)
-    <div class="row no-gutters">
-        @php $valueGroups = $character->profile->custom_values->groupBy('group'); @endphp
-        @foreach($valueGroups as $groupName => $values)
-            <div class="col-12 mb-3">
-                <div class="card">
-                    @if($groupName)
-                        <div class="card-header">
-                            <h5 class="mb-0 mx-n1">{{ $values->first()->group }}</h5>
-                        </div>
-                    @endif
-                    <ul class="list-group list-group-flush">
-                        @foreach($values as $value)
-                            <li class="list-group-item px-3">
-                                <div class="row no-gutters align-items-center">
-                                    @if($value->name && $value->name != "")
-                                        <div class="col-4 col-md-3"><h6 class="mb-0" style="font-weight: bold;">{{ $value->name }}</h6></div>
-                                        <div class="col-8 col-md-9 pl-2">{!! $value->data_parsed !!}</div>
-                                    @else
-                                        <div class="col-12">{!! $value->data_parsed !!}</div>
-                                    @endif
-                                </div>
-                            </li>
-                        @endforeach
-                    </ul>
+    @if ($character->profile->custom_values->count() > 0)
+        <div class="row no-gutters">
+            @php $valueGroups = $character->profile->custom_values->groupBy('group'); @endphp
+            @foreach ($valueGroups as $groupName => $values)
+                <div class="col-12 mb-3">
+                    <div class="card">
+                        @if ($groupName)
+                            <div class="card-header">
+                                <h5 class="mb-0 mx-n1">{{ $values->first()->group }}</h5>
+                            </div>
+                        @endif
+                        <ul class="list-group list-group-flush">
+                            @foreach ($values as $value)
+                                <li class="list-group-item px-3">
+                                    <div class="row no-gutters align-items-center">
+                                        @if ($value->name && $value->name != '')
+                                            <div class="col-4 col-md-3">
+                                                <h6 class="mb-0" style="font-weight: bold;">{{ $value->name }}</h6>
+                                            </div>
+                                            <div class="col-8 col-md-9 pl-2">{!! $value->data_parsed !!}</div>
+                                        @else
+                                            <div class="col-12">{!! $value->data_parsed !!}</div>
+                                        @endif
+                                    </div>
+                                </li>
+                            @endforeach
+                        </ul>
+                    </div>
                 </div>
-            </div>
-        @endforeach
-    </div>
-@endif
+            @endforeach
+        </div>
+    @endif
     @if ($character->profile->parsed_text)
         <div class="card mb-3">
             <div class="card-body parsed-text">
@@ -79,7 +77,7 @@
         </div>
     @endif
 
-    @if ($character->is_trading || $character->is_gift_art_allowed || $character->is_gift_writing_allowed || $character->is_links_open)
+    @if ($character->is_trading || $character->is_gift_art_allowed || $character->is_gift_writing_allowed)
         <div class="card mb-3">
             <ul class="list-group list-group-flush">
                 @if ($character->is_gift_art_allowed >= 1 && !$character->is_myo_slot)
@@ -99,11 +97,7 @@
                         <h5 class="mb-0"><i class="text-success far fa-circle fa-fw mr-2"></i> Open for trades</h5>
                     </li>
                 @endif
-                @if ($character->is_links_open)
-                    <li class="list-group-item">
-                        <h5 class="mb-0"><i class="text-success far fa-circle fa-fw mr-2"></i> Open for link requests</h5>
-                    </li>
-                @endif
+
             </ul>
         </div>
     @endif

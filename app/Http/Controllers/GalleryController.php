@@ -64,7 +64,7 @@ class GalleryController extends Controller {
             abort(404);
         }
 
-        $query = GallerySubmission::where('gallery_id', $gallery->id)->visible(Auth::check() ? Auth::user() : null);
+        $query = GallerySubmission::where('gallery_id', $gallery->id)->visible(Auth::user() ?? null);
         $sort = $request->only(['sort']);
 
         if ($request->get('title')) {
@@ -109,8 +109,8 @@ class GalleryController extends Controller {
             'gallery'          => $gallery,
             'submissions'      => $query->paginate(20)->appends($request->query()),
             'locations'        => [0 => 'Any Location'] + Location::whereIn('id', GallerySubmission::where('gallery_id', $gallery->id)->visible(Auth::check() ? Auth::user() : null)->accepted()->whereNotNull('location_id')->pluck('location_id')->toArray())->orderBy('name')->get()->pluck('styleParent', 'id')->toArray(),
-            'prompts'          => [0 => 'Any Prompt'] + Prompt::whereIn('id', GallerySubmission::where('gallery_id', $gallery->id)->visible(Auth::check() ? Auth::user() : null)->accepted()->whereNotNull('prompt_id')->pluck('prompt_id')->toArray())->orderBy('name')->pluck('name', 'id')->toArray(),
-            'childSubmissions' => GallerySubmission::whereIn('gallery_id', $gallery->children->pluck('id')->toArray())->where('is_visible', 1)->where('status', 'Accepted'),
+            'prompts'          => [0 => 'Any Prompt'] + Prompt::whereIn('id', GallerySubmission::where('gallery_id', $gallery->id)->withOnly('prompt')->visible(Auth::user() ?? null)->whereNotNull('prompt_id')->select('prompt_id')->distinct()->pluck('prompt_id')->toArray())->orderBy('name')->pluck('name', 'id')->toArray(),
+            'childSubmissions' => $gallery->through('children')->has('submissions')->where('is_visible', 1)->where('status', 'Accepted'),
             'galleryPage'      => true,
             'sideGallery'      => $gallery,
         ]);
@@ -334,7 +334,7 @@ class GalleryController extends Controller {
 
         return view('galleries.create_edit_submission', [
             'closed' => $closed,
-        ] + ($closed ? [] : [ 
+        ] + ($closed ? [] : [
             'gallery'     => $gallery,
             'submission'  => new GallerySubmission,
             'prompts'     => Prompt::active()->sortAlphabetical()->pluck('name', 'id')->toArray(),

@@ -154,7 +154,7 @@ class Submission extends Model {
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeSortOldest($query) {
-        return $query->orderBy('updated_at');
+        return $query->orderBy('id');
     }
 
     /**
@@ -165,7 +165,7 @@ class Submission extends Model {
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeSortNewest($query) {
-        return $query->orderBy('updated_at', 'DESC');
+        return $query->orderBy('id', 'DESC');
     }
 
     /**
@@ -254,22 +254,12 @@ class Submission extends Model {
         $rewards = [];
         foreach ($assets as $type => $a) {
             $class = getAssetModelString($type, false);
-            if ($class == 'Exp' || $class == 'Points') {
-                if (isset($a['quantity'])) {
-                    $rewards[] = (object) [
-                        'rewardable_type' => $class,
-                        'rewardable_id'   => 1,
-                        'quantity'        => $a['quantity'],
-                    ];
-                }
-            } else {
-                foreach ($a as $id => $asset) {
-                    $rewards[] = (object) [
-                        'rewardable_type' => $class,
-                        'rewardable_id'   => $id,
-                        'quantity'        => $asset['quantity'],
-                    ];
-                }
+            foreach ($a as $id => $asset) {
+                $rewards[] = (object) [
+                    'rewardable_type' => $class,
+                    'rewardable_id'   => $id,
+                    'quantity'        => $asset['quantity'],
+                ];
             }
         }
 

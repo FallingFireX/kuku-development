@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
+
 /*
 |--------------------------------------------------------------------------
 | Browse Routes
@@ -164,6 +166,7 @@ Route::group(['prefix' => 'myo', 'namespace' => 'Characters'], function () {
 Route::group(['prefix' => 'world'], function () {
     Route::get('/', 'WorldController@getIndex');
 
+    Route::get('currency-categories', 'WorldController@getCurrencyCategories');
     Route::get('currencies', 'WorldController@getCurrencies');
     Route::get('rarities', 'WorldController@getRarities');
     Route::get('species', 'WorldController@getSpecieses');
@@ -173,6 +176,7 @@ Route::group(['prefix' => 'world'], function () {
     Route::get('species/{speciesId}/trait/{id}', 'WorldController@getSpeciesFeatureDetail')->where(['id' => '[0-9]+', 'speciesId' => '[0-9]+']);
     Route::get('subtypes/{id}/traits', 'WorldController@getSubtypeFeatures');
     Route::get('universaltraits', 'WorldController@getUniversalFeatures');
+    Route::get('all-traits-index', 'WorldController@getKitchenSinkFeatures');
     Route::get('item-categories', 'WorldController@getItemCategories');
     Route::get('items', 'WorldController@getItems');
     Route::get(__('awards.award').'-categories', 'WorldController@getAwardCategories');
@@ -251,6 +255,7 @@ Route::get('pets/pet/{id}', 'Users\PetController@getPetDrops');
 **************************************************************************************************/
 Route::get('credits', 'PageController@getCreditsPage');
 Route::get('info/{key}', 'PageController@getPage');
+Route::get('feeds', 'PageController@getFeedsPage');
 
 /**************************************************************************************************
     Raffles
@@ -280,6 +285,7 @@ Route::get('queues', 'QueueController@getQueueIndex');
     Comments
 **************************************************************************************************/
 Route::get('comment/{id}', 'PermalinkController@getComment');
+Route::get('sort-comments/{model}/{id}', 'Comments\CommentController@getSortedComments');
 
 /**************************************************************************************************
     Galleries

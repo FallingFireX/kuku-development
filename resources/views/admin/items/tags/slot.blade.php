@@ -11,7 +11,7 @@
     @if ($isMyo)
         {!! add_help('This section is for making additional notes about the MYO slot. If there are restrictions for the character that can be created by this slot that cannot be expressed with the options below, use this section to describe them.') !!}
     @else
-        {!! add_help('This section is for making additional notes about the '.__('lorekeeper.character').' and is separate from the '.__('lorekeeper.character').'\'s profile (this is not editable by the user).') !!}
+        {!! add_help('This section is for making additional notes about the ' . __('lorekeeper.character') . ' and is separate from the ' . __('lorekeeper.character') . '\'s profile (this is not editable by the user).') !!}
     @endif
     {!! Form::textarea('description', $tag->getData()['description'], ['class' => 'form-control wysiwyg']) !!}
 </div>
@@ -46,7 +46,7 @@
 </div>
 <div class="card mb-3" id="resellOptions">
     <div class="card-body">
-        {!! Form::label('Resale Value') !!} {!! add_help('This value is publicly displayed on the '.__('lorekeeper.myo').'\'s page.') !!}
+        {!! Form::label('Resale Value') !!} {!! add_help('This value is publicly displayed on the ' . __('lorekeeper.myo') . '\'s page.') !!}
         {!! Form::text('sale_value', $tag->getData()['sale_value'], ['class' => 'form-control']) !!}
     </div>
 </div>
@@ -54,23 +54,46 @@
 <h3>Traits</h3>
 
 <div class="form-group">
-    {!! Form::label( ucfirst(__('lorekeeper.species'))) !!} {!! add_help('This will lock the slot into a particular '. __('lorekeeper.species') .'. Leave it blank if you would like to give the user a choice.') !!}
+    {!! Form::label(ucfirst(__('lorekeeper.species'))) !!} {!! add_help('This will lock the slot into a particular ' . __('lorekeeper.species') . '. Leave it blank if you would like to give the user a choice.') !!}
     {!! Form::select('species_id', $specieses, $tag->getData()['species_id'], ['class' => 'form-control', 'id' => 'species']) !!}
 </div>
 
-<div class="form-group">
-    {!! Form::label('Subtype (Optional)') !!} {!! add_help(
+<div class="form-group" id="subtypes">
+    {!! Form::label('Subtypes (Optional)') !!} {!! add_help(
         'This will lock the slot into a particular subtype. Leave it blank if you would like to give the user a choice, or not select a subtype. The subtype must match the species selected above, and if no species is specified, the subtype will not be applied.',
     ) !!}
-    {!! Form::select('subtype_id', $subtypes, $tag->getData()['subtype_id'], ['class' => 'form-control', 'id' => 'subtype']) !!}
+    {!! Form::select('subtype_ids[]', $subtypes, $tag->getData()['species_id'] ? $tag->getData()['subtype_ids'] : null, ['class' => 'form-control', 'placeholder' => 'Select Species First', 'id' => 'subtype', 'multiple']) !!}
 </div>
 
 <div class="form-group">
-    {!! Form::label(ucfirst(__('lorekeeper.character')).' Rarity') !!} {!! add_help('This will lock the slot into a particular rarity. Leave it blank if you would like to give the user more choices.') !!}
+    {!! Form::label(ucfirst(__('lorekeeper.character')) . ' Rarity') !!} {!! add_help('This will lock the slot into a particular rarity. Leave it blank if you would like to give the user more choices.') !!}
     {!! Form::select('rarity_id', $rarities, $tag->getData()['rarity_id'], ['class' => 'form-control']) !!}
 </div>
 
 @section('scripts')
     @parent
     @include('widgets._character_create_options_js')
+    @include('js._tinymce_wysiwyg')
+    <script>
+        $("#species").change(function() {
+            var species = $('#species').val();
+            var myo = '<?php echo $isMyo; ?>';
+            $.ajax({
+                type: "GET",
+                url: "{{ url('admin/masterlist/check-subtype') }}?species=" + species + "&myo=" + myo,
+                dataType: "text"
+            }).done(function(res) {
+                $("#subtypes").html(res);
+                $("#subtype").selectize({
+                    maxItems: {{ config('lorekeeper.extensions.multiple_subtype_limit') }},
+                });
+            }).fail(function(jqXHR, textStatus, errorThrown) {
+                alert("AJAX call failed: " + textStatus + ", " + errorThrown);
+            });
+        });
+
+        $('#subtype').selectize({
+            maxItems: {{ config('lorekeeper.extensions.multiple_subtype_limit') }},
+        });
+    </script>
 @endsection

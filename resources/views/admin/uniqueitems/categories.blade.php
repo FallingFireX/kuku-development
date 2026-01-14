@@ -14,7 +14,8 @@
 
     <div class="text-right mb-3">
         <a class="btn btn-primary" href="{{ url('admin/data/adoption-center') }}"><i class="fas fa-arrow-left"></i> Return to Adoptions</a>
-    <a class="btn btn-primary" href="{{ url('admin/data/adoption-categories/create') }}"><i class="fas fa-plus"></i> Create New Item Category</a></div>
+        <a class="btn btn-primary" href="{{ url('admin/data/adoption-categories/create') }}"><i class="fas fa-plus"></i> Create New Item Category</a>
+    </div>
     @if (!count($categories))
         <p>No Adoption categories found.</p>
     @else

@@ -34,6 +34,10 @@
                 e.preventDefault();
                 $(this).parent().parent().parent().remove();
             });
+            node.find('.remove-reward').on('click', function(e) {
+                e.preventDefault();
+                $(this).parent().parent().remove();
+            });
             node.find('.add-reward').on('click', function(e) {
                 e.preventDefault();
                 $clone = $components.find('.character-reward-row').clone();
@@ -63,20 +67,17 @@
                     $cell.children('.character-items').addClass('show');
                     $cell.children('.character-items').removeClass('hide');
                     $cell.children('.character-items');
-                }
-                else if(val == 'Award') {
+                } else if (val == 'Award') {
                     $cell.children('.character-awards').addClass('show');
                     $cell.children('.character-awards').removeClass('hide');
                     $cell.children('.character-awards');
                 } else if (val == 'Currency') {
                     $cell.children('.character-currencies').addClass('show');
                     $cell.children('.character-currencies').removeClass('hide');
-                }
-                else if (val == 'StatusEffect'){
+                } else if (val == 'StatusEffect') {
                     $cell.children('.character-statuses').addClass('show');
                     $cell.children('.character-statuses').removeClass('hide');
-                }
-                else if (val == 'LootTable'){
+                } else if (val == 'LootTable') {
                     $cell.children('.character-tables').addClass('show');
                     $cell.children('.character-tables').removeClass('hide');
                 } else if (val == 'Element') {
@@ -99,6 +100,5 @@
             node.find('.character-claymores-id').attr('name', 'character_rewardable_id[' + id + '][]');
             node.find('.character-element-id').attr('name', 'character_rewardable_id[' + id + '][]');
         }
-
     });
 </script>

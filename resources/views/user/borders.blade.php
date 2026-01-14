@@ -71,8 +71,7 @@
         @foreach ($logs as $log)
             <div class="d-flex row flex-wrap col-12 mt-1 pt-1 px-0 ubt-top">
                 <div class="col-6 col-md-2">
-                    <i
-                        class="btn py-1 m-0 px-2 btn-{{ $log->recipient_id == $user->id ? 'success' : 'danger' }} fas {{ $log->recipient_id == $user->id && $log->recipient_type == $user->logType ? 'fa-arrow-up' : 'fa-arrow-down' }} mr-2"></i>
+                    <i class="btn py-1 m-0 px-2 btn-{{ $log->recipient_id == $user->id ? 'success' : 'danger' }} fas {{ $log->recipient_id == $user->id && $log->recipient_type == $user->logType ? 'fa-arrow-up' : 'fa-arrow-down' }} mr-2"></i>
                     {!! $log->sender ? $log->sender->displayName : '' !!}
                 </div>
                 <div class="col-6 col-md-2">{!! $log->recipient ? $log->recipient->displayName : '' !!}</div>

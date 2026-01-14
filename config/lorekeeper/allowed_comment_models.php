@@ -12,5 +12,6 @@ return [
     'App\Models\Gallery\GallerySubmission',
     'App\Models\Submission\Submission',
     'App\Models\Submission\AdminApplication',
-
+    'App\Models\Trade\TradeListing',
+    'App\Models\Character\CharacterDesignUpdate',
 ];

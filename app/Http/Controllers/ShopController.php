@@ -2,16 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Currency\Currency;
 use App\Models\Item\Item;
-use App\Models\Item\ItemCategory;
 use App\Models\Item\ItemTag;
 use App\Models\Shop\Shop;
 use App\Models\Shop\ShopLog;
 use App\Models\Shop\ShopStock;
-use App\Models\Shop\UserItemDonation;
-use App\Models\SitePage;
 use App\Models\User\UserItem;
+use App\Services\LimitManager;
 use App\Services\ShopManager;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -33,7 +30,7 @@ class ShopController extends Controller {
      */
     public function getIndex() {
         return view('shops.index', [
-            'shops' => Shop::where('is_active', 1)->orderBy('sort', 'DESC')->get(),
+            'shops' => Shop::where('is_active', 1)->where('is_hidden', 0)->orderBy('sort', 'DESC')->get(),
         ]);
     }
 
@@ -45,7 +42,6 @@ class ShopController extends Controller {
      * @return \Illuminate\Contracts\Support\Renderable
      */
     public function getShop($id) {
-        $categories = ItemCategory::visible(Auth::user() ?? null)->orderBy('sort', 'DESC')->get();
         $shop = Shop::where('id', $id)->where('is_active', 1)->first();
 
         if (!$shop) {
@@ -61,21 +57,18 @@ class ShopController extends Controller {
             }
         }
 
-        if ($shop->is_restricted) {
+        if (count(getLimits($shop))) {
             if (!Auth::check()) {
                 flash('You must be logged in to enter this shop.')->error();
 
-                return redirect()->to('/shops');
+                return redirect()->to('shops');
             }
-            foreach ($shop->limits as $limit) {
-                $item = $limit->item_id;
-                $check = UserItem::where('item_id', $item)->where('user_id', Auth::user()->id)->where('count', '>', 0)->first();
 
-                if (!$check) {
-                    flash('You require a '.$limit->item->name.' to enter this store.')->error();
+            $limitService = new LimitManager;
+            if (!$limitService->checkLimits($shop)) {
+                flash($limitService->errors()->getMessages()['error'][0])->error();
 
-                    return redirect()->to('/shops');
-                }
+                return redirect()->to('shops');
             }
         }
 
@@ -105,12 +98,7 @@ class ShopController extends Controller {
                 $stocks[$type] = $stock;
                 continue; // If the category model doesn't exist, skip it
             }
-            // check if visible method exists on the category model
-            if (method_exists($model.'Category', 'visible')) {
-                $stock_category = ($model.'Category')::visible(Auth::check() ? Auth::user() : null)->orderBy('sort', 'DESC')->get();
-            } else {
-                $stock_category = ($model.'Category')::orderBy('sort', 'DESC')->get();
-            }
+            $stock_category = ($model.'Category')::orderBy('sort', 'DESC')->get();
             // order the stock
             $stock = count($stock_category) ? $shop->displayStock($model, $type)->where('stock_type', $type)
                 ->orderByRaw('FIELD('.$type.'_category_id,'.implode(',', $stock_category->pluck('id')->toArray()).')')
@@ -128,8 +116,7 @@ class ShopController extends Controller {
         return view('shops.shop', [
             'shop'       => $shop,
             'stocks'     => $stocks,
-            'shops'      => Shop::where('is_active', 1)->orderBy('sort', 'DESC')->get(),
-            'currencies' => Currency::whereIn('id', ShopStock::where('shop_id', $shop->id)->pluck('currency_id')->toArray())->get()->keyBy('id'),
+            'shops'      => Shop::where('is_active', 1)->where('is_hidden', 0)->orderBy('sort', 'DESC')->get(),
         ]);
     }
 
@@ -149,6 +136,15 @@ class ShopController extends Controller {
             abort(404);
         }
 
+        if (count(getLimits($shop))) {
+            $limitService = new LimitManager;
+            if (!$limitService->checkLimits($shop)) {
+                flash($limitService->errors()->getMessages()['error'][0])->error();
+
+                return redirect()->to('shops');
+            }
+        }
+
         $user = Auth::user();
         $quantityLimit = 0;
         $userPurchaseCount = 0;
@@ -157,16 +153,16 @@ class ShopController extends Controller {
             $quantityLimit = $service->getStockPurchaseLimit($stock, Auth::user());
             $userPurchaseCount = $service->checkUserPurchases($stock, Auth::user());
             $purchaseLimitReached = $service->checkPurchaseLimitReached($stock, Auth::user());
-            $userOwned = UserItem::where('user_id', $user->id)->where('item_id', $stock->item->id)->where('count', '>', 0)->get();
+            $userOwned = $service->getUserOwned($stock, Auth::user());
         }
 
-        if ($shop->use_coupons) {
+        if (Auth::check() && $shop->use_coupons) {
             $couponId = ItemTag::where('tag', 'coupon')->where('is_active', 1); // Removed get()
             $itemIds = $couponId->pluck('item_id'); // Could be combined with above
             // get rid of any itemIds that are not in allowed_coupons
-            if ($shop->allowed_coupons && count(json_decode($shop->allowed_coupons, 1))) {
+            if ($shop->allowed_coupons && count($shop->allowed_coupons)) {
                 $itemIds = $itemIds->filter(function ($itemId) use ($shop) {
-                    return in_array($itemId, json_decode($shop->allowed_coupons, 1));
+                    return in_array($itemId, $shop->allowed_coupons);
                 });
             }
             $check = UserItem::with('item')->whereIn('item_id', $itemIds)->where('user_id', Auth::user()->id)->where('count', '>', 0)->get()->pluck('item.name', 'id');
@@ -182,6 +178,7 @@ class ShopController extends Controller {
             'userPurchaseCount'    => $userPurchaseCount,
             'purchaseLimitReached' => $purchaseLimitReached,
             'userOwned'            => $user ? $userOwned : null,
+            'inventory'            => $user ? UserItem::with('item')->whereNull('deleted_at')->where('count', '>', '0')->where('user_id', Auth::user()->id)->get() : null,
         ]);
     }
 
@@ -194,7 +191,7 @@ class ShopController extends Controller {
      */
     public function postBuy(Request $request, ShopManager $service) {
         $request->validate(ShopLog::$createRules);
-        if ($service->buyStock($request->only(['stock_id', 'shop_id', 'slug', 'bank', 'quantity', 'use_coupon', 'coupon']), Auth::user())) {
+        if ($service->buyStock($request->only(['stock_id', 'shop_id', 'slug', 'bank', 'quantity', 'use_coupon', 'coupon', 'cost_group', 'stack_id', 'stack_quantity']), Auth::user())) {
             flash('Successfully purchased item.')->success();
         } else {
             foreach ($service->errors()->getMessages()['error'] as $error) {
@@ -215,61 +212,5 @@ class ShopController extends Controller {
             'logs'  => Auth::user()->getShopLogs(0),
             'shops' => Shop::where('is_active', 1)->orderBy('sort', 'DESC')->get(),
         ]);
-    }
-
-    /**
-     * Shows the donation shop.
-     *
-     * @return \Illuminate\Contracts\Support\Renderable
-     */
-    public function getDonationShop() {
-        $categories = ItemCategory::orderBy('sort', 'DESC')->get();
-
-        $object = new UserItemDonation;
-        $items = count($categories) ?
-            $object->displayStock()->orderByRaw('FIELD(item_category_id,'.implode(',', $categories->pluck('id')->toArray()).')')->orderBy('name')->get()->groupBy('item_category_id') :
-            $object->displayStock()->orderBy('name')->get()->groupBy('item_category_id');
-
-        return view('shops.donation_shop', [
-            'text'       => SitePage::where('key', 'donation-shop')->first(),
-            'categories' => $categories->keyBy('id'),
-            'items'      => $items,
-            'shops'      => Shop::where('is_active', 1)->orderBy('sort', 'DESC')->get(),
-        ]);
-    }
-
-    /**
-     * Gets the donation shop stock modal.
-     *
-     * @param App\Services\ShopManager $service
-     * @param int                      $id
-     *
-     * @return \Illuminate\Contracts\Support\Renderable
-     */
-    public function getDonationShopStock(ShopManager $service, $id) {
-        $stock = UserItemDonation::where('id', $id)->first();
-
-        return view('shops._donation_stock_modal', [
-            'stock' => $stock,
-        ]);
-    }
-
-    /**
-     * Collects an item from the donation shop.
-     *
-     * @param App\Services\ShopManager $service
-     *
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function postCollect(Request $request, ShopManager $service) {
-        if ($service->collectDonation($request->only(['stock_id']), Auth::user())) {
-            flash('Successfully collected item.')->success();
-        } else {
-            foreach ($service->errors()->getMessages()['error'] as $error) {
-                flash($error)->error();
-            }
-        }
-
-        return redirect()->back();
     }
 }

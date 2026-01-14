@@ -20,6 +20,7 @@ use App\Models\Currency\Currency;
 use App\Models\Gallery\GallerySubmission;
 use App\Models\Item\Item;
 use App\Models\Item\ItemCategory;
+use App\Models\Rarity;
 use App\Models\Skill\Skill;
 use App\Models\Stat\Stat;
 use App\Models\Status\StatusEffect;
@@ -140,6 +141,7 @@ class CharacterController extends Controller {
      */
     public function getCharacter($slug) {
         $markings = $this->character->getMarkingFinalArray();
+        $image = $this->character->image;
 
         return view('character.character', [
             'character'             => $this->character,
@@ -151,6 +153,7 @@ class CharacterController extends Controller {
             'extPrevAndNextBtnsUrl' => '',
             'parent'                => CharacterLink::where('child_id', $this->character->id)->orderBy('parent_id', 'ASC')->first(),
             'children'              => CharacterLink::where('parent_id', $this->character->id)->orderBy('child_id', 'ASC')->get(),
+            'image'                 => $image,
         ]);
     }
 
@@ -213,7 +216,7 @@ class CharacterController extends Controller {
         $data = $request->only([
             'name', 'link', 'text', 'is_gift_art_allowed', 'is_gift_writing_allowed',
             'is_trading', 'character_warning', 'custom_values_group', 'custom_values_name',
-            'custom_values_data', 'alert_user', 'is_links_open', 'kotm', 'location', 'faction',
+            'custom_values_data', 'alert_user', 'kotm', 'location', 'faction',
             'adoption', 'donation',
         ]);
 
@@ -276,12 +279,33 @@ class CharacterController extends Controller {
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function getCharacterInventory($slug) {
+    public function getCharacterInventory(Request $request, $slug) {
         $categories = ItemCategory::visible(Auth::user() ?? null)->where('is_character_owned', '1')->orderBy('sort', 'DESC')->get();
         $itemOptions = Item::whereIn('item_category_id', $categories->pluck('id'));
 
+        $query = Item::query();
+        $data = $request->only(['item_category_id', 'name', 'artist', 'rarity_id']);
+        if (isset($data['item_category_id'])) {
+            $query->where('item_category_id', $data['item_category_id']);
+        }
+        if (isset($data['name'])) {
+            $query->where('name', 'LIKE', '%'.$data['name'].'%');
+        }
+        if (isset($data['artist'])) {
+            $query->where('artist_id', $data['artist']);
+        }
+        if (isset($data['rarity_id'])) {
+            if ($data['rarity_id'] == 'withoutOption') {
+                $query->whereNull('data->rarity_id');
+            } else {
+                $query->where('data->rarity_id', $data['rarity_id']);
+            }
+        }
+
         $items = count($categories) ?
             $this->character->items()
+                ->whereIn('items.id', $query->pluck('id')->toArray())
+                ->with('category')
                 ->where('count', '>', 0)
                 ->orderByRaw('FIELD(item_category_id,'.implode(',', $categories->pluck('id')->toArray()).')')
                 ->orderBy('name')
@@ -289,6 +313,8 @@ class CharacterController extends Controller {
                 ->get()
                 ->groupBy(['item_category_id', 'id']) :
             $this->character->items()
+                ->whereIn('items.id', $query->pluck('id')->toArray())
+                ->with('category')
                 ->where('count', '>', 0)
                 ->orderBy('name')
                 ->orderBy('updated_at')
@@ -301,12 +327,11 @@ class CharacterController extends Controller {
             'categories'            => $categories->keyBy('id'),
             'items'                 => $items,
             'logs'                  => $this->character->getItemLogs(),
+            'artists'               => User::whereIn('id', Item::whereNotNull('artist_id')->pluck('artist_id')->toArray())->pluck('name', 'id')->toArray(),
+            'rarities'              => ['withoutOption' => 'Without Rarity'] + Rarity::orderBy('rarities.sort', 'DESC')->pluck('name', 'id')->toArray(),
         ] + (Auth::check() && (Auth::user()->hasPower('edit_inventories') || Auth::user()->id == $this->character->user_id) ? [
-            'itemOptions'   => $itemOptions->pluck('name', 'id'),
-            'userInventory' => UserItem::with('item')->whereIn('item_id', $itemOptions->pluck('id'))->whereNull('deleted_at')->where('count', '>', '0')->where('user_id', Auth::user()->id)->get()->filter(function ($userItem) {
-                return $userItem->isTransferrable == true;
-            })->sortBy('item.name'),
-            'page'          => 'character',
+            'itemOptions' => $itemOptions->pluck('name', 'id'),
+            'page'        => 'character',
         ] : []));
     }
 
@@ -1113,6 +1138,27 @@ class CharacterController extends Controller {
         ]);
     }
 
+    public function getFeaturedCharacter() {
+        $featuredId = SiteSetting::where('key', 'featured_character')->value('value');
+
+        if (!$featuredId) {
+            return response()->json(['error' => 'No featured character set'], 404);
+        }
+
+        $character = Character::find($featuredId);
+
+        if (!$character) {
+            return response()->json(['error' => 'Character not found'], 404);
+        }
+
+        return response()->json([
+            'id'        => $character->id,
+            'slug'      => $character->slug,
+            'name'      => $character->name,
+            'image_url' => $character->image_url,
+        ]);
+    }
+
     /**
      * Transfers inventory awards back to a user.
      *
@@ -1211,27 +1257,4 @@ class CharacterController extends Controller {
 
         return redirect()->back();
     }
-
-    
-    public function getFeaturedCharacter()
-{
-    $featuredId = SiteSetting::where('key', 'featured_character')->value('value');
-
-    if (!$featuredId) {
-        return response()->json(['error' => 'No featured character set'], 404);
-    }
-
-    $character = Character::find($featuredId);
-
-    if (!$character) {
-        return response()->json(['error' => 'Character not found'], 404);
-    }
-
-    return response()->json([
-        'id' => $character->id,
-        'slug' => $character->slug,
-        'name' => $character->name,
-        'image_url' => $character->image_url,
-    ]);
-}
 }

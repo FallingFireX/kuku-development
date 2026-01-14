@@ -39,8 +39,8 @@
                 {!! Form::text('owner_url', old('owner_url'), ['class' => 'form-control']) !!}
             </div>
         </div>
-    
-   
+
+
 
         @if (!$isMyo)
             <div class="row">
@@ -63,10 +63,21 @@
                     </div>
                 </div>
             </div>
-
-            <div class="form-group">
-                {!! Form::label('Character Code') !!} {!! add_help('This code identifies the character itself. You don\'t have to use the automatically generated code, but this must be unique among all characters (as it\'s used to generate the character\'s page URL).') !!}
-                {!! Form::text('slug', old('slug'), ['class' => 'form-control', 'id' => 'code']) !!}
+            <div class="row">
+                <div class="col-md-{{ config('lorekeeper.settings.enable_character_content_warnings') ? 6 : 12 }}">
+                    <div class="form-group">
+                        {!! Form::label('Character Code') !!} {!! add_help('This code identifies the character itself. You don\'t have to use the automatically generated code, but this must be unique among all characters (as it\'s used to generate the character\'s page URL).') !!}
+                        {!! Form::text('slug', old('slug'), ['class' => 'form-control', 'id' => 'code']) !!}
+                    </div>
+                </div>
+                @if (config('lorekeeper.settings.enable_character_content_warnings'))
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            {!! Form::label('Content Warnings') !!} {!! add_help('These warnings will be displayed on the character\'s page. They are not required, but are recommended if the character contains sensitive content.') !!}
+                            {!! Form::text('content_warnings', old('content_warnings'), ['class' => 'form-control', 'id' => 'warningList']) !!}
+                        </div>
+                    </div>
+                @endif
             </div>
         @endif
 
@@ -110,18 +121,18 @@
                 {!! Form::label('is_sellable', 'Is Resellable', ['class' => 'form-check-label ml-3']) !!}
             </div>
         </div>
-            <div class="card mb-3" id="resellOptions">
-                <div class="card-body">
-                    {!! Form::label('Resale Value') !!} {!! add_help('This value is publicly displayed on the ' . ($isMyo ? 'MYO slot' : 'character') . '\'s page.') !!}
-                    {!! Form::text('sale_value', old('sale_value'), ['class' => 'form-control']) !!}
-                </div>
+        <div class="card mb-3" id="resellOptions">
+            <div class="card-body">
+                {!! Form::label('Resale Value') !!} {!! add_help('This value is publicly displayed on the ' . ($isMyo ? 'MYO slot' : 'character') . '\'s page.') !!}
+                {!! Form::text('sale_value', old('sale_value'), ['class' => 'form-control']) !!}
             </div>
-            <div class="col-md-4 form-group">
-                {!! Form::label('On Transfer Cooldown Until (Optional)') !!}
-                {!! Form::text('transferrable_at', old('transferrable_at'), ['class' => 'form-control datepicker']) !!}
-            </div>
-        
-                <hr>
+        </div>
+        <div class="col-md-4 form-group">
+            {!! Form::label('On Transfer Cooldown Until (Optional)') !!}
+            {!! Form::text('transferrable_at', old('transferrable_at'), ['class' => 'form-control datepicker']) !!}
+        </div>
+
+        <hr>
         <h3>Image Upload</h3>
 
         <div class="form-group">
@@ -226,12 +237,12 @@
         </div>
 
         <div class="form-group" id="subtypes">
-            {!! Form::label('Subtype (Optional)') !!} @if ($isMyo)
+            {!! Form::label('Subtypes (Optional)') !!} @if ($isMyo)
                 {!! add_help(
                     'This will lock the slot into a particular subtype. Leave it blank if you would like to give the user a choice, or not select a subtype. The subtype must match the species selected above, and if no species is specified, the subtype will not be applied.',
                 ) !!}
             @endif
-            {!! Form::select('subtype_id', $subtypes, old('subtype_id'), ['class' => 'form-control disabled', 'id' => 'subtype']) !!}
+            {!! Form::select('subtype_ids[]', $subtypes, old('subtype_ids'), ['class' => 'form-control disabled', 'id' => 'subtype', 'multiple', 'placeholder' => 'Pick a Species First']) !!}
         </div>
 
         <div class="form-group">
@@ -269,7 +280,7 @@
             </div>
             <div class="col-md-4 form-group" id='diet'>
                 {!! Form::label('diet') !!}
-                {!! Form::select('diet',['Carnivore' => 'Carnivore', 'Omnivore' => 'Omnivore', 'Herbivore' => 'Herbivore'], null, ['class' => 'form-control']) !!}
+                {!! Form::select('diet', ['Carnivore' => 'Carnivore', 'Omnivore' => 'Omnivore', 'Herbivore' => 'Herbivore'], null, ['class' => 'form-control']) !!}
             </div>
         </div>
         <div class="row">
@@ -303,15 +314,15 @@
                 {!! Form::text('spd', old('spd'), ['class' => 'form-control', 'spd']) !!}
             </div>
         </div>
-            
-<!-- 
-        <div class="form-group" id='stats'>
-            {!! Form::label('Stats (atk/def/spd)') !!}
-            {!! Form::text('atk', old('atk'), ['class' => 'form-control', 'atk']) !!}
-            {!! Form::text('def', old('def'), ['class' => 'form-control', 'def']) !!}
-            {!! Form::text('spd', old('spd'), ['class' => 'form-control', 'spd']) !!}
-        </div>
-         -->
+
+        <!--
+                        <div class="form-group" id='stats'>
+                            {!! Form::label('Stats (atk/def/spd)') !!}
+                            {!! Form::text('atk', old('atk'), ['class' => 'form-control', 'atk']) !!}
+                            {!! Form::text('def', old('def'), ['class' => 'form-control', 'def']) !!}
+                            {!! Form::text('spd', old('spd'), ['class' => 'form-control', 'spd']) !!}
+                        </div>
+                         -->
 
         <div class="form-group">
             {!! Form::label('Traits') !!} @if ($isMyo)
@@ -337,140 +348,110 @@
             </div>
         @endif
 
-    
-    <h3>Lineage</h3>
 
-<div class="alert alert-info">Enter a sire and dam to autogenerate ancestry or enter ancestors manually. Do not enter anything if there are no ancestors in that slot.</div>
+        <h3>Lineage</h3>
 
-<?php
-    // Reduce errors and repetition
-    $k = [
-        'sire',
-        'dam',
-        'sire_sire',
-        'sire_sire_sire',
-        'sire_sire_dam',
-        'sire_dam',
-        'sire_dam_sire',
-        'sire_dam_dam',
-        'dam_sire',
-        'dam_sire_sire',
-        'dam_sire_dam',
-        'dam_dam',
-        'dam_dam_sire',
-        'dam_dam_dam'
-    ];
-    // Human-readable names for the things
-    $j = [
-        "Sire",
-        "Dam",
-        "Sire's Sire",
-        "Sire's Sire's Sire",
-        "Sire's Sire's Dam",
-        "Sire's Dam",
-        "Sire's Dam's Sire",
-        "Sire's Dam's Dam",
-        "Dam's Sire",
-        "Dam's Sire's Sire",
-        "Dam's Sire's Dam",
-        "Dam's Dam",
-        "Dam's Dam's Sire",
-        "Dam's Dam's Dam",
-    ];
-    ?>
-<div class="row">
-    <div class="col-md-6">
-        @for ($i=0; $i < 14; $i++)
-            <?php $em = ($i < 3 || $i == 5 || $i == 8 || $i == 11); ?>
-            <div class="form-group text-center {{ $em ? 'pb-1 border-bottom' : '' }}">
-                {!! Form::label($j[$i], null, ['class' => $em ? 'font-weight-bold' : '']) !!}
-                <div class="row">
-                    <div class="col-sm-6 pr-sm-1">
-                        {!! Form::select($k[$i].'_id', $characterOptions, old($k[$i].'_id'), ['class' => 'form-control text-left character-select mb-1', 'placeholder' => 'None']) !!}
+        <div class="alert alert-info">Enter a sire and dam to autogenerate ancestry or enter ancestors manually. Do not enter anything if there are no ancestors in that slot.</div>
+
+        <?php
+        // Reduce errors and repetition
+        $k = ['sire', 'dam', 'sire_sire', 'sire_sire_sire', 'sire_sire_dam', 'sire_dam', 'sire_dam_sire', 'sire_dam_dam', 'dam_sire', 'dam_sire_sire', 'dam_sire_dam', 'dam_dam', 'dam_dam_sire', 'dam_dam_dam'];
+        // Human-readable names for the things
+        $j = ['Sire', 'Dam', "Sire's Sire", "Sire's Sire's Sire", "Sire's Sire's Dam", "Sire's Dam", "Sire's Dam's Sire", "Sire's Dam's Dam", "Dam's Sire", "Dam's Sire's Sire", "Dam's Sire's Dam", "Dam's Dam", "Dam's Dam's Sire", "Dam's Dam's Dam"];
+        ?>
+        <div class="row">
+            <div class="col-md-6">
+                @for ($i = 0; $i < 14; $i++)
+                    <?php $em = $i < 3 || $i == 5 || $i == 8 || $i == 11; ?>
+                    <div class="form-group text-center {{ $em ? 'pb-1 border-bottom' : '' }}">
+                        {!! Form::label($j[$i], null, ['class' => $em ? 'font-weight-bold' : '']) !!}
+                        <div class="row">
+                            <div class="col-sm-6 pr-sm-1">
+                                {!! Form::select($k[$i] . '_id', $characterOptions, old($k[$i] . '_id'), ['class' => 'form-control text-left character-select mb-1', 'placeholder' => 'None']) !!}
+                            </div>
+                            <div class="col-sm-6 pl-sm-1">
+                                {!! Form::text($k[$i] . '_name', old($k[$i] . '_name'), ['class' => 'form-control mb-1']) !!}
+                            </div>
+                        </div>
                     </div>
-                    <div class="col-sm-6 pl-sm-1">
-                        {!! Form::text($k[$i].'_name', old($k[$i].'_name'), ['class' => 'form-control mb-1']) !!}
-                    </div>
-                </div>
+                    @if ($i == 0)
             </div>
-            @if ($i == 0)
-                </div>
-                <div class="col-md-6">
+            <div class="col-md-6">
             @elseif ($i == 1)
-                </div>
             </div>
-            <div class="form-check mb-4">
-                <input class="form-check-input" type="checkbox" value="generate" name="generate_ancestors" id="generate_ancestors" checked>
-                <label class="form-check-label" for="generate_ancestors">
-                    automatically fill in ancestors from the parent(s)/grandparent(s) lineages?
-                </label>
-            </div>
+        </div>
+        <div class="form-check mb-4">
+            <input class="form-check-input" type="checkbox" value="generate" name="generate_ancestors" id="generate_ancestors" checked>
+            <label class="form-check-label" for="generate_ancestors">
+                automatically fill in ancestors from the parent(s)/grandparent(s) lineages?
+            </label>
+        </div>
 
-            <h4><a href="#advanced_lineage" class="dropdown-toggle" data-toggle="collapse" data-target="#advanced_lineage" aria-expanded="false" aria-controls="advanced_lineage">
+        <h4><a href="#advanced_lineage" class="dropdown-toggle" data-toggle="collapse" data-target="#advanced_lineage" aria-expanded="false" aria-controls="advanced_lineage">
                 Advanced Lineage
             </a></h4>
 
-            <div class="mb-4">
-                <div id="advanced_lineage" class="row collapse mb-0">
-                    <div class="col-md-6">
-            @elseif ($i == 7)
+        <div class="mb-4">
+            <div id="advanced_lineage" class="row collapse mb-0">
+                <div class="col-md-6">
+                @elseif ($i == 7)
                 </div>
                 <div class="col-md-6">
-            @endif
-        @endfor
+    @endif
+    @endfor
     </div>
-</div>
-</div>
-        <div class="form-group">
-            {!! Form::checkbox('is_chimera', 0, 0, ['class' => 'form-check-input', 'data-toggle' => 'toggle', 'id' => 'is_chimera']) !!}
-            {!! Form::label('is_chimera', 'Is Chimera', ['class' => 'form-check-label ml-3']) !!} {!! add_help('If this character has the Chimera modifier, then this will give you the ability to customize both genomes.') !!}
-        </div>
+    </div>
+    </div>
+    <div class="form-group">
+        {!! Form::checkbox('is_chimera', 0, 0, ['class' => 'form-check-input', 'data-toggle' => 'toggle', 'id' => 'is_chimera']) !!}
+        {!! Form::label('is_chimera', 'Is Chimera', ['class' => 'form-check-label ml-3']) !!} {!! add_help('If this character has the Chimera modifier, then this will give you the ability to customize both genomes.') !!}
+    </div>
 
-        <div class="row">
-            <div class="col-md-6">
-                <div class="form-group">
-                    {!! Form::label('Base Color') !!}
-                    {!! Form::select('base', $bases, old('base_id'), ['class' => 'form-control']) !!}
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="form-group" connect="is_chimera" style="display:none">
-                    {!! Form::label('Secondary Base Color') !!}
-                    {!! Form::select('secondary_base', $bases, old('base_id'), ['class' => 'form-control']) !!}
-                </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                {!! Form::label('Base Color') !!}
+                {!! Form::select('base', $bases, old('base_id'), ['class' => 'form-control']) !!}
             </div>
         </div>
+        <div class="col-md-6">
+            <div class="form-group" connect="is_chimera" style="display:none">
+                {!! Form::label('Secondary Base Color') !!}
+                {!! Form::select('secondary_base', $bases, old('base_id'), ['class' => 'form-control']) !!}
+            </div>
+        </div>
+    </div>
 
-        <div class="form-group">
-            {!! Form::label('Markings') !!}
-            {!! add_help('Select markings applicable to character') !!}
-            <div><a href="#" class="btn btn-primary mb-2" id="add-marking">Add Marking</a></div>
-            <div id="markingList">
-            </div>
-            <div class="marking-row align-items-end hide mb-2">
-                {!! Form::select('marking_id[]', $markings, null, ['class' => 'form-control mr-2 marking-select', 'placeholder' => 'Select Marking']) !!}
-                <div class="form-group mb-0" style="width:50%">
-                    <select name="is_dominant[]" id="is_dominant[]" class="form-control markingType" placeholder="Select Type...">
-                        <option value="" data-code="">Select Type...</option>
-                        <option value="0" data-code="0">Recessive</option>
-                        <option value="1" data-code="1">Dominant</option>
-                    </select>
-                </div>
-                <div class="form-group mb-0 mx-2" connect="is_chimera" style="width:50%;display:none;">
-                    <select name="side_id[]" id="side_id" class="form-control" placeholder="Select Side...">
-                        <option value="" data-code="">Select Side...</option>
-                        <option value="0" data-code="0">Side 1</option>
-                        <option value="1" data-code="1">Side 2</option>
-                    </select>
-                </div>
-                <a href="#" class="remove-marking btn btn-danger mb-2">×</a>
-            </div>
+    <div class="form-group">
+        {!! Form::label('Markings') !!}
+        {!! add_help('Select markings applicable to character') !!}
+        <div><a href="#" class="btn btn-primary mb-2" id="add-marking">Add Marking</a></div>
+        <div id="markingList">
         </div>
+        <div class="marking-row align-items-end hide mb-2">
+            {!! Form::select('marking_id[]', $markings, null, ['class' => 'form-control mr-2 marking-select', 'placeholder' => 'Select Marking']) !!}
+            <div class="form-group mb-0" style="width:50%">
+                <select name="is_dominant[]" id="is_dominant[]" class="form-control markingType" placeholder="Select Type...">
+                    <option value="" data-code="">Select Type...</option>
+                    <option value="0" data-code="0">Recessive</option>
+                    <option value="1" data-code="1">Dominant</option>
+                </select>
+            </div>
+            <div class="form-group mb-0 mx-2" connect="is_chimera" style="width:50%;display:none;">
+                <select name="side_id[]" id="side_id" class="form-control" placeholder="Select Side...">
+                    <option value="" data-code="">Select Side...</option>
+                    <option value="0" data-code="0">Side 1</option>
+                    <option value="1" data-code="1">Side 2</option>
+                </select>
+            </div>
+            <a href="#" class="remove-marking btn btn-danger mb-2">×</a>
+        </div>
+    </div>
 
-        <div class="text-right">
-            {!! Form::submit('Create Character', ['class' => 'btn btn-primary', 'multiple' => true, 'placeholder' => 'Select Marking(s)']) !!}
-        </div>
-        {!! Form::close() !!}
+    <div class="text-right">
+        {!! Form::submit('Create Character', ['class' => 'btn btn-primary', 'multiple' => true, 'placeholder' => 'Select Marking(s)']) !!}
+    </div>
+    {!! Form::close() !!}
     @endif
 
 
@@ -484,10 +465,11 @@
     @include('widgets._image_upload_js')
     @include('widgets._datetimepicker_js')
     @include('widgets._markingbases_js', [])
+    @include('widgets._character_warning_js')
     @if (!$isMyo)
         @include('widgets._character_code_js')
     @endif
-
+    @include('js._tinymce_wysiwyg')
     <script>
         $("#species").change(function() {
             var species = $('#species').val();
@@ -499,6 +481,9 @@
                 dataType: "text"
             }).done(function(res) {
                 $("#subtypes").html(res);
+                $("#subtype").selectize({
+                    maxItems: {{ config('lorekeeper.extensions.multiple_subtype_limit') }},
+                });
             }).fail(function(jqXHR, textStatus, errorThrown) {
                 alert("AJAX call failed: " + textStatus + ", " + errorThrown);
             });
@@ -539,13 +524,15 @@
             });
         });
 
-        $(document).ready(function()
-        {
+        $(document).ready(function() {
             $('.character-select').selectize();
-            $('#advanced_lineage').on('click', function(e)
-            {
+            $('#advanced_lineage').on('click', function(e) {
                 e.preventDefault();
             });
+        });
+
+        $("#subtype").selectize({
+            maxItems: {{ config('lorekeeper.extensions.multiple_subtype_limit') }},
         });
     </script>
 @endsection

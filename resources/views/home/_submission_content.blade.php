@@ -29,7 +29,7 @@
             </div>
             <div class="col-md-10"><a href="{{ $submission->url }}">{{ $submission->url }}</a></div>
         </div>
-        
+
         <div class="row mb-2 no-gutters">
             <div class="col-md-2">
                 <h5 class="mb-0">Submitted</h5>
@@ -98,6 +98,13 @@
         </div>
     </div>
 @endif
+<div class="comments">
+    @comments([
+        'model' => $submission,
+        'perPage' => 5,
+        'allow_dislikes' => false,
+    ])
+</div>
 
 @if (array_filter(parseAssetData(isset($submission->data['rewards']) ? $submission->data['rewards'] : $submission->data)))
     <div class="card mb-3">
@@ -258,4 +265,3 @@
         </div>
     </div>
 @endif
-

@@ -8,6 +8,7 @@ use App\Models\Base\Base;
 use App\Models\Character\BreedingPermission;
 use App\Models\Character\Character;
 use App\Models\Character\CharacterCategory;
+use App\Models\Character\CharacterImage;
 use App\Models\Character\CharacterLineageBlacklist;
 use App\Models\Character\CharacterLink;
 use App\Models\Character\CharacterMarking;
@@ -19,11 +20,9 @@ use App\Models\Rarity;
 use App\Models\Species\Species;
 use App\Models\Species\Subtype;
 use App\Models\Stat\Stat;
-use App\Models\Trade;
+use App\Models\Trade\Trade;
 use App\Models\User\User;
-use App\Models\User\UserItem;
 use App\Services\CharacterManager;
-use App\Services\TradeManager;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -57,15 +56,15 @@ class CharacterController extends Controller {
         return view('admin.masterlist.create_character', [
             'categories'       => CharacterCategory::orderBy('sort')->get(),
             'userOptions'      => User::query()->orderBy('name')->pluck('name', 'id')->toArray(),
-            'characterOptions' => CharacterLineageBlacklist::getAncestorOptions(),
             'rarities'         => ['0' => 'Select Rarity'] + Rarity::orderBy('sort', 'DESC')->pluck('name', 'id')->toArray(),
             'specieses'        => ['0' => 'Select Species'] + Species::orderBy('sort', 'DESC')->pluck('name', 'id')->toArray(),
-            'markings'         => ['' => 'Select Markings(s)'] + Marking::orderBy('name', 'DESC')->pluck('name', 'id')->toArray(),
-            'bases'       => ['' => 'Select Base(s)'] + Base::orderBy('name', 'DESC')->pluck('code', 'id')->toArray(),
-            'subtypes'         => ['0' => 'Pick a Species First'],
-            'features'         => Feature::GetDropdownItems(1),
-            'transformations'  => ['0' => 'Pick a Species First'],
+            'subtypes'         => [],
+            'features'         => Feature::getDropdownItems(1),
             'isMyo'            => false,
+            'characterOptions' => CharacterLineageBlacklist::getAncestorOptions(),
+            'markings'         => ['' => 'Select Markings(s)'] + Marking::orderBy('name', 'DESC')->pluck('name', 'id')->toArray(),
+            'bases'            => ['' => 'Select Base(s)'] + Base::orderBy('name', 'DESC')->pluck('code', 'id')->toArray(),
+            'transformations'  => ['0' => 'Pick a Species First'],
             'stats'            => Stat::orderBy('name')->get(),
         ]);
     }
@@ -78,15 +77,15 @@ class CharacterController extends Controller {
     public function getCreateMyo() {
         return view('admin.masterlist.create_character', [
             'userOptions'      => User::query()->orderBy('name')->pluck('name', 'id')->toArray(),
-            'characterOptions' => CharacterLineageBlacklist::getAncestorOptions(),
             'rarities'         => ['0' => 'Select Rarity'] + Rarity::orderBy('sort', 'DESC')->pluck('name', 'id')->toArray(),
             'specieses'        => ['0' => 'Select Species'] + Species::orderBy('sort', 'DESC')->pluck('name', 'id')->toArray(),
-            'markings'         => ['' => 'Select Markings(s)'] + Marking::orderBy('name', 'DESC')->pluck('name', 'id')->toArray(),
-            'bases'       => ['' => 'Select Base(s)'] + Base::orderBy('name', 'DESC')->pluck('code', 'id')->toArray(),
-            'subtypes'         => ['0' => 'Pick a Species First'],
-            'features'         => Feature::GetDropdownItems(1),
-            'transformations'  => ['0' => 'Pick a Species First'],
+            'subtypes'         => [],
+            'features'         => Feature::getDropdownItems(1),
             'isMyo'            => true,
+            'characterOptions' => CharacterLineageBlacklist::getAncestorOptions(),
+            'markings'         => ['' => 'Select Markings(s)'] + Marking::orderBy('name', 'DESC')->pluck('name', 'id')->toArray(),
+            'bases'            => ['' => 'Select Base(s)'] + Base::orderBy('name', 'DESC')->pluck('code', 'id')->toArray(),
+            'transformations'  => ['0' => 'Pick a Species First'],
             'stats'            => Stat::orderBy('name')->get(),
         ]);
     }
@@ -100,7 +99,7 @@ class CharacterController extends Controller {
         $species = $request->input('species');
 
         return view('admin.masterlist._create_character_subtype', [
-            'subtypes' => ['0' => 'Select Subtype'] + Subtype::where('species_id', '=', $species)->orderBy('sort', 'DESC')->pluck('name', 'id')->toArray(),
+            'subtypes' => Subtype::where('species_id', '=', $species)->orderBy('sort', 'DESC')->pluck('name', 'id')->toArray(),
             'isMyo'    => $request->input('myo'),
         ]);
     }
@@ -157,11 +156,10 @@ class CharacterController extends Controller {
             'x0', 'x1', 'y0', 'y1',
             'designer_id', 'designer_url',
             'artist_id', 'artist_url',
-            'species_id', 'subtype_id', 'rarity_id', 'feature_id', 'feature_data', 'marking_id', 'is_dominant', 'base', 'secondary_base', 'side_id',
+            'species_id', 'subtype_ids', 'rarity_id', 'feature_id', 'feature_data', 'marking_id', 'is_dominant', 'base', 'secondary_base', 'side_id',
             'marking_color_0', 'marking_color_1', 'is_chimera',
             'designer_id', 'designer_url',
             'artist_id', 'artist_url',
-            
 
             // hello darkness my old friend //
             'sire_id',           'sire_name',
@@ -180,8 +178,7 @@ class CharacterController extends Controller {
             'dam_dam_dam_id',    'dam_dam_dam_name',
             'generate_ancestors',
 
-            'species_id', 'subtype_id', 'rarity_id', 'feature_id', 'feature_data', 
-            'image', 'thumbnail', 'image_description', 'parent_id', 'transformation_id', 'transformation_info', 'transformation_description', 'stats', 'genotype', 'phenotype', 'gender', 'eyecolor', 'spd', 'def', 'atk',
+            'image', 'thumbnail', 'image_description', 'content_warnings', 'parent_id', 'transformation_id', 'transformation_info', 'transformation_description', 'stats', 'genotype', 'phenotype', 'gender', 'eyecolor', 'spd', 'def', 'atk',
             'diet', 'bio',
         ]);
 
@@ -234,7 +231,7 @@ class CharacterController extends Controller {
             'dam_dam_dam_id',    'dam_dam_dam_name',
             'generate_ancestors',
 
-            'species_id', 'subtype_id', 'rarity_id', 'feature_id', 'feature_data', 'marking_id', 'is_dominant', 'base', 'secondary_base', 'side_id',
+            'species_id', 'subtype_ids', 'rarity_id', 'feature_id', 'feature_data', 'marking_id', 'is_dominant', 'base', 'secondary_base', 'side_id',
             'marking_color_0', 'marking_color_1', 'is_chimera',
             'image', 'thumbnail', 'parent_id', 'transformation_id', 'transformation_info', 'transformation_description', 'stats', 'genotype', 'phenotype', 'gender', 'eyecolor', 'spd', 'def', 'atk',
             'diet', 'bio',
@@ -346,47 +343,46 @@ class CharacterController extends Controller {
      *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function postEditCharacterStats(Request $request, CharacterManager $service, $slug)
-{
-    $request->validate(Character::$updateRules);
+    public function postEditCharacterStats(Request $request, CharacterManager $service, $slug) {
+        $request->validate(Character::$updateRules);
 
-    $data = $request->only([
-        'character_category_id', 'number', 'slug', 'is_giftable',
-        'is_tradeable', 'is_sellable', 'sale_value', 'transferrable_at',
-        'marking_id', 'is_dominant', 'base', 'secondary_base', 'side_id',
-        'marking_color_0', 'marking_color_1', 'is_chimera'
-    ]);
+        $data = $request->only([
+            'character_category_id', 'number', 'slug', 'is_giftable',
+            'is_tradeable', 'is_sellable', 'sale_value', 'transferrable_at',
+            'marking_id', 'is_dominant', 'base', 'secondary_base', 'side_id',
+            'marking_color_0', 'marking_color_1', 'is_chimera',
+        ]);
 
-    $this->character = Character::where('slug', $slug)->firstOrFail();
+        $this->character = Character::where('slug', $slug)->firstOrFail();
 
-    $is_chimera = $request->boolean('is_chimera');
+        $is_chimera = $request->boolean('is_chimera');
 
-    if ($is_chimera && isset($data['base']) && isset($data['secondary_base'])) {
-        // Prevent duplicate concatenation
-        if (!str_contains($this->character->base, '|')) {
-            $data['base'] = $data['base'] . '|' . $data['secondary_base'];
-        } else {
-            // Replace existing parts properly
-            $parts = explode('|', $this->character->base);
-            $primaryBase = $data['base'] ?? $parts[0];
-            $secondaryBase = $data['secondary_base'] ?? ($parts[1] ?? '');
-            $data['base'] = $primaryBase . '|' . $secondaryBase;
+        if ($is_chimera && isset($data['base']) && isset($data['secondary_base'])) {
+            // Prevent duplicate concatenation
+            if (!str_contains($this->character->base, '|')) {
+                $data['base'] = $data['base'].'|'.$data['secondary_base'];
+            } else {
+                // Replace existing parts properly
+                $parts = explode('|', $this->character->base);
+                $primaryBase = $data['base'] ?? $parts[0];
+                $secondaryBase = $data['secondary_base'] ?? ($parts[1] ?? '');
+                $data['base'] = $primaryBase.'|'.$secondaryBase;
+            }
         }
+
+        if ($service->updateCharacterStats($data, $this->character, Auth::user())) {
+            flash('Character stats updated successfully.')->success();
+            $service->updateCharacterMarkings($data, $this->character);
+
+            return redirect()->to($this->character->url);
+        }
+
+        foreach ($service->errors()->getMessages()['error'] as $error) {
+            flash($error)->error();
+        }
+
+        return redirect()->back()->withInput();
     }
-
-    if ($service->updateCharacterStats($data, $this->character, Auth::user())) {
-        flash('Character stats updated successfully.')->success();
-        $service->updateCharacterMarkings($data, $this->character);
-        return redirect()->to($this->character->url);
-    }
-
-    foreach ($service->errors()->getMessages()['error'] as $error) {
-        flash($error)->error();
-    }
-
-    return redirect()->back()->withInput();
-}
-
 
     /**
      * Edits an MYO slot's stats.
@@ -422,7 +418,6 @@ class CharacterController extends Controller {
         return redirect()->back()->withInput();
     }
 
-
     /**
      * Shows the edit character description modal.
      *
@@ -436,7 +431,7 @@ class CharacterController extends Controller {
             abort(404);
         }
 
-        return view('character.admin._edit_description_modal', [
+        return view('character.admin._edit_description', [
             'character' => $this->character,
             'isMyo'     => false,
         ]);
@@ -455,7 +450,7 @@ class CharacterController extends Controller {
             abort(404);
         }
 
-        return view('character.admin._edit_description_modal', [
+        return view('character.admin._edit_description', [
             'character' => $this->character,
             'isMyo'     => true,
         ]);
@@ -853,11 +848,11 @@ class CharacterController extends Controller {
                     $transfers->sortNewest();
                     break;
                 case 'oldest':
-                    $transfers->sortOldest();
+                    $transfers->sortNewest(true);
                     break;
             }
         } else {
-            $transfers->sortOldest();
+            $transfers->sortNewest(true);
         }
 
         if ($type == 'completed') {
@@ -933,104 +928,6 @@ class CharacterController extends Controller {
     }
 
     /**
-     * Shows the character trade queue.
-     *
-     * @param string $type
-     *
-     * @return \Illuminate\Contracts\Support\Renderable
-     */
-    public function getTradeQueue($type) {
-        $trades = Trade::query();
-        $user = Auth::user();
-
-        if ($type == 'completed') {
-            $trades->completed();
-        } elseif ($type == 'incoming') {
-            $trades->where('status', 'Pending');
-        } else {
-            abort(404);
-        }
-
-        $openTransfersQueue = Settings::get('open_transfers_queue');
-
-        $stacks = [];
-        foreach ($trades->get() as $trade) {
-            foreach ($trade->data as $side=> $assets) {
-                if (isset($assets['user_items'])) {
-                    $user_items = UserItem::with('item')->find(array_keys($assets['user_items']));
-                    $items = [];
-                    foreach ($assets['user_items'] as $id=> $quantity) {
-                        $user_item = $user_items->find($id);
-                        $user_item['quantity'] = $quantity;
-                        array_push($items, $user_item);
-                    }
-                    $items = collect($items)->groupBy('item_id');
-                    $stacks[$trade->id][$side] = $items;
-                }
-            }
-        }
-
-        return view('admin.masterlist.character_trades', [
-            'trades'             => $trades->orderBy('id', 'DESC')->paginate(20),
-            'tradesQueue'        => Settings::get('open_transfers_queue'),
-            'openTransfersQueue' => $openTransfersQueue,
-            'transferCount'      => $openTransfersQueue ? CharacterTransfer::active()->where('is_approved', 0)->count() : 0,
-            'tradeCount'         => $openTransfersQueue ? Trade::where('status', 'Pending')->count() : 0,
-            'stacks'             => $stacks,
-        ]);
-    }
-
-    /**
-     * Shows the character trade action modal.
-     *
-     * @param int    $id
-     * @param string $action
-     *
-     * @return \Illuminate\Contracts\Support\Renderable
-     */
-    public function getTradeModal($id, $action) {
-        if ($action != 'approve' && $action != 'reject') {
-            abort(404);
-        }
-        $trade = Trade::where('id', $id)->first();
-        if (!$trade) {
-            abort(404);
-        }
-
-        return view('admin.masterlist._'.$action.'_trade_modal', [
-            'trade'    => $trade,
-            'cooldown' => Settings::get('transfer_cooldown'),
-        ]);
-    }
-
-    /**
-     * Acts on a trade in the trade queue.
-     *
-     * @param App\Services\CharacterManager $service
-     * @param int                           $id
-     *
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function postTradeQueue(Request $request, TradeManager $service, $id) {
-        if (!Auth::check()) {
-            abort(404);
-        }
-
-        $action = strtolower($request->get('action'));
-        if ($action == 'approve' && $service->approveTrade($request->only(['action', 'cooldowns']) + ['id' => $id], Auth::user())) {
-            flash('Trade approved.')->success();
-        } elseif ($action == 'reject' && $service->rejectTrade($request->only(['action', 'reason']) + ['id' => $id], Auth::user())) {
-            flash('Trade rejected.')->success();
-        } else {
-            foreach ($service->errors()->getMessages()['error'] as $error) {
-                flash($error)->error();
-            }
-        }
-
-        return redirect()->back();
-    }
-
-    /**
      * Shows a list of all existing MYO slots.
      *
      * @return \Illuminate\Contracts\Support\Renderable
@@ -1039,5 +936,22 @@ class CharacterController extends Controller {
         return view('admin.masterlist.myo_index', [
             'slots' => Character::myo(1)->orderBy('id', 'DESC')->paginate(30),
         ]);
+    }
+
+    /**
+     * Gets all extant content warnings.
+     *
+     * @return string
+     */
+    public function getContentWarnings() {
+        $contentWarnings = CharacterImage::whereNotNull('content_warnings')->pluck('content_warnings')->flatten()->map(function ($warnings) {
+            return collect($warnings)->map(function ($warning) {
+                $lower = strtolower(trim($warning));
+
+                return ['warning' => ucwords($lower)];
+            });
+        })->sort()->flatten(1)->unique()->values()->toJson();
+
+        return $contentWarnings;
     }
 }

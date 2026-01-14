@@ -28,7 +28,7 @@
         <div class="world-entry-text">
             <p>{{ $prompt->summary }}</p>
             <h3 class="mb-3"><a data-toggle="collapse" href="#prompt-{{ $prompt->id }}" @if (isset($isPage)) aria-expanded="true" @endif>Details <i class="fas fa-angle-down"></i></a></h3>
-            <div class="collapse @if (isset($isPage)) show @endif mb-5" id="prompt-{{ $prompt->id }}">
+            <div class="collapse @if (isset($isPage)) show @endif" id="prompt-{{ $prompt->id }}">
                 @if ($prompt->parsed_description)
                     {!! $prompt->parsed_description !!}
                 @else
@@ -44,7 +44,7 @@
             @if (!count($prompt->rewards))
                 No rewards.
             @else
-                <table class="table table-sm">
+                <table class="table table-sm mb-0">
                     <thead>
                         <tr>
                             <th width="70%">Reward</th>
@@ -54,7 +54,10 @@
                     <tbody>
                         @foreach ($prompt->rewards as $reward)
                             <tr>
-                                <td>{!! $reward->reward ? $reward->reward->displayName : $reward->rewardable_type !!}</td>
+                                <td>
+                                    {!! $reward->rewardable_recipient == 'User' ? '<i class="fas fa-user" data-toggle="tooltip" title="User Reward"></i>' : '<i class="fas fa-paw" data-toggle="tooltip" title="Character Reward"></i>' !!}
+                                    {!! $reward->reward ? $reward->reward->displayName : $reward->rewardable_type !!}
+                                </td>
                                 <td>{{ $reward->quantity }}</td>
                             </tr>
                         @endforeach
@@ -89,25 +92,30 @@
                         @endforeach
                     </tbody>
                 </table>
-            @endif
+                @if (count(getLimits($prompt)))
+                    <hr />
+                    @include('widgets._limits', [
+                        'object' => $prompt,
+                        'hideUnlock' => true,
+                    ])
+                @endif
         </div>
-        <div class="text-right mt-1">
-            @if ($prompt->level_req)
-                <p class="text-danger">
-                    This prompt requires you to be at least level {{ $prompt->level_req }}
-                </p>
-            @endif
-
+        <div class="text-right {{ $prompt->limit ? 'text-danger' : '' }}">
+            <p>{{ $prompt->limit ? 'You can submit this prompt ' . $prompt->limit . ' time(s)' : 'You can submit this prompt an unlimited number of times' }}
+                {{ $prompt->limit_period ? ' per ' . strtolower($prompt->limit_period) : '' }}
+                {{ $prompt->limit_character ? ' per character' : '' }}.</p>
+        </div>
+        <div class="text-right">
             @if ($prompt->end_at && $prompt->end_at->isPast())
                 <span class="text-secondary">This prompt has ended.</span>
             @elseif ($prompt->start_at && $prompt->start_at->isFuture())
                 <span class="text-secondary">This prompt is not open for submissions yet.</span>
             @else
-                <a href="{{ url('submissions/new?prompt_id=' . $prompt->id) }}"
-                class="btn btn-primary">
+                <a href="{{ url('submissions/new?prompt_id=' . $prompt->id) }}" class="btn btn-primary">
                     Submit Prompt
                 </a>
             @endif
         </div>
     </div>
+    @endif
 </div>

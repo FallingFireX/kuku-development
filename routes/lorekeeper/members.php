@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
+
 /*
 |--------------------------------------------------------------------------
 | Member Routes
@@ -43,6 +45,8 @@ Route::group(['prefix' => 'account', 'namespace' => 'Users'], function () {
     Route::post('remove-alias/{id}', 'AccountController@postRemoveAlias');
     Route::post('dob', 'AccountController@postBirthday');
     Route::post('devlog-notif', 'AccountController@postdevLogNotif');
+    Route::post('warning', 'AccountController@postWarningVisibility');
+    Route::post('comments', 'AccountController@postProfileComments');
 
     Route::get('two-factor/confirm', 'AccountController@getConfirmTwoFactor');
     Route::post('two-factor/enable', 'AccountController@postEnableTwoFactor');
@@ -164,11 +168,26 @@ Route::group(['prefix' => 'stats', 'namespace' => 'Users'], function () {
 });
 
 Route::group(['prefix' => 'trades', 'namespace' => 'Users'], function () {
-    Route::get('{status}', 'TradeController@getIndex')->where('status', 'open|pending|completed|rejected|canceled');
+    // LISTINGS
+    Route::get('listings', 'TradeController@getListingIndex');
+    Route::get('listings/expired', 'TradeController@getExpiredListings');
+    Route::get('listings/create', 'TradeController@getCreateListing');
+    Route::get('listings/{id}', 'TradeController@getListing')->where('id', '[0-9]+');
+    Route::get('listings/{id}/edit', 'TradeController@getEditListing')->where('id', '[0-9]+');
+    Route::post('listings/create', 'TradeController@postCreateEditListing');
+    Route::post('listings/{id}/edit', 'TradeController@postCreateEditListing')->where('id', '[0-9]+');
+    Route::post('listings/{id}/expire', 'TradeController@postExpireListing')->where('id', '[0-9]+');
+
+    // TRADES
+    Route::get('{status}', 'TradeController@getIndex')->where('status', 'proposals|open|pending|completed|rejected|canceled');
     Route::get('create', 'TradeController@getCreateTrade');
     Route::get('{id}/edit', 'TradeController@getEditTrade')->where('id', '[0-9]+');
+    Route::get('proposal/{id?}', 'TradeController@getCreateEditTradeProposal')->where('id', '[0-9]+');
+    Route::get('proposal/user/{id}', 'TradeController@getUserTradeProposal')->where('id', '[0-9]+');
     Route::post('create', 'TradeController@postCreateTrade');
     Route::post('{id}/edit', 'TradeController@postEditTrade')->where('id', '[0-9]+');
+    Route::post('propose/{id?}', 'TradeController@postCreateEditTradeProposal')->where('id', '[0-9]+');
+    Route::post('proposal/{id}/{action}', 'TradeController@postRespondToTradeProposal')->where('id', '[0-9]+')->where('action', 'accept|reject');
     Route::get('{id}', 'TradeController@getTrade')->where('id', '[0-9]+');
 
     Route::get('{id}/confirm-offer', 'TradeController@getConfirmOffer');
@@ -278,6 +297,7 @@ Route::group(['prefix' => 'submissions', 'namespace' => 'Users'], function () {
     Route::get('new/character/{slug}', 'SubmissionController@getCharacterInfo');
     Route::get('new/prompt/{id}', 'SubmissionController@getPromptInfo');
     Route::get('new/form/{id}', 'SubmissionController@getPromptForm');
+    Route::get('new/prompt/{id}/requirements', 'SubmissionController@getPromptRequirementInfo');
     Route::post('new', 'SubmissionController@postNewSubmission');
     Route::post('new/{draft}', 'SubmissionController@postNewSubmission')->where('draft', 'draft');
     Route::get('draft/{id}', 'SubmissionController@getEditSubmission');
@@ -323,6 +343,7 @@ Route::group(['prefix' => 'designs', 'namespace' => 'Characters'], function () {
     Route::post('{id}/traits', 'DesignController@postFeatures');
     Route::get('traits/subtype', 'DesignController@getFeaturesSubtype');
     Route::get('traits/transformation', 'DesignController@getFeaturesTransformation');
+    Route::get('traits/feature', 'DesignController@getFeaturesTrait');
 
     Route::get('{id}/confirm', 'DesignController@getConfirm');
     Route::post('{id}/submit', 'DesignController@postSubmit');
@@ -367,12 +388,19 @@ Route::group(['prefix' => __('dailies.dailies')], function () {
 **************************************************************************************************/
 Route::group(['prefix' => 'comments', 'namespace' => 'Comments'], function () {
     Route::post('make/{model}/{id}', 'CommentController@store');
-    Route::delete('/{comment}', 'CommentController@destroy')->name('comments.destroy');
+    Route::delete('{comment}', 'CommentController@destroy')->name('comments.destroy')->where('comment', '[0-9]+');
     Route::post('edit/{comment}', 'CommentController@update')->name('comments.update');
-    Route::post('/{comment}', 'CommentController@reply')->name('comments.reply');
-    Route::post('/{id}/feature', 'CommentController@feature')->name('comments.feature');
-    Route::post('/{id}/like/{action}', 'CommentController@like')->name('comments.like');
-    Route::get('/liked', 'CommentController@getLikedComments');
+    Route::post('{comment}', 'CommentController@reply')->name('comments.reply');
+    Route::post('{id}/feature', 'CommentController@feature')->name('comments.feature');
+    Route::post('{id}/like/{action}', 'CommentController@like')->name('comments.like');
+    Route::get('liked', 'CommentController@getLikedComments');
+});
+
+/**************************************************************************************************
+    Comments
+**************************************************************************************************/
+Route::group(['prefix' => 'limits'], function () {
+    Route::post('unlock/{id}', 'Admin\LimitController@postUnlockLimits');
 });
 
 /**************************************************************************************************
@@ -405,3 +433,8 @@ Route::get('adoption-center/create', 'UniqueItemController@getCreateItem');
 Route::get('adoption-center/edit/{id}', 'UniqueItemController@getEditItem');
 Route::post('adoption-center/create', 'UniqueItemController@postCreateEditItem');
 Route::post('adoption-center/edit/{id?}', 'UniqueItemController@postCreateEditItem');
+//    Rewards
+// **************************************************************************************************/
+Route::group(['prefix' => 'rewards'], function () {
+    Route::post('/types', 'RewardController@postRewardTypes');
+});

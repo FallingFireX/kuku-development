@@ -57,8 +57,8 @@
     </div>
 
     @include('admin.lineage._edit_lineage_blacklist', [
-    'lineageBlacklist' => $lineageBlacklist,
-    'type' => 'category'
+        'lineageBlacklist' => $lineageBlacklist,
+        'type' => 'category',
     ])
 
     <div class="form-group">
@@ -90,6 +90,7 @@
 
 @section('scripts')
     @parent
+    @include('js._tinymce_wysiwyg')
     <script>
         $(document).ready(function() {
             $('.delete-category-button').on('click', function(e) {

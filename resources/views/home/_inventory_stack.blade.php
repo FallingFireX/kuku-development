@@ -1,4 +1,4 @@
-@if (!$stack) 
+@if (!$stack)
     <div class="text-center">
         Invalid stack selected.</div>
 @else
@@ -30,8 +30,19 @@
                 </div>
             </div>
         </div>
-    @endif 
-    
+    @endif
+
+
+    @if ($item->parsed_description)
+        <div class="mb-2">
+            <a data-toggle="collapse" href="#itemDescription" class="h5">Description <i class="fas fa-caret-down"></i></a>
+            <div class="card collapse mt-1" id="itemDescription">
+                <div class="card-body">
+                    {!! $item->parsed_description !!}
+                </div>
+            </div>
+        </div>
+    @endif
 
     <h5>Item Variations</h5>
     @if ($user && $user->hasPower('edit_inventories'))
@@ -119,12 +130,17 @@
                         </div>
                     </li>
                 @endif
-                
-                @if($item->canDonate)
+
+                @if ($item->canDonate)
                     <li class="list-group-item">
-                        <a class="card-title h5 collapse-title" data-toggle="collapse" href="#donateForm">@if($stack->first()->user_id != $user->id) [ADMIN] @endif Donate Item</a>
+                        <a class="card-title h5 collapse-title" data-toggle="collapse" href="#donateForm">
+                            @if ($stack->first()->user_id != $user->id)
+                                [ADMIN]
+                            @endif Donate Item
+                        </a>
                         <div id="donateForm" class="collapse">
-                            <p>This will donate this item to the <a href="{{ url('shops/donation-shop') }}">Donation Shop</a>, where it will be available for other users to take. This action is not reversible. Are you sure you want to donate this item?</p>
+                            <p>This will donate this item to the <a href="{{ url('shops/donation-shop') }}">Donation Shop</a>, where it will be available for other users to take. This action is not reversible. Are you sure you want to donate this
+                                item?</p>
                             <div class="text-right">
                                 {!! Form::button('Donate', ['class' => 'btn btn-warning', 'name' => 'action', 'value' => 'donate', 'type' => 'submit']) !!}
                             </div>
@@ -157,7 +173,7 @@
                         <div id="transferForm" class="collapse">
                             <div class="form-group">
                                 {!! Form::label('user_id', 'Recipient') !!} {!! add_help('You can only transfer items to verified users.') !!}
-                                {!! Form::select('user_id', $userOptions, null, ['class' => 'form-control']) !!}
+                                {!! Form::select('user_id', $userOptions, null, ['class' => 'form-control user-select']) !!}
                             </div>
                             <div class="text-right">
                                 {!! Form::button('Transfer', ['class' => 'btn btn-primary', 'name' => 'action', 'value' => 'transfer', 'type' => 'submit']) !!}
@@ -178,15 +194,19 @@
                                 {!! Form::button('Delete', ['class' => 'btn btn-danger', 'name' => 'action', 'value' => 'delete', 'type' => 'submit']) !!}
                             </div>
                         </div>
-                    
-                @endif 
 
-                    <!-- Deposit form -->
+                @endif
+
+                <!-- Deposit form -->
                 <li class="list-group-item">
-                    <a class="card-title h5 collapse-title" data-toggle="collapse" href="#depositForm">@if($stack->first()->user_id != $user->id) [ADMIN] @endif Deposit Item</a>
+                    <a class="card-title h5 collapse-title" data-toggle="collapse" href="#depositForm">
+                        @if ($stack->first()->user_id != $user->id)
+                            [ADMIN]
+                        @endif Deposit Item
+                    </a>
                     <div id="depositForm" class="collapse">
                         <p>
-                            This item will be moved into your <a href="{{ url(__('safetydeposit.url')) }}" target="_blank">{{ ucwords(__('safetydeposit.name')) }}</a> for later usage. <br/>
+                            This item will be moved into your <a href="{{ url(__('safetydeposit.url')) }}" target="_blank">{{ ucwords(__('safetydeposit.name')) }}</a> for later usage. <br />
                             It will not be usable in trades, submissions, etc until you move it back into your inventory.
                         </p>
                         <div class="text-right">
@@ -194,7 +214,7 @@
                         </div>
                     </div>
                 </li>
-                
+
             </ul>
         </div>
     @endif
@@ -208,6 +228,7 @@
             return false;
     });
     $('.default.character-select').selectize();
+    $('.user-select').selectize();
 
     function toggleChecks($toggle) {
         $.each($('.item-check'), function(index, checkbox) {

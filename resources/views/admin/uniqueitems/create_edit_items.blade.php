@@ -5,18 +5,21 @@
 @endsection
 
 @section('admin-content')
-    {!! breadcrumbs(['Admin Panel' => 'admin', 'Adoption Center' => 'admin/data/adoption-center', ($unique_item->id ? 'Edit' : 'Create') . ' Adoption' => $unique_item->id ? 'admin/data/adoption-center/edit/' . $unique_item->id : 'admin/data/adoption-center/create']) !!}
+    {!! breadcrumbs([
+        'Admin Panel' => 'admin',
+        'Adoption Center' => 'admin/data/adoption-center',
+        ($unique_item->id ? 'Edit' : 'Create') . ' Adoption' => $unique_item->id ? 'admin/data/adoption-center/edit/' . $unique_item->id : 'admin/data/adoption-center/create',
+    ]) !!}
 
     <h1>{{ $unique_item->id ? 'Edit' : 'Create' }} Adoption
-    @if ($unique_item->id)
-        <form action="{{ route('admin.uniqueitems.delete', $unique_item->id) }}" method="POST" class="delete-item-form">
-            @csrf
-            @method('DELETE')
-            <button type="submit" class="btn btn-outline-danger float-right">Delete Item</button>
-        </form>
-
-    @endif
-</h1>
+        @if ($unique_item->id)
+            <form action="{{ route('admin.uniqueitems.delete', $unique_item->id) }}" method="POST" class="delete-item-form">
+                @csrf
+                @method('DELETE')
+                <button type="submit" class="btn btn-outline-danger float-right">Delete Item</button>
+            </form>
+        @endif
+    </h1>
 
 
     {!! Form::open(['url' => $unique_item->id ? 'admin/data/adoption-center/edit/' . $unique_item->id : 'admin/data/adoption-center/create', 'files' => true]) !!}
@@ -32,17 +35,17 @@
             </div>
         </div>
 
-            <div class="col-md">
-                <div class="form-group">
-                    {!! Form::label('Item Name') !!}
-                    <div class="input-group">
-                            {!! Form::text('item_slug', $unique_item->item_slug ?? '', ['class' => 'form-control', 'id' => 'item-slug']) !!}
-                        <div class="input-group-append">
-                            <button type="button" class="btn btn-secondary" id="generate-slug-btn" data-toggle="tooltip" title="This will create a recommended Name for the AC entry">Generate Name</button>
-                        </div>
+        <div class="col-md">
+            <div class="form-group">
+                {!! Form::label('Item Name') !!}
+                <div class="input-group">
+                    {!! Form::text('item_slug', $unique_item->item_slug ?? '', ['class' => 'form-control', 'id' => 'item-slug']) !!}
+                    <div class="input-group-append">
+                        <button type="button" class="btn btn-secondary" id="generate-slug-btn" data-toggle="tooltip" title="This will create a recommended Name for the AC entry">Generate Name</button>
                     </div>
                 </div>
             </div>
+        </div>
     </div>
 
     <div class="form-group">
@@ -76,14 +79,14 @@
         <br>-> Ensure the geno is the correct one
         <br>-> Use Kuku-ri to give the geno
     </p>
-            <div class="form-group">
-                {!! Form::label('player', 'Owner') !!}
-                {!! Form::select('owner_id', $user, $unique_item->owner_id ?? null, [
-                    'class' => 'form-control', 
-                    'placeholder' => 'No Owner Selected'
-                ]) !!}
-            </div>
-            
+    <div class="form-group">
+        {!! Form::label('player', 'Owner') !!}
+        {!! Form::select('owner_id', $user, $unique_item->owner_id ?? null, [
+            'class' => 'form-control',
+            'placeholder' => 'No Owner Selected',
+        ]) !!}
+    </div>
+
 
     <div class="text-right">
         {!! Form::submit($unique_item->id ? 'Edit' : 'Create', ['class' => 'btn btn-primary']) !!}
@@ -92,30 +95,30 @@
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-$(document).ready(function() {
-    $("#generate-slug-btn").click(function() {
-        // Get the item_id from the input field
-        var itemId = $.trim($("input[name='item_id']").val());
-        
-        // Check if item_id is provided
-        if (itemId === "") {
-            alert("Please enter an Item ID first.");
-            return;
-        }
+    $(document).ready(function() {
+        $("#generate-slug-btn").click(function() {
+            // Get the item_id from the input field
+            var itemId = $.trim($("input[name='item_id']").val());
 
-        // Generate the slug in the format "AC[item_id]"
-        var itemSlug = "AC" + itemId;
+            // Check if item_id is provided
+            if (itemId === "") {
+                alert("Please enter an Item ID first.");
+                return;
+            }
 
-        // Insert it into the slug input field
-        $("#item-slug").val(itemSlug);
+            // Generate the slug in the format "AC[item_id]"
+            var itemSlug = "AC" + itemId;
 
-        // Confirmation for delete button
-    $(document).on("submit", ".delete-item-form", function(event) {
-        if (!confirm("Are you sure you want to delete this item? This action cannot be undone.")) {
-            event.preventDefault();
-        }
+            // Insert it into the slug input field
+            $("#item-slug").val(itemSlug);
+
+            // Confirmation for delete button
+            $(document).on("submit", ".delete-item-form", function(event) {
+                if (!confirm("Are you sure you want to delete this item? This action cannot be undone.")) {
+                    event.preventDefault();
+                }
+            });
+        });
+
     });
-    });
-
-});
 </script>

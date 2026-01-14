@@ -15,7 +15,7 @@ return [
     */
 
     'Admin'      => [
-        'power' => 'manage_reports',
+        'power' => 'admin',
         'links' => [
             [
                 'name' => 'User Ranks',
@@ -23,7 +23,7 @@ return [
             ],
             [
                 'name' => 'Admin Logs',
-                'url'  => 'admin/logs',
+                'url'  => 'admin/admin-logs',
             ],
             [
                 'name' => 'Staff Reward Settings',
@@ -127,6 +127,10 @@ return [
                 'name' => 'Claim Submissions',
                 'url'  => 'admin/claims',
             ],
+            [
+                'name' => 'Trades',
+                'url'  => 'admin/trades/incoming',
+            ],
         ],
     ],
     'Grants'     => [
@@ -144,37 +148,26 @@ return [
                 'name' => 'Award Grants',
                 'url'  => 'admin/grants/awards',
             ],
-            [
-                'name' => 'Recipe Grants',
-                'url'  => 'admin/grants/recipes',
-            ],
-            [
-                'name' => 'EXP Grants',
-                'url'  => 'admin/grants/exp',
-            ],
             // [
-            //     'name' => 'Stat Point Grants',
-            //     'url'  => 'admin/grants/points',
+            //     'name' => 'Recipe Grants',
+            //     'url'  => 'admin/grants/recipes',
             // ],
+            // [
+            //     'name' => 'EXP Grants',
+            //     'url'  => 'admin/grants/exp',
+            // ],
+
             [
                 'name' => 'Pet Grants',
                 'url'  => 'admin/grants/pets',
             ],
             // [
-            //     'name' => 'Gear Grants',
-            //     'url'  => 'admin/grants/gear',
-            // ],
-            // [
-            //     'name' => 'Weapon Grants',
-            //     'url'  => 'admin/grants/weapons',
-            // ],
-            // [
-            //     'name' => 'Skill Grants',
-            //     'url'  => 'admin/grants/skills',
+            //     'name' => 'Border Grants',
+            //     'url'  => 'admin/grants/borders',
             // ],
             [
-                'name' => 'Border Grants',
-                'url'  => 'admin/grants/borders',
+                'name' => 'Loot Table Grants',
+                'url'  => 'admin/grants/loot-tables',
             ],
         ],
     ],
@@ -192,10 +185,6 @@ return [
             [
                 'name' => 'Character Transfers',
                 'url'  => 'admin/masterlist/transfers/incoming',
-            ],
-            [
-                'name' => 'Character Trades',
-                'url'  => 'admin/masterlist/trades/incoming',
             ],
             [
                 'name' => 'Design Updates',
@@ -303,6 +292,10 @@ return [
                 'url'  => 'admin/data/items',
             ],
             [
+                'name' => 'Dynamic Limits',
+                'url'  => 'admin/data/limits',
+            ],
+            [
                 'name' => 'Library',
                 'url'  => 'admin/data/volumes',
             ],
@@ -385,6 +378,10 @@ return [
             [
                 'name' => 'Theme Manager',
                 'url'  => 'admin/themes',
+            ],
+            [
+                'name' => 'Log Viewer',
+                'url'  => 'admin/logs',
             ],
         ],
     ],

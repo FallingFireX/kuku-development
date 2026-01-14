@@ -5,8 +5,8 @@
 </div>
 
 <div class="form-group" id="subtypes">
-    {!! Form::label('Subtype (Optional)') !!}
-    {!! Form::select('subtype_id', $subtypes, $image->subtype_id, ['class' => 'form-control', 'id' => 'subtype']) !!}
+    {!! Form::label('Subtypes (Optional)') !!}
+    {!! Form::select('subtype_ids[]', $subtypes, $image->subtypes()->pluck('subtype_id')->toArray() ?? [], ['class' => 'form-control', 'id' => 'subtype', 'multiple']) !!}
 </div>
 
 
@@ -43,49 +43,80 @@
             </div>
         @endforeach
     </div>
-    <div class="feature-row hide mb-2">
+    <div class="feature-row hide mb-2" id="new-feature">
         {!! Form::select('feature_id[]', $features, null, ['class' => 'form-control mr-2 feature-select', 'placeholder' => 'Select Trait']) !!}
         {!! Form::text('feature_data[]', null, ['class' => 'form-control mr-2', 'placeholder' => 'Extra Info (Optional)']) !!}
         <a href="#" class="remove-feature btn btn-danger mb-2">×</a>
     </div>
 </div>
 
- <div class="form-group" id='gender'>
-            {!! Form::label('gender') !!}
-            {!! Form::select('gender', ['Rook' => 'Rook', 'Dove' => 'Dove'], $image->gender, ['class' => 'form-control']) !!}
-        </div>
+<div class="form-group" id='gender'>
+    {!! Form::label('gender') !!}
+    {!! Form::select('gender', ['Rook' => 'Rook', 'Dove' => 'Dove'], $image->gender, ['class' => 'form-control']) !!}
+</div>
 <div class="form-group" id='eyecolor'>
-            {!! Form::label('eyecolor') !!}
-            {!! Form::text('eyecolor', $image->eyecolor, ['class' => 'form-control mr-2']) !!}
-        </div>
+    {!! Form::label('eyecolor') !!}
+    {!! Form::text('eyecolor', $image->eyecolor, ['class' => 'form-control mr-2']) !!}
+</div>
 
-        
+
 <div class="form-group" id='genotype'>
-            {!! Form::label('genotype') !!}
-            {!! Form::text('genotype', $image->genotype, ['class' => 'form-control mr-2']) !!}
-        </div>
- <div class="form-group" id='phenotype'>
-            {!! Form::label('phenotype') !!}
-            {!! Form::text('phenotype', $image->phenotype, ['class' => 'form-control mr-2']) !!}
-        </div>
+    {!! Form::label('genotype') !!}
+    {!! Form::text('genotype', $image->genotype, ['class' => 'form-control mr-2']) !!}
+</div>
+<div class="form-group" id='phenotype'>
+    {!! Form::label('phenotype') !!}
+    {!! Form::text('phenotype', $image->phenotype, ['class' => 'form-control mr-2']) !!}
+</div>
 
 <div class="form-group" id='stats'>
-            {!! Form::label('Stats (atk/def/spd)') !!}
-            {!! Form::text('atk', $image->atk, ['class' => 'form-control mr-2']) !!}
-            {!! Form::text('def', $image->def, ['class' => 'form-control mr-2']) !!}
-            {!! Form::text('spd', $image->spd, ['class' => 'form-control mr-2']) !!}
-        </div>
+    {!! Form::label('Stats (atk/def/spd)') !!}
+    {!! Form::text('atk', $image->atk, ['class' => 'form-control mr-2']) !!}
+    {!! Form::text('def', $image->def, ['class' => 'form-control mr-2']) !!}
+    {!! Form::text('spd', $image->spd, ['class' => 'form-control mr-2']) !!}
+</div>
 
 <div class="form-group" id='bio'>
-            {!! Form::label('bio') !!}
-            {!! Form::select('bio', ['Diurnal' => 'Diurnal', 'Crepuscular' => 'Crepuscular', 'Nocturnal' => 'Nocturnal', 'Diurnal (originally Nocturnal)' => 'Diurnal (originally Nocturnal)', 'Diurnal (originally Crepuscular)' => 'Diurnal (originally Crepuscular)', 'Crepuscular (originally Diurnal)' => 'Crepuscular (originally Diurnal)', 'Crepuscular (originally Nocturnal)' => 'Crepuscular (originally Nocturnal)', 'Nocturnal (originally Diurnal)' => 'Nocturnal (originally Diurnal)', 'Nocturnal (originally Crepuscular)' => 'Nocturnal (originally Crepuscular)'], $image->bio, ['class' => 'form-control']) !!}
-        </div>
+    {!! Form::label('bio') !!}
+    {!! Form::select(
+        'bio',
+        [
+            'Diurnal' => 'Diurnal',
+            'Crepuscular' => 'Crepuscular',
+            'Nocturnal' => 'Nocturnal',
+            'Diurnal (originally Nocturnal)' => 'Diurnal (originally Nocturnal)',
+            'Diurnal (originally Crepuscular)' => 'Diurnal (originally Crepuscular)',
+            'Crepuscular (originally Diurnal)' => 'Crepuscular (originally Diurnal)',
+            'Crepuscular (originally Nocturnal)' => 'Crepuscular (originally Nocturnal)',
+            'Nocturnal (originally Diurnal)' => 'Nocturnal (originally Diurnal)',
+            'Nocturnal (originally Crepuscular)' => 'Nocturnal (originally Crepuscular)',
+        ],
+        $image->bio,
+        ['class' => 'form-control'],
+    ) !!}
+</div>
 
 <div class="form-group" id='diet'>
-            {!! Form::label('diet') !!}
-            {!! Form::select('diet', ['Carnivore' => 'Carnivore', 'Omnivore' => 'Omnivore', 'Herbivore' => 'Herbivore', 'Carnivore (originally Herbivore)' => 'Carnivore (originally Herbivore)', 'Omnivore (originally Carnivore)' =>'Omnivore (originally Carnivore)', 'Carnivore (originally Omnivore)' => 'Carnivore (originally Omnivore)', 'Herbivore (originally Carnivore)' => 'Herbivore (originally Carnivore)', 'Herbivore (originally Omnivore)' => 'Herbivore (originally Omnivore)', 'Omnivore (originally Herbivore)' => 'Omnivore (originally Herbivore)', 'Herbivore (originally Carnivore)' => 'Herbivore (originally Carnivore)'], $image->diet, ['class' => 'form-control']) !!}
-        </div>
- 
+    {!! Form::label('diet') !!}
+    {!! Form::select(
+        'diet',
+        [
+            'Carnivore' => 'Carnivore',
+            'Omnivore' => 'Omnivore',
+            'Herbivore' => 'Herbivore',
+            'Carnivore (originally Herbivore)' => 'Carnivore (originally Herbivore)',
+            'Omnivore (originally Carnivore)' => 'Omnivore (originally Carnivore)',
+            'Carnivore (originally Omnivore)' => 'Carnivore (originally Omnivore)',
+            'Herbivore (originally Carnivore)' => 'Herbivore (originally Carnivore)',
+            'Herbivore (originally Omnivore)' => 'Herbivore (originally Omnivore)',
+            'Omnivore (originally Herbivore)' => 'Omnivore (originally Herbivore)',
+            'Herbivore (originally Carnivore)' => 'Herbivore (originally Carnivore)',
+        ],
+        $image->diet,
+        ['class' => 'form-control'],
+    ) !!}
+</div>
+
 <div class="text-right">
     {!! Form::submit('Edit', ['class' => 'btn btn-primary']) !!}
 </div>
@@ -93,11 +124,20 @@
 
 <script>
     $(document).ready(function() {
-        @if (config('lorekeeper.extensions.organised_traits_dropdown'))
-            $('.original.feature-select').selectize({
-                render: {
+        @if (config('lorekeeper.extensions.organised_traits_dropdown.enable'))
+            let renderOptions = {};
+            @if (config('lorekeeper.extensions.organised_traits_dropdown.rarity.enable'))
+                renderOptions = {
+                    option: featureOptionRender,
                     item: featureSelectedRender
                 }
+            @else
+                renderOptions = {
+                    item: featureSelectedRender
+                }
+            @endif
+            $('.original.feature-select').selectize({
+                render: renderOptions
             });
         @else
             $('.original.feature-select').selectize();
@@ -121,11 +161,20 @@
                 removeFeatureRow($(this));
             })
 
-            @if (config('lorekeeper.extensions.organised_traits_dropdown'))
-                $clone.find('.feature-select').selectize({
-                    render: {
+            @if (config('lorekeeper.extensions.organised_traits_dropdown.enable'))
+                let renderOptions = {};
+                @if (config('lorekeeper.extensions.organised_traits_dropdown.rarity.enable'))
+                    renderOptions = {
+                        option: featureOptionRender,
                         item: featureSelectedRender
                     }
+                @else
+                    renderOptions = {
+                        item: featureSelectedRender
+                    }
+                @endif
+                $clone.find('.feature-select').selectize({
+                    render: renderOptions
                 });
             @else
                 $clone.find('.feature-select').selectize();
@@ -136,10 +185,22 @@
             $trigger.parent().remove();
         }
 
+        function featureOptionRender(item, escape) {
+            return '<div class="option"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' + (item["text"].trim()) + '</span></div>';
+        }
+
         function featureSelectedRender(item, escape) {
+            @if (config('lorekeeper.extensions.organised_traits_dropdown.rarity.enable'))
+                return '<div><span>' + (item["text"].trim()) + ' (' + (item["optgroup"].trim()) + ')' + '</span></div>';
+            @endif
             return '<div><span>' + escape(item["text"].trim()) + ' (' + escape(item["optgroup"].trim()) + ')' + '</span></div>';
         }
         refreshSubtype();
+    });
+
+    $("#species").change(function() {
+        refreshSubtype();
+        refreshTrait();
     });
 
     function refreshSubtype() {
@@ -151,6 +212,9 @@
             dataType: "text"
         }).done(function(res) {
             $("#subtypes").html(res);
+            $("#subtype").selectize({
+                maxItems: {{ config('lorekeeper.extensions.multiple_subtype_limit') }},
+            });
         }).fail(function(jqXHR, textStatus, errorThrown) {
             alert("AJAX call failed: " + textStatus + ", " + errorThrown);
         });
@@ -164,4 +228,22 @@
             alert("AJAX call failed: " + textStatus + ", " + errorThrown);
         });
     };
+
+
+    function refreshTrait() {
+        var species = $('#species').val();
+        $.ajax({
+            type: "GET",
+            url: "{{ url('designs/traits/feature') }}?species=" + species,
+            dataType: "text"
+        }).done(function(res) {
+            $("#new-feature").html(res);
+        }).fail(function(jqXHR, textStatus, errorThrown) {
+            alert("AJAX call failed: " + textStatus + ", " + errorThrown);
+        });
+    };
+
+    $("#subtype").selectize({
+        maxItems: {{ config('lorekeeper.extensions.multiple_subtype_limit') }},
+    });
 </script>

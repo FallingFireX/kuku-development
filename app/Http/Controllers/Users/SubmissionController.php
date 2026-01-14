@@ -11,9 +11,11 @@ use App\Models\Gallery\GalleryCollaborator;
 use App\Models\Gallery\GallerySubmission;
 use App\Models\Item\Item;
 use App\Models\Item\ItemCategory;
+use App\Models\Pet\Pet;
 use App\Models\Prompt\Prompt;
 use App\Models\Prompt\PromptCriterion;
 use App\Models\Raffle\Raffle;
+use App\Models\Stat\Stat;
 use App\Models\Submission\Submission;
 use App\Models\User\User;
 use App\Models\User\UserItem;
@@ -110,6 +112,15 @@ class SubmissionController extends Controller {
             $gallerySubmissions = [];
         }
 
+        $item_filter = Item::released()->orderBy('name')->get()->mapWithKeys(function ($item) {
+            return [
+                $item->id => json_encode([
+                    'name'      => $item->name,
+                    'image_url' => $item->image_url,
+                ]),
+            ];
+        });
+
         return view('home.create_submission', [
             'closed'  => $closed,
             'isClaim' => false,
@@ -117,8 +128,8 @@ class SubmissionController extends Controller {
             'submission'             => new Submission,
             'prompts'                => Prompt::active()->sortAlphabetical()->pluck('name', 'id')->toArray(),
             'characterCurrencies'    => Currency::where('is_character_owned', 1)->orderBy('sort_character', 'DESC')->pluck('name', 'id'),
-            'categories'             => ItemCategory::visible(Auth::check() ? Auth::user() : null)->orderBy('sort', 'DESC')->get(),
-            'item_filter'            => Item::orderBy('name')->released()->get()->keyBy('id'),
+            'categories'             => ItemCategory::visible(Auth::user() ?? null)->orderBy('sort', 'DESC')->get(),
+            'item_filter'            => $item_filter,
             'items'                  => Item::orderBy('name')->released()->pluck('name', 'id'),
             'character_items'        => Item::whereIn('item_category_id', ItemCategory::where('is_character_owned', 1)->pluck('id')->toArray())->orderBy('name')->released()->pluck('name', 'id'),
             'currencies'             => Currency::where('is_user_owned', 1)->orderBy('name')->pluck('name', 'id'),
@@ -160,6 +171,15 @@ class SubmissionController extends Controller {
             $gallerySubmissions = [];
         }
 
+        $item_filter = Item::released()->orderBy('name')->get()->mapWithKeys(function ($item) {
+            return [
+                $item->id => json_encode([
+                    'name'      => $item->name,
+                    'image_url' => $item->image_url,
+                ]),
+            ];
+        });
+
         return view('home.edit_submission', [
             'closed'              => $closed,
             'isClaim'             => false,
@@ -168,7 +188,7 @@ class SubmissionController extends Controller {
             'prompts'                => Prompt::active()->sortAlphabetical()->pluck('name', 'id')->toArray(),
             'characterCurrencies'    => Currency::where('is_character_owned', 1)->orderBy('sort_character', 'DESC')->pluck('name', 'id'),
             'categories'             => ItemCategory::orderBy('sort', 'DESC')->get(),
-            'item_filter'            => Item::orderBy('name')->released()->get()->keyBy('id'),
+            'item_filter'            => $item_filter,
             'items'                  => Item::orderBy('name')->released()->pluck('name', 'id'),
             'character_items'        => Item::whereIn('item_category_id', ItemCategory::where('is_character_owned', 1)->pluck('id')->toArray())->orderBy('name')->released()->pluck('name', 'id'),
             'currencies'             => Currency::where('is_user_owned', 1)->orderBy('name')->pluck('name', 'id'),
@@ -214,13 +234,27 @@ class SubmissionController extends Controller {
             return response(404);
         }
 
+        $count['all'] = Submission::submitted($id, Auth::user()->id)->count();
+        $count['Hour'] = Submission::submitted($id, Auth::user()->id)->where('created_at', '>=', now()->startOfHour())->count();
+        $count['Day'] = Submission::submitted($id, Auth::user()->id)->where('created_at', '>=', now()->startOfDay())->count();
+        $count['Week'] = Submission::submitted($id, Auth::user()->id)->where('created_at', '>=', now()->startOfWeek())->count();
+        $count['Month'] = Submission::submitted($id, Auth::user()->id)->where('created_at', '>=', now()->startOfMonth())->count();
+        $count['Year'] = Submission::submitted($id, Auth::user()->id)->where('created_at', '>=', now()->startOfYear())->count();
+
+        if ($prompt->limit_character) {
+            $limit = $prompt->limit * Character::visible()->where('is_myo_slot', 0)->where('user_id', Auth::user()->id)->count();
+        } else {
+            $limit = $prompt->limit;
+        }
+
         return view('home._prompt', [
             'prompt' => $prompt,
-            'count'  => Submission::where('prompt_id', $id)->where('status', 'Approved')->where('user_id', Auth::user()->id)->count(),
+            'count'  => $count,
+            'limit'  => $limit,
         ]);
     }
 
-     /**
+    /**
      * Shows prompt form.
      *
      * @param int $id
@@ -235,6 +269,24 @@ class SubmissionController extends Controller {
 
         return view('home._promptform', [
             'form' => $prompt->form,
+        ]);
+    }
+
+    /**
+     * Shows prompt requirement information.
+     *
+     * @param int $id
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function getPromptRequirementInfo($id) {
+        $prompt = Prompt::active()->where('id', $id)->first();
+        if (!$prompt) {
+            return response(404);
+        }
+
+        return view('home._prompt_requirements', [
+            'prompt' => $prompt,
         ]);
     }
 
@@ -421,6 +473,15 @@ class SubmissionController extends Controller {
         $closed = !Settings::get('is_claims_open');
         $inventory = UserItem::with('item')->whereNull('deleted_at')->where('count', '>', '0')->where('user_id', Auth::user()->id)->get();
 
+        $item_filter = Item::released()->orderBy('name')->get()->mapWithKeys(function ($item) {
+            return [
+                $item->id => json_encode([
+                    'name'      => $item->name,
+                    'image_url' => $item->image_url,
+                ]),
+            ];
+        });
+
         return view('home.create_submission', [
             'closed'  => $closed,
             'isClaim' => true,
@@ -429,7 +490,7 @@ class SubmissionController extends Controller {
             'characterCurrencies'    => Currency::where('is_character_owned', 1)->orderBy('sort_character', 'DESC')->pluck('name', 'id'),
             'categories'             => ItemCategory::visible(Auth::user() ?? null)->orderBy('sort', 'DESC')->get(),
             'inventory'              => $inventory,
-            'item_filter'            => Item::orderBy('name')->released()->get()->keyBy('id'),
+            'item_filter'            => $item_filter,
             'items'                  => Item::orderBy('name')->released()->pluck('name', 'id'),
             'currencies'             => Currency::where('is_user_owned', 1)->orderBy('name')->pluck('name', 'id'),
             'raffles'                => Raffle::where('rolled_at', null)->where('is_active', 1)->orderBy('name')->pluck('name', 'id'),
@@ -458,6 +519,15 @@ class SubmissionController extends Controller {
             abort(404);
         }
 
+        $item_filter = Item::released()->orderBy('name')->get()->mapWithKeys(function ($item) {
+            return [
+                $item->id => json_encode([
+                    'name'      => $item->name,
+                    'image_url' => $item->image_url,
+                ]),
+            ];
+        });
+
         return view('home.edit_submission', [
             'closed'                => $closed,
             'isClaim'               => true,
@@ -467,7 +537,7 @@ class SubmissionController extends Controller {
             'character_items'        => Item::whereIn('item_category_id', ItemCategory::where('is_character_owned', 1)->pluck('id')->toArray())->orderBy('name')->released()->pluck('name', 'id'),
             'categories'             => ItemCategory::orderBy('sort', 'DESC')->get(),
             'currencies'             => Currency::where('is_user_owned', 1)->orderBy('name')->pluck('name', 'id'),
-            'item_filter'            => Item::orderBy('name')->released()->get()->keyBy('id'),
+            'item_filter'            => $item_filter,
             'items'                  => Item::orderBy('name')->released()->pluck('name', 'id'),
             'inventory'              => $inventory,
             'raffles'                => Raffle::where('rolled_at', null)->where('is_active', 1)->orderBy('name')->pluck('name', 'id'),

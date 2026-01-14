@@ -171,12 +171,21 @@ class DesignController extends Controller {
             $inventory = isset($r->data['user']) ? parseAssetData($r->data['user']) : null;
         }
 
+        $item_filter = Item::orderBy('name')->get()->mapWithKeys(function ($item) {
+            return [
+                $item->id => json_encode([
+                    'name'      => $item->name,
+                    'image_url' => $item->image_url,
+                ]),
+            ];
+        });
+
         return view('character.design.addons', [
             'request'     => $r,
             'categories'  => ItemCategory::visible(Auth::user() ?? null)->orderBy('sort', 'DESC')->get(),
             'inventory'   => $inventory,
             'items'       => Item::all()->keyBy('id'),
-            'item_filter' => Item::orderBy('name')->get()->keyBy('id'),
+            'item_filter' => $item_filter,
             'page'        => 'update',
         ]);
     }
@@ -225,9 +234,9 @@ class DesignController extends Controller {
         return view('character.design.features', [
             'request'         => $r,
             'specieses'       => ['0' => 'Select Species'] + Species::visible()->orderBy('sort', 'DESC')->pluck('name', 'id')->toArray(),
-            'subtypes'        => ['0' => 'No Subtype'] + Subtype::visible()->where('species_id', '=', $r->species_id)->orderBy('sort', 'DESC')->pluck('name', 'id')->toArray(),
+            'subtypes'        => Subtype::visible()->where('species_id', '=', $r->species_id)->orderBy('sort', 'DESC')->pluck('name', 'id')->toArray(),
             'rarities'        => ['0' => 'Select Rarity'] + Rarity::orderBy('sort', 'DESC')->pluck('name', 'id')->toArray(),
-            'features'        => Feature::GetDropdownItems(1),
+            'features'        => Feature::getDropdownItems(0, $r->species_id),
             'transformations' => ['0' => 'Select '.ucfirst(__('transformations.transformation'))] + Transformation::where('species_id', '=', $r->species_id)->orWhereNull('species_id')->orderBy('sort', 'DESC')->pluck('name', 'id')->toArray(),
         ]);
     }
@@ -242,7 +251,7 @@ class DesignController extends Controller {
         $id = $request->input('id');
 
         return view('character.design._features_subtype', [
-            'subtypes' => ['0' => 'Select Subtype'] + Subtype::visible()->where('species_id', '=', $species)->orderBy('sort', 'DESC')->pluck('name', 'id')->toArray(),
+            'subtypes' => Subtype::visible()->where('species_id', '=', $species)->orderBy('sort', 'DESC')->pluck('name', 'id')->toArray(),
             'subtype'  => $id,
         ]);
     }
@@ -259,6 +268,19 @@ class DesignController extends Controller {
         return view('character.design._features_transformation', [
             'transformations' => ['0' => 'Select '.ucfirst(__('transformations.transformation'))] + Transformation::where('species_id', '=', $species)->orWhereNull('species_id')->orderBy('sort', 'DESC')->pluck('name', 'id')->toArray(),
             'transformation'  => $id,
+        ]);
+    }
+
+    /**
+     * Shows the edit image trait portion of the modal.
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function getFeaturesTrait(Request $request) {
+        $species = $request->input('species');
+
+        return view('character.design._features_trait', [
+            'features'  => Feature::getDropdownItems(Auth::user()->hasPower('edit_data'), $species),
         ]);
     }
 

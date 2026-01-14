@@ -12,7 +12,7 @@
     <div class="card character-bio">
         <div class="card-header">
             <ul class="nav nav-tabs card-header-tabs">
-                
+
                 <li class="nav-item">
                     <a class="nav-link active" id="sessionTab" data-toggle="tab" href="#session" role="tab">Session</a>
                 </li>
@@ -22,7 +22,7 @@
                 <li class="nav-item">
                     <a class="nav-link" id="personalizationTab" data-toggle="tab" href="#personalization" role="tab">Personalization</a>
                 </li>
-                
+
             </ul>
         </div>
         <div class="card-body tab-content">
@@ -33,116 +33,119 @@
                     <h3>Change Username</h3>
                     <p>
                         For security and moderation purposes, all usernames changes will be recorded in your username log.
-                        @if($usernameCooldown > 0)
-                            You may only change your username once {{ $usernameCooldown == 1 ? 'per day' : 'every '. $usernameCooldown .' days' }}.
+                        @if ($usernameCooldown > 0)
+                            You may only change your username once {{ $usernameCooldown == 1 ? 'per day' : 'every ' . $usernameCooldown . ' days' }}.
                         @endif
                     </p>
-                    @if($canChangeName)
+                    @if ($canChangeName)
                         {!! Form::open(['url' => 'account/username']) !!}
-                            <div class="form-group row">
-                                <label class="col-md-2 col-form-label">New Username</label>
-                                <div class="col-md-10">
-                                    {!! Form::text('username', Auth::user()->name, ['class' => 'form-control']) !!}
-                                </div>
+                        <div class="form-group row">
+                            <label class="col-md-2 col-form-label">New Username</label>
+                            <div class="col-md-10">
+                                {!! Form::text('username', Auth::user()->name, ['class' => 'form-control']) !!}
                             </div>
-                            <div class="form-group row">
-                                <label class="col-md-2 col-form-label">Password</label>
-                                <div class="col-md-10">
-                                    {!! Form::password('password', ['class' => 'form-control']) !!}
-                                </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-2 col-form-label">Password</label>
+                            <div class="col-md-10">
+                                {!! Form::password('password', ['class' => 'form-control']) !!}
                             </div>
-                            <div class="text-right">
-                                {!! Form::submit('Edit', ['class' => 'btn btn-primary']) !!}
-                            </div>
+                        </div>
+                        <div class="text-right">
+                            {!! Form::submit('Edit', ['class' => 'btn btn-primary']) !!}
+                        </div>
                         {!! Form::close() !!}
                     @else
                         <p class="alert alert-warning">You must wait {{ $usernameCountdown }} more day{{ $usernameCountdown > 1 ? 's' : '' }} before you can change your username again.</p>
                     @endif
                 </div>
-            <!--EMAIL-->
-            <div class="card p-3 mb-2">
-                <h3>Email Address</h3>
-                <p>Changing your email address will require you to re-verify your email address.</p>
-                {!! Form::open(['url' => 'account/email']) !!}
-                <div class="form-group row">
-                    <label class="col-md-2 col-form-label">Email Address</label>
-                    <div class="col-md-10">
-                        {!! Form::text('email', Auth::user()->email, ['class' => 'form-control']) !!}
-                    </div>
-                </div>
-                <div class="text-right">
-                    {!! Form::submit('Edit', ['class' => 'btn btn-primary']) !!}
-                </div>
-                {!! Form::close() !!}
-            </div>
-
-            <!--PASSWORD-->
-            <div class="card p-3 mb-2">
-                <h3>Change Password</h3>
-                {!! Form::open(['url' => 'account/password']) !!}
-                <div class="form-group row">
-                    <label class="col-md-2 col-form-label">Old Password</label>
-                    <div class="col-md-10">
-                        {!! Form::password('old_password', ['class' => 'form-control']) !!}
-                    </div>
-                </div>
-                <div class="form-group row">
-                    <label class="col-md-2 col-form-label">New Password</label>
-                    <div class="col-md-10">
-                        {!! Form::password('new_password', ['class' => 'form-control']) !!}
-                    </div>
-                </div>
-                <div class="form-group row">
-                    <label class="col-md-2 col-form-label">Confirm New Password</label>
-                    <div class="col-md-10">
-                        {!! Form::password('new_password_confirmation', ['class' => 'form-control']) !!}
-                    </div>
-                </div>
-                <div class="text-right">
-                    {!! Form::submit('Edit', ['class' => 'btn btn-primary']) !!}
-                </div>
-                {!! Form::close() !!}
-            </div>
-            
-            <!--Two Factor Auth-->
-            <div class="card p-3 mb-2">
-                <h3>Two-Factor Authentication</h3>
-
-                <p>Two-factor authentication acts as a second layer of protection for your account. It uses an app on your phone-- such as Google Authenticator-- and information provided by the site to generate a random code that changes frequently.</p>
-
-                <div class="alert alert-info">
-                    Please note that two-factor authentication is only used when logging in directly to the site (with an email address and password), and not when logging in via an off-site account. If you log in using an off-site account, consider enabling
-                    two-factor authentication on that site instead!
-                </div>
-
-                @if (!isset(Auth::user()->two_factor_secret))
-                    <p>In order to enable two-factor authentication, you will need to scan a QR code with an authenticator app on your phone. Two-factor authentication will not be enabled until you do so and confirm by entering one of the codes provided by your
-                        authentication app.</p>
-                    {!! Form::open(['url' => 'account/two-factor/enable']) !!}
-                    <div class="text-right">
-                        {!! Form::submit('Enable', ['class' => 'btn btn-primary']) !!}
-                    </div>
-                    {!! Form::close() !!}
-                @elseif(isset(Auth::user()->two_factor_secret))
-                    <p>Two-factor authentication is currently enabled.</p>
-
-                    <h4>Disable Two-Factor Authentication</h4>
-                    <p>To disable two-factor authentication, you must enter a code from your authenticator app.</p>
-                    {!! Form::open(['url' => 'account/two-factor/disable']) !!}
+                <!--EMAIL-->
+                <div class="card p-3 mb-2">
+                    <h3>Email Address</h3>
+                    <p>Changing your email address will require you to re-verify your email address.</p>
+                    {!! Form::open(['url' => 'account/email']) !!}
                     <div class="form-group row">
-                        <label class="col-md-2 col-form-label">Code</label>
+                        <label class="col-md-2 col-form-label">Email Address</label>
                         <div class="col-md-10">
-                            {!! Form::text('code', null, ['class' => 'form-control']) !!}
+                            {!! Form::text('email', Auth::user()->email, ['class' => 'form-control']) !!}
                         </div>
                     </div>
                     <div class="text-right">
-                        {!! Form::submit('Disable', ['class' => 'btn btn-primary']) !!}
+                        {!! Form::submit('Edit', ['class' => 'btn btn-primary']) !!}
                     </div>
                     {!! Form::close() !!}
-                @endif
+                </div>
+
+                <!--PASSWORD-->
+                <div class="card p-3 mb-2">
+                    <h3>Change Password</h3>
+                    {!! Form::open(['url' => 'account/password']) !!}
+                    <div class="form-group row">
+                        <label class="col-md-2 col-form-label">Old Password</label>
+                        <div class="col-md-10">
+                            {!! Form::password('old_password', ['class' => 'form-control']) !!}
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-md-2 col-form-label">New Password</label>
+                        <div class="col-md-10">
+                            {!! Form::password('new_password', ['class' => 'form-control']) !!}
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-md-2 col-form-label">Confirm New Password</label>
+                        <div class="col-md-10">
+                            {!! Form::password('new_password_confirmation', ['class' => 'form-control']) !!}
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        {!! Form::submit('Edit', ['class' => 'btn btn-primary']) !!}
+                    </div>
+                    {!! Form::close() !!}
+                </div>
+
+                <!--Two Factor Auth-->
+                <div class="card p-3 mb-2">
+                    <h3>Two-Factor Authentication</h3>
+
+                    <p>Two-factor authentication acts as a second layer of protection for your account. It uses an app on your phone-- such as Google Authenticator-- and information provided by the site to generate a random code that changes frequently.
+                    </p>
+
+                    <div class="alert alert-info">
+                        Please note that two-factor authentication is only used when logging in directly to the site (with an email address and password), and not when logging in via an off-site account. If you log in using an off-site account, consider
+                        enabling
+                        two-factor authentication on that site instead!
+                    </div>
+
+                    @if (!isset(Auth::user()->two_factor_secret))
+                        <p>In order to enable two-factor authentication, you will need to scan a QR code with an authenticator app on your phone. Two-factor authentication will not be enabled until you do so and confirm by entering one of the codes
+                            provided by your
+                            authentication app.</p>
+                        {!! Form::open(['url' => 'account/two-factor/enable']) !!}
+                        <div class="text-right">
+                            {!! Form::submit('Enable', ['class' => 'btn btn-primary']) !!}
+                        </div>
+                        {!! Form::close() !!}
+                    @elseif(isset(Auth::user()->two_factor_secret))
+                        <p>Two-factor authentication is currently enabled.</p>
+
+                        <h4>Disable Two-Factor Authentication</h4>
+                        <p>To disable two-factor authentication, you must enter a code from your authenticator app.</p>
+                        {!! Form::open(['url' => 'account/two-factor/disable']) !!}
+                        <div class="form-group row">
+                            <label class="col-md-2 col-form-label">Code</label>
+                            <div class="col-md-10">
+                                {!! Form::text('code', null, ['class' => 'form-control']) !!}
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            {!! Form::submit('Disable', ['class' => 'btn btn-primary']) !!}
+                        </div>
+                        {!! Form::close() !!}
+                    @endif
+                </div>
+
             </div>
-            
-        </div>
 
             <!-- Preferences -->
             <div class="tab-pane fade" id="preferences">
@@ -151,9 +154,18 @@
                     <h3>Birthday Publicity</h3>
                     {!! Form::open(['url' => 'account/dob']) !!}
                     <div class="form-group row">
-                    <label class="col-md-2 col-form-label">Setting</label>
+                        <label class="col-md-2 col-form-label">Setting</label>
                         <div class="col-md-10">
-                            {!! Form::select('birthday_setting', ['0' => '0: No one can see your birthday.', '1' => '1: Members can see your day and month.', '2' => '2: Anyone can see your day and month.', '3' => '3: Full date public.', '4' => '4: Members can see the month.', '5' => '5: Anyone can see the month.'],
+                            {!! Form::select(
+                                'birthday_setting',
+                                [
+                                    '0' => '0: No one can see your birthday.',
+                                    '1' => '1: Members can see your day and month.',
+                                    '2' => '2: Anyone can see your day and month.',
+                                    '3' => '3: Full date public.',
+                                    '4' => '4: Members can see the month.',
+                                    '5' => '5: Anyone can see the month.',
+                                ],
                                 Auth::user()->settings->birthday_setting,
                                 ['class' => 'form-control'],
                             ) !!}
@@ -164,44 +176,65 @@
                     </div>
                     {!! Form::close() !!}
                 </div>
-            
+
                 <!-- Notifications -->
-                @if(Config::get('lorekeeper.extensions.navbar_news_notif'))
+                @if (Config::get('lorekeeper.extensions.navbar_news_notif'))
                     <div class="card p-3 mb-2">
                         <h3>Development Log Notifications</h3>
                         {!! Form::open(['url' => 'account/devlog-notif']) !!}
-                            <div class="form-group row">
-                                <label class="col-md-2 col-form-label">Setting</label>
-                                <div class="col-md-10">
-                                    {!! Form::select('dev_log_notif', ['0' => '0: Do not receive an alert for unread dev log(s).', '1' => '1: Receive alerts for unread dev log(s).'],Auth::user()->settings->dev_log_notif, ['class' => 'form-control']) !!}
-                                </div>
+                        <div class="form-group row">
+                            <label class="col-md-2 col-form-label">Setting</label>
+                            <div class="col-md-10">
+                                {!! Form::select('dev_log_notif', ['0' => '0: Do not receive an alert for unread dev log(s).', '1' => '1: Receive alerts for unread dev log(s).'], Auth::user()->settings->dev_log_notif, ['class' => 'form-control']) !!}
                             </div>
-                            <div class="text-right">
-                                {!! Form::submit('Edit', ['class' => 'btn btn-primary']) !!}
-                            </div>
+                        </div>
+                        <div class="text-right">
+                            {!! Form::submit('Edit', ['class' => 'btn btn-primary']) !!}
+                        </div>
                         {!! Form::close() !!}
                     </div>
                 @endif
 
-                <!-- Chara warnings -->
                 <div class="card p-3 mb-2">
-                    <h3>Character Warning Visibility</h3>
-                        <p>Change how you wish characters with content warnings to appear.</p>
-                        {!! Form::open(['url' => 'account/warning']) !!}
-                            <div class="form-group row">
-                                <label class="col-md-2 col-form-label">Setting</label>
-                                <div class="col-md-10">
-                                    {!! Form::select('warning_visibility', ['0' => '0: Pop-up warnings and censored icons', '1' => '1: Pop-up warnings only', '2' => '2: No warnings'] ,Auth::user()->settings->warning_visibility, ['class' => 'form-control']) !!}
-                                </div>
-                            </div>
-                        <div class="text-right">
-                            {!! Form::submit('Edit', ['class' => 'btn btn-primary']) !!}
+                    <h3>Allow Profile Comments</h3>
+                    {!! Form::open(['url' => 'account/comments']) !!}
+                    <p>If turned off, all comments on your profile will be hidden.</p>
+                    <div class="form-group row">
+                        <label class="col-md-2 col-form-label">Setting</label>
+                        <div class="col-md-10">
+                            {!! Form::select('allow_profile_comments', ['0' => '0: No one can comment on your profile.', '1' => '1: Users can comment on your profile.'], Auth::user()->settings->allow_profile_comments, ['class' => 'form-control']) !!}
                         </div>
+                    </div>
+                    <div class="text-right">
+                        {!! Form::submit('Edit', ['class' => 'btn btn-primary']) !!}
+                    </div>
                     {!! Form::close() !!}
                 </div>
+
+                <div class="card p-3 mb-2">
+                    <h3>Character Warning Visibility</h3>
+                    <p>This setting will change how characters with content warnings are displayed to you.</p>
+                    {!! Form::open(['url' => 'account/warning']) !!}
+                    <div class="form-group row">
+                        <label class="col-md-2 col-form-label">Setting</label>
+                        <div class="col-md-10">
+                            {!! Form::select(
+                                'content_warning_visibility',
+                                ['0' => '0: Character has pop-up warning and censored icons.', '1' => '1: Character has pop-up warnings only.', '2' => '2: No warnings will appear on characters.'],
+                                Auth::user()->settings->content_warning_visibility,
+                                ['class' => 'form-control'],
+                            ) !!}
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        {!! Form::submit('Edit', ['class' => 'btn btn-primary']) !!}
+                    </div>
+                    {!! Form::close() !!}
+                </div>
+
             </div>
-           
-           
+
+
             <!-- PERSONALIZATION -->
             <div class="tab-pane fade" id="personalization">
                 <!-- Avatar -->
@@ -270,7 +303,8 @@
                 <div class="card p-3 mb-2">
                     <h3>Border</h3>
                     <p>Change your onsite border.</p>
-                    <p>Standard borders behave as normal. Variants may be different colors or even border styles than the main border. If your chosen main border has a "layer" associated with it, you can layer that image with one of its variant's borders.</p>
+                    <p>Standard borders behave as normal. Variants may be different colors or even border styles than the main border. If your chosen main border has a "layer" associated with it, you can layer that image with one of its variant's
+                        borders.</p>
                     <p>Variants supersede standard borders, and layers supersede variants.</p>
                     {!! Form::open(['url' => 'account/border']) !!}
                     <div class="form-group row">
@@ -282,8 +316,8 @@
                     <div class="form-group row">
                         <label class="col-md-2 col-form-label">Border Variant</label>
                         <div class="col-md-10">
-                        
-                        {!! Form::select('border_variant_id', $border_variants, Auth::user()->border_variant_id, ['class' => 'form-control', 'id' => 'bordervariant']) !!}
+
+                            {!! Form::select('border_variant_id', $border_variants, Auth::user()->border_variant_id, ['class' => 'form-control', 'id' => 'bordervariant']) !!}
                         </div>
                     </div>
                     <div id="layers">
@@ -352,71 +386,71 @@
                     </div>
                 </div>
 
-                @if($user_enabled == 1 || (Auth::user()->isStaff && $user_enabled == 2))
+                @if ($user_enabled == 1 || (Auth::user()->isStaff && $user_enabled == 2))
                     <div class="card p-3 mb-2">
                         <h3>Home Location <span class="text-muted">({{ ucfirst($location_interval) }})</span></h3>
-                        @if(Auth::user()->isStaff && $user_enabled == 2)
+                        @if (Auth::user()->isStaff && $user_enabled == 2)
                             <div class="alert alert-warning">You can edit this because you are a staff member. Normal users cannot edit their own locations freely.</div>
                         @endif
-                        @if($char_enabled == 1)
+                        @if ($char_enabled == 1)
                             <div class="alert alert-warning">Your characters will have the same home as you.</div>
                         @endif
-                        @if(Auth::user()->canChangeLocation)
+                        @if (Auth::user()->canChangeLocation)
                             {!! Form::open(['url' => 'account/location']) !!}
-                                <div class="form-group row">
-                                    <label class="col-md-2 col-form-label">Location</label>
-                                    <div class="col-md-9">
-                                    {!! Form::select('location', [0=>'Choose a Location'] + $locations, isset(Auth::user()->home_id) ? Auth::user()->home_id : 0, ['class' => 'form-control selectize']) !!}
-                                    </div>
-                                    <div class="col-md text-right">
-                                        {!! Form::submit('Edit', ['class' => 'btn btn-primary']) !!}
-                                    </div>
+                            <div class="form-group row">
+                                <label class="col-md-2 col-form-label">Location</label>
+                                <div class="col-md-9">
+                                    {!! Form::select('location', [0 => 'Choose a Location'] + $locations, isset(Auth::user()->home_id) ? Auth::user()->home_id : 0, ['class' => 'form-control selectize']) !!}
                                 </div>
+                                <div class="col-md text-right">
+                                    {!! Form::submit('Edit', ['class' => 'btn btn-primary']) !!}
+                                </div>
+                            </div>
                             {!! Form::close() !!}
                         @else
                             <div class="alert alert-warning">
-                            <strong>You can't change your location right now.</strong>
-                            You last changed it on {!! format_date(Auth::user()->home_changed, false) !!}.
-                            Home locations can be changed {{ $location_interval }}.
+                                <strong>You can't change your location right now.</strong>
+                                You last changed it on {!! format_date(Auth::user()->home_changed, false) !!}.
+                                Home locations can be changed {{ $location_interval }}.
                             </div>
                         @endif
                     </div>
-                    @endif
+                @endif
 
-                    @if($user_faction_enabled == 1 || (Auth::user()->isStaff && $user_faction_enabled == 2))
+                @if ($user_faction_enabled == 1 || (Auth::user()->isStaff && $user_faction_enabled == 2))
                     <div class="card p-3 mb-2">
                         <h3>Faction <span class="text-muted">({{ ucfirst($location_interval) }})</span></h3>
-                        @if(Auth::user()->isStaff && $user_faction_enabled == 2)
+                        @if (Auth::user()->isStaff && $user_faction_enabled == 2)
                             <div class="alert alert-warning">You can edit this because you are a staff member. Normal users cannot edit their own faction freely.</div>
                         @endif
-                        @if($char_faction_enabled == 1)
+                        @if ($char_faction_enabled == 1)
                             <div class="alert alert-warning">Your characters will have the same faction as you.</div>
                         @endif
-                        @if(Auth::user()->canChangeFaction)
+                        @if (Auth::user()->canChangeFaction)
                             <p>Please note that changing your faction will remove you from any special ranks and reset your faction standing!</p>
                             {!! Form::open(['url' => 'account/faction']) !!}
-                                <div class="form-group row">
-                                    <label class="col-md-2 col-form-label">Faction</label>
-                                    <div class="col-md-9">
-                                    {!! Form::select('faction', [0=>'Choose a Faction'] + $factions, isset(Auth::user()->faction_id) ? Auth::user()->faction_id : 0, ['class' => 'form-control selectize']) !!}
-                                    </div>
-                                    <div class="col-md text-right">
-                                        {!! Form::submit('Edit', ['class' => 'btn btn-primary']) !!}
-                                    </div>
+                            <div class="form-group row">
+                                <label class="col-md-2 col-form-label">Faction</label>
+                                <div class="col-md-9">
+                                    {!! Form::select('faction', [0 => 'Choose a Faction'] + $factions, isset(Auth::user()->faction_id) ? Auth::user()->faction_id : 0, ['class' => 'form-control selectize']) !!}
                                 </div>
+                                <div class="col-md text-right">
+                                    {!! Form::submit('Edit', ['class' => 'btn btn-primary']) !!}
+                                </div>
+                            </div>
                             {!! Form::close() !!}
                         @else
                             <div class="alert alert-warning">
-                            <strong>You can't change your faction right now.</strong>
-                            You last changed it on {!! format_date(Auth::user()->faction_changed, false) !!}.
-                            Faction can be changed {{ $location_interval }}.
+                                <strong>You can't change your faction right now.</strong>
+                                You last changed it on {!! format_date(Auth::user()->faction_changed, false) !!}.
+                                Faction can be changed {{ $location_interval }}.
                             </div>
                         @endif
                     </div>
-                    @endif
+                @endif
 
                 <!-- Admin stuff -->
-                @if(Auth::user()->isStaff)
+                @if (Auth::user()->isStaff)
                     @include('widgets._staff_profile_form', ['user' => Auth::user(), 'adminView' => 0])
                 @endif
             </div>
@@ -427,33 +461,33 @@
 
 
 
-    
-
-    
-
-    
 
 
 
 
 
 
-    
-
-    
-    
-    
-    
 
 
 
 
-    
+
+
+
+
+
+
+
+
+
+
+
+
 @endsection
 
 @section('scripts')
-@parent
-    @if(Auth::user()->isStaff)
+    @parent
+    @if (Auth::user()->isStaff)
         @include('js._website_links_js')
     @endif
 @endsection
@@ -461,43 +495,41 @@
 @section('scripts')
     @parent
     <script>
-    
-    function refreshBorder() {
-    var border = $('#border').val();
+        function refreshBorder() {
+            var border = $('#border').val();
 
-    if (border) {
-        // Build base URLs from Blade without query params
-        var checkBorderUrl = "{{ url('account/check-border') }}";
-        var checkLayersUrl = "{{ url('account/check-layers') }}";
+            if (border) {
+                // Build base URLs from Blade without query params
+                var checkBorderUrl = "{{ url('account/check-border') }}";
+                var checkLayersUrl = "{{ url('account/check-layers') }}";
 
-        // Check Border Variant
-        $.ajax({
-            type: "GET",
-            url: checkBorderUrl + "?border=" + encodeURIComponent(border),
-            dataType: "text"
-        }).done(function(res) {
-            $("#bordervariant").html(res);
-        }).fail(function(jqXHR, textStatus, errorThrown) {
-            alert("Border variant AJAX call failed: " + textStatus + ", " + errorThrown);
-        });
+                // Check Border Variant
+                $.ajax({
+                    type: "GET",
+                    url: checkBorderUrl + "?border=" + encodeURIComponent(border),
+                    dataType: "text"
+                }).done(function(res) {
+                    $("#bordervariant").html(res);
+                }).fail(function(jqXHR, textStatus, errorThrown) {
+                    alert("Border variant AJAX call failed: " + textStatus + ", " + errorThrown);
+                });
 
-        // Check Layers
-        $.ajax({
-            type: "GET",
-            url: checkLayersUrl + "?border=" + encodeURIComponent(border),
-            dataType: "text"
-        }).done(function(res) {
-            $("#layers").html(res);
-        }).fail(function(jqXHR, textStatus, errorThrown) {
-            alert("Layer AJAX call failed: " + textStatus + ", " + errorThrown);
-        });
-    } else {
-        console.warn("No border value provided. Skipping AJAX calls.");
-        $("#bordervariant").html(""); // Optional
-        $("#layers").html("");        // Optional
-    }
-};
-
+                // Check Layers
+                $.ajax({
+                    type: "GET",
+                    url: checkLayersUrl + "?border=" + encodeURIComponent(border),
+                    dataType: "text"
+                }).done(function(res) {
+                    $("#layers").html(res);
+                }).fail(function(jqXHR, textStatus, errorThrown) {
+                    alert("Layer AJAX call failed: " + textStatus + ", " + errorThrown);
+                });
+            } else {
+                console.warn("No border value provided. Skipping AJAX calls.");
+                $("#bordervariant").html(""); // Optional
+                $("#layers").html(""); // Optional
+            }
+        };
     </script>
 @endsection
 
@@ -507,5 +539,56 @@
         $(document).ready(function() {
             $('.selectize').selectize();
         });
+    </script>
+@endsection
+@section('scripts')
+    @include('js._tinymce_wysiwyg')
+    <script>
+        var $avatarCrop = $('#avatarCrop');
+        var $cropper = $('#cropper');
+        var c = null;
+        var $x0 = $('#cropX0');
+        var $y0 = $('#cropY0');
+        var $x1 = $('#cropX1');
+        var $y1 = $('#cropY1');
+        var zoom = 0;
+
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    $cropper.attr('src', e.target.result);
+                    c = new Croppie($cropper[0], {
+                        viewport: {
+                            width: 200,
+                            height: 200,
+                        },
+                        boundary: {
+                            width: 250,
+                            height: 250
+                        },
+                        update: function() {
+                            updateCropValues();
+                        }
+                    });
+                    updateCropValues();
+                    $avatarCrop.removeClass('hide');
+                    $cropper.removeClass('hide');
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        $("#avatar").change(function() {
+            readURL(this);
+        });
+
+        function updateCropValues() {
+            var values = c.get();
+            $x0.val(values.points[0]);
+            $y0.val(values.points[1]);
+            $x1.val(values.points[2]);
+            $y1.val(values.points[3]);
+        }
     </script>
 @endsection

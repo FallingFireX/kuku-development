@@ -41,7 +41,7 @@
         {!! Form::close() !!}
     </div>
     <p>Kukuri-arpg holds group sales on a bi-yearly basis, once in June, and once in December. This is called the Divine Shop. You can purchase everything from slots to items,
-        to even semi-customs at these sales! 
+        to even semi-customs at these sales!
     </p>
     @if (count($saleses))
         {!! $saleses->render() !!}

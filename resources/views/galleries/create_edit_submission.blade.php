@@ -37,8 +37,8 @@
         <h2>Main Content</h2>
         <p>Upload an image and/or text as the content of your submission. You <strong>can</strong> upload both in the event that you have an image with accompanying text or vice versa.</p>
 
-        <div class="form-group">
-            {!! Form::label('Image') !!}
+        <div class="form-group" id="imageForm">
+            {!! Form::label('image', 'Image Upload', ['class' => 'h5']) !!}
             @if ($submission->id && isset($submission->hash) && $submission->hash)
                 <div class="card mb-2" id="existingImage">
                     <div class="card-body text-center">
@@ -61,25 +61,30 @@
         </div>
 
         <div class="form-group">
-            {!! Form::label('Text') !!}
-            {!! Form::textarea('text', $submission->text ?? old('text'), ['class' => 'form-control wysiwyg']) !!}
+            {!! Form::label('text', 'Writing / Text', ['class' => 'h5']) !!} {!! add_help('If you have a text submission, you can paste it here. You can also use the WYSIWYG editor to format your text. If you have an image submission, you can leave this blank or add a text to supplement your image submission.') !!}
+            @if (config('lorekeeper.settings.hide_textarea_on_gallery_submissions.enable'))
+                <a href="#writingForm" id="writingFormCollapseBtn" class="mx-2 mb-2 btn btn-sm btn-primary" data-toggle="collapse" aria-expanded="false">Hide Textarea</a>
+            @endif
+            <div id="writingForm" class="collapse show">
+                {!! Form::textarea('text', $submission->text ?? old('text'), ['class' => 'form-control wysiwyg']) !!}
+            </div>
         </div>
 
         <div class="row">
             <div class="col-md">
                 <h3>Basic Information</h3>
                 <div class="form-group">
-                    {!! Form::label('Title') !!} {!! add_help('You <strong>do not</strong> need to indicate that a piece is a trade, gift, for a prompt etc. as this will be automatically added based on your input elsewhere in this form.') !!}
+                    {!! Form::label('title', 'Title', ['class' => 'h5']) !!} {!! add_help('You <strong>do not</strong> need to indicate that a piece is a trade, gift, for a prompt etc. as this will be automatically added based on your input elsewhere in this form.') !!}
                     {!! Form::text('title', $submission->title ?? old('title'), ['class' => 'form-control']) !!}
                 </div>
 
                 <div class="form-group">
-                    {!! Form::label('Description (Optional)') !!}
+                    {!! Form::label('description', 'Description (Optional)', ['class' => 'h5']) !!}
                     {!! Form::textarea('description', $submission->description ?? old('description'), ['class' => 'form-control wysiwyg']) !!}
                 </div>
 
                 <div class="form-group">
-                    {!! Form::label('Content Warning (Optional)') !!} {!! add_help(
+                    {!! Form::label('content_warning', 'Content Warning (Optional)', ['class' => 'h5']) !!} {!! add_help(
                         'Provide a succinct content warning for the piece if necessary. If a content warning is provided, the thumbnail will be replaced with a generic image and the warning displayed under it. The piece will be displayed in full on its page, however.',
                     ) !!}
                     {!! Form::text('content_warning', $submission->content_warning ?? old('content_warning'), ['class' => 'form-control']) !!}
@@ -96,7 +101,7 @@
                     {!! $submission->prompt_id ? '<p><strong>Prompt:</strong> ' . $submission->prompt->displayName . '</p>' : '' !!}
                 @endif
 
-                @if($gallery->location_selection == 1 && (!$submission->id || Auth::user()->hasPower('manage_submissions')))
+                @if ($gallery->location_selection == 1 && (!$submission->id || Auth::user()->hasPower('manage_submissions')))
                     <div class="form-group">
                         {!! Form::label('location_id', ($submission->id && Auth::user()->hasPower('manage_submissions') ? '[Admin] ' : '') . 'Location (Optional)') !!} {!! add_help(
                             'This <strong>does not</strong> automatically submit to the selected location, and you will need to submit to it separately. The location selected here will be displayed on the submission page for future reference. You will not be able to edit this after creating the submission.',
@@ -107,7 +112,7 @@
                     {!! $submission->location_id ? '<p><strong>Location:</strong> ' . $submission->location->displayName . '</p>' : '' !!}
                 @endif
 
-                @if($submission->id && Auth::user()->hasPower('manage_submissions'))
+                @if ($submission->id && Auth::user()->hasPower('manage_submissions'))
                     <div class="form-group">
                         {!! Form::label('gallery_id', '[Admin] Gallery / Move Submission') !!} {!! add_help(
                             'Use in the event you need to move a submission between galleries. If left blank, leaves the submission in its current location. Note that if currency rewards from submissions are enabled, this won\'t retroactively fill out the form if moved from a gallery where they are disabled to one where they are enabled.',
@@ -360,7 +365,7 @@
     @parent
     @if (!$closed || ($submission->id && $submission->status != 'Rejected'))
         @include('galleries._character_select_js')
-
+        @include('js._tinymce_wysiwyg')
         <script>
             $(document).ready(function() {
                 var $submitButton = $('#submitButton');
@@ -444,11 +449,27 @@
                             $('#imageContainer').removeClass('hide');
                         }
                         reader.readAsDataURL(input.files[0]);
+                        @if (config('lorekeeper.settings.hide_textarea_on_gallery_submissions.enable') && config('lorekeeper.settings.hide_textarea_on_gallery_submissions.on_image'))
+                            // hide text editor if image is uploaded
+                            $('#writingForm').collapse('hide')
+                        @endif
+                    } else {
+                        @if (config('lorekeeper.settings.hide_textarea_on_gallery_submissions.enable') && config('lorekeeper.settings.hide_textarea_on_gallery_submissions.on_image'))
+                            $('#writingForm').collapse('show')
+                        @endif
                     }
                 }
                 $("#mainImage").change(function() {
                     readURL(this);
                 });
+                @if (config('lorekeeper.settings.hide_textarea_on_gallery_submissions.enable'))
+                    $('#writingForm').on('hide.bs.collapse', function() {
+                        $('#writingFormCollapseBtn').text("Show Textarea");
+                    })
+                    $('#writingForm').on('show.bs.collapse', function() {
+                        $('#writingFormCollapseBtn').text("Hide Textarea");
+                    })
+                @endif
 
                 $('.original.gallery-select').selectize();
 

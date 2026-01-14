@@ -46,41 +46,41 @@
                 </div>
             </div>
             <div class="logs-table-body">
-            @auth
-                @foreach ($submissions as $submission)
-                    <div class="logs-table-row" style="{{ $submission->user->id == Auth::user()->id ? 'background-color:rgba(48, 121, 240, 0.1);' : '' }}">
-                        <div class="row flex-wrap">
-                            @if (!$isClaims)
-                                <div class="col-12 col-md-2">
-                                    <div class="logs-table-cell">{!! $submission->prompt->displayName !!}</div>
-                                </div>
-                                <div class="col-6 {{ !$isClaims ? 'col-md-2' : 'col-md-3' }}">
-                                    <div class="logs-table-cell">{!! $submission->user->displayName !!}</div>
-                                </div>
-                                <div class="col-6 {{ !$isClaims ? 'col-md-3' : 'col-md-4' }}">
-                                    <div class="logs-table-cell">
-                                        <span class="ubt-texthide"><a href="{{ $submission->url }}">{{ $submission->url }}</a></span>
+                @auth
+                    @foreach ($submissions as $submission)
+                        <div class="logs-table-row" style="{{ $submission->user->id == Auth::user()->id ? 'background-color:rgba(48, 121, 240, 0.1);' : '' }}">
+                            <div class="row flex-wrap">
+                                @if (!$isClaims)
+                                    <div class="col-12 col-md-2">
+                                        <div class="logs-table-cell">{!! $submission->prompt->displayName !!}</div>
                                     </div>
-                                </div>
-                                <div class="col-6 col-md-3">
-                                    <div class="logs-table-cell">{!! pretty_date($submission->created_at) !!}</div>
-                                </div>
-                                <div class="col-3 col-md-1">
-                                    <div class="logs-table-cell">
-                                        <span class="btn btn-{{ $submission->status == 'Pending' ? 'secondary' : ($submission->status == 'Approved' ? 'success' : 'danger') }} btn-sm py-0 px-1">{{ $submission->status }}</span>
+                                    <div class="col-6 {{ !$isClaims ? 'col-md-2' : 'col-md-3' }}">
+                                        <div class="logs-table-cell">{!! $submission->user->displayName !!}</div>
                                     </div>
-                                </div>
-                                <div class="col-3 col-md-1">
-                                    <div class="logs-table-cell"></div>
-                                </div>
-                            @endif
+                                    <div class="col-6 {{ !$isClaims ? 'col-md-3' : 'col-md-4' }}">
+                                        <div class="logs-table-cell">
+                                            <span class="ubt-texthide"><a href="{{ $submission->url }}">{{ $submission->url }}</a></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-6 col-md-3">
+                                        <div class="logs-table-cell">{!! pretty_date($submission->created_at) !!}</div>
+                                    </div>
+                                    <div class="col-3 col-md-1">
+                                        <div class="logs-table-cell">
+                                            <span class="btn btn-{{ $submission->status == 'Pending' ? 'secondary' : ($submission->status == 'Approved' ? 'success' : 'danger') }} btn-sm py-0 px-1">{{ $submission->status }}</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-3 col-md-1">
+                                        <div class="logs-table-cell"></div>
+                                    </div>
+                                @endif
+                            </div>
                         </div>
-                    </div>
-                @endforeach
-            @endauth
+                    @endforeach
+                @endauth
             </div>
         </div>
         {!! $submissions->render() !!}
         <div class="text-center mt-4 small text-muted">{{ $submissions->total() }} result{{ $submissions->total() == 1 ? '' : 's' }} found.</div>
-</div>
-    @endsection
+    </div>
+@endsection

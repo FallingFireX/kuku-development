@@ -4,10 +4,6 @@
             e.preventDefault();
             loadModal("{{ url('admin/character/image') }}/" + $(this).data('id') + "/traits", 'Edit Traits');
         });
-        $('.edit-class').on('click', function(e) {
-            e.preventDefault();
-            loadModal("{{ url('characters/class/edit') }}/" + $(this).data('id'), 'Edit Class');
-        });
         $('.edit-notes').on('click', function(e) {
             e.preventDefault();
             $("div.imagenoteseditingparse").load("{{ url('admin/character/image') }}/" + $(this).data('id') + "/notes", function() {
@@ -16,33 +12,25 @@
                     height: 500,
                     menubar: false,
                     convert_urls: false,
-                    
                     plugins: [
                         'advlist autolink lists link image charmap print preview anchor',
                         'searchreplace visualblocks code fullscreen spoiler',
-                        'insertdatetime media table paste code help wordcount',
-                        'code'
+                        'insertdatetime media table paste code help wordcount'
                     ],
                     toolbar: 'undo redo | formatselect | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | spoiler-add spoiler-remove | removeformat | code',
                     content_css: [
                         '{{ asset('css/app.css') }}',
-                        '{{ asset('css/lorekeeper.css') }}',
-                        '{{ asset('css/custom.css') }}',
-                        '{{ asset($theme?->cssUrl) }}',
-                        '{{ asset($conditionalTheme?->cssUrl) }}',
-                        '{{ asset($decoratorTheme?->cssUrl) }}',
-                        '{{ asset('css/all.min.css') }}' //fontawesome
+                        '{{ asset('css/lorekeeper.css') }}'
                     ],
-                    content_style: `
-                    {{ str_replace(['<style>', '</style>'], '', view('layouts.editable_theme', ['theme' => $theme])) }}
-                    {{ str_replace(['<style>', '</style>'], '', view('layouts.editable_theme', ['theme' => $conditionalTheme])) }}
-                    {{ str_replace(['<style>', '</style>'], '', view('layouts.editable_theme', ['theme' => $decoratorTheme])) }}
-                    `,
-                    spoiler_caption: 'View Details',
+                    spoiler_caption: 'Toggle Spoiler',
                     target_list: false
                 });
             });
             $(".edit-notes").remove();
+        });
+        $('.edit-credits').on('click', function(e) {
+            e.preventDefault();
+            loadModal("{{ url('admin/character/image') }}/" + $(this).data('id') + "/credits", 'Edit Image Credits');
         });
         $('.edit-credits').on('click', function(e) {
             e.preventDefault();
@@ -64,10 +52,6 @@
             e.preventDefault();
             loadModal("{{ url($character->is_myo_slot ? 'admin/myo/' : 'admin/character/') }}/" + $(this).data('{{ $character->is_myo_slot ? 'id' : 'slug' }}') + "/stats", 'Edit Character Stats');
         });
-        $('.edit-lineage').on('click', function(e) {
-            e.preventDefault();
-            loadModal("{{ url($character->is_myo_slot ? 'admin/myo/' : 'admin/character/') }}/"+$(this).data('{{ $character->is_myo_slot ? 'id' : 'slug' }}')+"/lineage", 'Edit Character Lineage');
-        });
         $('.edit-description').on('click', function(e) {
             e.preventDefault();
             $("div.descriptioneditingparse").load("{{ url($character->is_myo_slot ? 'admin/myo/' : 'admin/character/') }}/" + $(this).data('{{ $character->is_myo_slot ? 'id' : 'slug' }}') + "/description", function() {
@@ -76,29 +60,17 @@
                     height: 500,
                     menubar: false,
                     convert_urls: false,
-                    advcode_inline: true,
                     plugins: [
                         'advlist autolink lists link image charmap print preview anchor',
                         'searchreplace visualblocks code fullscreen spoiler',
-                        'insertdatetime media table paste code help wordcount',
-                        'advcode'
+                        'insertdatetime media table paste code help wordcount'
                     ],
                     toolbar: 'undo redo | formatselect | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | spoiler-add spoiler-remove | removeformat | code',
                     content_css: [
                         '{{ asset('css/app.css') }}',
-                        '{{ asset('css/lorekeeper.css') }}',
-                        '{{ asset('css/custom.css') }}',
-                        '{{ asset($theme?->cssUrl) }}',
-                        '{{ asset($conditionalTheme?->cssUrl) }}',
-                        '{{ asset($decoratorTheme?->cssUrl) }}',
-                        '{{ asset('css/all.min.css') }}' //fontawesome
+                        '{{ asset('css/lorekeeper.css') }}'
                     ],
-                    content_style: `
-                    {{ str_replace(['<style>', '</style>'], '', view('layouts.editable_theme', ['theme' => $theme])) }}
-                    {{ str_replace(['<style>', '</style>'], '', view('layouts.editable_theme', ['theme' => $conditionalTheme])) }}
-                    {{ str_replace(['<style>', '</style>'], '', view('layouts.editable_theme', ['theme' => $decoratorTheme])) }}
-                    `,
-                    spoiler_caption: 'View Details',
+                    spoiler_caption: 'Toggle Spoiler',
                     target_list: false
                 });
             });
@@ -114,5 +86,6 @@
             if (!is_myo) return;
             loadModal("{{ url('admin/character/') }}/" + $(this).data('id') + "/typing", 'Edit Character Typing');
         });
+
     });
 </script>

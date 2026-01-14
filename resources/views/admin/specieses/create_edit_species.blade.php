@@ -53,8 +53,8 @@
     </div>
 
     @include('admin.lineage._edit_lineage_blacklist', [
-    'lineageBlacklist' => $lineageBlacklist,
-    'type' => 'species'
+        'lineageBlacklist' => $lineageBlacklist,
+        'type' => 'species',
     ])
 
     <div class="text-right">
@@ -77,6 +77,7 @@
 
 @section('scripts')
     @parent
+    @include('js._tinymce_wysiwyg')
     <script>
         $(document).ready(function() {
             $('.delete-species-button').on('click', function(e) {

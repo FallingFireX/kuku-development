@@ -14,20 +14,21 @@ use App\Models\Character\CharacterCurrency;
 use App\Models\Character\CharacterDesignUpdate;
 use App\Models\Character\CharacterFeature;
 use App\Models\Character\CharacterImage;
+use App\Models\Character\CharacterImageSubtype;
 use App\Models\Character\CharacterLineage;
 use App\Models\Character\CharacterLink;
+use App\Models\Character\CharacterLog;
 use App\Models\Character\CharacterMarking;
 use App\Models\Character\CharacterStat;
 use App\Models\Character\CharacterTransfer;
-use App\Models\Character\CharacterTransformation as Transformation;
 use App\Models\Currency\Currency;
-use App\Models\Feature\Feature;
 use App\Models\Marking\Marking;
 use App\Models\Rarity;
 use App\Models\Sales\SalesCharacter;
 use App\Models\Species\Species;
 use App\Models\Species\Subtype;
 use App\Models\User\User;
+use App\Models\User\UserCharacterLog;
 use App\Models\User\UserPet;
 use App\Models\WorldExpansion\FactionRankMember;
 use Carbon\Carbon;
@@ -111,16 +112,23 @@ class CharacterManager extends Service {
                     throw new \Exception('Characters require a rarity.');
                 }
             }
-            if (isset($data['subtype_id']) && $data['subtype_id']) {
-                $subtype = Subtype::find($data['subtype_id']);
+            if (isset($data['subtype_ids']) && $data['subtype_ids']) {
+                if (count($data['subtype_ids']) > config('lorekeeper.extensions.multiple_subtype_limit')) {
+                    throw new \Exception('Too many subtypes selected.');
+                }
+
                 if (!(isset($data['species_id']) && $data['species_id'])) {
                     throw new \Exception('Species must be selected to select a subtype.');
                 }
-                if (!$subtype || $subtype->species_id != $data['species_id']) {
-                    throw new \Exception('Selected subtype invalid or does not match species.');
+
+                foreach ($data['subtype_ids'] as $subtypeId) {
+                    $subtype = Subtype::find($subtypeId);
+                    if (!$subtype || $subtype->species_id != $data['species_id']) {
+                        throw new \Exception('Selected subtype invalid or does not match species.');
+                    }
                 }
             } else {
-                $data['subtype_id'] = null;
+                $data['subtype_ids'] = null;
             }
 
             // Get owner info
@@ -567,26 +575,33 @@ class CharacterManager extends Service {
      * @return bool
      */
     public function createLog($senderId, $senderUrl, $recipientId, $recipientUrl, $characterId, $type, $data, $logType, $isUpdate = false, $oldData = null, $newData = null) {
-        return DB::table($logType == 'character' ? 'character_log' : 'user_character_log')->insert(
-            [
-                'sender_id'     => $senderId,
-                'sender_url'    => $senderUrl,
-                'recipient_id'  => $recipientId,
-                'recipient_url' => $recipientUrl,
-                'character_id'  => $characterId,
-                'log'           => $type.($data ? ' ('.$data.')' : ''),
-                'log_type'      => $type,
-                'data'          => $data,
-                'created_at'    => Carbon::now(),
-                'updated_at'    => Carbon::now(),
-            ] + ($logType == 'character' ?
-                [
-                    'change_log' => $isUpdate ? json_encode([
+        $log = null;
+
+        $shared = [
+            'sender_id'     => $senderId,
+            'sender_url'    => $senderUrl,
+            'recipient_id'  => $recipientId,
+            'recipient_url' => $recipientUrl,
+            'character_id'  => $characterId,
+            'log'           => $type.($data ? ' ('.$data.')' : ''),
+            'log_type'      => $type,
+            'data'          => $data,
+        ];
+
+        if ($logType == 'character') {
+            $log = CharacterLog::create(
+                $shared + [
+                    'change_log' => $isUpdate ? [
                         'old' => $oldData,
                         'new' => $newData,
-                    ]) : null,
-                ] : [])
-        );
+                    ] : null,
+                ]
+            );
+        } else {
+            $log = UserCharacterLog::create($shared);
+        }
+
+        return $log;
     }
 
     /**
@@ -610,16 +625,21 @@ class CharacterManager extends Service {
                     throw new \Exception('Characters require a rarity.');
                 }
             }
-            if (isset($data['subtype_id']) && $data['subtype_id']) {
-                $subtype = Subtype::find($data['subtype_id']);
+            if (isset($data['subtype_ids']) && $data['subtype_ids']) {
+                if (count($data['subtype_ids']) > config('lorekeeper.extensions.multiple_subtype_limit')) {
+                    throw new \Exception('Too many subtypes selected.');
+                }
                 if (!(isset($data['species_id']) && $data['species_id'])) {
                     throw new \Exception('Species must be selected to select a subtype.');
                 }
-                if (!$subtype || $subtype->species_id != $data['species_id']) {
-                    throw new \Exception('Selected subtype invalid or does not match species.');
+                foreach ($data['subtype_ids'] as $subtypeId) {
+                    $subtype = Subtype::find($subtypeId);
+                    if (!$subtype || $subtype->species_id != $data['species_id']) {
+                        throw new \Exception('Selected subtype invalid or does not match species.');
+                    }
                 }
             } else {
-                $data['subtype_id'] = null;
+                $data['subtype_ids'] = null;
             }
 
             $data['is_visible'] = 1;
@@ -678,13 +698,22 @@ class CharacterManager extends Service {
 
         try {
             // Check that the subtype matches
-            if (isset($data['subtype_id']) && $data['subtype_id']) {
-                $subtype = Subtype::find($data['subtype_id']);
+            if (isset($data['subtype_ids']) && $data['subtype_ids']) {
+                if (count($data['subtype_ids']) > config('lorekeeper.extensions.multiple_subtype_limit')) {
+                    throw new \Exception('Too many subtypes selected.');
+                }
+
                 if (!(isset($data['species_id']) && $data['species_id'])) {
                     throw new \Exception('Species must be selected to select a subtype.');
                 }
-                if (!$subtype || $subtype->species_id != $data['species_id']) {
-                    throw new \Exception('Selected subtype invalid or does not match species.');
+
+                $species_id = $data['species_id'] != $image->species_id ? $data['species_id'] : $image->species_id;
+
+                foreach ($data['subtype_ids'] as $subtypeId) {
+                    $subtype = Subtype::find($subtypeId);
+                    if (!$subtype || $subtype->species_id != $species_id) {
+                        throw new \Exception('Selected subtype invalid or does not match species.');
+                    }
                 }
             }
 
@@ -705,7 +734,7 @@ class CharacterManager extends Service {
             $old = [];
             $old['features'] = $this->generateFeatureList($image);
             $old['species'] = $image->species_id ? $image->species->displayName : null;
-            $old['subtype'] = $image->subtype_id ? $image->subtype->displayName : null;
+            $old['subtypes'] = count($image->subtypes) ? $image->displaySubtypes() : null;
             $old['rarity'] = $image->rarity_id ? $image->rarity->displayName : null;
             $old['transformation'] = $image->transformation_id ? $image->transformation->displayName : null;
 
@@ -721,7 +750,19 @@ class CharacterManager extends Service {
 
             // Update other stats
             $image->species_id = $data['species_id'];
-            $image->subtype_id = $data['subtype_id'] ?: null;
+            // SUBTYPES
+            $image->subtypes()->delete();
+            if (isset($data['subtype_ids']) && $data['subtype_ids']) {
+                if (count($data['subtype_ids']) > config('lorekeeper.extensions.multiple_subtype_limit')) {
+                    throw new \Exception('Too many subtypes selected.');
+                }
+                foreach ($data['subtype_ids'] as $subtypeId) {
+                    CharacterImageSubtype::create([
+                        'character_image_id' => $image->id,
+                        'subtype_id'         => $subtypeId,
+                    ]);
+                }
+            }
             $image->rarity_id = $data['rarity_id'];
             $image->transformation_id = $data['transformation_id'] ?: null;
             $image->transformation_info = $data['transformation_info'] ?: null;
@@ -740,7 +781,7 @@ class CharacterManager extends Service {
             $new = [];
             $new['features'] = $this->generateFeatureList($image);
             $new['species'] = $image->species_id ? $image->species->displayName : null;
-            $new['subtype'] = $image->subtype_id ? $image->subtype->displayName : null;
+            $new['subtypes'] = count($image->subtypes) ? $image->displaySubtypes() : null;
             $new['rarity'] = $image->rarity_id ? $image->rarity->displayName : null;
             $new['transformation'] = $image->transformation_id ? $image->transformation->displayName : null;
             $new['transformation_info'] = $image->transformation_info ? $image->transformation_info : null;
@@ -1035,6 +1076,7 @@ class CharacterManager extends Service {
 
             $image->is_valid = isset($data['is_valid']);
             $image->is_visible = isset($data['is_visible']);
+            $image->content_warnings = isset($data['content_warnings']) ? explode(',', $data['content_warnings']) : null;
             $image->save();
 
             // Add a log for the character
@@ -1682,9 +1724,7 @@ class CharacterManager extends Service {
                 if (isset($data['is_gift_writing_allowed']) && $character->is_gift_writing_allowed != $data['is_gift_writing_allowed']) {
                     $notifyGiftWriting = true;
                 }
-                if (!isset($data['is_links_open'])) {
-                    $data['is_links_open'] = 0;
-                }
+
                 if (!isset($data['kotm'])) {
                     $data['kotm'] = 0;
                 }
@@ -1698,7 +1738,6 @@ class CharacterManager extends Service {
                 $character->is_gift_art_allowed = isset($data['is_gift_art_allowed']) && $data['is_gift_art_allowed'] <= 2 ? $data['is_gift_art_allowed'] : 0;
                 $character->is_gift_writing_allowed = isset($data['is_gift_writing_allowed']) && $data['is_gift_writing_allowed'] <= 2 ? $data['is_gift_writing_allowed'] : 0;
                 $character->is_trading = isset($data['is_trading']);
-                $character->is_links_open = $data['is_links_open'];
 
                 $character->save();
             } else {
@@ -2186,10 +2225,10 @@ class CharacterManager extends Service {
                     }
                     $this->moveCharacter($transfer->character, $transfer->recipient, 'User Transfer', $cooldown);
                     if (!Settings::get('open_transfers_queue')) {
-                        $transfer->data = json_encode([
+                        $transfer->data = [
                             'cooldown' => $cooldown,
                             'staff_id' => null,
-                        ]);
+                        ];
                     }
 
                     // Notify sender of the successful transfer
@@ -2199,12 +2238,20 @@ class CharacterManager extends Service {
                         'sender_name'    => $transfer->recipient->name,
                         'sender_url'     => $transfer->recipient->url,
                     ]);
+
+                    // Notify recipient of the successful transfer
+                    Notifications::create('CHARACTER_TRANSFER_ACCEPTED', $transfer->recipient, [
+                        'character_name' => $transfer->character->slug,
+                        'character_url'  => $transfer->character->url,
+                        'sender_name'    => $transfer->sender->name,
+                        'sender_url'     => $transfer->sender->url,
+                    ]);
                 }
             } else {
                 $transfer->status = 'Rejected';
-                $transfer->data = json_encode([
+                $transfer->data = [
                     'staff_id' => null,
-                ]);
+                ];
 
                 // Notify sender that transfer has been rejected
                 Notifications::create('CHARACTER_TRANSFER_REJECTED', $transfer->sender, [
@@ -2283,10 +2330,10 @@ class CharacterManager extends Service {
 
             if ($data['action'] == 'Approve') {
                 $transfer->is_approved = 1;
-                $transfer->data = json_encode([
+                $transfer->data = [
                     'staff_id' => $user->id,
                     'cooldown' => $data['cooldown'] ?? Settings::get('transfer_cooldown'),
-                ]);
+                ];
 
                 // Process the character move if the recipient has already accepted the transfer
                 if ($transfer->status == 'Accepted') {
@@ -2362,9 +2409,9 @@ class CharacterManager extends Service {
 
                 $transfer->status = 'Rejected';
                 $transfer->reason = $data['reason'] ?? null;
-                $transfer->data = json_encode([
+                $transfer->data = [
                     'staff_id' => $user->id,
-                ]);
+                ];
 
                 // Notify both parties that the request was denied
                 Notifications::create('CHARACTER_TRANSFER_DENIED', $transfer->sender, [
@@ -2618,152 +2665,52 @@ class CharacterManager extends Service {
     }
 
     /**
- * Updates a character's markings.
- *
- * @param array     $data
- * @param Character $character
- *
- * @return bool
- */
-public function updateCharacterMarkings($data, $character) {
-    DB::beginTransaction();
-
-    try {
-        // Clear old markings
-        CharacterMarking::where('character_id', $character->id)->delete();
-
-        $i = 0;
-
-        // Attach markings
-        foreach ($data['marking_id'] as $markingId) {
-            if ($markingId) {
-                $temp = Marking::where('id', $markingId)->first();
-
-                $is_dominant = $data['is_dominant'][$i] ?? 0;
-
-                $marking = CharacterMarking::create([
-                    'character_id'  => $character->id,
-                    'marking_id'    => $markingId,
-                    'code'          => ($is_dominant ? $temp->dominant : $temp->recessive),
-                    'order'         => !empty($temp->goes_before_base) ? 1 : 0, // <-- Uses your new column
-                    'is_dominant'   => $is_dominant,
-                    'data'          => $data['side_id'][$i] ?? 0,
-                    'base_id'       => $character->base, // Set the base_id field
-                ]);
-            }
-
-            $i++;
-        }
-
-        $character->save();
-
-        return $this->commitReturn(true);
-    } catch (\Exception $e) {
-        \Log::error('Marking error', ['error' => $e->getMessage()]);
-        $this->setError('error', $e->getMessage());
-    }
-
-    return $this->rollbackReturn(false);
-}
-
-
-    /**
-     * Handles character data.
+     * Updates a character's markings.
      *
-     * @param mixed      $character
-     * @param mixed      $user
-     * @param mixed|null $image
-     * @param mixed      $isImage
+     * @param array     $data
+     * @param Character $character
      *
-     * @return bool|Character
+     * @return bool
      */
-    public function createDesignUpdateRequest($character, $user, $image = null, $isImage = false) {
+    public function updateCharacterMarkings($data, $character) {
         DB::beginTransaction();
 
         try {
-            if ($isImage) {
-                $image = $image;
-            } else {
-                $image = $character->image;
-            }
-            if ($character->user_id != $user->id) {
-                throw new \Exception('You do not own this character.');
-            }
-            if (CharacterDesignUpdate::where('character_id', $character->id)->active()->exists()) {
-                throw new \Exception('This '.($character->is_myo_slot ? 'MYO slot' : 'character').' already has an existing request. Please update that one, or delete it before creating a new one.');
-            }
-            if (!$character->isAvailable) {
-                throw new \Exception('This '.($character->is_myo_slot ? 'MYO slot' : 'character').' is currently in an open trade or transfer. Please cancel the trade or transfer before creating a design update.');
-            }
+            // Clear old markings
+            CharacterMarking::where('character_id', $character->id)->delete();
 
-            $data = [
-                'user_id'       => $user->id,
-                'character_id'  => $character->id,
-                'status'        => 'Draft',
-                'hash'          => randomString(10),
-                'fullsize_hash' => randomString(15),
-                'update_type'   => $character->is_myo_slot ? 'MYO' : 'Character',
+            $i = 0;
 
-                // Set some data based on the character's existing stats
-                'rarity_id'                  => $image->rarity_id,
-                'species_id'                 => $image->species_id,
-                'subtype_id'                 => $image->subtype_id,
-                'transformation_id'          => $image->transformation_id,
-                'transformation_info'        => $image->transformation_info,
-                'transformation_description' => $image->transformation_description,
-            ];
+            // Attach markings
+            foreach ($data['marking_id'] as $markingId) {
+                if ($markingId) {
+                    $temp = Marking::where('id', $markingId)->first();
 
-            $request = CharacterDesignUpdate::create($data);
+                    $is_dominant = $data['is_dominant'][$i] ?? 0;
 
-            // If the character is not a MYO slot, make a copy of the previous image's traits
-            // as presumably, we will not want to make major modifications to them.
-            // This is skipped for MYO slots as it complicates things later on - we don't want
-            // users to edit compulsory traits, so we'll only add them when the design is approved.
-            if (!$character->is_myo_slot) {
-                foreach ($image->features as $feature) {
-                    $request->features()->create([
-                        'character_image_id' => $request->id,
-                        'character_type'     => 'Update',
-                        'feature_id'         => $feature->feature_id,
-                        'data'               => $feature->data,
+                    $marking = CharacterMarking::create([
+                        'character_id'  => $character->id,
+                        'marking_id'    => $markingId,
+                        'code'          => ($is_dominant ? $temp->dominant : $temp->recessive),
+                        'order'         => !empty($temp->goes_before_base) ? 1 : 0, // <-- Uses your new column
+                        'is_dominant'   => $is_dominant,
+                        'data'          => $data['side_id'][$i] ?? 0,
+                        'base_id'       => $character->base, // Set the base_id field
                     ]);
                 }
+
+                $i++;
             }
 
-            $characterData = Arr::only($data, [
-                'character_category_id', 'rarity_id', 'user_id',
-                'number', 'slug', 'description',
-                'sale_value', 'transferrable_at', 'is_visible',
-                'base', 'secondary_base', 'is_chimera',
-            ]);
+            $character->save();
 
-            $characterData['name'] = ($isMyo && isset($data['name'])) ? $data['name'] : null;
-            $characterData['owner_url'] = isset($characterData['user_id']) ? null : $data['owner_url'];
-            $characterData['is_sellable'] = isset($data['is_sellable']);
-            $characterData['is_tradeable'] = isset($data['is_tradeable']);
-            $characterData['is_giftable'] = isset($data['is_giftable']);
-            $characterData['is_visible'] = isset($data['is_visible']);
-            $characterData['sale_value'] = $data['sale_value'] ?? 0;
-            $characterData['is_gift_art_allowed'] = 0;
-            $characterData['is_gift_writing_allowed'] = 0;
-            $characterData['is_trading'] = 0;
-            $characterData['parsed_description'] = parse($data['description']);
-            $characterData['base'] = (isset($data['is_chimera']) ? $data['base'].'|'.$data['secondary_base'] : $data['base']);
-            if ($isMyo) {
-                $characterData['is_myo_slot'] = 1;
-            }
-
-            $character = Character::create($characterData);
-
-            // Create character profile row
-            $character->profile()->create([]);
-
-            return $character;
+            return $this->commitReturn(true);
         } catch (\Exception $e) {
+            \Log::error('Marking error', ['error' => $e->getMessage()]);
             $this->setError('error', $e->getMessage());
         }
 
-        return false;
+        return $this->rollbackReturn(false);
     }
 
     /**
@@ -2781,7 +2728,7 @@ public function updateCharacterMarkings($data, $character) {
                 $data['number'] = null;
                 $data['slug'] = null;
                 $data['species_id'] = isset($data['species_id']) && $data['species_id'] ? $data['species_id'] : null;
-                $data['subtype_id'] = isset($data['subtype_id']) && $data['subtype_id'] ? $data['subtype_id'] : null;
+                $data['subtype_ids'] = isset($data['subtype_ids']) && $data['subtype_ids'] ? $data['subtype_ids'] : null;
                 $data['rarity_id'] = isset($data['rarity_id']) && $data['rarity_id'] ? $data['rarity_id'] : null;
                 $data['transformation_id'] = isset($data['transformation_id']) && $data['transformation_id'] ? $data['transformation_id'] : null;
                 $data['transformation_info'] = isset($data['transformation_info']) && $data['transformation_info'] ? $data['transformation_info'] : null;
@@ -2846,9 +2793,8 @@ public function updateCharacterMarkings($data, $character) {
     private function handleCharacterImage($data, $character, $isMyo = false) {
         try {
             if ($isMyo) {
-                $data['species_id'] = (isset($data['species_id']) && $data['species_id']) ? $data['species_id'] : null;
-                $data['subtype_id'] = isset($data['subtype_id']) && $data['subtype_id'] ? $data['subtype_id'] : null;
-                $data['rarity_id'] = (isset($data['rarity_id']) && $data['rarity_id']) ? $data['rarity_id'] : null;
+                $data['species_id'] = isset($data['species_id']) && $data['species_id'] ? $data['species_id'] : null;
+                $data['rarity_id'] = isset($data['rarity_id']) && $data['rarity_id'] ? $data['rarity_id'] : null;
                 $data['transformation_id'] = isset($data['transformation_id']) && $data['transformation_id'] ? $data['transformation_id'] : null;
                 $data['transformation_info'] = isset($data['transformation_info']) && $data['transformation_info'] ? $data['transformation_info'] : null;
                 $data['transformation_description'] = isset($data['transformation_description']) && $data['transformation_description'] ? $data['transformation_description'] : null;
@@ -2872,8 +2818,8 @@ public function updateCharacterMarkings($data, $character) {
                 }
             }
             $imageData = Arr::only($data, [
-                'species_id', 'subtype_id', 'rarity_id', 'use_cropper',
-                'x0', 'x1', 'y0', 'y1', 'transformation_id', 'transformation_info', 'transformation_description', 'genotype', 'phenotype', 'gender', 'eyecolor', 'bio', 'diet', 'atk', 'def', 'spd',
+                'species_id', 'rarity_id', 'use_cropper',
+                'x0', 'x1', 'y0', 'y1', 'content_warnings', 'transformation_id', 'transformation_info', 'transformation_description', 'genotype', 'phenotype', 'gender', 'eyecolor', 'bio', 'diet', 'atk', 'def', 'spd',
             ]);
             $imageData['use_cropper'] = isset($data['use_cropper']);
             $imageData['description'] = $data['image_description'] ?? null;
@@ -2885,8 +2831,19 @@ public function updateCharacterMarkings($data, $character) {
             $imageData['is_visible'] = isset($data['is_visible']);
             $imageData['extension'] = (Config::get('lorekeeper.settings.masterlist_image_format') ? Config::get('lorekeeper.settings.masterlist_image_format') : ($data['extension'] ?? $data['image']->getClientOriginalExtension()));
             $imageData['character_id'] = $character->id;
+            $imageData['content_warnings'] = isset($data['content_warnings']) ? explode(',', $data['content_warnings']) : null;
 
             $image = CharacterImage::create($imageData);
+
+            // create subtype relations
+            if (isset($data['subtype_ids']) && $data['subtype_ids']) {
+                foreach ($data['subtype_ids'] as $subtypeId) {
+                    CharacterImageSubtype::create([
+                        'character_image_id' => $image->id,
+                        'subtype_id'         => $subtypeId,
+                    ]);
+                }
+            }
 
             // Check if entered url(s) have aliases associated with any on-site users
             foreach ($data['designer_url'] as $key=>$url) {
@@ -3102,190 +3059,6 @@ public function updateCharacterMarkings($data, $character) {
         return false;
     }
 
-    // /**
-    //  * Handles character image data.
-    //  *
-    //  * @param array $data
-    //  * @param bool  $isMyo
-    //  * @param mixed $character
-    //  *
-    //  * @return \App\Models\Character\Character           $character
-    //  * @return \App\Models\Character\CharacterImage|bool
-    //  */
-    // private function handleCharacterImage($data, $character, $isMyo = false) {
-    //     try {
-    //         if ($isMyo) {
-    //             $data['species_id'] = (isset($data['species_id']) && $data['species_id']) ? $data['species_id'] : null;
-    //             $data['subtype_id'] = isset($data['subtype_id']) && $data['subtype_id'] ? $data['subtype_id'] : null;
-    //             $data['rarity_id'] = (isset($data['rarity_id']) && $data['rarity_id']) ? $data['rarity_id'] : null;
-    //             $data['transformation_id'] = isset($data['transformation_id']) && $data['transformation_id'] ? $data['transformation_id'] : null;
-    //             $data['transformation_info'] = isset($data['transformation_info']) && $data['transformation_info'] ? $data['transformation_info'] : null;
-    //             $data['transformation_description'] = isset($data['transformation_description']) && $data['transformation_description'] ? $data['transformation_description'] : null;
-    //             $data['genotype'] = isset($data['genotype']) ? $data['genotype'] : null;
-    //             $data['phenotype'] = isset($data['phenotype']) ? $data['phenotype'] : null;
-    //             $data['gender'] = isset($data['gender']) ? $data['gender'] : null;
-    //             $data['eyecolor'] = isset($data['eyecolor']) ? $data['eyecolor'] : null;
-    //             $data['def'] = isset($data['def']) ? $data['def'] : null;
-    //             $data['spd'] = isset($data['spd']) ? $data['spd'] : null;
-    //             $data['atk'] = isset($data['atk']) ? $data['atk'] : null;
-
-    //             // Use default images for MYO slots without an image provided
-    //             if (!isset($data['image'])) {
-    //                 $data['image'] = public_path('images/myo.png');
-    //                 $data['thumbnail'] = public_path('images/myo-th.png');
-    //                 $data['extension'] = config('lorekeeper.settings.masterlist_image_format') ?? 'png';
-    //                 $data['fullsize_extension'] = config('lorekeeper.settings.masterlist_fullsizes_format') ?? $data['extension'];
-    //                 $data['default_image'] = true;
-    //                 unset($data['use_cropper']);
-    //             }
-    //         }
-    //         $imageData = Arr::only($data, [
-    //             'species_id', 'subtype_id', 'rarity_id', 'use_cropper',
-    //             'x0', 'x1', 'y0', 'y1',
-    //         ]);
-    //         $imageData['use_cropper'] = isset($data['use_cropper']);
-    //         $imageData['description'] = $data['image_description'] ?? null;
-    //         $imageData['parsed_description'] = parse($imageData['description']);
-    //         $imageData['hash'] = randomString(10);
-    //         $imageData['fullsize_hash'] = randomString(15);
-    //         $imageData['sort'] = 0;
-    //         $imageData['is_valid'] = isset($data['is_valid']);
-    //         $imageData['is_visible'] = isset($data['is_visible']);
-    //         $imageData['extension'] = (config('lorekeeper.settings.masterlist_image_format') ?? ($data['extension'] ?? $data['image']->getClientOriginalExtension()));
-    //         $imageData['fullsize_extension'] = (config('lorekeeper.settings.masterlist_fullsizes_format') ?? ($data['fullsize_extension'] ?? $data['image']->getClientOriginalExtension()));
-    //         $imageData['character_id'] = $character->id;
-
-    //         $image = CharacterImage::create($imageData);
-
-    //         // Check if entered url(s) have aliases associated with any on-site users
-    //         $designers = array_filter($data['designer_url']); // filter null values
-    //         foreach ($designers as $key=> $url) {
-    //             $recipient = checkAlias($url, false);
-    //             if (is_object($recipient)) {
-    //                 $data['designer_id'][$key] = $recipient->id;
-    //                 $designers[$key] = null;
-    //             }
-    //         }
-    //         $artists = array_filter($data['artist_url']);  // filter null values
-    //         foreach ($artists as $key=> $url) {
-    //             $recipient = checkAlias($url, false);
-    //             if (is_object($recipient)) {
-    //                 $data['artist_id'][$key] = $recipient->id;
-    //                 $artists[$key] = null;
-    //             }
-    //         }
-    //         // Check that users with the specified id(s) exist on site
-    //         foreach ($data['designer_id'] as $id) {
-    //             if (isset($id) && $id) {
-    //                 $user = User::find($id);
-    //                 if (!$user) {
-    //                     throw new \Exception('One or more designers is invalid.');
-    //                 }
-    //             }
-    //         }
-    //         foreach ($data['artist_id'] as $id) {
-    //             if (isset($id) && $id) {
-    //                 $user = $user = User::find($id);
-    //                 if (!$user) {
-    //                     throw new \Exception('One or more artists is invalid.');
-    //                 }
-    //             }
-    //         }
-
-    //         // Attach artists/designers
-    //         foreach ($data['designer_id'] as $key => $id) {
-    //             if ($id || $data['designer_url'][$key]) {
-    //                 DB::table('character_image_creators')->insert([
-    //                     'character_image_id' => $image->id,
-    //                     'type'               => 'Designer',
-    //                     'url'                => $data['designer_url'][$key],
-    //                     'user_id'            => $id,
-    //                 ]);
-    //             }
-    //         }
-    //         foreach ($data['artist_id'] as $key => $id) {
-    //             if ($id || $data['artist_url'][$key]) {
-    //                 DB::table('character_image_creators')->insert([
-    //                     'character_image_id' => $image->id,
-    //                     'type'               => 'Artist',
-    //                     'url'                => $data['artist_url'][$key],
-    //                     'user_id'            => $id,
-    //                 ]);
-    //             }
-    //         }
-
-    //         // Save image
-    //         $this->handleImage($data['image'], $image->imageDirectory, $image->imageFileName, null, isset($data['default_image']));
-
-    //         // Save thumbnail first before processing full image
-    //         if (isset($data['use_cropper'])) {
-    //             $this->cropThumbnail(Arr::only($data, ['x0', 'x1', 'y0', 'y1']), $image, $isMyo);
-    //         } else {
-    //             $this->handleImage($data['thumbnail'], $image->imageDirectory, $image->thumbnailFileName, null, isset($data['default_image']));
-    //         }
-    //     } catch (\Exception $e) {
-    //         $this->setError('error', $e->getMessage());
-    //     }
-
-    //     try {
-    //         if(!($request->character->is_myo_slot && $request->character->image->species_id) && !isset($data['species_id'])) throw new \Exception("Please select a ".__('lorekeeper.species').".");
-    //         if(!($request->character->is_myo_slot && $request->character->image->rarity_id) && !isset($data['rarity_id'])) throw new \Exception("Please select a rarity.");
-
-    //         $rarity = ($request->character->is_myo_slot && $request->character->image->rarity_id) ? $request->character->image->rarity : Rarity::find($data['rarity_id']);
-    //         $species = ($request->character->is_myo_slot && $request->character->image->species_id) ? $request->character->image->species : Species::find($data['species_id']);
-    //         if(isset($data['subtype_id']) && $data['subtype_id'])
-    //             $subtype = ($request->character->is_myo_slot && $request->character->image->subtype_id) ? $request->character->image->subtype : Subtype::find($data['subtype_id']);
-    //         else $subtype = null;
-    //         if (isset($data['transformation_id']) && $data['transformation_id']) {
-    //             $transformation = ($request->character->is_myo_slot && $request->character->image->transformation_id) ? $request->character->image->transformation : Transformation::find($data['transformation_id']);
-    //             $transformation_info = ($request->character->is_myo_slot && $request->character->image->transformation_info) ? $request->character->image->transformation_info : $data['transformation_info'];
-    //             $transformation_description = ($request->character->is_myo_slot && $request->character->image->transformation_description) ? $request->character->image->transformation_description : $data['transformation_description'];
-    //         } else {
-    //             $transformation = null;
-    //             $transformation_info = null;
-    //             $transformation_description = null;
-    //         }
-    //         if(!$rarity) throw new \Exception("Invalid rarity selected.");
-    //         if(!$species) throw new \Exception("Invalid species selected.");
-    //         if($subtype && $subtype->species_id != $species->id) throw new \Exception("Subtype does not match the species.");
-    //         if($transformation && $transformation->species_id != null){
-    //             if($transformation->species_id != $species->id) throw new \Exception(ucfirst(__('transformations.transformation'))." does not match the species.");
-    //         }
-
-    //         // Clear old features
-    //         $request->features()->delete();
-    //         // Process and save the image itself
-    //         if (!$isMyo) {
-    //             $this->processImage($image);
-    //         }
-
-    //         // Attach features
-    //         foreach ($data['feature_id'] as $key => $featureId) {
-    //             if ($featureId) {
-    //                 $feature = CharacterFeature::create(['character_image_id' => $image->id, 'feature_id' => $featureId, 'data' => $data['feature_data'][$key]]);
-    //             }
-    //         }
-
-    //         //Update other stats
-    //         $request->species_id = $species->id;
-    //         $request->rarity_id = $rarity->id;
-    //         $request->subtype_id = $subtype ? $subtype->id : null;
-    //         $request->transformation_id = $transformation ? $transformation->id : null;
-    //         $request->transformation_info = $transformation_info;
-    //         $request->transformation_description = $transformation_description;
-    //         $request->has_features = 1;
-    //         $request->save();
-
-    //         return $this->commitReturn(true);
-
-    //         return $image;
-    //     } catch (\Exception $e) {
-    //         $this->setError('error', $e->getMessage());
-    //     }
-
-    //     return false;
-    // }
-
     /**
      * Generates a list of features for displaying.
      *
@@ -3349,13 +3122,13 @@ public function updateCharacterMarkings($data, $character) {
                     $is_dominant = $data['is_dominant'][$key];
 
                     $marking = CharacterMarking::create([
-                    'character_id'  => $character->id,
-                    'marking_id'    => $markingId,
-                    'code'          => ($is_dominant ? $temp->dominant : $temp->recessive),
-                    'order'         => !empty($temp->goes_before_base) ? 1 : 0, // <-- Uses your new column
-                    'is_dominant'   => $is_dominant,
-                    'data'          => $data['side_id'][$i] ?? 0,
-                ]);
+                        'character_id'  => $character->id,
+                        'marking_id'    => $markingId,
+                        'code'          => ($is_dominant ? $temp->dominant : $temp->recessive),
+                        'order'         => !empty($temp->goes_before_base) ? 1 : 0, // <-- Uses your new column
+                        'is_dominant'   => $is_dominant,
+                        'data'          => $data['side_id'][$i] ?? 0,
+                    ]);
                 }
             }
 

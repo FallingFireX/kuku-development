@@ -13,14 +13,12 @@
         <div class="row mb-2">
             @if (is_array($tag->getData()) && count($tag->getData()))
                 @foreach ($tag->getData() as $loot)
-                    <div class="col-md-3"
-                        style="{{ Auth::user()->hasBorder($loot->rewardable_id) ? 'text-decoration: line-through; opacity:0.5;' : '' }}">
+                    <div class="col-md-3" style="{{ Auth::user()->hasBorder($loot->rewardable_id) ? 'text-decoration: line-through; opacity:0.5;' : '' }}">
                         {!! App\Models\Border\Border::find($loot->rewardable_id)->displayName !!}</div>
                 @endforeach
             @else
                 @foreach (App\Models\Border\Border::orderBy('name')->where('is_default', 0)->get() as $loot)
-                    <div class="col-md-3"
-                        style="{{ Auth::user()->hasBorder($loot->id) ? 'text-decoration: line-through; opacity:0.5;' : '' }}">
+                    <div class="col-md-3" style="{{ Auth::user()->hasBorder($loot->id) ? 'text-decoration: line-through; opacity:0.5;' : '' }}">
                         {!! $loot->displayName !!}</div>
                 @endforeach
             @endif

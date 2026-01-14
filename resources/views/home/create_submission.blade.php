@@ -40,6 +40,10 @@
                             If you aren't certain that you are ready, consider saving as a draft instead.
                             Click the Confirm button to complete the {{ $isClaim ? 'claim' : 'submission' }}.
                         </p>
+                        @if (!$isClaim)
+                            <div id="requirementsWarning">
+                            </div>
+                        @endif
                         <div class="text-right">
                             <a href="#" id="confirmSubmit" class="btn btn-primary">Confirm</a>
                         </div>
@@ -75,24 +79,23 @@
             @include('js._loot_js', ['showLootTables' => false, 'showRaffles' => false])
         @endif
         @include('js._character_select_js')
-        @include('widgets._inventory_select_js', ['readOnly' => true])
+        @include('widgets._inventory_select_js')
         @include('widgets._bank_select_row', ['owners' => [Auth::user()]])
         @include('widgets._bank_select_js', [])
 
 
-<script>
-   
-    $(document).ready(function() {
-        var $confirmationModal = $('#confirmationModal');
-        var $submissionForm = $('#submissionForm');
+        <script>
+            $(document).ready(function() {
+                var $confirmationModal = $('#confirmationModal');
+                var $submissionForm = $('#submissionForm');
 
-        var $confirmButton = $('#confirmButton');
-        var $confirmContent = $('#confirmContent');
-        var $confirmSubmit = $('#confirmSubmit');
+                var $confirmButton = $('#confirmButton');
+                var $confirmContent = $('#confirmContent');
+                var $confirmSubmit = $('#confirmSubmit');
 
-        var $draftButton = $('#draftButton');
-        var $draftContent = $('#draftContent');
-        var $draftSubmit = $('#draftSubmit');
+                var $draftButton = $('#draftButton');
+                var $draftContent = $('#draftContent');
+                var $draftSubmit = $('#draftSubmit');
 
                 @if (!$isClaim)
                     var $prompt = $('#prompt');
@@ -105,6 +108,7 @@
                             });
                         });
                     }
+                    var $requirementsWarning = $('#requirementsWarning');
 
                     $prompt.selectize();
                     $prompt.on('change', function(e) {
@@ -116,101 +120,117 @@
                             });
                         }
                         $rewards.load('{{ url('submissions/new/prompt') }}/' + $(this).val());
+                        $requirementsWarning.load('{{ url('submissions/new/prompt') }}/' + $(this).val() + '/requirements');
                     });
+
+                    if ($prompt.val()) {
+                        $rewards.load('{{ url('submissions/new/prompt') }}/' + $prompt.val());
+                        $requirementsWarning.load('{{ url('submissions/new/prompt') }}/' + $prompt.val() + '/requirements');
+                    }
                 @endif
 
-            // Load initial form and initialize TinyMCE after it loads
-            $form.load('{{ url('submissions/new/form') }}/' + $prompt.val(), function() {
-                initWysiwyg();
-            });
-
-            $prompt.selectize();
-
-            $prompt.on('change', function(e) {
-                var promptId = $(this).val();
-
-                $rewards.load('{{ url('submissions/new/prompt') }}/' + promptId);
-                $('#copy-calc').load('{{ url('criteria/prompt') }}/' + promptId);
-                if (promptId) $('#criterion-section').removeClass('hide');
-
-                // Reload the form HTML and reinit TinyMCE afterward
-                $form.load('{{ url('submissions/new/form') }}/' + promptId, function() {
+                // Load initial form and initialize TinyMCE after it loads
+                $form.load('{{ url('submissions/new/form') }}/' + $prompt.val(), function() {
                     initWysiwyg();
                 });
-            });
-        @else
-            // Initialize editor for claims (no prompt switch)
-            initWysiwyg();
-        @endif
 
-        $confirmButton.on('click', function(e) {
-            e.preventDefault();
-            $confirmContent.removeClass('hide');
-            $draftContent.addClass('hide');
-            $confirmationModal.modal('show');
-        });
-
-        $confirmSubmit.on('click', function(e) {
-            e.preventDefault();
-            $submissionForm.attr('action', '{{ url()->current() }}');
-            $submissionForm.submit();
-        });
-
-        $draftButton.on('click', function(e) {
-            e.preventDefault();
-            $draftContent.removeClass('hide');
-            $confirmContent.addClass('hide');
-            $confirmationModal.modal('show');
-        });
-
-        $draftSubmit.on('click', function(e) {
-            e.preventDefault();
-            $submissionForm.attr('action', '{{ url()->current() }}/draft');
-            $submissionForm.submit();
-        });
-
-        $('.add-calc').on('click', function(e) {
-            e.preventDefault();
-            var clone = $('#copy-calc').clone();
-            clone.removeClass('hide');
-            var input = clone.find('[name*=criterion]');
-            var count = $('.criterion-select').length;
-            input.attr('name', input.attr('name').replace('#', count))
-            clone.find('.criterion-select').on('change', loadForm);
-            clone.find('.delete-calc').on('click', deleteCriterion);
-            clone.removeAttr('id');
-            $('#criteria').append(clone);
-        });
-
-        $('.delete-calc').on('click', deleteCriterion);
-
-        function deleteCriterion(e) {
-            e.preventDefault();
-            var toDelete = $(this).closest('.card');
-            toDelete.remove();
-        }
-
-        function loadForm(e) {
-            var id = $(this).val();
-            var promptId = $prompt.val();
-            var formId = $(this).attr('name').split('[')[1].replace(']', '');
-
-            if (id) {
-                var form = $(this).closest('.card').find('.form');
-                form.load("{{ url('criteria/prompt') }}/" + id + "/" + promptId + "/" + formId, (response, status, xhr) => {
-                    if (status == "error") {
-                        var msg = "Error: ";
-                        console.error(msg + xhr.status + " " + xhr.statusText);
-                    } else {
-                        form.find('[data-toggle=tooltip]').tooltip({ html: true });
-                        form.find('[data-toggle=toggle]').bootstrapToggle();
+                $confirmSubmit.on('click', function(e) {
+                    e.preventDefault();
+                    let $confirm = $('#requirementsWarning').find('#confirm').length ? $('#requirementsWarning').find('#confirm').is(':checked') : true;
+                    if ("{{ !$isClaim }}" && !$confirm) {
+                        alert('You must confirm that you understand that you will not be able to edit this submission after it has been made.');
+                        return;
                     }
+                    $submissionForm.attr('action', '{{ url()->current() }}');
+                    $submissionForm.submit();
                 });
+
+                $prompt.on('change', function(e) {
+                    var promptId = $(this).val();
+
+                    $rewards.load('{{ url('submissions/new/prompt') }}/' + promptId);
+                    $('#copy-calc').load('{{ url('criteria/prompt') }}/' + promptId);
+                    if (promptId) $('#criterion-section').removeClass('hide');
+
+                    // Reload the form HTML and reinit TinyMCE afterward
+                    $form.load('{{ url('submissions/new/form') }}/' + promptId, function() {
+                        initWysiwyg();
+                    });
+                });
+            @else
+                // Initialize editor for claims (no prompt switch)
+                initWysiwyg();
+            @endif
+
+            $confirmButton.on('click', function(e) {
+                e.preventDefault();
+                $confirmContent.removeClass('hide');
+                $draftContent.addClass('hide');
+                $confirmationModal.modal('show');
+            });
+
+            $confirmSubmit.on('click', function(e) {
+                e.preventDefault();
+                $submissionForm.attr('action', '{{ url()->current() }}');
+                $submissionForm.submit();
+            });
+
+            $draftButton.on('click', function(e) {
+                e.preventDefault();
+                $draftContent.removeClass('hide');
+                $confirmContent.addClass('hide');
+                $confirmationModal.modal('show');
+            });
+
+            $draftSubmit.on('click', function(e) {
+                e.preventDefault();
+                $submissionForm.attr('action', '{{ url()->current() }}/draft');
+                $submissionForm.submit();
+            });
+
+            $('.add-calc').on('click', function(e) {
+                e.preventDefault();
+                var clone = $('#copy-calc').clone();
+                clone.removeClass('hide');
+                var input = clone.find('[name*=criterion]');
+                var count = $('.criterion-select').length;
+                input.attr('name', input.attr('name').replace('#', count))
+                clone.find('.criterion-select').on('change', loadForm);
+                clone.find('.delete-calc').on('click', deleteCriterion);
+                clone.removeAttr('id');
+                $('#criteria').append(clone);
+            });
+
+            $('.delete-calc').on('click', deleteCriterion);
+
+            function deleteCriterion(e) {
+                e.preventDefault();
+                var toDelete = $(this).closest('.card');
+                toDelete.remove();
             }
-        }
 
-        $('.criterion-select').on('change', loadForm);
-    });
-</script>
+            function loadForm(e) {
+                var id = $(this).val();
+                var promptId = $prompt.val();
+                var formId = $(this).attr('name').split('[')[1].replace(']', '');
 
-@endsection
+                if (id) {
+                    var form = $(this).closest('.card').find('.form');
+                    form.load("{{ url('criteria/prompt') }}/" + id + "/" + promptId + "/" + formId, (response, status, xhr) => {
+                        if (status == "error") {
+                            var msg = "Error: ";
+                            console.error(msg + xhr.status + " " + xhr.statusText);
+                        } else {
+                            form.find('[data-toggle=tooltip]').tooltip({
+                                html: true
+                            });
+                            form.find('[data-toggle=toggle]').bootstrapToggle();
+                        }
+                    });
+                }
+            }
+
+            $('.criterion-select').on('change', loadForm);
+            });
+        </script>
+    @endsection

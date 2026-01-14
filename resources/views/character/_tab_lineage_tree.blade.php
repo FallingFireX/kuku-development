@@ -1,19 +1,19 @@
 <div class="container text-left">
----------------------------------------- SSS: {!! $line['sire_sire_sire'] !!}
-<br>------------------- SS: {!! $line['sire_sire'] !!}
-<br>---------------------------------------- SSD: {!! $line['sire_sire_dam'] !!}
-<br><span class="font-weight-bold">Sire</span>: {!! $line['sire'] !!}
-<br>---------------------------------------- SDS: {!! $line['sire_dam_sire'] !!}
-<br>------------------- SD: {!! $line['sire_dam'] !!}
-<br>---------------------------------------- SDD: {!! $line['sire_dam_dam'] !!}
-<br>---------------------------------------- DSS: {!! $line['dam_sire_sire'] !!}
-<br>------------------- DS: {!! $line['dam_sire'] !!}
-<br>---------------------------------------- DSD: {!! $line['dam_sire_dam'] !!}
-<br><span class="font-weight-bold">Dam</span>: {!! $line['dam'] !!}
-<br>---------------------------------------- DDS: {!! $line['dam_dam_sire'] !!}
-<br>------------------- DD: {!! $line['dam_dam'] !!}
-<br>---------------------------------------- DDD: {!! $line['dam_dam_dam'] !!}
-<br><br>
+    ---------------------------------------- SSS: {!! $line['sire_sire_sire'] !!}
+    <br>------------------- SS: {!! $line['sire_sire'] !!}
+    <br>---------------------------------------- SSD: {!! $line['sire_sire_dam'] !!}
+    <br><span class="font-weight-bold">Sire</span>: {!! $line['sire'] !!}
+    <br>---------------------------------------- SDS: {!! $line['sire_dam_sire'] !!}
+    <br>------------------- SD: {!! $line['sire_dam'] !!}
+    <br>---------------------------------------- SDD: {!! $line['sire_dam_dam'] !!}
+    <br>---------------------------------------- DSS: {!! $line['dam_sire_sire'] !!}
+    <br>------------------- DS: {!! $line['dam_sire'] !!}
+    <br>---------------------------------------- DSD: {!! $line['dam_sire_dam'] !!}
+    <br><span class="font-weight-bold">Dam</span>: {!! $line['dam'] !!}
+    <br>---------------------------------------- DDS: {!! $line['dam_dam_sire'] !!}
+    <br>------------------- DD: {!! $line['dam_dam'] !!}
+    <br>---------------------------------------- DDD: {!! $line['dam_dam_dam'] !!}
+    <br><br>
 </div>
 <!-- <div class="container text-center">
     <div class="row">

@@ -45,6 +45,12 @@ class AddSiteSettings extends Command {
 
         $this->addSiteSetting('open_transfers_queue', 0, '0: Character transfers do not need mod approval, 1: Transfers must be approved by a mod.');
 
+        $this->addSiteSetting('open_trades_queue', 0, '0: Trades do not need mod approval, 1: Trades must be approved by a mod.');
+
+        $this->addSiteSetting('trade_listing_duration', 14, 'Number of days a trade listing is displayed for.');
+
+        $this->addSiteSetting('trade_listing_limit', 3, 'Number of trade listings a user can have at once.');
+
         $this->addSiteSetting('is_prompts_open', 1, '0: New prompt submissions cannot be made (mods can work on the queue still), 1: Prompts are submittable.');
 
         $this->addSiteSetting('is_claims_open', 1, '0: New claims cannot be made (mods can work on the queue still), 1: Claims are submittable.');
@@ -116,6 +122,8 @@ class AddSiteSettings extends Command {
         $this->addSiteSetting('notify_staff_applicants', 0, 'Toggle notifications sent when accepting/denying applicants to the staff team. 0: notifications disabled, 1 notifications enabled');
 
         $this->addSiteSetting('is_applications_comment_read_only', 1, 'Allow/disallow replies to comments from staff on applications. 0: applicants CAN reply to comments 1: applicants CANT reply to comments.');
+
+        $this->addSiteSetting('allow_users_to_delete_profile_comments', 0, '0: Users cannot delete profile comments, 1: Users can delete profile comments.');
 
         $this->line("\nSite settings up to date!");
     }

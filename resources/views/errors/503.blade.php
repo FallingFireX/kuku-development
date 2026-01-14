@@ -1,6 +1,8 @@
 @extends('layouts.app')
 
-@section('title') Down for Maintenance @endsection
+@section('title')
+    Down for Maintenance
+@endsection
 
 @section('content')
     <h1 class="text-center">{{ config('lorekeeper.settings.site_name', 'Lorekeeper') }}</h1>
