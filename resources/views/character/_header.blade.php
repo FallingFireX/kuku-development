@@ -21,8 +21,7 @@
 <div class="character-masterlist-categories">
     @if ($character->is_myo_slot)
         {!! $character->category?->displayName ?? 'None' !!} ・ {!! $character->image->species?->displayName ?? 'None' !!} ・ {!! $character->image->rarity?->displayName ?? 'None' !!}
-    
-        @endif
+    @endif
 </div>
 <h1 class="mb-0 text-center">
     @if ($character->is_visible && Auth::check() && $character->user_id != Auth::user()->id)

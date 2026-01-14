@@ -15,8 +15,8 @@
         {!! Form::open(['method' => 'POST']) !!}
         <div class="form-group">
             {!! Form::label('Season') !!}
-            {!! Form::textarea('box1', $sidebar->box1content, ['class' => 'form-control wysiwyg']) !!}  
-            
+            {!! Form::textarea('box1', $sidebar->box1content, ['class' => 'form-control wysiwyg']) !!}
+
             {!! Form::label('MQ widget ') !!}
             {!! Form::textarea('box2', $sidebar->box2content, ['class' => 'form-control wysiwyg']) !!}
 
@@ -34,5 +34,4 @@
 @section('scripts')
     @parent
     @include('js._tinymce_wysiwyg')
-    
 @endsection
