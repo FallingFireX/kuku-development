@@ -544,7 +544,7 @@ class WorldController extends Controller {
      * @return \Illuminate\Contracts\Support\Renderable
      */
     public function getFeatureDetail($id) {
-        $feature = Feature::visible(Auth::user() ?? null)->where('id', $id)->with('species', 'subtype', 'rarity')->first();
+        $feature = Feature::visible(Auth::user() ?? null)->where('id', $id)->with('species', 'subtypes', 'rarity')->first();
 
         if (!$feature) {
             abort(404);
