@@ -196,7 +196,7 @@
                         <a class="dropdown-item" href="{{ url('/fp-calculator') }}">
                             FP Calculator
                         </a>
-                        
+
                         <a class="dropdown-item" href="{{ url('shops') }}">
                             Shops
                         </a>
