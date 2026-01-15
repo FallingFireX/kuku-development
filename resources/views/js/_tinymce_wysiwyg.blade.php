@@ -4,6 +4,18 @@
 @endif
         tinymce.init({
             selector: '{{ $tinymceSelector ?? ".wysiwyg" }}',
+            theme: 'silver',
+    mobile: {
+        theme: 'silver'
+    },
+    
+    // Ensure TinyMCE doesn't crash if it can't find a skin
+    skin: 'oxide',
+    content_css: 'default',
+    
+    // Fixes the Modal visibility issue:
+    promotion: false,
+    branding: false,
             height: {{ $tinymceHeight ?? 500 }},
             menubar: false,
             convert_urls: false,
