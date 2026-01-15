@@ -3,22 +3,20 @@
 @endphp
 
 @if ($image->features()->count())
-    {{-- Handle Category 1 --}}
-    @if ($traitgroup->has(1))
+    {{-- Changed to check for category 14 specifically to prevent "Undefined Index" errors --}}
+    @if (isset($traitgroup[14])) 
         <div class="mb-2" style="font-size: 0.85rem">
             <strong>Special origin:</strong>
             @foreach ($traitgroup[14] as $feature)
-                {{-- Check if trait name contains "admin" --}}
                 @php
                     $name = $feature->feature->displayName;
                 @endphp
 
                 @if (stripos($name, 'admin') !== false)
                     <span data-toggle="tooltip" title="This kukuri cant be sold, traded, or gifted. Only donated to the adoption center!">
-                        <i class="fas fa-dragon"> </i>
+                        <i class="fas fa-dragon"></i>
                     </span>
-                @else
-                    (stripos($name, 'raffle') !== false)
+                @elseif (stripos($name, 'raffle') !== false) {{-- Fixed: Changed to @elseif --}}
                     <span data-toggle="tooltip" title="This kukuri cant be sold, traded, or gifted. Only donated to the adoption center!">
                         <i class="fas fa-ticket"></i>
                     </span>
