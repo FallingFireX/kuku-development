@@ -7,7 +7,7 @@
     @if ($traitgroup->has(1))
         <div class="mb-2" style="font-size: 0.85rem">
             <strong>Special origin:</strong>
-            @foreach ($traitgroup[1] as $feature)
+            @foreach ($traitgroup[14] as $feature)
                 {{-- Check if trait name contains "admin" --}}
                 @php
                     $name = $feature->feature->displayName;

@@ -121,31 +121,32 @@
                 <br>
 
 
-                @php
-    $traitgroup = $image->features()
-        ->whereNotNull('feature_category_id')
-        ->whereNotIn('feature_category_id', [1])
-        ->with('feature.category')
-        ->get()
-        ->groupBy('feature_category_id');
-@endphp
+                <div class="mb-2">
+                    <div>
+                        @php
+                            $traitgroup = $image->features()->get()->groupBy('feature_category_id');
+                        @endphp
 
-@if ($traitgroup->count())
-    @foreach ($traitgroup as $group)
-        <div class="mb-2">
-            <strong>{{ $group->first()->feature->category->displayName }}:</strong>
-            @foreach ($group as $item)
-                {{ $item->feature->displayName }}
-                @if ($item->data)
-                    ({{ $item->data }})
-                @endif
-            @endforeach
-        </div>
-    @endforeach
-@else
-    <div>Your kukuri doesn’t have traits added! Please submit an import error prompt to get this fixed!</div>
-@endif
-
+                        @if ($image->features()->count())
+                            @foreach ($traitgroup as $key => $group)
+                                {{-- Skip category null (rank) and category 1 --}}
+                                @if ($key && $key != 14)
+                                    <div class="mb-2">
+                                        <strong>{!! $group->first()->feature->category->displayName !!}:</strong>
+                                        @foreach ($group as $feature)
+                                            {!! $feature->feature->displayName !!}
+                                            @if ($feature->data)
+                                                ({{ $feature->data }})
+                                            @endif
+                                        @endforeach
+                                    </div>
+                                @endif
+                            @endforeach
+                        @else
+                            <div>Your kukuri doesnt have traits added! Please submit an import error prompt to get this fixed!</div>
+                        @endif
+                    </div>
+                </div>
 
 
                 <div class="row pt-3">
