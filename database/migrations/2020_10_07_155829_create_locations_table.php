@@ -8,20 +8,22 @@ class CreateLocationsTable extends Migration {
     /**
      * Run the migrations.
      */
-    public function up() {
+    public function up()
+{
+    if (!Schema::hasTable('location_types')) {
         Schema::create('location_types', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->increments('id');
 
             $table->string('name');
             $table->string('names');
-            $table->string('summary', 300)->nullable()->default(null);
+            $table->string('summary', 300)->nullable();
 
-            $table->text('description')->nullable()->default(null);
-            $table->text('parsed_description')->nullable()->default(null);
+            $table->text('description')->nullable();
+            $table->text('parsed_description')->nullable();
 
-            $table->string('image_extension', 191)->nullable()->default(null);
-            $table->string('thumb_extension', 191)->nullable()->default(null);
+            $table->string('image_extension', 191)->nullable();
+            $table->string('thumb_extension', 191)->nullable();
             $table->integer('sort')->unsigned()->default(0);
 
             $table->boolean('is_active')->default(1);
@@ -29,35 +31,40 @@ class CreateLocationsTable extends Migration {
             $table->timestamps();
             $table->softDeletes();
         });
+    }
 
+    if (!Schema::hasTable('locations')) {
         Schema::create('locations', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->increments('id');
 
             $table->string('name');
-            $table->string('summary', 300)->nullable()->default(null);
+            $table->string('summary', 300)->nullable();
 
-            $table->text('description')->nullable()->default(null);
-            $table->text('parsed_description')->nullable()->default(null);
+            $table->text('description')->nullable();
+            $table->text('parsed_description')->nullable();
 
-            $table->string('image_extension', 191)->nullable()->default(null);
-            $table->string('thumb_extension', 191)->nullable()->default(null);
+            $table->string('image_extension', 191)->nullable();
+            $table->string('thumb_extension', 191)->nullable();
             $table->integer('sort')->unsigned()->default(0);
 
-            $table->integer('parent_id')->unsigned()->nullable()->default(null);
+            $table->integer('parent_id')->unsigned()->nullable();
             $table->integer('type_id')->unsigned();
             $table->integer('display_style')->unsigned()->default(0);
 
-            $table->foreign('type_id')->references('id')->on('location_types')->onDelete('cascade');
+            $table->foreign('type_id')
+                ->references('id')->on('location_types')
+                ->onDelete('cascade');
 
             $table->boolean('is_active')->default(1);
-
             $table->boolean('is_character_home')->default(0);
             $table->boolean('is_user_home')->default(0);
 
             $table->timestamps();
             $table->softDeletes();
         });
+    }
+
 
         Schema::table('users', function (Blueprint $table) {
             $table->integer('home_id')->unsigned()->nullable()->default(null);
