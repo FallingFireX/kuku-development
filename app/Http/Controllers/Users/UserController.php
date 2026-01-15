@@ -21,6 +21,7 @@ use App\Models\Gallery\GallerySubmission;
 use App\Models\Item\Item;
 use App\Models\Item\ItemCategory;
 use App\Models\Pet\Pet;
+use App\Models\Pet\PetCategory;
 use App\Models\Prompt\Prompt;
 use App\Models\Rarity;
 use App\Models\User\User;
