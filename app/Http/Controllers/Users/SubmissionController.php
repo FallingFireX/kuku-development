@@ -23,6 +23,11 @@ use App\Models\User\UserItem;
 use App\Services\SubmissionManager;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Pet\Pet;
+use App\Models\Weapon\Weapon;
+use App\Models\Gear\Gear;
+use App\Models\Stat\Stat;
+
 
 class SubmissionController extends Controller {
     /*
@@ -143,7 +148,6 @@ class SubmissionController extends Controller {
             'weapons'                => [],
             'gears'                  => [],
             'stats'                  => Stat::orderBy('name')->pluck('name', 'id'),
-            'trackers'            => (['' => 'Select tracker card...']) + $trackers_formatted,
         ]));
     }
 
@@ -210,7 +214,6 @@ class SubmissionController extends Controller {
             'weapons'                => [],
             'gears'                  => [],
             'stats'                  => Stat::orderBy('name')->pluck('name', 'id'),
-            'trackers'            => (['' => 'Select tracker card...']) + $trackers_formatted,
         ]));
     }
 
