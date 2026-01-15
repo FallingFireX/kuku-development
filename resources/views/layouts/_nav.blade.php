@@ -299,7 +299,9 @@
                     @endif
 
                 @endguest
+                 @include('layouts._searchindexbar')
             </ul>
+            
 
 
 

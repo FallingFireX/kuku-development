@@ -407,3 +407,7 @@ Route::get('/join-the-team', 'BrowseController@getJoinTeam');
 **************************************************************************************************/
 Route::get('/submit-xp', 'XPCalcController@getXPCalc');
 Route::post('/submit-xp', 'XPCalcController@postXPForm');
+/**************************************************************************************************
+    Search Function
+**************************************************************************************************/
+Route::get('asearch', 'SearchController@siteSearch');
