@@ -831,7 +831,7 @@ class UserController extends Controller {
         ]);
     }
 
-     public function getUserPets($name) {
+    public function getUserPets($name) {
         $categories = PetCategory::orderBy('sort', 'DESC')->get();
         $pets = count($categories) ? $this->user->pets()->orderByRaw('FIELD(pet_category_id,'.implode(',', $categories->pluck('id')->toArray()).')')->orderBy('name')->orderBy('updated_at')->get()->groupBy('pet_category_id') : $this->user->pets()->orderBy('name')->orderBy('updated_at')->get()->groupBy('pet_category_id');
 
