@@ -196,45 +196,7 @@
                         <a class="dropdown-item" href="{{ url('/fp-calculator') }}">
                             FP Calculator
                         </a>
-                        <!-- <a class="dropdown-item" href="{{ url('/info/games') }}">
-                                Minigames
-                            </a>
-                            <a class="dropdown-item" href="{{ url('generators') }}">
-                                Random Generators
-                            </a>
-                            <a class="dropdown-item" href="{{ url('world/info') }}">
-                                World Expanded
-                            </a> -->
-
-                        <!-- <div class="dropdown-divider"></div>
-
-                            <a class="dropdown-item" href="{{ url('submissions') }}">
-                                My Submissions
-                            </a>
-                            <a class="dropdown-item" href="{{ url('submissions?type=draft') }}">
-                                Submission Drafts
-                            </a>
-                            
-                            <a class="dropdown-item" href="{{ url('claims') }}">
-                                My Claims
-                            </a>
-                            <a class="dropdown-item" href="{{ url('claims?type=draft') }}">
-                                Claim Drafts
-                            </a>
-                            <a class="dropdown-item" href="{{ url('reports') }}">
-                                Reports
-                            </a> -->
-                        <!-- <a class="dropdown-item" href="{{ url('designs') }}">
-                                Design Approvals
-                            </a> -->
-
-                        <!-- <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="{{ url('characters/transfers/incoming') }}">
-                                Character Transfers
-                            </a>
-                            <a class="dropdown-item" href="{{ url('trades/open') }}">
-                                Trades
-                            </a> -->
+                       
                         <a class="dropdown-item" href="{{ url('shops') }}">
                             Shops
                         </a>
