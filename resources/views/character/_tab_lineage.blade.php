@@ -4,7 +4,7 @@
 
 @if ($image->features()->count())
     {{-- Changed to check for category 14 specifically to prevent "Undefined Index" errors --}}
-    @if (isset($traitgroup[14])) 
+    @if (isset($traitgroup[14]))
         <div class="mb-2" style="font-size: 0.85rem">
             <strong>Special origin:</strong>
             @foreach ($traitgroup[14] as $feature)
@@ -16,7 +16,8 @@
                     <span data-toggle="tooltip" title="This kukuri cant be sold, traded, or gifted. Only donated to the adoption center!">
                         <i class="fas fa-dragon"></i>
                     </span>
-                @elseif (stripos($name, 'raffle') !== false) {{-- Fixed: Changed to @elseif --}}
+                @elseif (stripos($name, 'raffle') !== false)
+                    {{-- Fixed: Changed to @elseif --}}
                     <span data-toggle="tooltip" title="This kukuri cant be sold, traded, or gifted. Only donated to the adoption center!">
                         <i class="fas fa-ticket"></i>
                     </span>

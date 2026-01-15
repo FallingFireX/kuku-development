@@ -298,9 +298,9 @@
                     @endif
 
                 @endguest
-                 @include('layouts._searchindexbar')
+                @include('layouts._searchindexbar')
             </ul>
-            
+
 
 
 

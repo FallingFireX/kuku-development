@@ -35,4 +35,3 @@
     @parent
     @include('js._tinymce_wysiwyg')
 @endsection
-

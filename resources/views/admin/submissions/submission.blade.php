@@ -69,7 +69,7 @@
                         <h5 class="mb-0">Gallery Submission</h5>
                     </div>
                     <div class="col-md-10"><a href="{{ $submission->gallerySubmission->url }}">{{ $submission->gallerySubmission->title }}</a></div>
-                    </div>
+                </div>
             @endif
             @if ($submission->tracker_id)
                 <div class="row">
