@@ -30,20 +30,10 @@
             <div class="col-md-6">
                 <h5>Ingredients</h5>
                 @foreach ($recipe->ingredients as $ingredient)
-                    @php
-                        $data = json_decode($ingredient->ingredient_data, true);
-                        $itemId = (int) ($data[0] ?? 0); // grab the first ID
-                        $needed = $ingredient->quantity;
-                        $owned = $inventoryItems[$itemId] ?? 0;
-                    @endphp
-
-                    <div class="alert {{ $owned >= $needed ? 'alert-success' : 'alert-danger' }}">
+                    <div class="alert alert-secondary">
                         @include('home.crafting._recipe_ingredient_entry', ['ingredient' => $ingredient])
-                        <div><small>You own: {{ $owned }} / Need: {{ $needed }}</small></div>
                     </div>
                 @endforeach
-
-
             </div>
             <div class="col-md-6">
                 <h5>Rewards</h5>
@@ -60,7 +50,7 @@
     @if ($selected || $recipe->onlyCurrency)
         {{-- Check if sufficient ingredients have been selected? --}}
         {!! Form::open(['url' => 'crafting/craft/' . $recipe->id]) !!}
-        @include('widgets._inventory_select', ['user' => Auth::user(), 'inventory' => $inventory, 'categories' => $categories, 'selected' => $selected, 'page' => 'crafting'])
+        @include('widgets._inventory_select', ['user' => Auth::user(), 'inventory' => $inventory, 'categories' => $categories, 'selected' => $selected, 'page' => $page])
         <div class="text-right">
             {!! Form::submit('Craft', ['class' => 'btn btn-primary']) !!}
         </div>
