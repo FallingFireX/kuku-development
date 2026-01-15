@@ -110,8 +110,8 @@ class Character extends Model {
         'slug'                  => 'required|alpha_dash',
         'description'           => 'nullable',
         'sale_value'            => 'nullable|decimal:0,2',
-        'image'                 => 'required|mimes:jpeg,jpg,gif,png|max:2048',
-        'thumbnail'             => 'nullable|mimes:jpeg,jpg,gif,png|max:2048',
+        'image'                 => 'required|mimes:jpeg,jpg,gif,png|max:20000',
+        'thumbnail'             => 'nullable|mimes:jpeg,jpg,gif,png|max:20000',
         'owner_url'             => 'url|nullable',
         'base'                  => 'nullable',
     ];
@@ -127,8 +127,8 @@ class Character extends Model {
         'slug'                  => 'required',
         'description'           => 'nullable',
         'sale_value'            => 'nullable|decimal:0,2',
-        'image'                 => 'nullable|mimes:jpeg,jpg,gif,png|max:2048',
-        'thumbnail'             => 'nullable|mimes:jpeg,jpg,gif,png|max:2048',
+        'image'                 => 'nullable|mimes:jpeg,jpg,gif,png|max:20000',
+        'thumbnail'             => 'nullable|mimes:jpeg,jpg,gif,png|max:20000',
         'base'                  => 'nullable',
     ];
 
@@ -145,8 +145,8 @@ class Character extends Model {
         'description' => 'nullable',
         'sale_value'  => 'nullable|decimal:0,2',
         'name'        => 'required',
-        'image'       => 'nullable|mimes:jpeg,gif,png|max:2048',
-        'thumbnail'   => 'nullable|mimes:jpeg,gif,png|max:2048',
+        'image'       => 'nullable|mimes:jpeg,gif,png|max:20000',
+        'thumbnail'   => 'nullable|mimes:jpeg,gif,png|max:20000',
         'base'        => 'nullable',
     ];
 
