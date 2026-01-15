@@ -340,15 +340,6 @@
             </div>
         </div>
 
-        @if ($stats)
-            <h3>Stats</h3>
-            <p class="alert alert-info">If you want a character to have different stats from the default, set them here. Else, leave it as default</p>
-            <div class="form-group" id="stats">
-                <p>Set species and/or subtype to edit stats.</p>
-            </div>
-        @endif
-
-
         <h3>Lineage</h3>
 
         <div class="alert alert-info">Enter a sire and dam to autogenerate ancestry or enter ancestors manually. Do not enter anything if there are no ancestors in that slot.</div>
