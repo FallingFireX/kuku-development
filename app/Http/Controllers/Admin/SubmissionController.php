@@ -7,8 +7,8 @@ use App\Models\Character\Character;
 use App\Models\Currency\Currency;
 use App\Models\Item\Item;
 use App\Models\Loot\LootTable;
-use App\Models\Prompt\PromptCategory;
 use App\Models\Prompt\Prompt;
+use App\Models\Prompt\PromptCategory;
 use App\Models\Raffle\Raffle;
 use App\Models\Submission\Submission;
 use App\Services\SubmissionManager;
@@ -51,7 +51,7 @@ class SubmissionController extends Controller {
         return view('admin.submissions.index', [
             'submissions' => $submissions->paginate(30)->appends($request->query()),
             'categories'  => ['none' => 'Any Category'] + PromptCategory::orderBy('sort', 'DESC')->pluck('name', 'id')->toArray(),
-            'prompts'     => ['none' => 'Any Prompt'] + Prompt::orderBy('id','DESC')->pluck('name','id')->toArray(),
+            'prompts'     => ['none' => 'Any Prompt'] + Prompt::orderBy('id', 'DESC')->pluck('name', 'id')->toArray(),
             'isClaims'    => false,
         ]);
     }

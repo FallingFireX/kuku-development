@@ -89,7 +89,7 @@ class GrantController extends Controller {
         $data = $request->only(['status_id', 'quantity', 'data']);
         if ($service->grantCharacterStatusEffects($data, Character::where('slug', $slug)->first(), Auth::user())) {
             flash('Status effect granted successfully.')->success();
-             } else {
+        } else {
             foreach ($service->errors()->getMessages()['error'] as $error) {
                 flash($error)->error();
             }
@@ -97,6 +97,7 @@ class GrantController extends Controller {
 
         return redirect()->back();
     }
+
     /**
      * Grants XP to characters.
      *

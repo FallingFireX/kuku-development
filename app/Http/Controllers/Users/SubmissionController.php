@@ -26,11 +26,6 @@ use App\Services\SubmissionManager;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-use App\Models\Weapon\Weapon;
-use App\Models\Gear\Gear;
-
-
-
 class SubmissionController extends Controller {
     /*
     |--------------------------------------------------------------------------
