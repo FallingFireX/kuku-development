@@ -55,50 +55,50 @@
                                                         <p>{!! $field->field_description !!}</p>
                                                     @endif
 
-                                                        @switch($field->field_type)
-                                                            @case('number')
-                                                                {!! Form::number('tracker[' . $field->field_name . '][]', null, ['class' => 'form-control', 'placeholder' => 'Enter a number.']) !!}
-                                                            @break
+                                                    @switch($field->field_type)
+                                                        @case('number')
+                                                            {!! Form::number('tracker[' . $field->field_name . '][]', null, ['class' => 'form-control', 'placeholder' => 'Enter a number.']) !!}
+                                                        @break
 
-                                                            @case('radio')
-                                                                @if ($field->field_options)
-                                                                    @foreach ($field->field_options as $option)
-                                                                        <div class="list-item">
-                                                                            {!! Form::radio('tracker[0][' . $field->field_name . '][' . $option->label . '][value]', $option->point_value, false, [
-                                                                                'class' => 'mr-2',
-                                                                                'label' => $option->label,
-                                                                                'id' => 'tracker[' . $field->field_name . '][' . $option->label . '][value]',
-                                                                            ]) !!}
-                                                                            {!! Form::hidden('tracker[0][' . $field->field_name . '][' . $option->label . '][label]', $option->label) !!}
-                                                                            <label for="{!! 'tracker[][' . $field->field_name . '][' . $option->label . '][value]' !!}"><strong>{!! $option->label !!}</strong> ({!! $option->point_value !!} {{ __('art_tracker.xp') }})
-                                                                                <br>{!! $option->description !!}</label>
-                                                                        </div>
-                                                                    @endforeach
-                                                                @endif
-                                                            @break
+                                                        @case('radio')
+                                                            @if ($field->field_options)
+                                                                @foreach ($field->field_options as $option)
+                                                                    <div class="list-item">
+                                                                        {!! Form::radio('tracker[0][' . $field->field_name . '][' . $option->label . '][value]', $option->point_value, false, [
+                                                                            'class' => 'mr-2',
+                                                                            'label' => $option->label,
+                                                                            'id' => 'tracker[' . $field->field_name . '][' . $option->label . '][value]',
+                                                                        ]) !!}
+                                                                        {!! Form::hidden('tracker[0][' . $field->field_name . '][' . $option->label . '][label]', $option->label) !!}
+                                                                        <label for="{!! 'tracker[][' . $field->field_name . '][' . $option->label . '][value]' !!}"><strong>{!! $option->label !!}</strong> ({!! $option->point_value !!} {{ __('art_tracker.xp') }})
+                                                                            <br>{!! $option->description !!}</label>
+                                                                    </div>
+                                                                @endforeach
+                                                            @endif
+                                                        @break
 
-                                                            @case('checkboxes')
-                                                                @if ($field->field_options)
-                                                                    @foreach ($field->field_options as $option)
-                                                                        <div class="list-item">
-                                                                            {!! Form::checkbox('tracker[0][' . $field->field_name . '][' . $option->label . '][value]', $option->point_value, false, [
-                                                                                'class' => 'mr-2',
-                                                                                'label' => $option->label,
-                                                                                'id' => 'tracker[' . $field->field_name . '][' . $option->label . '][value]',
-                                                                            ]) !!}
-                                                                            {!! Form::hidden('tracker[0][' . $field->field_name . '][' . $option->label . '][label]', $option->label) !!}
-                                                                            <label for="{!! 'tracker[0][' . $field->field_name . '][' . $option->label . '][value]' !!}"><strong>{!! $option->label !!}</strong> <br>{!! $option->description !!}</label>
-                                                                        </div>
-                                                                    @endforeach
-                                                                @endif
-                                                            @break
+                                                        @case('checkboxes')
+                                                            @if ($field->field_options)
+                                                                @foreach ($field->field_options as $option)
+                                                                    <div class="list-item">
+                                                                        {!! Form::checkbox('tracker[0][' . $field->field_name . '][' . $option->label . '][value]', $option->point_value, false, [
+                                                                            'class' => 'mr-2',
+                                                                            'label' => $option->label,
+                                                                            'id' => 'tracker[' . $field->field_name . '][' . $option->label . '][value]',
+                                                                        ]) !!}
+                                                                        {!! Form::hidden('tracker[0][' . $field->field_name . '][' . $option->label . '][label]', $option->label) !!}
+                                                                        <label for="{!! 'tracker[0][' . $field->field_name . '][' . $option->label . '][value]' !!}"><strong>{!! $option->label !!}</strong> <br>{!! $option->description !!}</label>
+                                                                    </div>
+                                                                @endforeach
+                                                            @endif
+                                                        @break
 
-                                                            @default
-                                                                <div class="alert alert-danger" role="alert">
-                                                                    There was an issue rendering the field.
-                                                                </div>
-                                                        @endswitch
-                                                    
+                                                        @default
+                                                            <div class="alert alert-danger" role="alert">
+                                                                There was an issue rendering the field.
+                                                            </div>
+                                                    @endswitch
+
                                                 </div>
                                             </div>
                                         @endforeach
@@ -152,7 +152,7 @@
             {!! Form::submit('Submit Tracker Card for Review', ['class' => 'btn btn-primary']) !!}
         </div>
     </div>
-  
+
     {!! Form::close() !!}
 
 @endsection

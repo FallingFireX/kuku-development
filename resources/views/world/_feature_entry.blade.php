@@ -29,7 +29,9 @@
             <div><strong>Subcategory:</strong> {!! $feature->subcategory->displayName !!}</div>
         @endif
         @if ($feature->species_id)
-            <div><strong>Species:</strong> {!! $feature->species->displayName !!} @if ($feature->subtype_id) ({!! $feature->subtype->displayName !!} subtype) @endif
+            <div><strong>Species:</strong> {!! $feature->species->displayName !!} @if ($feature->subtype_id)
+                    ({!! $feature->subtype->displayName !!} subtype)
+                @endif
             </div>
             @if ($feature->species_id)
                 <div>
@@ -51,7 +53,7 @@
                     {!! $feature->parsed_description !!}
                 </div>
             @endif
-            @endif
+        @endif
 
     </div>
 </div>

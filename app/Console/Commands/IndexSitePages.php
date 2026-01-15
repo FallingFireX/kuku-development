@@ -43,11 +43,11 @@ class IndexSitePages extends Command {
      */
     public function handle() {
         if (Schema::hasTable('site_temp_index')) {
-            //A. ------------------ Clear the temp table for extra insurance
+            // A. ------------------ Clear the temp table for extra insurance
             DB::table('site_temp_index')->truncate();
 
-            //B. ------------------ Index types of content
-            //1. FIND ALL CHARACTERS TO INDEX
+            // B. ------------------ Index types of content
+            // 1. FIND ALL CHARACTERS TO INDEX
             $characters = Character::visible()->myo(0)->get();
             foreach ($characters as $character) {
                 DB::table('site_temp_index')->insert([
@@ -60,7 +60,7 @@ class IndexSitePages extends Command {
                 ]);
             }
 
-            //2. FIND ALL PAGES TO INDEX
+            // 2. FIND ALL PAGES TO INDEX
             $pages = SitePage::where('is_visible', 1)->get();
             foreach ($pages as $page) {
                 DB::table('site_temp_index')->insert([
@@ -73,7 +73,7 @@ class IndexSitePages extends Command {
                 ]);
             }
 
-            //3. FIND ALL USERS TO INDEX
+            // 3. FIND ALL USERS TO INDEX
             $users = User::all();
             foreach ($users as $user) {
                 DB::table('site_temp_index')->insert([
@@ -86,7 +86,7 @@ class IndexSitePages extends Command {
                 ]);
             }
 
-            //4. FIND ALL ITEMS TO INDEX
+            // 4. FIND ALL ITEMS TO INDEX
             $items = Item::all();
             foreach ($items as $item) {
                 DB::table('site_temp_index')->insert([
@@ -99,7 +99,7 @@ class IndexSitePages extends Command {
                 ]);
             }
 
-            //5. FIND ALL PROMPTS TO INDEX
+            // 5. FIND ALL PROMPTS TO INDEX
             $prompts = Prompt::active()->get();
             foreach ($prompts as $prompt) {
                 DB::table('site_temp_index')->insert([
@@ -112,7 +112,7 @@ class IndexSitePages extends Command {
                 ]);
             }
 
-            //6. FIND ALL SHOPS TO INDEX
+            // 6. FIND ALL SHOPS TO INDEX
             $shops = Shop::where('is_active', 1)->get();
             foreach ($shops as $shop) {
                 DB::table('site_temp_index')->insert([
@@ -125,7 +125,7 @@ class IndexSitePages extends Command {
                 ]);
             }
 
-            //7. FIND ALL TRAITS TO INDEX
+            // 7. FIND ALL TRAITS TO INDEX
             $features = Feature::visible()->get();
             foreach ($features as $feature) {
                 DB::table('site_temp_index')->insert([

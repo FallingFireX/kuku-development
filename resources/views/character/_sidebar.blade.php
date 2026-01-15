@@ -24,7 +24,8 @@
         <div class="sidebar-item"><a href="{{ $character->url . '/submissions' }}" class="{{ set_active('character/' . $character->slug . '/submissions') }}">Submissions</a></div>
         <!-- <div class="sidebar-item"><a href="{{ $character->url . '/tracker' }}" class="{{ set_active('character/' . $character->slug . '/tracker') }}">{{ __('art_tracker.xp') }} Tracker</a></div>
         <div class="sidebar-item"><a href="{{ $character->url . '/xp-logs' }}" class="{{ set_active('character/' . $character->slug . '/xp-logs') }}">{{ __('art_tracker.xp') }} Logs</a></div>
-    --></li> 
+    -->
+    </li>
     @if (Auth::check() && (Auth::user()->id == $character->user_id || Auth::user()->hasPower('manage_characters')))
         <li class="sidebar-section">
             <div class="sidebar-section-header">Settings</div>

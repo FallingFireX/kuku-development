@@ -196,7 +196,7 @@
     <h3>Skill Rewards</h3>
     <p>Skills are rewarded to focus characters. These are the default rewards, however, they can be modified on approval.</p>
     <div class="form-group">
-        
+
         <div><a href="#" class="btn btn-primary" id="add-skill">Add Skill Reward</a></div>
     </div>
 
@@ -206,7 +206,7 @@
 
     {!! Form::close() !!}
 
-    
+
 
     <div id="copy-calc" class="card p-3 mb-2 pl-0 hide">
         <div class="d-flex justify-content-between align-items-center mb-2">

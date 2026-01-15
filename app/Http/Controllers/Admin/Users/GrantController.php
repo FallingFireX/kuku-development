@@ -448,7 +448,7 @@ class GrantController extends Controller {
         ]);
     }
 
-     /**
+    /**
      * Show the XP grant page.
      *
      * @return \Illuminate\Contracts\Support\Renderable
@@ -508,7 +508,7 @@ class GrantController extends Controller {
         $data = $request->only(['names', 'loot_table_ids', 'quantities', 'data', 'disallow_transfer', 'notes']);
         if ($service->grantLootTables($data, Auth::user())) {
             flash('Loot tables granted successfully.')->success();
-            } else {
+        } else {
             foreach ($service->errors()->getMessages()['error'] as $error) {
                 flash($error)->error();
             }
@@ -516,35 +516,35 @@ class GrantController extends Controller {
 
         return redirect()->back();
     }
-     /**
+
+    /**
      * Grants XP to characters.
      *
      * @param App\Services\TrackerManager $service
      *
      * @return \Illuminate\Http\RedirectResponse
      */
-   public function postXP(Request $request, TrackerManager $service) {
-    $data = $request->only(['characters', 'data', 'levels', 'static_xp']);
+    public function postXP(Request $request, TrackerManager $service) {
+        $data = $request->only(['characters', 'data', 'levels', 'static_xp']);
 
-    if ($service->grantCharacterXP($data, Auth::user())) {
-        flash('XP granted successfully.')->success();
-    } else {
-        $messages = $service->errors()->getMessages();
-
-        if (!empty($messages)) {
-            // Loop through every field and its errors
-            foreach ($messages as $field_errors) {
-                foreach ((array)$field_errors as $error) {
-                    flash($error)->error();
-                }
-            }
+        if ($service->grantCharacterXP($data, Auth::user())) {
+            flash('XP granted successfully.')->success();
         } else {
-            // Fallback if no error messages exist
-            flash('An unknown error occurred while granting XP.')->error();
+            $messages = $service->errors()->getMessages();
+
+            if (!empty($messages)) {
+                // Loop through every field and its errors
+                foreach ($messages as $field_errors) {
+                    foreach ((array) $field_errors as $error) {
+                        flash($error)->error();
+                    }
+                }
+            } else {
+                // Fallback if no error messages exist
+                flash('An unknown error occurred while granting XP.')->error();
+            }
         }
+
+        return redirect()->back();
     }
-
-    return redirect()->back();
-}
-
 }

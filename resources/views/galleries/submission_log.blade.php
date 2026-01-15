@@ -115,7 +115,7 @@
                         @else
                             <p>This submission is not eligible for currency awards{{ $submission->status == 'Pending' ? ' yet-- it must be accepted first' : '' }}.</p>
                         @endif
-                         @if (isset($totals) && count($totals) > 0)
+                        @if (isset($totals) && count($totals) > 0)
                             <hr />
                             <div id="totals">
                                 @include('galleries._submission_totals', ['totals' => $totals, 'collaboratorsCount' => $collaboratorsCount])
@@ -142,7 +142,7 @@
                                                 @endif
                                             </div>
                                         @endforeach
-                                      
+
                                     </div>
                                 @endif
                             </div>

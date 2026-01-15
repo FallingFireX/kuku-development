@@ -1,8 +1,9 @@
 <?php
 
 namespace App\Models\Prompt;
-use App\Models\Reward\Reward;
+
 use App\Models\Model;
+use App\Models\Reward\Reward;
 use Carbon\Carbon;
 
 class Prompt extends Model {
