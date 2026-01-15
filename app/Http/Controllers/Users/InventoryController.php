@@ -35,6 +35,10 @@ class InventoryController extends Controller {
      * @return \Illuminate\Contracts\Support\Renderable
      */
     public function getIndex(Request $request) {
+        $user = Auth::user();
+        if (!$user) {
+            abort(403, 'Unauthorized access.');
+        }
         $categories = ItemCategory::visible(Auth::user() ?? null)->orderBy('sort', 'DESC')->get();
         $query = Item::query();
         $data = $request->only(['item_category_id', 'name', 'artist', 'rarity_id']);
@@ -78,6 +82,7 @@ class InventoryController extends Controller {
         return view('home.inventory', [
             'categories'  => $categories->keyBy('id'),
             'items'       => $items,
+            'uniqueItems' => $uniqueItems, // Now correctly defined
             'userOptions' => User::visible()->where('id', '!=', Auth::user()->id)->orderBy('name')->pluck('name', 'id')->toArray(),
             'user'        => Auth::user(),
             'artists'     => User::whereIn('id', Item::whereNotNull('artist_id')->pluck('artist_id')->toArray())->pluck('name', 'id')->toArray(),
