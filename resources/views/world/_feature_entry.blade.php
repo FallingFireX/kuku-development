@@ -51,6 +51,7 @@
                     {!! $feature->parsed_description !!}
                 </div>
             @endif
+            @endif
 
     </div>
 </div>

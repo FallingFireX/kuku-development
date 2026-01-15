@@ -23,10 +23,10 @@ use App\Models\User\UserItem;
 use App\Services\SubmissionManager;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Models\Pet\Pet;
+
 use App\Models\Weapon\Weapon;
 use App\Models\Gear\Gear;
-use App\Models\Stat\Stat;
+
 
 
 class SubmissionController extends Controller {

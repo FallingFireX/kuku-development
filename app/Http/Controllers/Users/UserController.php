@@ -297,7 +297,7 @@ class UserController extends Controller {
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function getUserInventory(Request $request, $name) {
+    public function getUserInventory(Request $request, $name, User $user) {
         $categories = ItemCategory::visible(Auth::user() ?? null)->orderBy('sort', 'DESC')->get();
         $query = Item::query();
         $data = $request->only(['item_category_id', 'name', 'artist', 'rarity_id']);
