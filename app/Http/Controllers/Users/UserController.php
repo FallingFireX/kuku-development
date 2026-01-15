@@ -829,4 +829,18 @@ class UserController extends Controller {
             'sublists' => Sublist::orderBy('sort', 'DESC')->get(),
         ]);
     }
+
+     public function getUserPets($name) {
+        $categories = PetCategory::orderBy('sort', 'DESC')->get();
+        $pets = count($categories) ? $this->user->pets()->orderByRaw('FIELD(pet_category_id,'.implode(',', $categories->pluck('id')->toArray()).')')->orderBy('name')->orderBy('updated_at')->get()->groupBy('pet_category_id') : $this->user->pets()->orderBy('name')->orderBy('updated_at')->get()->groupBy('pet_category_id');
+
+        return view('user.pets', [
+            'user'        => $this->user,
+            'categories'  => $categories->keyBy('id'),
+            'pets'        => $pets,
+            'userOptions' => User::where('id', '!=', $this->user->id)->orderBy('name')->pluck('name', 'id')->toArray(),
+            'user'        => $this->user,
+            'logs'        => $this->user->getPetLogs(),
+        ]);
+    }
 }
