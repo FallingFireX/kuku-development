@@ -65,40 +65,7 @@
                 </table>
             @endif
             <hr>
-            <h4>Skills</h4>
-            @if (!count($prompt->skills))
-                No skill increase.
-            @else
-                <table class="table table-sm">
-                    <thead>
-                        <tr>
-                            <th width="70%">Skill</th>
-                            <th width="30%">Amount</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($prompt->skills as $skill)
-                            <tr>
-                                <td>{!! $skill->skill->displayName !!}
-                                    @if ($skill->skill->parent)
-                                        <br><span class="text-danger">This skill requires {!! $skill->skill->parent->displayname !!} level {{ $skill->skill->parent_level }} on all focus characters.</span>
-                                    @endif
-                                    @if ($skill->skill->prerequisite)
-                                        <br><span class="text-danger">This skill requires {!! $skill->skill->prerequisite->displayname !!} on all focus characters.</span>
-                                    @endif
-                                </td>
-                                <td>{{ $skill->quantity }}</td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-                @if (count(getLimits($prompt)))
-                    <hr />
-                    @include('widgets._limits', [
-                        'object' => $prompt,
-                        'hideUnlock' => true,
-                    ])
-                @endif
+            
         </div>
         <div class="text-right {{ $prompt->limit ? 'text-danger' : '' }}">
             <p>{{ $prompt->limit ? 'You can submit this prompt ' . $prompt->limit . ' time(s)' : 'You can submit this prompt an unlimited number of times' }}
@@ -117,5 +84,5 @@
             @endif
         </div>
     </div>
-    @endif
+   
 </div>

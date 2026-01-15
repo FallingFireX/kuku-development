@@ -154,7 +154,7 @@
         and allow for dynamic reward amounts to be generated based on user / admin selected criteria like the type of art, or the number of words.
     </p>
     <div id="criteria">
-        @foreach ($prompt->criteria as $criterion)
+        @foreach ($prompt->criteria ?? [] as $criterion)
             <div class="card p-3 mb-2 pl-0">
                 <div class="d-flex justify-content-between align-items-center mb-2">
                     <a class="col-1 p-0" data-toggle="collapse" href="#collapsable-{{ $criterion->id }}">
@@ -196,15 +196,7 @@
     <h3>Skill Rewards</h3>
     <p>Skills are rewarded to focus characters. These are the default rewards, however, they can be modified on approval.</p>
     <div class="form-group">
-        <div id="skillList">
-            @foreach ($prompt->skills as $skill)
-                <div class="d-flex mb-2">
-                    {!! Form::select('skill_id[]', $skills, $skill->skill_id, ['class' => 'form-control mr-2 skill-select original', 'placeholder' => 'Select Skill']) !!}
-                    {!! Form::text('skill_quantity[]', $skill->quantity, ['class' => 'form-control mr-2', 'placeholder' => 'Amount of level']) !!}
-                    <a href="#" class="remove-skill btn btn-danger mb-2">×</a>
-                </div>
-            @endforeach
-        </div>
+        
         <div><a href="#" class="btn btn-primary" id="add-skill">Add Skill Reward</a></div>
     </div>
 
@@ -214,11 +206,7 @@
 
     {!! Form::close() !!}
 
-    <div class="skill-row hide mb-2">
-        {!! Form::select('skill_id[]', $skills, null, ['class' => 'form-control mr-2 skill-select', 'placeholder' => 'Select Skill']) !!}
-        {!! Form::text('skill_quantity[]', null, ['class' => 'form-control mr-2', 'placeholder' => 'Amount of level']) !!}
-        <a href="#" class="remove-skill btn btn-danger mb-2">×</a>
-    </div>
+    
 
     <div id="copy-calc" class="card p-3 mb-2 pl-0 hide">
         <div class="d-flex justify-content-between align-items-center mb-2">
