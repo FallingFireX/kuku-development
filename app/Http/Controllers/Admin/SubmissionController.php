@@ -8,6 +8,7 @@ use App\Models\Currency\Currency;
 use App\Models\Item\Item;
 use App\Models\Loot\LootTable;
 use App\Models\Prompt\PromptCategory;
+use App\Models\Prompt\Prompt;
 use App\Models\Raffle\Raffle;
 use App\Models\Submission\Submission;
 use App\Services\SubmissionManager;
@@ -24,11 +25,15 @@ class SubmissionController extends Controller {
      */
     public function getSubmissionIndex(Request $request, $status = null) {
         $submissions = Submission::with('prompt')->where('status', $status ? ucfirst($status) : 'Pending')->whereNotNull('prompt_id');
-        $data = $request->only(['prompt_category_id', 'sort']);
+        $data = $request->only(['prompt_category_id', 'sort', 'prompt_id']);
         if (isset($data['prompt_category_id']) && $data['prompt_category_id'] != 'none') {
             $submissions->whereHas('prompt', function ($query) use ($data) {
                 $query->where('prompt_category_id', $data['prompt_category_id']);
             });
+        }
+
+        if (!empty($data['prompt_id'])) {
+            $submissions->where('prompt_id', intval($data['prompt_id']));
         }
         if (isset($data['sort'])) {
             switch ($data['sort']) {
@@ -46,6 +51,7 @@ class SubmissionController extends Controller {
         return view('admin.submissions.index', [
             'submissions' => $submissions->paginate(30)->appends($request->query()),
             'categories'  => ['none' => 'Any Category'] + PromptCategory::orderBy('sort', 'DESC')->pluck('name', 'id')->toArray(),
+            'prompts'     => ['none' => 'Any Prompt'] + Prompt::orderBy('id','DESC')->pluck('name','id')->toArray(),
             'isClaims'    => false,
         ]);
     }
