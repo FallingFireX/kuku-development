@@ -58,17 +58,15 @@ class CharacterController extends Controller {
      *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function postSortCharacters(Request $request, CharacterManager $service) {
-        if ($service->sortCharacters($request->only(['sort']), Auth::user())) {
+     public function postSortCharacters(Request $request, CharacterManager $service)
+    {
+        if ($service->sortCharacters($request->only(['sort', 'folder_ids']), Auth::user())) {
             flash('Characters sorted successfully.')->success();
-
             return redirect()->back();
-        } else {
-            foreach ($service->errors()->getMessages()['error'] as $error) {
-                flash($error)->error();
-            }
         }
-
+        else {
+            foreach($service->errors()->getMessages()['error'] as $error) flash($error)->error();
+        }
         return redirect()->back();
     }
 
