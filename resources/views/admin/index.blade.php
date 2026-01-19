@@ -46,16 +46,16 @@
                             @endif
                         </h5>
                         <h5><i class="fas fa-compass"></i> Traveling</h5>
-                        <a href="{{ url('https://www.kukuri-arpg.com/admin/submissions/pending?prompt_id=2&sort=oldest') }}" class="card-link">View Queue <span class="fas fa-caret-right ml-1"></span></a>
+                        <a href="{{ url('https://www.kukuri-arpg.com/admin/submissions/pending?prompt_id=14&sort=oldest') }}" class="card-link">View Queue <span class="fas fa-caret-right ml-1"></span></a>
 
                         <h5 class="mt-3 pt-3"><i class="fas fa-gem"></i> Excavation</h5>
-                        <a href="{{ url('https://www.kukuri-arpg.com/admin/submissions/pending?prompt_id=4&sort=oldest') }}" class="card-link">View Queue <span class="fas fa-caret-right ml-1"></span></a>
+                        <a href="{{ url('https://www.kukuri-arpg.com/admin/submissions/pending?prompt_id=15&sort=oldest') }}" class="card-link">View Queue <span class="fas fa-caret-right ml-1"></span></a>
 
                         <h5 class="mt-3 pt-3"><i class="fas fa-leaf"></i> Gathering</h5>
-                        <a href="{{ url('https://www.kukuri-arpg.com/admin/submissions/pending?prompt_id=8&sort=oldest') }}" class="card-link">View Queue <span class="fas fa-caret-right ml-1"></span></a>
+                        <a href="{{ url('https://www.kukuri-arpg.com/admin/submissions/pending?prompt_id=13&sort=oldest') }}" class="card-link">View Queue <span class="fas fa-caret-right ml-1"></span></a>
 
                         <h5 class="mt-3 pt-3"><i class="fas fa-drumstick-bite"></i> Hunting</h5>
-                        <a href="{{ url('https://www.kukuri-arpg.com/admin/submissions/pending?prompt_id=8&sort=oldest') }}" class="card-link">View Queue <span class="fas fa-caret-right ml-1 pb-3"></span></a>
+                        <a href="{{ url('https://www.kukuri-arpg.com/admin/submissions/pending?prompt_id=12&sort=oldest') }}" class="card-link">View Queue <span class="fas fa-caret-right ml-1 pb-3"></span></a>
 
                     </div>
                 </div>
@@ -71,7 +71,7 @@
                                 <span class="badge badge-success ml-3 pt-1">Clear</span>
                             @endif
                         </h5>
-                        <a href="{{ url('https://www.kukuri-arpg.com/admin/submissions/pending?prompt_id=2&sort=oldest') }}" class="card-link">View Queue <span class="fas fa-caret-right ml-1"></span></a>
+                        <a href="{{ url('https://www.kukuri-arpg.com/admin/submissions/pending?prompt_category_id=10&prompt__id=none&sort=oldest') }}" class="card-link">View Queue <span class="fas fa-caret-right ml-1"></span></a>
 
                         <h5 class="mt-3 pt-3"><i class="fas fa-envelope"></i> Letters
                             @if ($letterCount)
@@ -80,7 +80,7 @@
                                 <span class="badge badge-success ml-3 pt-1">Clear</span>
                             @endif
                         </h5>
-                        <a href="{{ url('https://www.kukuri-arpg.com/admin/submissions/pending?prompt_id=4&sort=oldest') }}" class="card-link">View Queue <span class="fas fa-caret-right ml-1"></span></a>
+                        <a href="{{ url('https://www.kukuri-arpg.com/admin/submissions/pending?prompt_category_id=4&prompt__id=none&sort=oldest') }}" class="card-link">View Queue <span class="fas fa-caret-right ml-1"></span></a>
 
                         <h5 class="mt-3 pt-3"><i class="fas fa-stamp"></i> Training
                             @if ($trainingCount)
@@ -89,7 +89,7 @@
                                 <span class="badge badge-success ml-3 pt-1">Clear</span>
                             @endif
                         </h5>
-                        <a href="{{ url('https://www.kukuri-arpg.com/admin/submissions/pending?prompt_id=8&sort=oldest') }}" class="card-link">View Queue <span class="fas fa-caret-right ml-1"></span></a>
+                        <a href="{{ url('https://www.kukuri-arpg.com/admin/submissions/pending?prompt_id=19&sort=oldest') }}" class="card-link">View Queue <span class="fas fa-caret-right ml-1"></span></a>
 
                         <h5 class="mt-3 pt-3"><i class="fas fa-dumbbell"></i> Coli/Merchant
                             @if ($coliCount)
@@ -98,7 +98,7 @@
                                 <span class="badge badge-success ml-3 pt-1">Clear</span>
                             @endif
                         </h5>
-                        <a href="{{ url('https://www.kukuri-arpg.com/admin/submissions/pending?prompt_id=8&sort=oldest') }}" class="card-link">View Queue <span class="fas fa-caret-right ml-1 pb-3"></span></a>
+                        <a href="{{ url('https://www.kukuri-arpg.com/admin/submissions/pending??prompt_category_id=7&prompt__id=none&sort=oldest') }}" class="card-link">View Queue <span class="fas fa-caret-right ml-1 pb-3"></span></a>
 
                     </div>
                 </div>
@@ -139,13 +139,13 @@
                             @endif
                         </h5>
                         <h5><i class="fas fa-hand-holding-heart"></i> First Time Adopts</h5>
-                        <a href="{{ url('https://www.kukuri-arpg.com/admin/submissions/pending?prompt_id=22&sort=oldest') }}" class="card-link">View Queue <span class="fas fa-caret-right ml-1"></span></a>
+                        <a href="{{ url('https://www.kukuri-arpg.com/admin/submissions/pending?prompt_id=10&sort=oldest') }}" class="card-link">View Queue <span class="fas fa-caret-right ml-1"></span></a>
 
                         <h5 class="mt-3 pt-3"><i class="fas fa-calendar"></i> Monthly Adopts</h5>
-                        <a href="{{ url('https://www.kukuri-arpg.com/admin/submissions/pending?prompt_id=23&sort=oldest') }}" class="card-link">View Queue <span class="fas fa-caret-right ml-1"></span></a>
+                        <a href="{{ url('https://www.kukuri-arpg.com/admin/submissions/pending?prompt_id=11&sort=oldest') }}" class="card-link">View Queue <span class="fas fa-caret-right ml-1"></span></a>
 
                         <h5 class="mt-3 pt-3"><i class="fas fa-gift"></i> Donations</h5>
-                        <a href="{{ url('https://www.kukuri-arpg.com/admin/submissions/pending?prompt_id=24&sort=oldest') }}" class="card-link">View Queue <span class="fas fa-caret-right ml-1 pb-3"></span></a>
+                        <a href="{{ url('https://www.kukuri-arpg.com/admin/submissions/pending?prompt_id=9&sort=oldest') }}" class="card-link">View Queue <span class="fas fa-caret-right ml-1 pb-3"></span></a>
                     </div>
 
                 </div>
@@ -161,11 +161,11 @@
                                 <span class="badge badge-success ml-3 pt-1">Clear</span>
                             @endif
                         </h5>
-                        <h5><i class="fas fa-gavel"></i> Misc Queues</h5>
-                        <a href="{{ url('https://www.kukuri-arpg.com/admin/submissions/pending?prompt_category_id=3&prompt_id=none&sort=oldest') }}" class="card-link">View Queue <span class="fas fa-caret-right ml-1"></span></a>
+                        <h5><i class="fas fa-gavel"></i> Create Character</h5>
+                        <a href="{{ url('https://www.kukuri-arpg.com/admin/masterlist/create-character') }}" class="card-link">View Queue <span class="fas fa-caret-right ml-1"></span></a>
 
-                        <h5 class="mt-3 pt-3"><i class="fas fa-wrench"></i> Import Update</h5>
-                        <a href="{{ url('https://www.kukuri-arpg.com/admin/submissions/pending?prompt_category_id=3&prompt_id=28&sort=oldest') }}" class="card-link">View Queue <span class="fas fa-caret-right ml-1"></span></a>
+                        <h5 class="mt-3 pt-3"><i class="fas fa-wrench"></i> Misc Queues</h5>
+                        <a href="{{ url('https://www.kukuri-arpg.com/admin/submissions/pending?prompt_category_id=3&prompt__id=none&sort=oldest') }}" class="card-link">View Queue <span class="fas fa-caret-right ml-1"></span></a>
 
                         <h5 class="mt-3 pt-3"><i class="fas fa-bug"></i> Errors
                             @if ($errorCount)
@@ -230,7 +230,7 @@
                                     <span class="badge badge-success ml-3 pt-1">Clear</span>
                                 @endif
                             </h5>
-                            <a href="{{ url('admin/reports/pending') }}" class="card-link">View Queue <span class="fas fa-caret-right ml-1"></span></a>
+                            <a href="{{ url('admin/affiliates/pending') }}" class="card-link">View Queue <span class="fas fa-caret-right ml-1"></span></a>
                         @endif
                         @if (Auth::user()->hasPower('edit_teams'))
                             <h5 class="mt-3 pt-3"><i class="fas fa-exclamation"></i> Applications
@@ -240,7 +240,7 @@
                                     <span class="badge badge-success ml-3 pt-1">Clear</span>
                                 @endif
                             </h5>
-                            <a href="{{ url('admin/reports/pending') }}" class="card-link">View Queue <span class="fas fa-caret-right ml-1"></span></a>
+                            <a href="{{ url('admin/applications') }}" class="card-link">View Queue <span class="fas fa-caret-right ml-1"></span></a>
                         @endif
                     </div>
                 </div>
@@ -251,31 +251,31 @@
     @endif
 
     <!-- @if (Auth::user()->hasPower('manage_submissions'))
-                        <div class="col-sm-6">
-                            <div class="card mb-3">
-                                <div class="card-body">
-                                    <h5 class="card-title">Tracker Submissions
-                                        @if ($trackerCount)
+                            <div class="col-sm-6">
+                                <div class="card mb-3">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Tracker Submissions
+                                            @if ($trackerCount)
     <span class="badge badge-primary">{{ $trackerCount }}</span>
     @endif
-                                    </h5>
-                                    <p class="card-text">
-                                        @if ($trackerCount)
+                                        </h5>
+                                        <p class="card-text">
+                                            @if ($trackerCount)
     @if ($trackerCount)
     {{ $trackerCount }} tracker submission{{ $trackerCount == 1 ? '' : 's' }} awaiting assignment.
     @endif
-                                            {!! $trackerCount ? '<br/>' : '' !!}
+                                                {!! $trackerCount ? '<br/>' : '' !!}
 @else
     The tracker submission queue is clear. Hooray!
     @endif
-                                    </p>
-                                    <div class="text-right">
-                                        <a href="{{ url('admin/trackers/pending') }}" class="card-link">View Queue <span class="fas fa-caret-right ml-1"></span></a>
+                                        </p>
+                                        <div class="text-right">
+                                            <a href="{{ url('admin/trackers/pending') }}" class="card-link">View Queue <span class="fas fa-caret-right ml-1"></span></a>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    @endif -->
+                        @endif -->
 
     </div>
 @endsection
