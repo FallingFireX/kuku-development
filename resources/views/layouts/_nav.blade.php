@@ -108,7 +108,7 @@
 
                         <a class="dropdown-item" href="https://kukuri-arpg.w3spaces.com/genetics/genes-and-mutations.html">Genetics and Mutations</a>
                         <a class="dropdown-item" href="https://kukuri-arpg.w3spaces.com/genetics/physical-traits.html">Physical Traits</a>
-                        <a class="dropdown-item" href="https://kukuri-arpg.w3spaces.com/genetics/physical-traits.html">Skill Traits</a>
+                        <a class="dropdown-item" href="https://www.deviantart.com/kukuri-arpg/journal/Traits-828401506">Skill Traits</a>
 
                         <div class="dropdown-divider"></div>
 
@@ -180,7 +180,7 @@
                         <a class="dropdown-item" href="{{ url('info/coliseum') }}">
                             Coliseum
                         </a>
-                        <a class="dropdown-item" href="https://kukuri-arpg.w3spaces.com/activities/traveling-merchant.html">
+                        <a class="dropdown-item" href="{{ url('info/merchant') }}">
                             Traveling Merchant
                         </a>
                         <div class="dropdown-divider"></div>
