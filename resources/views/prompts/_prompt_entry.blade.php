@@ -4,6 +4,11 @@
     @endif
     <div class="{{ $prompt->has_image ? 'col-md-9' : 'col-12' }}">
         <div class="mb-3">
+            @if (Auth::user()->isStaff)
+                <div class="text-right">
+                    <a class="nav-link" href="{{ url('/admin/data/prompts/edit/' . $prompt->id) }}"><i class="fas fa-pen fa-crown"></i></a>
+                </div>
+            @endif
             <h3 class="mb-0">{!! $prompt->name !!}</h3>
             @if ($prompt->prompt_category_id)
                 <div><strong>Category: </strong>{!! $prompt->category->displayName !!}</div>
