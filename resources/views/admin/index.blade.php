@@ -162,7 +162,7 @@
                             @endif
                         </h5>
                         <h5><i class="fas fa-gavel"></i> Create Character</h5>
-                        <a href="{{ url('https://www.kukuri-arpg.com/admin/masterlist/create-character') }}" class="card-link">View Queue <span class="fas fa-caret-right ml-1"></span></a>
+                        <a href="{{ url('https://www.kukuri-arpg.com/admin/masterlist/create-character') }}" class="card-link">Open Tool<span class="fas fa-caret-right ml-1"></span></a>
 
                         <h5 class="mt-3 pt-3"><i class="fas fa-wrench"></i> Misc Queues</h5>
                         <a href="{{ url('https://www.kukuri-arpg.com/admin/submissions/pending?prompt_category_id=3&prompt__id=none&sort=oldest') }}" class="card-link">View Queue <span class="fas fa-caret-right ml-1"></span></a>
