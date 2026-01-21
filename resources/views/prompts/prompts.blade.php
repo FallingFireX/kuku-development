@@ -53,7 +53,7 @@
                     @include('prompts._prompt_entry', [
                         'prompt' => $prompt,
                         'edit' => ['object' => $prompt, 'title' => 'Prompt'],
-                        ])
+                    ])
                 </div>
             </div>
         @endforeach
