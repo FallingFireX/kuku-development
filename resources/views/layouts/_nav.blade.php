@@ -71,7 +71,7 @@
                         </a>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="https://kukuri-arpg.w3spaces.com/newbie-guide.html"> Newbie Guide </a>
-                        <a class="dropdown-item" href="{{ url('/adoption-center') }}"> Adoption Center </a>
+                        <a class="dropdown-item" href="{{ url('/info/adoption-center') }}"> Adoption Center </a>
                         @if (Auth::check() && Auth::user()->is_raffles_unread && config('lorekeeper.extensions.navbar_news_notif'))
                             <a class="dropdown-item text-warning" href="{{ url('raffles') }}">
                                 Raffles <i class="fas fa-bell"></i>
@@ -100,7 +100,7 @@
                             Character Masterlist
                         </a>
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="https://kukuri-arpg.w3spaces.com/folklore.html">Folklore</a>
+                        <a class="dropdown-item" href="{{ url('/info/folklore') }}">Folklore</a>
                         <a class="dropdown-item" href="https://kukuri-arpg.w3spaces.com/genetics/species-info.html">Species Information</a>
                         <a class="dropdown-item" href="https://kukuri-arpg.w3spaces.com/lore.html">The Story So Far</a>
 
@@ -108,12 +108,12 @@
 
                         <a class="dropdown-item" href="https://kukuri-arpg.w3spaces.com/genetics/genes-and-mutations.html">Genetics and Mutations</a>
                         <a class="dropdown-item" href="https://kukuri-arpg.w3spaces.com/genetics/physical-traits.html">Physical Traits</a>
-                        <a class="dropdown-item" href="https://www.deviantart.com/kukuri-arpg/journal/Traits-828401506">Skill Traits</a>
+                        <a class="dropdown-item" href="{{ url('/info/traits') }}">Skill Traits</a>
 
                         <div class="dropdown-divider"></div>
 
-                        <a class="dropdown-item" href="https://kukuri-arpg.w3spaces.com/activities/familiars.html">Familiars</a>
-                        <a class="dropdown-item" href="https://kukuri-arpg.w3spaces.com/handlers-guides.html">Handlers and Guides</a>
+                        <a class="dropdown-item" href="{{ url('/info/familiars') }}">Familiars</a>
+                        <a class="dropdown-item" href="{{ url('/info/handlers') }}">Handlers and Guides</a>
 
                     </div>
                 </li>
@@ -129,11 +129,11 @@
                         @endif
                         <a class="dropdown-item" href="https://kukuri-arpg.w3spaces.com/training/home.html">Training</a>
                         <a class="dropdown-item" href="{{ url('/info/fp-fate-points') }}">Leveling and Fate Points</a>
-                        <a class="dropdown-item" href="https://kukuri-arpg.deviantart.com/journal/Injuries-and-illnesses-645173583">Health and Injuries</a>
+                        <a class="dropdown-item" href="{{ url('/info/health') }}">Health and Injuries</a>
 
                         <div class="dropdown-divider"></div>
 
-                        <a class="dropdown-item" href="https://www.kukuri-arpg.com/prompts/prompts?prompt_category_id=2"> Rank Updates </a>
+                        <a class="dropdown-item" href="{{ url('/info/fp-status-update') }}"> Rank Updates </a>
                         <a class="dropdown-item" href="https://www.deviantart.com/kukuri-arpg/journal/Ownership-transfers-593704983">Ownership Transfers</a>
                         <a class="dropdown-item" href="https://www.kukuri-arpg.com/prompts/28">Import Updates</a>
                         <a class="dropdown-item" href="https://www.kukuri-arpg.com/prompts/6">Heal your Kukuri</a>
@@ -142,7 +142,7 @@
 
                         <a class="dropdown-item" href="https://www.kukuri-arpg.com/info/design-approval"> Design Approvals </a>
                         <a class="dropdown-item" href="https://www.deviantart.com/momma-kuku/journal/Item-guides-645162809">Import Customization</a>
-                        <a class="dropdown-item" href="https://www.deviantart.com/kukuri-arpg/journal/FP-tracker-and-how-to-make-one-604378418">Creating Trackers</a>
+                        <a class="dropdown-item" href="{{ url('/info/fp-tracker') }}">Creating Trackers</a>
 
                     </div>
                 </li>
@@ -154,7 +154,7 @@
                         <a class="dropdown-item" href="{{ url('/queues') }}">
                             Check Queues
                         </a>
-                        <a class="dropdown-item" href="https://kukuri-arpg.w3spaces.com/activities/quests.html">
+                        <a class="dropdown-item" href="{{ url('/info/quest') }}">
                             Current Quest/Event
                         </a>
                         <a class="dropdown-item" href="{{ url('prompts/prompt-categories') }}">
@@ -187,7 +187,7 @@
                         <a class="dropdown-item" href="{{ url('crafting') }}">
                             Crafting
                         </a>
-                        <a class="dropdown-item" href="{{ url('https://kukuri-arpg.w3spaces.com/activities/breeding.html') }}">
+                        <a class="dropdown-item" href="{{ url('/info/breeding') }}">
                             Breeding
                         </a>
 
