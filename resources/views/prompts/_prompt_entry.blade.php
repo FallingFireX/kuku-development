@@ -4,11 +4,6 @@
     @endif
     <div class="{{ $prompt->has_image ? 'col-md-9' : 'col-12' }}">
         <div class="mb-3">
-            <!-- @if (Auth::user()->isStaff)
-                <div class="float-right">
-                    <a class="nav-link" href="{{ url('/admin/data/prompts/edit/' . $prompt->id) }}" title="Edit Prompt"><i class="fas fa-pen fa-crown"></i></a>
-                </div>
-            @endif -->
             @if (isset($edit))
                 <x-admin-edit title="{{ $edit['title'] }}" :object="$edit['object']" />
             @endif
