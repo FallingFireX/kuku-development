@@ -103,7 +103,6 @@
         </div>
     </div>
 @endif
-
 <div class="card mb-3">
     <div class="card-header h2">
         Rewards
@@ -177,6 +176,7 @@
     </div>
 </div>
 
+
 <div class="card mb-3">
     <div class="card-header h2">
         Add-Ons
@@ -202,24 +202,18 @@
 
 @if ($submission->status == 'Draft')
     <div class="text-right">
-        <button type="submit" class="btn btn-danger mr-2" id="cancelButton">Delete Draft</button>
-        <button type="submit" name="draft" value="1" class="btn btn-secondary mr-2" id="draftButton">Save Draft</button>
-        <button type="submit" class="btn btn-primary" id="confirmButton">Submit</button>
+        <a href="#" class="btn btn-danger mr-2" id="cancelButton">Delete Draft</a>
+        <a href="#" class="btn btn-secondary mr-2" id="draftButton">Save Draft</a>
+        <a href="#" class="btn btn-primary" id="confirmButton">Submit</a>
     </div>
 @else
     <div class="text-right">
-        <button type="submit" class="btn btn-secondary mr-2" id="draftButton">Save Draft</button>
-        <button type="submit" class="btn btn-primary" id="confirmButton">Submit</button>
+        <a href="#" class="btn btn-secondary mr-2" id="draftButton">Save Draft</a>
+        <a href="#" class="btn btn-primary" id="confirmButton">Submit</a>
     </div>
 @endif
 
 {!! Form::close() !!}
-
-<div id="copy-calc" class="card p-3 mb-2 pl-0 hide">
-    @if (isset($criteria))
-        @include('criteria._criterion_selector', ['criteria' => $criteria])
-    @endif
-</div>
 
 @include('widgets._character_select', ['characterCurrencies' => $characterCurrencies, 'showLootTables' => false])
 @if ($isClaim)
@@ -228,6 +222,5 @@
     @include('widgets._loot_select_row', ['items' => $items, 'currencies' => $currencies, 'showLootTables' => false, 'showRaffles' => false])
 @endif
 
-@section ('scripts')
+
 @include('js._tinymce_wysiwyg')
-@endsection
