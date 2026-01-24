@@ -29,16 +29,14 @@ class CharacterController extends Controller {
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function getIndex()
-    {
+    public function getIndex() {
         $characters = Auth::user()->characters()->with('image')->visible()->whereNull('trade_id')->get();
 
         return view('home.characters', [
             'characters' => $characters,
-            'folders' => ['None' => 'None'] + Auth::user()->folders()->pluck('name', 'id')->toArray(),
+            'folders'    => ['None' => 'None'] + Auth::user()->folders()->pluck('name', 'id')->toArray(),
         ]);
     }
-
 
     /**
      * Shows the user's MYO slots.
@@ -60,15 +58,17 @@ class CharacterController extends Controller {
      *
      * @return \Illuminate\Http\RedirectResponse
      */
-     public function postSortCharacters(Request $request, CharacterManager $service)
-    {
+    public function postSortCharacters(Request $request, CharacterManager $service) {
         if ($service->sortCharacters($request->only(['sort', 'folder_ids']), Auth::user())) {
             flash('Characters sorted successfully.')->success();
+
             return redirect()->back();
+        } else {
+            foreach ($service->errors()->getMessages()['error'] as $error) {
+                flash($error)->error();
+            }
         }
-        else {
-            foreach($service->errors()->getMessages()['error'] as $error) flash($error)->error();
-        }
+
         return redirect()->back();
     }
 

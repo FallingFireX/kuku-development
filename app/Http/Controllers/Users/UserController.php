@@ -147,19 +147,16 @@ class UserController extends Controller {
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-     
-    public function getUserCharacters($name)
-    {
+    public function getUserCharacters($name) {
         $query = Character::myo(0)->where('user_id', $this->user->id);
         $imageQuery = CharacterImage::images(Auth::check() ? Auth::user() : null)->with('features')->with('rarity')->with('species')->with('features');
 
-        if($sublists = Sublist::where('show_main', 0)->get())
-        $subCategories = []; $subSpecies = [];
-        {   foreach($sublists as $sublist)
-            {
-                $subCategories = array_merge($subCategories, $sublist->categories->pluck('id')->toArray());
-                $subSpecies = array_merge($subSpecies, $sublist->species->pluck('id')->toArray());
-            }
+        if ($sublists = Sublist::where('show_main', 0)->get()) {
+            $subCategories = [];
+        } $subSpecies = [];
+        foreach ($sublists as $sublist) {
+            $subCategories = array_merge($subCategories, $sublist->categories->pluck('id')->toArray());
+            $subSpecies = array_merge($subSpecies, $sublist->species->pluck('id')->toArray());
         }
 
         $query->whereNotIn('character_category_id', $subCategories);
@@ -167,16 +164,19 @@ class UserController extends Controller {
 
         $query->whereIn('id', $imageQuery->pluck('character_id'));
 
-        if(!Auth::check() || !(Auth::check() && Auth::user()->hasPower('manage_characters'))) $query->visible();
+        if (!Auth::check() || !(Auth::check() && Auth::user()->hasPower('manage_characters'))) {
+            $query->visible();
+        }
         $query = $query->orderBy('sort', 'DESC')->get()
         // group query folder, getting the name from the id
-        ->groupBy(function($item) {
-            return $item->folder ? $item->folder->name : 'Unsorted';
-        });
+            ->groupBy(function ($item) {
+                return $item->folder ? $item->folder->name : 'Unsorted';
+            });
+
         return view('user.characters', [
-            'user' => $this->user,
+            'user'       => $this->user,
             'characters' => $query,
-            'sublists' => Sublist::orderBy('sort', 'DESC')->get()
+            'sublists'   => Sublist::orderBy('sort', 'DESC')->get(),
         ]);
     }
 
