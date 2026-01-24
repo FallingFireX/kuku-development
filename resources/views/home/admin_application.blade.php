@@ -33,7 +33,7 @@
     </div>
 
     <!-- I make comments read only here under the assumption that most groups dont want sad or upset players replying to them about denied applications.
-                                                             Setting "read_only" to false will allow replies as normal. -->
+                                                                 Setting "read_only" to false will allow replies as normal. -->
     <div class="comments">
         @comments([
             'model' => $applications,
