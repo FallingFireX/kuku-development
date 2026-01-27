@@ -12,5 +12,5 @@
 
 @section('content')
     {!! breadcrumbs(['Prompts' => 'prompts', 'All Prompts' => 'prompts/prompts', $prompt->name => 'prompts/' . $prompt->id]) !!}
-    @include('prompts._prompt_entry', ['prompt' => $prompt, 'isPage' => true, 'edit' => ['object' => $prompt, 'title' => 'Prompt']] )
+    @include('prompts._prompt_entry', ['prompt' => $prompt, 'isPage' => true, 'edit' => ['object' => $prompt, 'title' => 'Prompt']])
 @endsection
