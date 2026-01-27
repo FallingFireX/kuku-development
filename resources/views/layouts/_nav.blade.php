@@ -127,7 +127,7 @@
                         @if (Auth::check())
                             <a class="dropdown-item" href="{{ Auth::user()->url . '/characters' }}"> My Loaf </a>
                         @endif
-                        <a class="dropdown-item" href="https://kukuri-arpg.w3spaces.com/training/home.html">Training</a>
+                        <a class="dropdown-item" href="{{ url('/info/training-hub') }}">Training</a>
                         <a class="dropdown-item" href="{{ url('/info/fp-fate-points') }}">Leveling and Fate Points</a>
                         <a class="dropdown-item" href="{{ url('/info/health') }}">Health and Injuries</a>
 

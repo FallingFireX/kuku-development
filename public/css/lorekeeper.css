@@ -539,6 +539,14 @@ p {
 .tooltip-inner {
     max-width: 350px !important;
 }
+.modal-backdrop.show  {
+	visibility: hidden;
+    z-index: 50;
+}
+
+.modal-dialog {
+    z-index: 100;
+}
 
 .nav-tabs .nav-link.active {
     background-color: transparent;
